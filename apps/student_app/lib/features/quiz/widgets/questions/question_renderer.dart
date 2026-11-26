@@ -95,15 +95,17 @@ abstract class QuestionRenderer {
   }) {
     final lang = Localizations.localeOf(context).languageCode;
 
-    // 1. Try specific column (question_text_en, question_text_hu)
-    if (question['question_text_$lang'] != null &&
-        question['question_text_$lang'].toString().isNotEmpty) {
-      return question['question_text_$lang'].toString();
+    final content = question['content'];
+    final prompt = content is Map ? content['question_text'] : null;
+    for (final candidate in [
+      question['question_text_$lang'], if (prompt is Map) prompt[lang],
+      defaultText, question['question_text_en'], question['text'],
+      if (prompt is Map) prompt['en'], prompt, question['question_text_hu'],
+      if (prompt is Map) prompt['hu'],
+    ]) {
+      if (candidate is String && candidate.trim().isNotEmpty) return candidate;
     }
-
-    // 2. Fallback to default/content
-    // Note: 'text' column usually holds English or legacy text
-    return defaultText ?? question['text']?.toString() ?? '';
+    return '';
   }
 
   /// Helper: Get localized content field (for deep JSON structures)
@@ -224,6 +226,8 @@ abstract class QuestionRenderer {
     return result.where((opt) => opt.trim().isNotEmpty).toList();
   }
 
+  String normalizeAnswerLabel(String value) => value.trim().toLowerCase();
+
   /// Shared validation logic for standard answer types with bilingual support
   bool commonValidateAnswer(
     dynamic userAnswer,
@@ -233,28 +237,20 @@ abstract class QuestionRenderer {
   ]) {
     if (userAnswer == null || correctAnswer == null) return false;
 
-    // Helper to normalize strings for comparison
-    String normalize(String s) {
-      final trimmed = s.trim().toLowerCase();
-      // Handle bilingual boolean labels
-      if (trimmed == 'igaz') return 'true';
-      if (trimmed == 'hamis') return 'false';
-      return trimmed;
-    }
-
+    final choices = question?['choice_options'];
     // 1. Try Direct Comparison (Fast Path)
-    final uStr = normalize(userAnswer.toString());
-    final cStr = normalize(correctAnswer.toString());
+    final uStr = normalizeAnswerLabel(userAnswer.toString());
+    final cStr = normalizeAnswerLabel(correctAnswer.toString());
 
     // Check for List/JSON structure in Correct Answer
     List<String> cList = [];
     if (correctAnswer is List) {
-      cList = correctAnswer.map((e) => normalize(e.toString())).toList();
+      cList = correctAnswer.map((e) => normalizeAnswerLabel(e.toString())).toList();
     } else {
       if (cStr.startsWith('[') && cStr.endsWith(']')) {
         try {
           final List<dynamic> list = json.decode(cStr);
-          cList = list.map((e) => normalize(e.toString())).toList();
+          cList = list.map((e) => normalizeAnswerLabel(e.toString())).toList();
         } catch (_) {
           cList = [cStr];
         }
@@ -266,17 +262,16 @@ abstract class QuestionRenderer {
     // Check for List in User Answer (Multi-Select)
     List<String> uList = [];
     if (userAnswer is List) {
-      uList = userAnswer.map((e) => normalize(e.toString())).toList();
+      uList = userAnswer.map((e) => normalizeAnswerLabel(e.toString())).toList();
     } else {
       uList = [uStr];
     }
 
-    final choices = question?['choice_options'];
     if (choices is List && choices.isNotEmpty) {
       String? key(String value) {
         for (final field in ['id', 'en', 'hu']) {
           for (final choice in choices) {
-            if (choice[field] != null && normalize(choice[field].toString()) == value) {
+            if (choice[field] != null && normalizeAnswerLabel(choice[field].toString()) == value) {
               return choice['id'] as String;
             }
           }
@@ -323,7 +318,7 @@ abstract class QuestionRenderer {
           }
         }
         if (data is List) {
-          target.addAll(data.map((e) => normalize(e.toString())));
+          target.addAll(data.map((e) => normalizeAnswerLabel(e.toString())));
         }
       }
 

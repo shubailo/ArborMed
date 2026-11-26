@@ -1,4 +1,4 @@
-const { choiceOptions, gradeChoices, resolveChoice } = require('./choiceOptions');
+const { choiceOptions, distinctChoices, gradeChoices, resolveChoice } = require('./choiceOptions');
 const { decodeStoredAnswer, scalarAnswer } = require('./storedAnswer');
 const registry = require('./registry');
 
@@ -73,7 +73,7 @@ function fromType(question, declaredType) {
     if (!key) return null;
   } else if (type === 'single_choice' || type === 'multiple_choice') {
     const choices = choiceOptions(question);
-    if (choices.length < 2) return null;
+    if (choices.length < 2 || (type === 'single_choice' && !distinctChoices(choices))) return null;
     const multiple = type === 'multiple_choice';
     if (!gradeChoices(question, input, multiple).correct) {
       key = recoverChoices(choices, input, multiple);

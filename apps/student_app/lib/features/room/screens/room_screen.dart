@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:vector_math/vector_math_64.dart' hide Colors;
 
 // Core & Providers
 import 'package:arbor_med/services/auth_provider.dart';
 import 'package:arbor_med/services/audio_provider.dart';
-import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
 import 'package:arbor_med/features/profile/providers/rank_provider.dart';
 import 'package:arbor_med/features/shop/providers/shop_provider.dart';
@@ -15,6 +13,7 @@ import 'package:arbor_med/features/quiz/providers/question_cache_service.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
 
 // Feature Widgets
+import '../widgets/room_camera.dart';
 import '../widgets/hub/cozy_actions_overlay.dart';
 import '../widgets/probation_overlay.dart';
 import '../widgets/cozy_room_renderer.dart';
@@ -52,14 +51,13 @@ class RoomWidget extends StatefulWidget {
 
 class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
   late final TransformationController _transformationController;
-  late AnimationController _entryController;
-  Animation<double>? _entryAnimation;
+  late final RoomCamera _camera;
   bool _isZoomed = false;
 
   @override
   void dispose() {
+    _camera.dispose();
     _transformationController.dispose();
-    _entryController.dispose();
     super.dispose();
   }
 
@@ -72,10 +70,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
         ..scaleByDouble(0.4, 0.4, 1.0, 1.0),
     );
 
-    _entryController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 900),
-    );
+    _camera = RoomCamera(_transformationController, this);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
@@ -118,22 +113,13 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final double startX = (screenSize.width / 2) - (2500 * startScale);
     final double startY = (screenSize.height / 2) - (2500 * startScale);
 
-    _entryAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _entryController,
-        curve: Curves.easeOutQuart,
-      ),
-    )..addListener(() {
-        final double v = _entryAnimation!.value;
-        final double currentScale = startScale + (finalScale - startScale) * v;
-        final double currentX = startX + (endX - startX) * v;
-        final double currentY = startY + (endY - startY) * v;
-
-        _transformationController.value = Matrix4.translationValues(currentX, currentY, 0.0) *
-            Matrix4.diagonal3Values(currentScale, currentScale, 1.0);
-      });
-
-    _entryController.forward();
+    _transformationController.value = Matrix4.translationValues(startX, startY, 0)
+      ..scaleByDouble(startScale, startScale, 1, 1);
+    _camera.animateTo(
+      Matrix4.translationValues(endX, endY, 0)..scaleByDouble(finalScale, finalScale, 1, 1),
+      const Duration(milliseconds: 900),
+      curve: Curves.easeOutQuart,
+    );
   }
 
   void _centerRoom({bool animate = true, double? targetScale}) {
@@ -143,52 +129,13 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final double targetX = (screenSize.width / 2) - (2500 * scale);
     final double targetY = (screenSize.height / 2) - (2500 * scale);
 
-    final Matrix4 endValue = Matrix4.translationValues(targetX, targetY, 0.0) *
-        Matrix4.diagonal3Values(scale, scale, 1.0);
+    final Matrix4 endValue = Matrix4.translationValues(targetX, targetY, 0.0)..scaleByDouble(scale, scale, 1, 1);
 
     if (animate) {
-      _animateToMatrix(endValue, durationMs: 1000);
+      _camera.animateTo(endValue, const Duration(seconds: 1));
     } else {
       _transformationController.value = endValue;
     }
-  }
-
-  void _animateToMatrix(Matrix4 target, {int durationMs = 600}) {
-    // Stop any existing entry animation to prevent conflicts
-    _entryController.stop();
-
-    final Matrix4 start = _transformationController.value;
-    final AnimationController anim = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: durationMs),
-    );
-
-    final Animation<double> curve = CurvedAnimation(
-      parent: anim,
-      curve: Curves.easeInOutCubic,
-    );
-
-    // Decomposition for stable interpolation (Translation + Scale)
-    final Vector3 startTranslation = start.getTranslation();
-    final Vector3 endTranslation = target.getTranslation();
-    final double startScale = start.getMaxScaleOnAxis();
-    final double endScale = target.getMaxScaleOnAxis();
-
-    anim.addListener(() {
-      final t = curve.value;
-      
-      // Interpolate Components
-      final currentX = startTranslation.x + (endTranslation.x - startTranslation.x) * t;
-      final currentY = startTranslation.y + (endTranslation.y - startTranslation.y) * t;
-      final currentScale = startScale + (endScale - startScale) * t;
-
-      _transformationController.value = Matrix4.translationValues(currentX, currentY, 0.0)
-        ..scaleByDouble(currentScale, currentScale, 1.0, 1.0);
-    });
-
-    anim.forward().then((_) {
-      if (mounted) anim.dispose();
-    });
   }
 
   void _zoomToDesk() {
@@ -198,11 +145,10 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     final double targetX = (screenSize.width / 2) - (2500 * zoomScale);
     final double targetY = (screenSize.height / 2) - (2200 * zoomScale);
 
-    final Matrix4 zoomMatrix = Matrix4.translationValues(targetX, targetY - 200, 0.0) *
-        Matrix4.diagonal3Values(zoomScale, zoomScale, 1.0);
+    final Matrix4 zoomMatrix = Matrix4.translationValues(targetX, targetY - 200, 0.0)..scaleByDouble(zoomScale, zoomScale, 1, 1);
 
     setState(() => _isZoomed = true);
-    _animateToMatrix(zoomMatrix, durationMs: 1200);
+    _camera.animateTo(zoomMatrix, const Duration(milliseconds: 1200));
   }
 
   void _resetFromZoom() {
@@ -232,66 +178,25 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
     );
   }
 
-  void _startQuizSequence(String name, String slug) {
-    final api = ApiService();
-    final cache = Provider.of<QuestionCacheService>(context, listen: false);
-
-    final selection = cache.open(slug);
-    final Future<Map<String, dynamic>> dataFuture = Future(() async {
-      selection.prefetch();
-      String sessionId = "local_${DateTime.now().millisecondsSinceEpoch}";
-      try {
-        final session = await api.post('/quiz/start', {});
-        if (session != null && session['id'] != null) {
-          sessionId = session['id'].toString();
-        }
-      } catch (e) {
-        debugPrint("Notice: Server session handshake failed, starting with offline/optimistic session: $e");
-      }
-      final firstQuestion = await selection.next(prefetchNext: false);
-      return {'question': firstQuestion, 'sessionId': sessionId};
-    });
-
-    Navigator.of(context).push(
-      PageRouteBuilder(
-        pageBuilder: (routeContext, animation, secondaryAnimation) => QuizLoadingScreen(
-          systemName: name,
-          dataFuture: dataFuture,
-          onComplete: (data) {
-            if (!selection.isActive) {
-              if (ModalRoute.of(routeContext)?.isCurrent == true) Navigator.of(routeContext).maybePop();
-              return;
-            }
-            Navigator.of(routeContext)
-                .pushReplacement(
-              MaterialPageRoute(
-                builder: (_) => QuizSessionScreen(
-                  systemName: name,
-                  systemSlug: slug,
-                  initialData: data['question'],
-                  sessionId: data['sessionId'],
-                ),
-              ),
-            )
-            .then((_) {
-              if (!mounted) return;
-              _centerRoom();
-              if (mounted) {
-                Provider.of<AuthProvider>(context, listen: false).refreshUser();
-                final stats = Provider.of<StatsProvider>(context, listen: false);
-                stats.fetchSummary();
-                stats.fetchActivity();
-                stats.fetchSubjectDetail(slug);
-                stats.fetchSmartReview();
-              }
-            });
-          },
-        ),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-      ),
-    );
+  Future<void> _startQuizSequence(String name, String slug) async {
+    final auth = context.read<AuthProvider>();
+    final owner = auth.user?.id;
+    if (owner == null) return;
+    final finished = await openRoomQuiz(context, name, slug, owner);
+    if (!mounted || !finished || auth.user?.id != owner) return;
+    _centerRoom();
+    final stats = context.read<StatsProvider>();
+    try {
+      await Future.wait([
+        auth.refreshUser(),
+        stats.fetchSummary(),
+        stats.fetchActivity(),
+        stats.fetchSubjectDetail(slug),
+        stats.fetchSmartReview(),
+      ]);
+    } catch (error) {
+      debugPrint('Quiz return refresh failed: ${error.runtimeType}');
+    }
   }
 
   void _showProfile() {
@@ -435,6 +340,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                 child: InteractiveViewer(
                   transformationController: _transformationController,
                   panAxis: PanAxis.free,
+                  onInteractionStart: (_) => _camera.stop(),
                   boundaryMargin: const EdgeInsets.all(5000),
                   minScale: 0.1,
                   maxScale: 2.0,
@@ -644,5 +550,64 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+}
+
+/// Keep the loading view and the quiz on one route, including when a dialog covers it.
+Future<bool> openRoomQuiz(BuildContext context, String name, String slug, int owner) async {
+  final api = context.read<AuthProvider>().apiService;
+  if (api.userId != owner) return false;
+  final selection = context.read<QuestionCacheService>().open(slug);
+  Future<Map<String, dynamic>> load() async {
+    selection.prefetch();
+    var sessionId = 'local_${DateTime.now().millisecondsSinceEpoch}';
+    try {
+      final session = await api.post('/quiz/start', {});
+      if (session is Map && session['id'] != null) sessionId = session['id'].toString();
+    } catch (error) {
+      debugPrint('Quiz session handshake failed: ${error.runtimeType}');
+    }
+    final question = await selection.next(prefetchNext: false);
+    return {'question': question, 'sessionId': sessionId};
+  }
+
+  final future = load();
+  // A fast response can fail before Navigator builds the first frame.
+  future.ignore();
+  Map<String, dynamic>? result;
+  try {
+    await Navigator.of(context).push<void>(PageRouteBuilder(
+      pageBuilder: (_, animation, secondaryAnimation) => StatefulBuilder(
+        builder: (routeContext, rebuild) {
+          final data = result;
+          if (data != null) {
+            return QuizSessionScreen(
+              ownerId: owner,
+              systemName: name,
+              systemSlug: slug,
+              initialData: data['question'],
+              sessionId: data['sessionId'],
+            );
+          }
+          return QuizLoadingScreen(
+            systemName: name, dataFuture: future,
+            onComplete: (value) {
+              final route = ModalRoute.of(routeContext);
+              if (route == null || !route.isActive) return;
+              if (!selection.isActive) {
+                Navigator.of(routeContext).removeRoute(route);
+                return;
+              }
+              rebuild(() => result = value);
+            },
+          );
+        },
+      ),
+      transitionsBuilder: (_, animation, secondaryAnimation, child) =>
+          FadeTransition(opacity: animation, child: child),
+    ));
+    return result != null;
+  } finally {
+    selection.close();
   }
 }

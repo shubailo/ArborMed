@@ -11,7 +11,8 @@ const DAYS_MS = 1000 * 60 * 60 * 24;
 function calculateTopicMetrics(rows) {
   const now = new Date();
   return rows.map((row) => {
-    const daysElapsed = (now - new Date(row.last_studied_at)) / DAYS_MS;
+    const studied = row.last_studied_at == null ? NaN : new Date(row.last_studied_at).getTime();
+    const daysElapsed = Math.max(0, (now - studied) / DAYS_MS);
     const retention = learningService.calculateRetention(
       daysElapsed,
       row.stability || 1.0
@@ -25,7 +26,7 @@ function calculateTopicMetrics(rows) {
       slug: row.slug,
       retention,
       readiness,
-      daysSince: Math.round(daysElapsed * 10) / 10,
+      daysSince: Number.isFinite(daysElapsed) ? Math.round(daysElapsed * 10) / 10 : null,
       mastery: row.mastery_score,
     };
   });
@@ -57,6 +58,10 @@ const PROGRESS_QUERY = `
     FROM user_topic_progress utp
     JOIN topics t ON utp.topic_slug = t.slug
     WHERE utp.user_id = $1
+      AND (utp.total_answered > 0 OR utp.mastery_score > 0 OR EXISTS (
+        SELECT 1 FROM responses r JOIN questions q ON q.id = r.question_id
+        WHERE r.user_id = utp.user_id AND q.topic_id = t.id
+      ))
 `;
 
 /**

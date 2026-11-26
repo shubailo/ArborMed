@@ -4,10 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:arbor_med/services/auth_provider.dart';
 import 'package:arbor_med/services/locale_provider.dart';
-import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/features/quiz/providers/question_cache_service.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
-import '../../../database/database.dart';
 import 'package:arbor_med/widgets/cozy/floating_medical_icons.dart';
 import 'package:arbor_med/widgets/cozy/confetti_overlay.dart';
 import 'package:arbor_med/widgets/cozy/coin_particle.dart';
@@ -20,7 +18,8 @@ import 'package:arbor_med/services/audio_provider.dart';
 import 'package:arbor_med/widgets/cozy/cozy_progress_bar.dart'; // Solves PulseNotifier error
 import 'package:arbor_med/features/quiz/models/quiz_ui_state.dart';
 
-class QuizSessionScreen extends StatelessWidget {
+class QuizSessionScreen extends StatefulWidget {
+  final int? ownerId;
   final String systemName;
   final String systemSlug;
   final Map<String, dynamic>? initialData;
@@ -29,6 +28,7 @@ class QuizSessionScreen extends StatelessWidget {
 
   const QuizSessionScreen({
     super.key,
+    this.ownerId,
     required this.systemName,
     required this.systemSlug,
     this.initialData,
@@ -37,22 +37,48 @@ class QuizSessionScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final user = Provider.of<AuthProvider>(context).user;
+  State<QuizSessionScreen> createState() => _QuizSessionScreenState();
+}
 
+class _QuizSessionScreenState extends State<QuizSessionScreen> {
+  late final int? _owner;
+  bool _ended = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _owner = widget.ownerId ?? context.read<AuthProvider>().user?.id;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final active = context.select<AuthProvider, int?>((auth) => auth.user?.id);
+    if (_owner == null || active != _owner) {
+      _ended = true;
+    }
+    if (_ended) {
+      final hu = Localizations.localeOf(context).languageCode == 'hu';
+      return Scaffold(
+        appBar: AppBar(),
+        body: Center(
+          child: Text(hu ? 'Ez a kvízmunkamenet véget ért.' : 'This quiz session has ended.'),
+        ),
+      );
+    }
+    final queue = context.read<SubmissionQueue>();
     return ChangeNotifierProvider(
       create: (context) => QuizController(
-        apiService: ApiService(),
-        cacheService: Provider.of<QuestionCacheService>(context, listen: false),
-        db: AppDatabase(),
-        queue: context.read<SubmissionQueue>(),
-        systemSlug: systemSlug,
-        systemName: systemName,
-        userId: user!.id,
-        initialQuestion: initialData,
-        initialSessionId: sessionId,
-        questionIds: questionIds, // Pass to controller
-        languageCode: Provider.of<LocaleProvider>(context, listen: false).locale.languageCode,
+        apiService: queue.api,
+        cacheService: context.read<QuestionCacheService>(),
+        db: queue.db,
+        queue: queue,
+        systemSlug: widget.systemSlug,
+        systemName: widget.systemName,
+        userId: _owner!,
+        initialQuestion: widget.initialData,
+        initialSessionId: widget.sessionId,
+        questionIds: widget.questionIds,
+        languageCode: context.read<LocaleProvider>().locale.languageCode,
       ),
       child: const _QuizView(),
     );
@@ -80,7 +106,7 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _focusNode.requestFocus();
+      if (!mounted) return;
       _subscribeToEffects();
     });
   }
@@ -149,6 +175,7 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
     setState(() {
       _coinParticles.add(
         Positioned(
+          key: key,
           top: 30, // Align closer to the header HUD
           left: 40,
           child: CoinParticle(
@@ -175,12 +202,12 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
     // Keyboard handling
     return KeyboardListener(
       focusNode: _focusNode,
-      autofocus: true,
+      autofocus: ModalRoute.isCurrentOf(context) ?? true,
       onKeyEvent: (event) {
-        if (event is! KeyDownEvent) return;
+        if (event is! KeyDownEvent || ModalRoute.of(context)?.isCurrent == false) return;
         final key = event.logicalKey;
         if (key == LogicalKeyboardKey.space) {
-          if (controller.state.isAnswerChecked) {
+          if (controller.state.isAnswerChecked || controller.state.submissionRejected) {
             controller.loadNextQuestion();
           } else {
             controller.submitAnswer();

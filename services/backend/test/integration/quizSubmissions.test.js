@@ -31,7 +31,7 @@ integration('PostgreSQL quiz receipts and rewards', () => {
     await pool.query(`
       CREATE TABLE users (id int PRIMARY KEY, coins int DEFAULT 0, daily_coins_earned int DEFAULT 0,
         daily_coins_softcap_progress int DEFAULT 0, last_coin_reset_date date);
-      CREATE TABLE topics (id int PRIMARY KEY, slug text, parent_id int, nexus_metadata jsonb);
+      CREATE TABLE topics (id int PRIMARY KEY, slug text, parent_id int, nexus_metadata jsonb, name_en text);
       CREATE TABLE questions (id int PRIMARY KEY, topic_id int, question_type text, correct_answer text,
         options jsonb, metadata jsonb, bloom_level int, active boolean DEFAULT true);
       CREATE TABLE quiz_sessions (id int PRIMARY KEY, user_id int REFERENCES users);
@@ -39,7 +39,7 @@ integration('PostgreSQL quiz receipts and rewards', () => {
         repetition_count int, next_review_at timestamptz, mastered boolean, PRIMARY KEY(user_id,question_id));
       CREATE TABLE user_topic_progress (user_id int, topic_slug text, current_bloom_level int, current_streak int,
         consecutive_wrong int, level_correct_count int, mastery_score int, total_answered int, correct_answered int,
-        last_studied_at timestamptz, PRIMARY KEY(user_id,topic_slug));
+        last_studied_at timestamptz, stability float, retention_score float, PRIMARY KEY(user_id,topic_slug));
       CREATE TABLE responses (id serial PRIMARY KEY, user_id int, question_id int, session_id int, user_answer text,
         is_correct boolean, response_time_ms int, quality int, selection_reason text, easiness_factor decimal, interval_days int, created_at timestamptz DEFAULT NOW());
       CREATE TABLE user_activity (user_id int, action text, metadata jsonb);
@@ -163,6 +163,20 @@ integration('PostgreSQL quiz receipts and rewards', () => {
     expect((await pool.query('SELECT repetition_count FROM user_question_progress')).rows).toEqual([{repetition_count:1}]);
   });
 
+  test('readiness omits seeded topics and retains legacy sections with recorded study', async () => {
+    const stats = require('../../src/controllers/statsController');
+    await addSubject();
+    await pool.query(`INSERT INTO user_topic_progress(user_id,topic_slug,current_bloom_level,last_studied_at)
+      VALUES(1,'sibling',2,now()),(1,'section',1,now());
+      INSERT INTO responses(user_id,question_id,is_correct) VALUES(2,103,true),(1,101,false);`);
+    let result;
+    await stats.getReadiness({user:{id:1}}, {json: value => {result=value;}}, err => {throw err;});
+    expect(result.breakdown.map(row => row.slug)).toEqual(['section']);
+    await pool.query("UPDATE user_topic_progress SET total_answered=1 WHERE topic_slug='sibling'");
+    await stats.getReadiness({user:{id:1}}, {json: value => {result=value;}}, err => {throw err;});
+    expect(result.breakdown.map(row => row.slug).sort()).toEqual(['section','sibling']);
+  });
+
   test('the soft cap uses the exact UTC day recorded by the locked credit operation', async () => {
     const economy = require('../../src/services/economyService');
     const { day } = (await pool.query("SELECT ((now() AT TIME ZONE 'UTC')::date + 1)::text AS day")).rows[0];
@@ -224,6 +238,19 @@ integration('PostgreSQL quiz receipts and rewards', () => {
     expect(await nextQuestion('subject')).toMatchObject({id:101,topic_slug:'section',selectionReason:'FAIL_DOWN_PREREQ_102'});
     await pool.query('INSERT INTO responses(user_id,question_id,is_correct) VALUES (1,102,true)');
     expect(await nextQuestion('subject','103')).toMatchObject({id:101,selectionReason:'BLOOM_CLIMBER_LEVEL_1'});
+  });
+
+  test('a legacy zero interval and saturated repetition count can receive a durable quiz receipt', async () => {
+    await pool.query(`INSERT INTO user_question_progress
+      (user_id,question_id,easiness_factor,interval_days,repetition_count)
+      VALUES (1,7,2.5,0,2147483647)`);
+    const body = attempt(7);
+    const receipt = await submit(body);
+    expect(receipt).toMatchObject({isCorrect:true});
+    expect(await submit(body)).toEqual(receipt);
+    const saved = await pool.query(`SELECT repetition_count,interval_days,next_review_at > now() AS scheduled
+      FROM user_question_progress WHERE user_id=1 AND question_id=7`);
+    expect(saved.rows).toEqual([{repetition_count:2147483647, interval_days:1, scheduled:true}]);
   });
 
   test('a long run of correct practice remains schedulable and a lapse still resets the review', async () => {

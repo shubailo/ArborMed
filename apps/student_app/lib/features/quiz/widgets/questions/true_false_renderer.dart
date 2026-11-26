@@ -8,6 +8,15 @@ import 'package:arbor_med/widgets/cozy/pressable_answer_button.dart';
 /// Renderer for True/False questions
 class TrueFalseRenderer extends QuestionRenderer {
   @override
+  String normalizeAnswerLabel(String value) {
+    return switch (super.normalizeAnswerLabel(value)) {
+      'igaz' => 'true',
+      'hamis' => 'false',
+      final label => label,
+    };
+  }
+
+  @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
     final palette = CozyTheme.of(context);
     final questionText = getLocalizedText(context, question);

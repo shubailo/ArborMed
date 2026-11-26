@@ -16,9 +16,11 @@ class AnalyticsEngine {
      * @returns {Object} An object containing the new easinessFactor, interval, and repetitions.
      */
     calculateSM2(quality, previousEF, previousInterval, repetitions) {
-        let ef = previousEF;
+        const priorFactor = Number(previousEF);
+        let ef = Number.isFinite(priorFactor) && priorFactor > 0 ? Math.max(1.3, priorFactor) : 2.5;
         let interval;
-        let n = repetitions;
+        let n = Number(repetitions);
+        if (!Number.isSafeInteger(n) || n < 0) n = 0;
 
         if (quality >= 3) {
             // Correct response
@@ -27,9 +29,10 @@ class AnalyticsEngine {
             } else if (n === 1) {
                 interval = 6;
             } else {
-                interval = Math.round(previousInterval * ef);
+                const days = Number(previousInterval);
+                interval = Number.isFinite(days) && days > 0 ? Math.max(1, Math.round(days * ef)) : 1;
             }
-            n++;
+            n = Math.min(n + 1, 2147483647); // user_question_progress.repetition_count is int4
 
             // EF calculation: EF' := f(EF, q)
             ef = ef + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
@@ -103,8 +106,10 @@ class AnalyticsEngine {
      * @returns {number} The calculated retention percentage (0-100).
      */
     calculateRetention(daysElapsed, stability) {
-        const s = stability || 1.0;
-        const retention = Math.exp(-daysElapsed / s);
+        if (!Number.isFinite(daysElapsed)) return 0;
+        const value = Number(stability);
+        const s = Number.isFinite(value) && value > 0 ? value : 1;
+        const retention = Math.exp(-Math.max(0, daysElapsed) / s);
         return Math.round(retention * 100);
     }
 
@@ -118,8 +123,11 @@ class AnalyticsEngine {
      */
     calculateReadiness(masteryScore, retention) {
         // Simple balance: 60% Mastery, 40% current retention
-        const readiness = (masteryScore * 0.6) + (retention * 0.4);
-        return Math.round(Math.min(100, readiness));
+        const percent = value => {
+            const numeric = Number(value);
+            return Number.isFinite(numeric) ? Math.max(0, Math.min(100, numeric)) : 0;
+        };
+        return Math.round(percent(masteryScore) * 0.6 + percent(retention) * 0.4);
     }
 }
 

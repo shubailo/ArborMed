@@ -15,33 +15,34 @@ class SingleChoiceRenderer extends QuestionRenderer {
     final palette = CozyTheme.of(context);
     final questionText = getLocalizedText(context, question);
 
-    String? imageUrl;
-    if (question['content'] != null && question['content'] is Map) {
-      imageUrl = question['content']['image_url'];
+    final content = question['content'];
+    final raw = content is Map ? content['image_url'] : null;
+    Uri? image;
+    if (raw is String && raw.trim().isNotEmpty) {
+      final reference = Uri.tryParse(raw.trim());
+      if (reference != null) {
+        final uri = Uri.parse(ApiService.baseUrl).resolveUri(reference);
+        if ((uri.scheme == 'https' || uri.scheme == 'http') && uri.host.isNotEmpty) image = uri;
+      }
     }
+    final imageUrl = image?.toString();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        if (imageUrl != null && imageUrl.isNotEmpty) ...[
+        if (imageUrl != null) ...[
           Tooltip(
             message: 'Tap to enlarge image',
             child: GestureDetector(
               onTap: () {
                 Provider.of<AudioProvider>(context, listen: false)
                     .playSfx('click');
-                showZoomedImage(
-                    context,
-                    imageUrl!.startsWith('http')
-                        ? imageUrl
-                        : '${ApiService.baseUrl}$imageUrl');
+                showZoomedImage(context, imageUrl);
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  imageUrl.startsWith('http')
-                      ? imageUrl
-                      : '${ApiService.baseUrl}$imageUrl',
+                  imageUrl,
                   width: double.infinity,
                   height: 200,
                   fit: BoxFit.cover,
