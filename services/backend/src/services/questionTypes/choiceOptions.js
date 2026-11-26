@@ -10,30 +10,60 @@ function stableId(key) {
   return 'opt_' + createHash('sha256').update(String(key)).digest('hex').slice(0, 32);
 }
 
-function choiceOptions(question) {
+function optionSource(question) {
   const sources = [parseOptions(question.options), parseOptions(question.content?.options),
     { en: parseOptions(question.options_en), hu: parseOptions(question.options_hu) }];
-  const options = sources.find(value => [value, value?.en, value?.hu]
+  return sources.find(value => [value, value?.en, value?.hu]
     .some(list => Array.isArray(list) && list.length));
+}
+
+function firstText(...values) {
+  return values.find(value => typeof value === 'string' && value.trim()) ?? '';
+}
+
+function keyText(value) {
+  return typeof value === 'number' ? String(value) : firstText(value);
+}
+
+// Historical IDs are accepted on read without exposing additional student-facing fields.
+const historicalIds = new WeakMap();
+
+function choiceOptions(question) {
+  const options = optionSource(question);
   if (!options) return [];
-  const entries = [options, options.en, options.hu].find(list => Array.isArray(list) && list.length);
-  return entries.map((entry, index) => {
-    const en = String(entry?.en ?? entry?.label ?? entry?.text ?? entry?.hu ?? entry?.value ?? (typeof entry === 'string' ? entry : ''));
-    const translated = options.hu?.[index];
-    const hu = String(entry?.hu ?? translated?.hu ?? translated?.text ?? translated?.label ??
-      (typeof translated === 'string' ? translated : en));
-    // Keep the same key across translations, option shuffling and author reordering.
-    const key = String(entry?.id ?? entry?.value ?? en);
-    const id = stableId(key);
-    return { id, en, hu };
-  }).filter(c => c.en.trim() || c.hu.trim());
+  const enRows = Array.isArray(options) ? options : Array.isArray(options.en) ? options.en : [];
+  const huRows = Array.isArray(options.hu) ? options.hu : [];
+  const entries = enRows.length ? enRows : huRows;
+  const choices = [];
+  entries.forEach((raw, index) => {
+    const translated = huRows[index];
+    const hasPrimary = enRows.length > 0;
+    const entry = typeof raw === 'string' && !raw.trim() && translated && typeof translated === 'object'
+      ? translated : raw;
+    const hu = firstText(entry?.hu, translated?.hu, translated?.text, translated?.label,
+      keyText(translated?.value), translated);
+    const en = firstText(entry?.en, hasPrimary && entry === raw && entry?.label,
+      hasPrimary && entry === raw && entry?.text, hasPrimary && raw,
+      hasPrimary && entry === raw && !firstText(entry?.hu) && keyText(entry?.value));
+    if (!en && !hu) return;
+    const key = keyText(entry?.id) || keyText(entry?.value) || en || hu;
+    const choice = { id: stableId(key), en: en || hu, hu: hu || en };
+    const previousKey = raw?.id ?? raw?.value ?? raw?.en ?? raw?.label ?? raw?.text ??
+      raw?.hu ?? (typeof raw === 'string' ? raw : '');
+    if (String(previousKey) !== key) historicalIds.set(choice, stableId(previousKey));
+    choices.push(choice);
+  });
+  return choices;
 }
 
 function createChoiceResolver(choices) {
   const byId = new Map();
   const byLabel = new Map();
+  const byPreviousId = new Map();
   for (const choice of choices) {
     byId.set(choice.id, choice);
+    const previous = historicalIds.get(choice);
+    if (previous) byPreviousId.set(previous, byPreviousId.has(previous) ? null : choice);
     for (const text of [choice.en, choice.hu]) {
       const label = text.trim().toLowerCase();
       if (!byLabel.has(label)) byLabel.set(label, choice);
@@ -44,6 +74,7 @@ function createChoiceResolver(choices) {
     const text = String(value).trim();
     const label = text.toLowerCase();
     if (byId.has(label)) return byId.get(label);
+    if (byPreviousId.has(label)) return byPreviousId.get(label);
     const authored = byId.get(stableId(text));
     if (!byLabel.has(label)) return authored;
     const named = byLabel.get(label);
@@ -87,4 +118,4 @@ function resolveChoice(choices, value) {
   return createChoiceResolver(choices)(value);
 }
 
-module.exports = { choiceOptions, distinctChoices, gradeChoices, createChoiceResolver, resolveChoice };
+module.exports = { optionSource, choiceOptions, distinctChoices, gradeChoices, createChoiceResolver, resolveChoice };

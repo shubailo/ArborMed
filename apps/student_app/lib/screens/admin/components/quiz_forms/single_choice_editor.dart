@@ -3,7 +3,7 @@ import '../../../../widgets/admin/dynamic_option_list.dart';
 
 class SingleChoiceEditor extends StatelessWidget {
   final List<String> options;
-  final int correctIndex;
+  final int? correctIndex;
   final ValueChanged<List<String>> onOptionsChanged;
   final ValueChanged<int> onCorrectIndexChanged;
   final VoidCallback onAdd;

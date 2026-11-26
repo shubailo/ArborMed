@@ -6,15 +6,15 @@ import '../../../../core/models/admin_question.dart';
 class QuestionsDataTable extends StatelessWidget {
   final List<AdminQuestion> questions;
   final Set<int> selectedIds;
-  final Function(Set<int>) onSelectionChanged;
+  final ValueChanged<Set<int>> onSelectionChanged;
   final String sortBy;
   final bool isAscending;
-  final Function(String, bool) onSort;
+  final void Function(String, bool) onSort;
   final AdminQuestion? selectedPreviewQuestion;
-  final Function(AdminQuestion) onPreviewSelected;
+  final ValueChanged<AdminQuestion> onPreviewSelected;
   final String Function(String) getReadableType;
-  final Function(AdminQuestion) onEditQuestion;
-  final Function(AdminQuestion) onDeleteQuestion;
+  final ValueChanged<AdminQuestion> onEditQuestion;
+  final ValueChanged<AdminQuestion> onDeleteQuestion;
 
   const QuestionsDataTable({
     super.key,
@@ -42,6 +42,12 @@ class QuestionsDataTable extends StatelessWidget {
         const int attemptsFlex = 1;
         const int accuracyFlex = 1;
 
+        final indexById = {
+          for (var i = 0; i < questions.length; i++) questions[i].id: i
+        };
+        final selectedCount = indexById.keys.where(selectedIds.contains).length;
+        final allSelected =
+            questions.isNotEmpty && selectedCount == questions.length;
         return Column(
           children: [
             // 1. STICKY HEADER
@@ -60,17 +66,17 @@ class QuestionsDataTable extends StatelessWidget {
                   SizedBox(
                     width: 40,
                     child: Checkbox(
-                      value: questions.isNotEmpty &&
-                          questions.every((q) => selectedIds.contains(q.id)),
-                      onChanged: (val) {
-                        if (val == true) {
-                          onSelectionChanged(
-                            questions.map((q) => q.id).toSet(),
-                          );
-                        } else {
-                          onSelectionChanged({});
-                        }
-                      },
+                      tristate: true,
+                      value: selectedCount == 0
+                          ? false
+                          : (allSelected ? true : null),
+                      onChanged: questions.isEmpty
+                          ? null
+                          : (_) {
+                              onSelectionChanged(allSelected
+                                  ? <int>{}
+                                  : indexById.keys.toSet());
+                            },
                     ),
                   ),
                   SizedBox(
@@ -144,6 +150,8 @@ class QuestionsDataTable extends StatelessWidget {
               child: RepaintBoundary(
                 child: ListView.builder(
                   itemCount: questions.length,
+                  findChildIndexCallback: (key) =>
+                      key is ValueKey<int> ? indexById[key.value] : null,
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
                     final q = questions[index];
@@ -178,6 +186,7 @@ class QuestionsDataTable extends StatelessWidget {
     int attemptsFlex,
     int accuracyFlex,
   ) {
+    final l = AppLocalizations.of(context)!;
     final accuracy = q.successRate;
     Color accuracyColor = Colors.grey;
     if (q.attempts > 0) {
@@ -191,6 +200,7 @@ class QuestionsDataTable extends StatelessWidget {
     }
 
     return InkWell(
+      key: ValueKey(q.id),
       onTap: () {
         onPreviewSelected(q);
       },
@@ -237,7 +247,7 @@ class QuestionsDataTable extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
-                  q.text ?? '(No text)',
+                  q.questionLabel(l.localeName) ?? '—',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontSize: 13),
@@ -264,7 +274,7 @@ class QuestionsDataTable extends StatelessWidget {
             ),
             _buildFlexCell(
               Text(
-                q.topicNameEn ?? q.topicNameHu ?? '-',
+                q.topicLabel(l.localeName) ?? '—',
                 style: const TextStyle(fontSize: 12),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -298,7 +308,7 @@ class QuestionsDataTable extends StatelessWidget {
             ),
             _buildFlexCell(
               Text(
-                "${accuracy.toStringAsFixed(1)}%",
+                q.attempts > 0 ? '${accuracy.toStringAsFixed(1)}%' : '—',
                 style: TextStyle(
                   color: accuracyColor,
                   fontWeight: FontWeight.bold,
@@ -314,13 +324,16 @@ class QuestionsDataTable extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
+                    tooltip: l.edit,
                     icon: const Icon(Icons.edit, color: Colors.blue, size: 18),
-                    onPressed: q.supportsEditing ? () => onEditQuestion(q) : null,
+                    onPressed:
+                        q.supportsEditing ? () => onEditQuestion(q) : null,
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),
                   const SizedBox(width: 4),
                   IconButton(
+                    tooltip: l.delete,
                     icon: const Icon(Icons.delete, color: Colors.red, size: 18),
                     onPressed: () => onDeleteQuestion(q),
                     padding: EdgeInsets.zero,
@@ -355,9 +368,8 @@ class QuestionsDataTable extends StatelessWidget {
           alignment: center ? Alignment.center : Alignment.centerLeft,
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: center
-                ? MainAxisAlignment.center
-                : MainAxisAlignment.start,
+            mainAxisAlignment:
+                center ? MainAxisAlignment.center : MainAxisAlignment.start,
             children: [
               Flexible(
                 child: Text(

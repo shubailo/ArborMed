@@ -923,6 +923,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adminUnknown => 'Unknown';
 
   @override
+  String get adminAnswerKeyUnresolved =>
+      'Could not identify the correct answer';
+
+  @override
   String get adminUntitled => 'Untitled';
 
   @override

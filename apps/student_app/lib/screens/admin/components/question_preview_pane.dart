@@ -24,6 +24,7 @@ class QuestionPreviewPane extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = CozyTheme.of(context);
+    final l = AppLocalizations.of(context)!;
 
     return Container(
       decoration: BoxDecoration(
@@ -70,7 +71,7 @@ class QuestionPreviewPane extends StatelessWidget {
                 ),
                 IconButton(
                   icon: Icon(Icons.close, color: palette.textSecondary),
-                  tooltip: 'Close preview',
+                  tooltip: l.close,
                   onPressed: onClose,
                 ),
               ],
@@ -83,31 +84,12 @@ class QuestionPreviewPane extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Question Text
-                  Text(
-                    AppLocalizations.of(context)!.questionText,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: palette.textSecondary,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    question.text ??
-                        '(${AppLocalizations.of(context)!.adminUntitled})',
-                    style: GoogleFonts.outfit(
-                      fontSize: 16,
-                      color: palette.textPrimary,
-                      height: 1.4,
-                    ),
-                  ),
+                  _SavedQuestionDetails(
+                      key: ValueKey(question.id), question: question),
                   const SizedBox(height: 24),
-
                   // ANALYTICS SECTION
                   Text(
-                    "Analytics", // Hardcoded for now
+                    l.analyticsTab,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -136,21 +118,24 @@ class QuestionPreviewPane extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '${question.successRate.toStringAsFixed(1)}%',
+                                question.attempts == 0
+                                    ? '—'
+                                    : '${question.successRate.toStringAsFixed(1)}%',
                                 style: GoogleFonts.outfit(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  color: question.successRate < 30
-                                      ? palette.error
-                                      : (question.successRate > 80
-                                            ? Colors.green
-                                            : palette.primary),
+                                  color: question.attempts == 0
+                                      ? palette.textSecondary
+                                      : question.successRate < 30
+                                          ? palette.error
+                                          : (question.successRate > 80
+                                              ? Colors.green
+                                              : palette.primary),
                                 ),
                               ),
                               Text(
-                                "Success Rate",
+                                l.adminSuccessRate,
                                 style: TextStyle(
-                                  // Hardcoded
                                   fontSize: 10,
                                   color: palette.textSecondary,
                                 ),
@@ -184,9 +169,8 @@ class QuestionPreviewPane extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "Attempts",
+                                l.adminTableAttempts,
                                 style: TextStyle(
-                                  // Hardcoded
                                   fontSize: 10,
                                   color: palette.textSecondary,
                                 ),
@@ -219,16 +203,9 @@ class QuestionPreviewPane extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${question.reportCount} Active Reports',
+                                  '${l.adminQuestionReports} (${question.reportCount})',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.orange[800],
-                                  ),
-                                ),
-                                Text(
-                                  'Users have reported issues.',
-                                  style: TextStyle(
-                                    fontSize: 12,
                                     color: Colors.orange[800],
                                   ),
                                 ),
@@ -242,7 +219,9 @@ class QuestionPreviewPane extends StatelessWidget {
                                 builder: (_) => ReportsDialog(
                                   questionId: question.id,
                                   onChanged: () {
-                                    if (context.mounted) onReportsChanged?.call();
+                                    if (context.mounted) {
+                                      onReportsChanged?.call();
+                                    }
                                   },
                                 ),
                               );
@@ -252,7 +231,7 @@ class QuestionPreviewPane extends StatelessWidget {
                               foregroundColor: Colors.orange,
                               elevation: 0,
                             ),
-                            child: const Text("View"),
+                            child: Text(l.adminQuestionReports),
                           ),
                         ],
                       ),
@@ -261,7 +240,7 @@ class QuestionPreviewPane extends StatelessWidget {
                   ],
 
                   // Common Knowledge Gap (Existing)
-                  if (question.successRate < 50) ...[
+                  if (question.attempts > 0 && question.successRate < 50) ...[
                     Text(
                       AppLocalizations.of(context)!.adminCommonKnowledgeGap,
                       style: TextStyle(
@@ -289,7 +268,8 @@ class QuestionPreviewPane extends StatelessWidget {
                             child: Text(
                               AppLocalizations.of(
                                 context,
-                              )!.adminHighFailureRateWarning,
+                              )!
+                                  .adminHighFailureRateWarning,
                               style: TextStyle(
                                 color: palette.error,
                                 fontSize: 13,
@@ -306,15 +286,17 @@ class QuestionPreviewPane extends StatelessWidget {
                   FutureBuilder<Map<String, dynamic>?>(
                     future: analyticsFuture,
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData || snapshot.data == null) {
+                      if (analyticsFuture == null ||
+                          snapshot.connectionState != ConnectionState.done) {
                         return const SizedBox.shrink();
                       }
-
-                      final wrongAnswers =
-                          snapshot.data!['wrongAnswers'] as List?;
-                      if (wrongAnswers == null || wrongAnswers.isEmpty) {
-                        return const SizedBox.shrink();
+                      final raw = snapshot.data?['wrongAnswers'];
+                      if (snapshot.hasError || raw is! List) {
+                        return Text(l.adminNoAnalyticsAvailable);
                       }
+                      final wrongAnswers = raw.whereType<Map>().where((row) =>
+                          row['answer'] != null && row['count'] is num);
+                      if (wrongAnswers.isEmpty) return const SizedBox.shrink();
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -322,7 +304,8 @@ class QuestionPreviewPane extends StatelessWidget {
                           Text(
                             AppLocalizations.of(
                               context,
-                            )!.adminCommonlyConfusedWith,
+                            )!
+                                .adminCommonlyConfusedWith,
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
@@ -398,7 +381,9 @@ class QuestionPreviewPane extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: question.supportsEditing ? () => onEditQuestion(question) : null,
+                      onPressed: question.supportsEditing
+                          ? () => onEditQuestion(question)
+                          : null,
                       icon: const Icon(Icons.edit),
                       label: Text(
                         AppLocalizations.of(context)!.adminEditQuestion,
@@ -420,5 +405,129 @@ class QuestionPreviewPane extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _SavedQuestionDetails extends StatefulWidget {
+  const _SavedQuestionDetails({super.key, required this.question});
+  final AdminQuestion question;
+
+  @override
+  State<_SavedQuestionDetails> createState() => _SavedQuestionDetailsState();
+}
+
+class _SavedQuestionDetailsState extends State<_SavedQuestionDetails> {
+  String? _language;
+
+  @override
+  Widget build(BuildContext context) {
+    final ui = AppLocalizations.of(context)!;
+    final lang = _language ?? Localizations.localeOf(context).languageCode;
+    final q = widget.question;
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Wrap(spacing: 8, children: [
+        for (final code in ['en', 'hu'])
+          ChoiceChip(
+              label: Text(
+                  code == 'hu' ? ui.languageHungarian : ui.languageEnglish),
+              selected: lang == code,
+              onSelected: (_) => setState(() => _language = code)),
+      ]),
+      const SizedBox(height: 12),
+      Text(ui.questionText, style: Theme.of(context).textTheme.labelMedium),
+      Text(q.questionLabel(lang) ?? ui.adminUntitled),
+      if (q.type == 'relation_analysis' && q.content is Map)
+        for (final field in ['statement1', 'link_word', 'statement2'])
+          if (_translation(q.content[field], lang) case final String value)
+            Text(value),
+      if (q.type == 'single_choice' ||
+          q.type == 'multiple_choice' ||
+          q.type == 'case_study')
+        for (final choice in q.choices) Text('• ${choice.label(lang)}'),
+      const SizedBox(height: 12),
+      Text(ui.correctAnswer, style: Theme.of(context).textTheme.labelMedium),
+      for (final answer in _answers(q, lang, ui)) Text(answer),
+      if (q.explanationLabel(lang) case final String explanation) ...[
+        const SizedBox(height: 12),
+        Text(ui.explanation, style: Theme.of(context).textTheme.labelMedium),
+        Text(explanation),
+      ],
+    ]);
+  }
+
+  String? _translation(Object? value, String lang) {
+    if (value is String && value.trim().isNotEmpty) return value;
+    if (value is! Map) return null;
+    return [value[lang], value[lang == 'hu' ? 'en' : 'hu']]
+        .whereType<String>()
+        .where((s) => s.trim().isNotEmpty)
+        .firstOrNull;
+  }
+
+  List<String>? _splitPair(String line) {
+    final arrow = RegExp(r'\s+(?:->|→)\s+');
+    final parts = line
+        .split(arrow.hasMatch(line) ? arrow : RegExp(r':\s+'))
+        .map((part) => part.trim())
+        .toList();
+    return parts.length == 2 && parts.every((part) => part.isNotEmpty)
+        ? parts
+        : null;
+  }
+
+  Iterable<String> _answers(
+      AdminQuestion q, String lang, AppLocalizations l) sync* {
+    final keys = q.answerKeys;
+    if (keys.isEmpty) {
+      yield l.adminAnswerKeyUnresolved;
+      return;
+    }
+    final pairs = q.content is Map ? q.content['pairs'] : null;
+    for (final key in keys) {
+      if (q.type == 'single_choice' ||
+          q.type == 'multiple_choice' ||
+          q.type == 'case_study') {
+        final index = q.choiceIndex(key);
+        yield index == null
+            ? '${l.adminAnswerKeyUnresolved} ($key)'
+            : q.choices[index].label(lang);
+      } else if (q.type == 'matching' && key is Map) {
+        final translations = <String, String>{};
+        if (pairs is List && pairs.isNotEmpty) {
+          for (final pair in pairs.whereType<Map>()) {
+            for (final field in ['left', 'right']) {
+              final base = _translation(pair[field], 'en');
+              final localized = _translation(pair[field], lang);
+              if (base != null && localized != null) {
+                translations[base] = localized;
+              }
+            }
+          }
+        } else if (lang == 'hu') {
+          // Older imports stored the translated pairs as two parallel lists.
+          for (final choice in q.choices) {
+            final en = _splitPair(choice.en);
+            final hu = _splitPair(choice.hu);
+            if (en == null || hu == null) continue;
+            translations[en.first] = hu.first;
+            translations[en.last] = hu.last;
+          }
+        }
+        for (final entry in key.entries) {
+          yield '${translations[entry.key] ?? entry.key} → ${translations[entry.value] ?? entry.value}';
+        }
+      } else if (q.type == 'true_false') {
+        final value = key.toString().trim().toLowerCase();
+        if (const {'true', 'igaz', '1'}.contains(value)) {
+          yield lookupAppLocalizations(Locale(lang)).adminTrue;
+        } else if (const {'false', 'hamis', '0'}.contains(value)) {
+          yield lookupAppLocalizations(Locale(lang)).adminFalse;
+        } else {
+          yield l.adminAnswerKeyUnresolved;
+        }
+      } else {
+        yield key.toString();
+      }
+    }
   }
 }

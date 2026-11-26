@@ -15,7 +15,6 @@ class QuestionPayloadBuilder {
     required TextEditingController linkHuController,
     required TextEditingController textControllerEn,
     required TextEditingController textControllerHu,
-    required List<String> currentOptionsEn,
     required void Function(int) setCorrectIndex,
     required void Function(int) addMultipleCorrectIndex,
     required void Function({
@@ -65,10 +64,10 @@ class QuestionPayloadBuilder {
         }
       }
     } else if (questionType == 'multiple_choice') {
-      if (answer is List) {
-        for (var val in answer) {
-          final idx = currentOptionsEn.indexOf(val.toString());
-          if (idx != -1) addMultipleCorrectIndex(idx);
+      final indices = question.answerKeys.map(question.choiceIndex).toList();
+      if (indices.isNotEmpty && indices.every((i) => i != null)) {
+        for (final index in indices.whereType<int>().toSet()) {
+          addMultipleCorrectIndex(index);
         }
       }
     }
@@ -79,6 +78,8 @@ class QuestionPayloadBuilder {
     required String? existingImageUrl,
     required int? correctIndex,
     required List<int> multipleCorrectIndices,
+    List<AdminChoice?> originalChoices = const [],
+    Map<String, dynamic> originalContent = const {},
     required List<String> currentOptionsEn,
     required List<String> currentOptionsHu,
     required List<MatchingPairControllerGroup> matchingGroups,
@@ -95,7 +96,61 @@ class QuestionPayloadBuilder {
     required int? selectedTopicId,
     required int bloomLevel,
   }) {
-    Map<String, dynamic> contentPayload = {'image_url': existingImageUrl};
+    final contentPayload = {...originalContent, 'image_url': existingImageUrl};
+    List<dynamic> optionsEn = currentOptionsEn;
+    // Drop whitespace-only translations while retaining the authored text of nonempty choices.
+    final optionsHu = currentOptionsHu.map((v) => v.trim().isEmpty ? '' : v).toList();
+    final choiceFormat = questionType == 'single_choice' || questionType == 'multiple_choice';
+    if (choiceFormat) {
+      optionsEn = List.generate(currentOptionsEn.length, (i) {
+        final original = i < originalChoices.length ? originalChoices[i] : null;
+        final source = original?.source;
+        final en = currentOptionsEn[i].trim().isEmpty ? '': currentOptionsEn[i];
+        final hu = optionsHu[i];
+        if (source is Map || (original != null && original.en != en) || (en.isEmpty && hu.isNotEmpty)) {
+          final key = source is Map ? source['id'] ?? source['value'] : null;
+          final fields = source is Map ? Map<String, dynamic>.from(source) : <String, dynamic>{};
+          fields.remove('en');
+          fields.remove('hu');
+          if (en.trim().isEmpty) {
+            // The authored key is retained as id. Old display aliases must not revive cleared text.
+            fields.remove('label');
+            fields.remove('text');
+            fields.remove('value');
+          }
+          return {
+            ...fields,
+            if (original != null) 'id': key ?? original.label('en'),
+            if (en.isNotEmpty) 'en': en,
+            if (hu.isNotEmpty) 'hu': hu,
+          };
+        }
+        return en;
+      });
+      if (contentPayload.containsKey('options')) {
+        contentPayload['options'] = {'en': optionsEn, 'hu': optionsHu};
+      }
+      if (contentPayload.containsKey('question_text')) {
+        contentPayload['question_text'] = {'en': textControllerEn.text, 'hu': textControllerHu.text};
+      }
+    }
+
+    late final draft = AdminQuestion(
+      id: 0,
+      topicId: selectedTopicId ?? 0,
+      bloomLevel: bloomLevel,
+      options: {'en': optionsEn, 'hu': optionsHu},
+      correctAnswer: null,
+    );
+    String answerKey(int i) {
+      final original = i < originalChoices.length ? originalChoices[i] : null;
+      if (original != null && optionsEn[i] is Map) return original.id;
+      final label = currentOptionsEn[i].trim().isNotEmpty ? currentOptionsEn[i] : currentOptionsHu[i];
+      // The historical TEXT column also stores JSON-encoded answer keys.
+      final looksEncoded = RegExp(r'^[\[{"]').hasMatch(label.trimLeft());
+      return !looksEncoded && draft.choiceIndex(label) == i ? label : draft.choices[i].id;
+    }
+
     dynamic correctAnswerPayload;
 
     if (questionType == 'relation_analysis') {
@@ -129,7 +184,7 @@ class QuestionPayloadBuilder {
       correctAnswerPayload = correctMap;
     } else if (questionType == 'multiple_choice') {
       correctAnswerPayload =
-          multipleCorrectIndices.map((idx) => currentOptionsEn[idx]).toList();
+          multipleCorrectIndices.map(answerKey).toList();
       contentPayload['is_multi'] = true;
     } else if (questionType == 'true_false') {
       contentPayload['statement'] = {
@@ -138,14 +193,14 @@ class QuestionPayloadBuilder {
       };
       correctAnswerPayload = (correctIndex == 0) ? 'true' : 'false';
     } else {
-      correctAnswerPayload = currentOptionsEn[correctIndex ?? 0];
+      correctAnswerPayload = answerKey(correctIndex!);
     }
 
     return {
       'question_text_en': textControllerEn.text,
       'question_text_hu': textControllerHu.text,
-      'options_en': currentOptionsEn,
-      'options_hu': currentOptionsHu,
+      'options_en': optionsEn,
+      'options_hu': optionsHu,
       'explanation_en': explanationControllerEn.text,
       'explanation_hu': explanationControllerHu.text,
       'correct_answer': correctAnswerPayload,

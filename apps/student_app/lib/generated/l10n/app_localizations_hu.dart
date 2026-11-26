@@ -930,6 +930,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get adminUnknown => 'Ismeretlen';
 
   @override
+  String get adminAnswerKeyUnresolved => 'A helyes válasz nem azonosítható';
+
+  @override
   String get adminUntitled => 'Névtelen';
 
   @override

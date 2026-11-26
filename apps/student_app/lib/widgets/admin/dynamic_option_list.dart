@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/cozy_theme.dart';
-import '../../utils/extensions/list_extensions.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 class DynamicOptionList extends StatefulWidget {
   final List<String> options;
-  final int correctIndex;
+  final int? correctIndex;
   final ValueChanged<List<String>> onOptionsChanged;
   final ValueChanged<int> onCorrectIndexChanged;
   final VoidCallback? onAdd;
@@ -39,21 +39,16 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
   @override
   void didUpdateWidget(covariant DynamicOptionList oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.options.length != widget.options.length ||
-        oldWidget.options != widget.options) {
-      // Rebuild if length changes or content changes externally
-      // To preserve cursor, we ideally map provided options to existing controllers if count matches
-      if (oldWidget.options.length == widget.options.length) {
-        // ✅ Defer controller updates to avoid setState during build
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          for (int i = 0; i < _controllers.length; i++) {
-            if (_controllers[i].text != widget.options[i]) {
-              _controllers[i].text = widget.options[i];
-            }
-          }
-        });
-      } else {
-        _rebuildControllers();
+    if (_controllers.length != widget.options.length) {
+      _rebuildControllers();
+      return;
+    }
+    for (int i = 0; i < _controllers.length; i++) {
+      final text = widget.options[i];
+      if (_controllers[i].text != text) {
+        // Replace externally changed values without notifying the enclosing Form during build.
+        _controllers[i].dispose();
+        _controllers[i] = TextEditingController(text: text);
       }
     }
   }
@@ -98,11 +93,12 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Answers & Options",
+          l.options,
           style: GoogleFonts.quicksand(
             fontWeight: FontWeight.bold,
             color: CozyTheme.of(context).textPrimary,
@@ -128,14 +124,12 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    controller: _controllers.safeGet(index),
+                    controller: _controllers[index],
                     decoration: CozyTheme.inputDecoration(
                       context,
-                      "Option ${index + 1}",
+                      l.adminOptionIndex(index + 1),
                     ),
                     onChanged: (val) {
-                      // Update logic without full rebuild if possible, but for now propagate up
-                      // Actually, we must update the list in parent
                       final newOptions = List<String>.from(widget.options);
                       newOptions[index] = val;
                       widget.onOptionsChanged(newOptions);
@@ -149,7 +143,7 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
                       Icons.remove_circle_outline,
                       color: CozyTheme.of(context).error,
                     ),
-                    tooltip: 'Remove Option',
+                    tooltip: l.delete,
                     onPressed: () => _removeOption(index),
                   ),
               ],
@@ -160,7 +154,7 @@ class _DynamicOptionListState extends State<DynamicOptionList> {
           TextButton.icon(
             onPressed: _addOption,
             icon: const Icon(Icons.add),
-            label: const Text("Add Option"),
+            label: Text(l.adminAddOption),
           ),
       ],
     );

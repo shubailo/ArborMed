@@ -1,6 +1,6 @@
 const choiceSchema = require('./choiceSchema');
 const QuestionType = require('./QuestionType');
-const { choiceOptions, distinctChoices, gradeChoices, resolveChoice } = require('./choiceOptions');
+const { optionSource, choiceOptions, distinctChoices, gradeChoices, resolveChoice } = require('./choiceOptions');
 
 const { scalarAnswer } = require('./storedAnswer');
 
@@ -28,6 +28,7 @@ class SingleChoiceType extends QuestionType {
 
         const choices = choiceOptions(questionData);
         if (choices.length < 2) errors.push('At least 2 options are required');
+        else if (!choiceSchema.validOptions(optionSource(questionData))) errors.push('Invalid choice option or translation');
         else if (!distinctChoices(choices)) errors.push('Each option needs a distinct identity');
 
         const key = scalarAnswer(questionData.correct_answer);

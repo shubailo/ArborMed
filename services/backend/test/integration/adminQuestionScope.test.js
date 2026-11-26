@@ -61,6 +61,28 @@ const { app } = require('../../server');
     const question = topic_id => ({ topic_id, question_type: 'single_choice', question_text_en: 'Question?',
         options_en: ['A','B'], correct_answer: 'A' });
     const path = '/quiz/admin/questions';
+    test('single-language authored options survive editing while omissions preserve metadata and difficulty', async () => {
+        const payload = {
+            ...question(2), question_text_en:'', question_text_hu:'Melyik?', options_en:['', ''], options_hu:['Egy', 'Kettő'],
+            correct_answer:'Kettő', metadata:{prerequisite_ids:[25]}, difficulty:4, bloom_level:2,
+        };
+        const created = await call(11, path, 'POST', payload);
+        expect(created.status).toBe(201);
+        const {id} = await created.json();
+        try {
+            const update = {...question(2), bloom_level:3};
+            const edited = await call(11, path+'/'+id, 'PUT', update);
+            expect(edited.status).toBe(200);
+            expect(await edited.json()).toMatchObject({metadata:payload.metadata, difficulty:4, bloom_level:3});
+            const reset = await call(11, path+'/'+id, 'PUT', {...update, metadata:{}, difficulty:1});
+            expect(await reset.json()).toMatchObject({metadata:{}, difficulty:1});
+            for (const options of [{en:['One','Two'],hu:['Egy']}, [{en:{text:'One'}}, 'Two']]) {
+                const invalid = await call(11, path+'/'+id, 'PUT', {...update, options_en:undefined, content:{options}, correct_answer:'Two'});
+                expect(invalid.status).toBe(400);
+            }
+            expect(await (await call(11, path+'/'+id)).json()).toMatchObject({correct_answer:'A', metadata:{}, difficulty:1});
+        } finally { await call(11, path+'/'+id, 'DELETE'); }
+    });
     test('the question bank filters nested topics by Bloom level and returns editor data and numeric metrics', async () => {
         const { rows: [q] } = await pg.query(`INSERT INTO questions
             (created_by,topic_id,bloom_level,difficulty,question_type,type,question_text_en,question_text_hu,content)

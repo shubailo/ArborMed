@@ -1850,6 +1850,12 @@ abstract class AppLocalizations {
   /// **'Unknown'**
   String get adminUnknown;
 
+  /// No description provided for @adminAnswerKeyUnresolved.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not identify the correct answer'**
+  String get adminAnswerKeyUnresolved;
+
   /// No description provided for @adminUntitled.
   ///
   /// In en, this message translates to:

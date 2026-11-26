@@ -1,3 +1,4 @@
+import 'components/admin_question_action.dart';
 import 'package:arbor_med/core/models/topic_hierarchy.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -48,7 +49,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   Future<Map<String, dynamic>?>? _analyticsFuture;
   Timer? _debounceTimer;
   bool _searchPending = false;
-  int _pageRequest = 0;
 
   void _clearTableContext() {
     _debounceTimer?.cancel();
@@ -71,6 +71,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
   // Multi-Selection State
   final Set<int> _selectedIds = {};
+  List<AdminQuestion>? _lastRows;
+  (int, int)? _lastSession;
   bool get _isSelectionMode => _selectedIds.isNotEmpty;
 
   TopicProvider? _catalog;
@@ -81,6 +83,35 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    final questions = context.watch<AdminQuestionProvider>();
+    if (_lastSession != questions.actionSession) {
+      _clearTableContext();
+      _currentPage = 1;
+      _lastSession = questions.actionSession;
+    }
+    final rows = questions.adminQuestions;
+    if (!questions.questionsLoading && !identical(_lastRows, rows)) {
+      _lastRows = rows;
+      _selectedIds.retainAll(rows.map((q) => q.id));
+      final previewId = _selectedPreviewQuestion?.id;
+      _selectedPreviewQuestion = rows.where((q) => q.id == previewId).firstOrNull;
+      if (_selectedPreviewQuestion == null) _analyticsFuture = null;
+      final lastPage = ((questions.adminTotalQuestions - 1) ~/ 200) + 1;
+      if (!questions.questionsFailed && _currentPage > lastPage) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted || _searchPending || _selectedType == 'ecg' ||
+              questions.questionsLoading || !identical(rows, questions.adminQuestions) ||
+              _currentPage <= lastPage) {
+            return;
+          }
+          setState(() {
+            _clearTableContext();
+            _currentPage = lastPage;
+          });
+          _refresh();
+        });
+      }
+    }
     final catalog = context.read<TopicProvider>();
     if (identical(catalog, _catalog)) return;
     _catalog?.removeListener(_catalogChanged);
@@ -135,7 +166,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
   void _refresh() {
     if (!mounted) return;
-    final request = ++_pageRequest;
     final questionProvider =
         Provider.of<AdminQuestionProvider>(context, listen: false);
 
@@ -161,34 +191,13 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         bloomLevel: _selectedBloom,
         sortBy: _sortBy,
         order: _isAscending ? 'ASC' : 'DESC',
-      ).then((_) {
-        if (mounted && request == _pageRequest) _reconcilePage(questionProvider);
-      });
+      );
     }
     _refreshSummary();
   }
 
-  void _reconcilePage(AdminQuestionProvider provider) {
-    if (_searchPending || provider.questionsFailed) return;
-    final lastPage = ((provider.adminTotalQuestions - 1) ~/ 200) + 1;
-    if (_currentPage > lastPage) {
-      setState(() {
-        _clearTableContext();
-        _currentPage = lastPage;
-      });
-      _refresh();
-      return;
-    }
-    setState(() {
-      final rows = provider.adminQuestions;
-      _selectedIds.retainAll(rows.map((q) => q.id));
-      _selectedPreviewQuestion = rows.where((q) => q.id == _selectedPreviewQuestion?.id).firstOrNull;
-    });
-  }
-
   void _afterBatchWrite() {
     setState(() => _selectedIds.clear());
-    _reconcilePage(context.read<AdminQuestionProvider>());
     _refreshSummary();
   }
 
@@ -234,8 +243,9 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(32), // Matched Dashboard padding
-        child: Consumer2<AdminQuestionProvider, AdminUserProvider>(
-          builder: (context, questionProvider, userProvider, child) {
+        child: Consumer<AdminUserProvider>(
+          builder: (context, userProvider, child) {
+            final questionProvider = context.read<AdminQuestionProvider>();
             final palette = CozyTheme.of(context);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -379,36 +389,10 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                                                       : (questionProvider
                                                                 .adminQuestions
                                                                 .isNotEmpty
-                                                            ? QuestionsDataTable(
-                                                                questions: questionProvider.adminQuestions,
-
-                                                                selectedIds: _selectedIds,
-                                                                onSelectionChanged: (ids) {
-                                                                  setState(() {
-                                                                    _selectedIds.clear();
-                                                                    _selectedIds.addAll(ids);
-                                                                  });
-                                                                },
-                                                                sortBy: _sortBy,
-                                                                isAscending: _isAscending,
-                                                                onSort: _onSort,
-                                                                selectedPreviewQuestion: _selectedPreviewQuestion,
-                                                                onPreviewSelected: (q) {
-                                                                  setState(() {
-                                                                    _selectedPreviewQuestion = q;
-                                                                    _analyticsFuture = Provider.of<AdminQuestionProvider>(
-                                                                      context,
-                                                                      listen: false,
-                                                                    ).fetchQuestionAnalytics(q.id);
-                                                                  });
-                                                                },
-                                                                getReadableType: _getReadableType,
-                                                                onEditQuestion: showQuestionEditor,
-                                                                onDeleteQuestion: _confirmDelete,
-                                                              )
+                                                            ? _buildQuestionTable(questionProvider)
                                                             : Center(
                                                                 child: Text(
-                                                                  "No questions found.",
+                                                                  l10n.adminNoDataAvailable,
                                                                   style: GoogleFonts.outfit(
                                                                     color: palette
                                                                         .textSecondary,
@@ -468,7 +452,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                       ),
 
                       // PREVIEW PANEL (Split View)
-                      if (_selectedPreviewQuestion != null) ...[
+                      if (_selectedPreviewQuestion != null && !questionProvider.questionsLoading &&
+                          !questionProvider.questionsFailed) ...[
                         const SizedBox(width: 24),
                         Expanded(
                           flex: 2,
@@ -666,57 +651,41 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     );
   }
 
-  void _confirmDelete(AdminQuestion q) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(AppLocalizations.of(context)!.deleteQuestion),
-        content: Text(
-          AppLocalizations.of(
-            context,
-          )!.adminConfirmDeleteQuestion(q.id.toString()),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () async {
-              final success = await Provider.of<AdminQuestionProvider>(
-                context,
-                listen: false,
-              ).deleteQuestion(q.id);
-              if (!context.mounted) return;
-              if (success) {
-                _refresh();
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(AppLocalizations.of(context)!.success),
-                  ),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      AppLocalizations.of(
-                        context,
-                      )!.adminErrorQuestionDeleteLinked,
-                    ),
-                  ),
-                );
-                Navigator.pop(context);
-              }
-            },
-            child: Text(
-              AppLocalizations.of(context)!.delete,
-              style: const TextStyle(color: Colors.red),
-            ),
-          ),
-        ],
-      ),
-    );
+  Future<void> _confirmDelete(AdminQuestion q) async {
+    final provider = context.read<AdminQuestionProvider>();
+    await runQuestionAction(context, provider, (active) async {
+      final labels = l10n;
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (dialog) {
+          void close(bool result) {
+            if (ModalRoute.of(dialog)?.isCurrent == true) {
+              Navigator.pop(dialog, result);
+            }
+          }
+          return AlertDialog(
+            title: Text(labels.deleteQuestion),
+            content: Text(labels.adminConfirmDeleteQuestion(q.id.toString())),
+            actions: [
+              TextButton(onPressed: () => close(false), child: Text(labels.cancel)),
+              TextButton(onPressed: () => close(true), child: Text(labels.delete)),
+            ],
+          );
+        },
+      );
+      if (confirmed != true || !active() || _searchPending ||
+          provider.questionsLoading || !provider.adminQuestions.any((row) => row.id == q.id)) {
+        return;
+      }
+      final deleted = await provider.deleteQuestion(q.id);
+      if (!mounted || !active()) return;
+      if (deleted) {
+        _refreshSummary();
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(deleted ? labels.success : labels.adminErrorQuestionDeleteLinked),
+      ));
+    });
   }
 
   void showECGEditor(ECGCase? c) {
@@ -806,9 +775,49 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       onComplete: _afterBatchWrite,
     );
   }
+  Widget _buildQuestionTable(AdminQuestionProvider provider) {
+    final rows = provider.adminQuestions;
+    final session = provider.actionSession;
+    bool current() => mounted && !_searchPending && !provider.questionsLoading &&
+        !provider.questionsFailed && provider.actionSession == session &&
+        identical(rows, provider.adminQuestions);
+
+    return QuestionsDataTable(
+      questions: rows,
+      selectedIds: _selectedIds,
+      onSelectionChanged: (ids) {
+        if (!current()) return;
+        setState(() {
+          _selectedIds.clear();
+          _selectedIds.addAll(rows.map((q) => q.id).where(ids.contains));
+        });
+      },
+      sortBy: _sortBy,
+      isAscending: _isAscending,
+      onSort: (sort, ascending) {
+        if (current()) _onSort(sort, ascending);
+      },
+      selectedPreviewQuestion: _selectedPreviewQuestion,
+      onPreviewSelected: (q) {
+        if (!current()) return;
+        setState(() {
+          _selectedPreviewQuestion = q;
+          _analyticsFuture = provider.fetchQuestionAnalytics(q.id);
+        });
+      },
+      getReadableType: _getReadableType,
+      onEditQuestion: (q) {
+        if (current()) showQuestionEditor(q);
+      },
+      onDeleteQuestion: (q) {
+        if (current()) _confirmDelete(q);
+      },
+    );
+  }
+
   void _onSort(String sortKey, bool ascending) {
     setState(() {
-      _clearTableContext();
+      // The refreshed page reconciles retained selections by question ID.
       _currentPage = 1;
       _sortBy = sortKey;
       _isAscending = ascending;

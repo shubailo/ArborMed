@@ -1,4 +1,6 @@
 const db = require('../config/db');
+const { validOptions } = require('../services/questionTypes/choiceSchema');
+const { optionSource } = require('../services/questionTypes/choiceOptions');
 const gradeableQuestion = require('../services/questionTypes/gradeableQuestion');
 const questionTypeRegistry = require('../services/questionTypes/registry');
 const AdminExcelService = require('../services/adminExcelService');
@@ -7,7 +9,12 @@ const catchAsync = require('../utils/catchAsync');
 const { questionScope, questionFilter, withQuestionWrite, readQuestion } = require('../services/adminQuestionAccess');
 
 function answerForStorage(question_type, content, options, correct_answer) {
-  const validated = gradeableQuestion({ question_type: question_type || 'single_choice', content, options, correct_answer });
+  const definition = { question_type: question_type || 'single_choice', content, options, correct_answer };
+  if (['single_choice', 'multiple_choice', 'case_study'].includes(definition.question_type)
+      && !validOptions(optionSource(definition))) {
+    throw new AppError('Choice options must have aligned translations and a label for every row', 400);
+  }
+  const validated = gradeableQuestion(definition);
   if (!validated) throw new AppError('The answer key must match the displayed question options or pairs', 400);
   const key = validated.correct_answer;
   return typeof key === 'object' ? JSON.stringify(key) : String(key);
@@ -261,8 +268,8 @@ exports.adminUpdateQuestion = catchAsync(async (req, res, next) => {
   const query = `
         UPDATE questions
         SET question_text_en = $1, question_text_hu = $2, explanation_en = $3, explanation_hu = $4,
-            options = $5, correct_answer = $6, topic_id = $7, difficulty = $8, bloom_level = $9, 
-            type = $10, question_type = $11, content = $12, metadata = $13, updated_at = NOW()
+            options = $5, correct_answer = $6, topic_id = $7, difficulty = COALESCE($8, difficulty), bloom_level = COALESCE($9, bloom_level),
+            type = $10, question_type = $11, content = $12, metadata = COALESCE($13, metadata), updated_at = NOW()
         WHERE id = $14
         RETURNING *
     `;
@@ -275,12 +282,12 @@ exports.adminUpdateQuestion = catchAsync(async (req, res, next) => {
     definitionOptions,
     answerForStorage(question_type, content, definitionOptions, correct_answer),
     topic_id,
-    difficulty || bloom_level || 1,
-    bloom_level || difficulty || 1,
+    difficulty ?? null,
+    bloom_level ?? null,
     question_type || 'single_choice',
     question_type || 'single_choice',
     content || {},
-    metadata || {},
+    metadata ?? null,
     id,
   ]));
 

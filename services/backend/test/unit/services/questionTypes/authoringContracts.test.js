@@ -78,3 +78,63 @@ test('true/false authoring accepts Hungarian keys and preserves the available an
   expect(registry.prepareForAdmin(question).options).toEqual(registry.prepareForClient(question).options);
   expect(registry.checkAnswer(question, false)).toMatchObject({correct:true, correctAnswer:'Hamis'});
 });
+
+describe.each(['single_choice', 'multiple_choice'])('%s editor and student choice contract', type => {
+  const ajv = new (require('ajv'))();
+  const handler = registry.getType(type);
+  const schema = ajv.compile(handler.getSchema().properties.content);
+
+  test('empty alternate language and placeholders keep both choices visible and gradeable', () => {
+    for (const options of [
+      { en: ['One', 'Two'], hu: [] },
+      { en: ['One', 'Two'], hu: ['', '  '] },
+      { en: [], hu: [{ id: 4, hu: 'Egy' }, { id: 5, hu: 'Kettő' }] },
+      { en: ['', '  '], hu: ['Egy', 'Kettő'] },
+    ]) {
+      const expected = options.en.some(v => v.trim()) ? ['One', 'Two'] : ['Egy', 'Kettő'];
+      const key = expected[1];
+      const content = { question_text: { en: 'Choose', hu: '' }, options };
+      expect(schema(content)).toBe(true);
+      const question = { question_type: type, content, correct_answer: type === 'single_choice' ? key : [key] };
+      expect(registry.validate(type, question).valid).toBe(true);
+      const choices = handler.prepareForClient(question).choice_options;
+      expect(choices.map(c => c.hu)).toEqual(expected);
+      expect(choices.map(c => c.en)).toEqual(expected);
+      expect(handler.checkAnswer(question, type === 'single_choice' ? choices[1].id : [choices[1].id]).correct).toBe(true);
+    }
+  });
+
+  test('structured translated slots preserve the same canonical ID as the editor', () => {
+    const options = {en:['', ''], hu:[{id:42, label:'Egy'}, {id:5, hu:'Kettő'}]};
+    const question = {content:{question_text:'Choose', options}, correct_answer:type === 'single_choice' ? '42' : ['42']};
+    const [first] = handler.prepareForClient(question).choice_options;
+    expect(first).toEqual({en:'Egy', hu:'Egy', id:'opt_73475cb40a568e8da8a045ced110137e'});
+    expect(handler.checkAnswer(question, type === 'single_choice' ? first.id : [first.id]).correct).toBe(true);
+  });
+
+  test('a historical blank-label hash is usable only when its row is unique', () => {
+    const old = 'opt_e3b0c44298fc1c149afbf4c8996fb924';
+    const question = en => ({options:{en, hu:['Első','Második']}, correct_answer:type === 'single_choice' ? old : [old]});
+    const actual = type === 'single_choice' ? 'Első' : ['Első'];
+    expect(handler.checkAnswer(question(['','Second']), actual).correct).toBe(true);
+    expect(handler.checkAnswer(question(['','']), actual).correct).toBe(false);
+  });
+
+  test('invalid structured identity and labels are rejected by the advertised and runtime contracts', () => {
+    for (const bad of [{id: {}, en:'One'}, {en: {text:'One'}}, {en:'   '}]) {
+      const content = {question_text: 'Choose', options: [bad, 'Two']};
+      expect(schema(content)).toBe(false);
+      expect(registry.validate(type, {content, correct_answer: type === 'single_choice' ? 'Two' : ['Two']}).valid).toBe(false);
+    }
+  });
+});
+
+test('a quoted JSON-looking single answer still grades its original row after storage normalization', () => {
+  const gradeableQuestion = require('../../../../src/services/questionTypes/gradeableQuestion');
+  const q = {question_type:'single_choice', options:['[42]', '42'], correct_answer:'"[42]"'};
+  const prepared = gradeableQuestion(q);
+  const [first, second] = registry.prepareForClient(q).choice_options;
+  expect(prepared.correct_answer).toBe(first.id);
+  expect(registry.checkAnswer(prepared, first.id).correct).toBe(true);
+  expect(registry.checkAnswer(prepared, second.id).correct).toBe(false);
+});

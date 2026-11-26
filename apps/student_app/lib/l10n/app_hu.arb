@@ -315,6 +315,7 @@
   "adminTableDifficulty": "Nehézség",
   "adminQuestionDetails": "Kérdés részletei",
   "adminUnknown": "Ismeretlen",
+  "adminAnswerKeyUnresolved": "A helyes válasz nem azonosítható",
   "adminUntitled": "Névtelen",
   "adminSubjectFallback": "Tantárgy",
   "adminSectionFallback": "Szekció",

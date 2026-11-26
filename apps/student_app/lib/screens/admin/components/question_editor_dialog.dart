@@ -61,6 +61,8 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
   List<String> _currentOptionsEn = ['', '', '', ''];
   List<String> _currentOptionsHu = ['', '', '', ''];
 
+  List<AdminChoice?> _originalChoices = [];
+
   // Image Upload
   PlatformFile? _selectedImage;
   bool _isSaving = false;
@@ -181,46 +183,16 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       _existingImageUrl = widget.question!.content['image_url'];
     }
 
-    List<String> optsEn = [];
-    if (widget.question != null) {
-      dynamic rawOptions = widget.question!.options;
-      if (rawOptions is String) {
-        try {
-          final decoded = json.decode(rawOptions);
-          if (decoded is List) {
-            optsEn = (decoded).map((e) => e?.toString() ?? '').toList();
-          } else if (decoded is Map && decoded.containsKey('en')) {
-            optsEn = (decoded['en'] as List)
-                .map((e) => e?.toString() ?? '')
-                .toList();
-          }
-        } catch (_) {}
-      } else if (rawOptions is List) {
-        optsEn = (rawOptions).map((e) => e?.toString() ?? '').toList();
-      } else if (rawOptions is Map && rawOptions.containsKey('en')) {
-        optsEn =
-            (rawOptions['en'] as List).map((e) => e?.toString() ?? '').toList();
-      }
+    final question = widget.question;
+    final choices = question?.choices ?? const <AdminChoice>[];
+    if (choices.isNotEmpty) {
+      _currentOptionsEn = choices.map((choice) => choice.en).toList();
+      _currentOptionsHu = choices.map((choice) => choice.hu).toList();
     }
-    if (optsEn.isEmpty) optsEn = ['', '', '', ''];
-    _currentOptionsEn = optsEn;
-
-    List<String> optsHu = [];
-    if (widget.question?.optionsHu != null) {
-      optsHu = widget.question!.optionsHu!;
-    } else {
-      optsHu = List.filled(_currentOptionsEn.length, '', growable: true);
-    }
-
-    while (optsHu.length < _currentOptionsEn.length) {
-      optsHu.add('');
-    }
-    _currentOptionsHu = optsHu;
-
-    if (_questionType == 'single_choice' && widget.question != null) {
-      _correctIndex = _currentOptionsEn
-          .indexWhere((o) => o == widget.question!.correctAnswer);
-      if (_correctIndex == -1) _correctIndex = 0;
+    _originalChoices = List<AdminChoice?>.of(choices);
+    if (_questionType == 'single_choice') {
+      final keys = question?.answerKeys;
+      _correctIndex = keys?.length == 1 ? question!.choiceIndex(keys!.single) : null;
     } else {
       _correctIndex = 0;
     }
@@ -252,7 +224,6 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       linkHuController: _linkHuController,
       textControllerEn: _textControllerEn,
       textControllerHu: _textControllerHu,
-      currentOptionsEn: _currentOptionsEn,
       setCorrectIndex: (idx) => _correctIndex = idx,
       addMultipleCorrectIndex: (idx) => _multipleCorrectIndices.add(idx),
       addMatchingGroup: _addMatchingGroup,
@@ -460,6 +431,10 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       selectedTopicId: _selectedTopicId,
       onQuestionTypeChanged: (val) {
         setState(() {
+          if (!const {'single_choice','multiple_choice'}.contains(val) ||
+              !const {'single_choice','multiple_choice'}.contains(_questionType)) {
+            _originalChoices.clear();
+          }
           _questionType = val;
           _onTypeChanged();
         });
@@ -496,17 +471,12 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
             rightEn: TextEditingController(),
             rightHu: TextEditingController()));
       }
-    } else if (_questionType == 'multiple_choice') {
-      if (_currentOptionsEn.length < 2) {
-        _currentOptionsEn = ["", "", "", ""];
-        _currentOptionsHu = ["", "", "", ""];
-      }
-    } else {
-      if (_currentOptionsEn.length < 2) {
-        _currentOptionsEn = ["", "", "", ""];
-        _currentOptionsHu = ["", "", "", ""];
-      }
+    } else if (_currentOptionsEn.length < 2) {
+      _currentOptionsEn = ["", "", "", ""];
+      _currentOptionsHu = ["", "", "", ""];
     }
+    _multipleCorrectIndices.clear();
+    if (_questionType == 'single_choice') _correctIndex = null;
   }
 
   Map<String, dynamic> _translationFields(String source) =>
@@ -722,12 +692,13 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
             }
           }),
           onAddOption: () => setState(() {
-            _currentOptionsEn.add("");
-            _currentOptionsHu.add("");
+            _currentOptionsEn = [..._currentOptionsEn, ""];
+            _currentOptionsHu = [..._currentOptionsHu, ""];
           }),
           onRemoveOption: (index) => setState(() {
-            _currentOptionsEn.removeAt(index);
-            _currentOptionsHu.removeAt(index);
+            if (index < _originalChoices.length) _originalChoices.removeAt(index);
+            _currentOptionsEn = List.of(_currentOptionsEn)..removeAt(index);
+            _currentOptionsHu = List.of(_currentOptionsHu)..removeAt(index);
             _multipleCorrectIndices.remove(index);
             for (int i = 0; i < _multipleCorrectIndices.length; i++) {
               if (_multipleCorrectIndices[i] > index) {
@@ -745,21 +716,22 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
         final isEn = lang == 'en';
         return SingleChoiceEditor(
           options: isEn ? _currentOptionsEn : _currentOptionsHu,
-          correctIndex: _correctIndex ?? 0,
+          correctIndex: _correctIndex,
           onOptionsChanged: (newOpts) => setState(() =>
               isEn ? _currentOptionsEn = newOpts : _currentOptionsHu = newOpts),
           onCorrectIndexChanged: (idx) => setState(() => _correctIndex = idx),
           onAdd: () => setState(() {
-            _currentOptionsEn.add("");
-            _currentOptionsHu.add("");
+            _currentOptionsEn = [..._currentOptionsEn, ""];
+            _currentOptionsHu = [..._currentOptionsHu, ""];
           }),
           onRemove: (idx) {
             if (_currentOptionsEn.length <= 2) return;
             setState(() {
-              _currentOptionsEn.removeAt(idx);
-              _currentOptionsHu.removeAt(idx);
+              if (idx < _originalChoices.length) _originalChoices.removeAt(idx);
+              _currentOptionsEn = List.of(_currentOptionsEn)..removeAt(idx);
+              _currentOptionsHu = List.of(_currentOptionsHu)..removeAt(idx);
               if (_correctIndex == idx) {
-                _correctIndex = 0;
+                _correctIndex = null;
               } else if (_correctIndex != null && _correctIndex! > idx) {
                 _correctIndex = _correctIndex! - 1;
               }
@@ -842,11 +814,30 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     final questionProvider =
         Provider.of<AdminQuestionProvider>(context, listen: false);
     if (!_formKey.currentState!.validate()) return;
+    if ((_questionType == 'single_choice' && _correctIndex == null) ||
+        (_questionType == 'multiple_choice' && _multipleCorrectIndices.isEmpty)) {
+      final l = AppLocalizations.of(context)!;
+      setState(() => _formError = '${l.correctAnswer} · ${l.adminRequired}');
+      return;
+    }
+    if (_questionType == 'single_choice' || _questionType == 'multiple_choice') {
+      for (var i = 0; i < _currentOptionsEn.length; i++) {
+        if (_currentOptionsEn[i].trim().isEmpty && _currentOptionsHu[i].trim().isEmpty) {
+          final l = AppLocalizations.of(context)!;
+          setState(() => _formError = '${l.adminOptionIndex(i + 1)} · ${l.adminRequired}');
+          return;
+        }
+      }
+    }
     final payload = QuestionPayloadBuilder.buildPayload(
       questionType: _questionType,
       existingImageUrl: _existingImageUrl,
       correctIndex: _correctIndex,
       multipleCorrectIndices: _multipleCorrectIndices,
+      originalChoices: _originalChoices,
+      originalContent: widget.question?.type == _questionType && widget.question?.content is Map
+          ? Map<String, dynamic>.from(widget.question!.content as Map)
+          : const {},
       currentOptionsEn: _currentOptionsEn,
       currentOptionsHu: _currentOptionsHu,
       matchingGroups: _matchingGroups,

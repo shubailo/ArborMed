@@ -332,6 +332,7 @@
   "adminTableDifficulty": "Difficulty",
   "adminQuestionDetails": "Question Details",
   "adminUnknown": "Unknown",
+  "adminAnswerKeyUnresolved": "Could not identify the correct answer",
   "adminUntitled": "Untitled",
   "adminSubjectFallback": "Subject",
   "adminSectionFallback": "Section",
