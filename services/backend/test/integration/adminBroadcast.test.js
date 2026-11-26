@@ -13,10 +13,13 @@ const { app } = require('../../server');
     let pool, server, base;
     const send = (id, path, body) => fetch(base + path, {
         method: body ? 'POST' : 'GET',
-        headers: { authorization: 'Bearer ' + jwt.sign({ id }, process.env.JWT_SECRET), 'content-type': 'application/json' },
+        headers: { authorization: 'Bearer ' + jwt.sign({ id }, testSecret), 'content-type': 'application/json' },
         body: body && JSON.stringify(body),
     });
+    const originalSecret = process.env.JWT_SECRET;
+    const testSecret = 'jwt-fixture-' + require('node:crypto').randomUUID();
     beforeAll(async () => {
+        process.env.JWT_SECRET = testSecret;
         pool = new Pool({ connectionString: process.env.TEST_DATABASE_URL, options: '-c search_path=' + schema });
         await pool.query(`CREATE SCHEMA ${schema};
             CREATE TABLE users(id int PRIMARY KEY, email text, username text, role text, assigned_subject_id int,
@@ -35,6 +38,9 @@ const { app } = require('../../server');
         base = 'http://127.0.0.1:' + server.address().port;
     });
     afterAll(async () => {
+        if (originalSecret === undefined) delete process.env.JWT_SECRET;
+        else process.env.JWT_SECRET = originalSecret;
+
         if (server) await new Promise(resolve => server.close(resolve));
         if (pool) { await pool.query('DROP SCHEMA IF EXISTS ' + schema + ' CASCADE'); await pool.end(); }
     });

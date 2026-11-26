@@ -8,7 +8,10 @@ const { app } = require('../../server');
 
 (process.env.TEST_DATABASE_URL ? describe : describe.skip)('ECG editing over HTTP with PostgreSQL', () => {
     let pg, server, root;
+    const originalSecret = process.env.JWT_SECRET;
+    const testSecret = 'jwt-fixture-' + require('node:crypto').randomUUID();
     beforeAll(async () => {
+        process.env.JWT_SECRET = testSecret;
         pg = new Client({ connectionString: process.env.TEST_DATABASE_URL });
         await pg.connect();
         await pg.query(`CREATE TEMP TABLE users(id int primary key, email text, role text, coins int, xp int, level int,
@@ -25,12 +28,15 @@ const { app } = require('../../server');
         root = 'http://127.0.0.1:' + server.address().port + '/ecg';
     });
     afterAll(async () => {
+        if (originalSecret === undefined) delete process.env.JWT_SECRET;
+        else process.env.JWT_SECRET = originalSecret;
+
         if (server) await new Promise(resolve => server.close(resolve));
         if (pg) await pg.end();
     });
     const call = (path, method = 'GET', body, id = 1) => fetch(root + path, {
         method, body: body && JSON.stringify(body),
-        headers: { authorization: 'Bearer ' + jwt.sign({id}, process.env.JWT_SECRET), 'content-type': 'application/json' },
+        headers: { authorization: 'Bearer ' + jwt.sign({id}, testSecret), 'content-type': 'application/json' },
     });
     const data = {
         diagnosis_id: 1, secondary_diagnoses_ids: [2], difficulty: 'intermediate', image_url: '/uploads/example.png',
