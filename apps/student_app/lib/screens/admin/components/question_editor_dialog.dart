@@ -1,3 +1,4 @@
+import 'package:arbor_med/core/models/topic_hierarchy.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -26,7 +27,7 @@ import '../../../generated/l10n/app_localizations.dart';
 
 class QuestionEditorDialog extends StatefulWidget {
   final AdminQuestion? question;
-  final List<dynamic> topics; // Accepted topics list
+  final List<Map<String, dynamic>> topics;
   final VoidCallback onSaved;
 
   const QuestionEditorDialog(
@@ -87,7 +88,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
   // Metadata Fields
   int? _selectedTopicId;
   int? _selectedSubjectId;
-  late final Map<int, int> _subjectByTopic;
+  late TopicHierarchy _hierarchy;
   int _bloomLevel = 1;
   String _questionType = 'single_choice';
   int? _correctIndex;
@@ -112,31 +113,18 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
 
     _selectedTopicId = widget.question?.topicId;
 
-    final children = <int?, List<int>>{};
-    for (final topic in widget.topics) {
-      (children[topic['parent_id'] as int?] ??= []).add(topic['id'] as int);
-    }
-    _subjectByTopic = {};
-    for (final root in children[null] ?? <int>[]) {
-      final pending = [root];
-      while (pending.isNotEmpty) {
-        final id = pending.removeLast();
-        if (_subjectByTopic.containsKey(id)) continue;
-        _subjectByTopic[id] = root;
-        pending.addAll(children[id] ?? const []);
-      }
-    }
-    _selectedSubjectId = _subjectByTopic[_selectedTopicId];
+    _hierarchy = TopicHierarchy(widget.topics);
+    _selectedSubjectId = _hierarchy.subjectOf[_selectedTopicId];
     if (_selectedSubjectId == null) _selectedTopicId = null;
 
     // If creating a new question, restore last-used subject/topic for convenience
     if (widget.question == null) {
-      if (_rememberedSubjectId != null && _subjectByTopic[_rememberedSubjectId] == _rememberedSubjectId) {
+      if (_rememberedSubjectId != null && _hierarchy.subjectOf[_rememberedSubjectId] == _rememberedSubjectId) {
         _selectedSubjectId = _rememberedSubjectId;
       }
       if (_rememberedTopicId != null && _selectedTopicId == null) {
         // Ensure the remembered topic belongs to the selected subject
-        if (_selectedSubjectId != null && _subjectByTopic[_rememberedTopicId] == _selectedSubjectId) {
+        if (_selectedSubjectId != null && _hierarchy.subjectOf[_rememberedTopicId] == _selectedSubjectId) {
           _selectedTopicId = _rememberedTopicId;
         }
       }
@@ -235,6 +223,20 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       if (_correctIndex == -1) _correctIndex = 0;
     } else {
       _correctIndex = 0;
+    }
+  }
+
+  @override
+  void didUpdateWidget(QuestionEditorDialog oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (identical(oldWidget.topics, widget.topics)) return;
+    _hierarchy = TopicHierarchy(widget.topics);
+    if (!_hierarchy.roots.contains(_selectedSubjectId)) {
+      _selectedSubjectId = null;
+    }
+    if (_hierarchy.subjectOf[_selectedTopicId] != _selectedSubjectId ||
+        _selectedSubjectId == null) {
+      _selectedTopicId = null;
     }
   }
 
@@ -450,8 +452,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
   }
   Widget _buildMetadataSection() {
     return QuestionMetadataSection(
-      topics: widget.topics,
-      subjectByTopic: _subjectByTopic,
+      hierarchy: _hierarchy,
       excludedTopicSlugs: _excludedTopicSlugs,
       questionType: _questionType,
       bloomLevel: _bloomLevel,

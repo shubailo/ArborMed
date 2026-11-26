@@ -2894,6 +2894,18 @@ abstract class AppLocalizations {
   /// **'Upload Failed'**
   String get adminUploadFailed;
 
+  /// No description provided for @adminImportFileTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a file of up to 5 MiB.'**
+  String get adminImportFileTooLarge;
+
+  /// No description provided for @adminImportWithErrors.
+  ///
+  /// In en, this message translates to:
+  /// **'Import completed with errors'**
+  String get adminImportWithErrors;
+
   /// No description provided for @adminUploadComplete.
   ///
   /// In en, this message translates to:

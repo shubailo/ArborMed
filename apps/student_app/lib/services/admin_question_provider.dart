@@ -20,6 +20,7 @@ class AdminQuestionProvider with ChangeNotifier {
 
   (int?, String?)? _account;
   int _generation = 0;
+  (int, int) get actionSession => (authProvider.sessionRevision, _generation);
 
   void updateAccount(int? id, String? role) {
     if (_account == (id, role)) return;
@@ -226,17 +227,11 @@ class AdminQuestionProvider with ChangeNotifier {
   }
 
   Future<void> downloadQuestionsTemplate() async {
-    try {
-      final bytes = await apiService.getBytes(ApiEndpoints.quizAdminTemplate);
-
-      await downloadHelper.download(
-        bytes,
-        'QUESTION_TEMPLATE.xlsx',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      );
-    } catch (e) {
-      debugPrint('Error downloading template: $e');
-    }
+    final session = actionSession;
+    final bytes = await apiService.getBytes(ApiEndpoints.quizAdminTemplate);
+    if (actionSession != session) return;
+    await downloadHelper.download(bytes, 'QUESTION_TEMPLATE.xlsx',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   }
 
   Future<void> fetchWallOfPain() async {

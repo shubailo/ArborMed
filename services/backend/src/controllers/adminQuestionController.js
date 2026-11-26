@@ -362,6 +362,78 @@ exports.adminDownloadTemplate = catchAsync(async (req, res) => {
   res.end();
 });
 
+function importOptions(row, saved) {
+  const previous = saved?.options;
+  const stored =
+    [previous, saved?.content?.options].find(value =>
+      [value, value?.en, value?.hu].some(list => Array.isArray(list) && list.length)
+    ) ?? {};
+  const labels = value => (value ? value.split(';').map(label => label.trim()) : undefined);
+  const en = labels(row.optEn),
+    hu = labels(row.optHu);
+  if (!en && !hu) return stored;
+  const entries = Array.isArray(stored) ? stored : Array.isArray(stored.en) ? stored.en : undefined;
+  if (entries?.some(item => item && typeof item === 'object')) {
+    if ((en && en.length !== entries.length) || (hu && hu.length !== entries.length)) {
+      throw new AppError(
+        'Edit the existing options in order or use the question editor to change their number.',
+        400
+      );
+    }
+    const updated = entries.map((entry, index) => ({
+      ...(typeof entry === 'string' ? { en: entry } : entry),
+      ...(en && { en: en[index] }),
+      ...(hu && { hu: hu[index] })
+    }));
+    return Array.isArray(stored) ? updated : { ...stored, en: updated, ...(hu && { hu }) };
+  }
+  const result = { en: en ?? entries ?? [], hu: hu ?? stored.hu ?? [] };
+  if (result.en.length && result.hu.length && result.en.length !== result.hu.length) {
+    throw new AppError('English and Hungarian choice lists must have the same number of entries.', 400);
+  }
+  return result;
+}
+
+function importQuestion(row, saved) {
+  const type = row.type || saved?.question_type || saved?.type || 'single_choice';
+  const bloom = Number(row.bloom || saved?.bloom_level || 1);
+  if (!Number.isInteger(bloom) || bloom < 1 || bloom > 4)
+    throw new AppError('Bloom level must be 1 to 4.', 400);
+  const options = importOptions(row, saved);
+  const q_en = row.q_en || saved?.question_text_en || '';
+  const q_hu = row.q_hu || saved?.question_text_hu || '';
+  if (type !== 'matching' && !(q_en.trim() || q_hu.trim()))
+    throw new AppError('Question text is required.', 400);
+  const answer = value =>
+    type === 'multiple_choice' && typeof value === 'string' && value.includes(';')
+      ? value.split(';').map(label => label.trim())
+      : value;
+  const correctAns = answerForStorage(
+    type,
+    saved?.content,
+    options,
+    answer(row.correctAns || saved?.correct_answer)
+  );
+  if (row.otherAnswer) {
+    const definition = { question_type: type, options, content: saved?.content, correct_answer: correctAns };
+    if (!questionTypeRegistry.getType(type)?.checkAnswer(definition, answer(row.otherAnswer)).correct) {
+      throw new AppError('The language rows disagree on the correct answer.', 400);
+    }
+  }
+  return {
+    q_en,
+    q_hu,
+    topic_id: row.topic_id,
+    bloom,
+    type,
+    correctAns,
+    optionsJson: JSON.stringify(options),
+    expEn: row.expEn || saved?.explanation_en || '',
+    expHu: row.expHu || saved?.explanation_hu || '',
+    db_id: row.db_id
+  };
+}
+
 /**
  * @desc Admin: Batch upload questions (Excel/CSV)
  * @route POST /api/quiz/admin/questions/batch
@@ -373,121 +445,111 @@ exports.adminBatchUpload = catchAsync(async (req, res, next) => {
 
   const questions = await AdminExcelService.parseFile(
     req.file.buffer,
-    req.file.mimetype
+    req.file.mimetype,
+    req.file.originalname
   );
   let successCount = 0;
   const errors = [];
 
-  const insertsToProcess = [];
-  const updatesToProcess = [];
+  const candidates = questions.filter(q => {
+    if (!q.error && q.topic_id) return true;
+    errors.push(q.at + ': ' + (q.error || 'Invalid or missing topic.'));
+    return false;
+  });
+  if (!candidates.length) throw new AppError('Upload failed: ' + errors.join(', '), 400);
 
-  for (let i = 0; i < questions.length; i++) {
-    try {
-      const q = questions[i];
-      if (!q.topic_id) throw new Error(`Invalid or missing topic: ${q.topic}`);
-
-      const optListEn = q.optEn ? q.optEn.toString().split(';') : [];
-      const optListHu = q.optHu ? q.optHu.toString().split(';') : [];
-      const optionsJson = JSON.stringify({ en: optListEn, hu: optListHu });
-
-      let finalCorrectAnswer = q.correctAns || '';
-      if ((q.type || 'single_choice') === 'multiple_choice' && finalCorrectAnswer.includes(';')) {
-        finalCorrectAnswer = JSON.stringify(finalCorrectAnswer.split(';').map(s => s.trim()));
-      }
-
-      const processedQ = {
-        q_en: q.q_en || '',
-        q_hu: q.q_hu || '',
-        topic_id: q.topic_id,
-        bloom: parseInt(q.bloom) || 1,
-        type: q.type || 'single_choice',
-        correctAns: answerForStorage(q.type, null, optionsJson, finalCorrectAnswer),
-        optionsJson,
-        expEn: q.expEn || '',
-        expHu: q.expHu || '',
-        db_id: q.db_id,
-      };
-
-      if (q.db_id) {
-        updatesToProcess.push(processedQ);
-      } else {
-        insertsToProcess.push(processedQ);
-      }
-      successCount++;
-    } catch (err) {
-      errors.push(`Row ${i + 2}: ${err.message}`);
-    }
-  }
-
-  if (errors.length > 0 && successCount === 0) {
-    return next(new AppError('Upload failed: ' + errors.join(', '), 400));
-  }
-
-  await withQuestionWrite(req.user.id, {
-    questionIds: updatesToProcess.map(row => row.db_id),
-    topicIds: [...new Set([...insertsToProcess, ...updatesToProcess].map(row => row.topic_id))],
-  }, async client => {
-    // Bulk Inserts
-    const insertChunkSize = 500;
-    for (let i = 0; i < insertsToProcess.length; i += insertChunkSize) {
-      const chunk = insertsToProcess.slice(i, i + insertChunkSize);
-      const params = [];
-      const values = [];
-      let offset = 1;
-      for (const q of chunk) {
-        values.push(
-          `($${offset}, $${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 3}, $${offset + 4}, $${offset + 4}, $${offset + 5}, $${offset + 6}, $${offset + 7}, $${offset + 8}, $${offset + 9})`
+  await withQuestionWrite(
+    req.user.id,
+    {
+      questionIds: candidates.filter(q => q.db_id).map(q => q.db_id),
+      topicIds: [...new Set(candidates.map(q => q.topic_id))]
+    },
+    async client => {
+      const editIds = candidates.filter(q => q.db_id).map(q => q.db_id);
+      const existing = new Map();
+      if (editIds.length) {
+        const { rows } = await client.query(
+          `SELECT id, question_text_en, question_text_hu, explanation_en, explanation_hu,
+        bloom_level, question_type, type, options, correct_answer, content FROM questions WHERE id=ANY($1::int[])`,
+          [editIds]
         );
-        params.push(
-          q.q_en,
-          q.q_hu,
-          q.topic_id,
-          q.bloom,
-          q.type,
-          q.correctAns,
-          q.optionsJson,
-          q.expEn,
-          q.expHu,
-          req.user.id
-        );
-        offset += 10;
+        for (const row of rows) existing.set(row.id, row);
       }
-      if (values.length > 0) {
-        const query = `INSERT INTO questions (question_text_en, question_text_hu, topic_id, bloom_level, difficulty, type, question_type, correct_answer, options, explanation_en, explanation_hu, created_by) VALUES ${values.join(', ')}`;
-        await client.query(query, params);
+      const insertsToProcess = [],
+        updatesToProcess = [];
+      for (const row of candidates) {
+        try {
+          const q = importQuestion(row, existing.get(row.db_id));
+          (row.db_id ? updatesToProcess : insertsToProcess).push(q);
+          successCount++;
+        } catch (err) {
+          if (!(err instanceof AppError)) throw err;
+          errors.push(row.at + ': ' + err.message);
+        }
       }
-    }
+      if (!successCount) throw new AppError('Upload failed: ' + errors.join(', '), 400);
 
-    // Bulk Updates
-    const updateChunkSize = 500;
-    for (let i = 0; i < updatesToProcess.length; i += updateChunkSize) {
-      const chunk = updatesToProcess.slice(i, i + updateChunkSize);
-      const ids = [],
-        qEn = [],
-        qHu = [],
-        topicId = [],
-        bloom = [],
-        type = [],
-        correctAns = [],
-        options = [],
-        expEn = [],
-        expHu = [];
-
-      for (const q of chunk) {
-        ids.push(q.db_id);
-        qEn.push(q.q_en);
-        qHu.push(q.q_hu);
-        topicId.push(q.topic_id);
-        bloom.push(q.bloom);
-        type.push(q.type);
-        correctAns.push(q.correctAns);
-        options.push(q.optionsJson);
-        expEn.push(q.expEn);
-        expHu.push(q.expHu);
+      // Bulk Inserts
+      const insertChunkSize = 500;
+      for (let i = 0; i < insertsToProcess.length; i += insertChunkSize) {
+        const chunk = insertsToProcess.slice(i, i + insertChunkSize);
+        const params = [];
+        const values = [];
+        let offset = 1;
+        for (const q of chunk) {
+          values.push(
+            `($${offset}, $${offset + 1}, $${offset + 2}, $${offset + 3}, $${offset + 3}, $${offset + 4}, $${offset + 4}, $${offset + 5}, $${offset + 6}, $${offset + 7}, $${offset + 8}, $${offset + 9})`
+          );
+          params.push(
+            q.q_en,
+            q.q_hu,
+            q.topic_id,
+            q.bloom,
+            q.type,
+            q.correctAns,
+            q.optionsJson,
+            q.expEn,
+            q.expHu,
+            req.user.id
+          );
+          offset += 10;
+        }
+        if (values.length > 0) {
+          const query = `INSERT INTO questions (question_text_en, question_text_hu, topic_id, bloom_level, difficulty, type, question_type, correct_answer, options, explanation_en, explanation_hu, created_by) VALUES ${values.join(', ')}`;
+          await client.query(query, params);
+        }
       }
 
-      if (ids.length > 0) {
-        const query = `
+      // Bulk Updates
+      const updateChunkSize = 500;
+      for (let i = 0; i < updatesToProcess.length; i += updateChunkSize) {
+        const chunk = updatesToProcess.slice(i, i + updateChunkSize);
+        const ids = [],
+          qEn = [],
+          qHu = [],
+          topicId = [],
+          bloom = [],
+          type = [],
+          correctAns = [],
+          options = [],
+          expEn = [],
+          expHu = [];
+
+        for (const q of chunk) {
+          ids.push(q.db_id);
+          qEn.push(q.q_en);
+          qHu.push(q.q_hu);
+          topicId.push(q.topic_id);
+          bloom.push(q.bloom);
+          type.push(q.type);
+          correctAns.push(q.correctAns);
+          options.push(q.optionsJson);
+          expEn.push(q.expEn);
+          expHu.push(q.expHu);
+        }
+
+        if (ids.length > 0) {
+          const query = `
                     UPDATE questions
                     SET
                         question_text_en = c.q_en,
@@ -500,7 +562,7 @@ exports.adminBatchUpload = catchAsync(async (req, res, next) => {
                         correct_answer = c.correct_ans,
                         options = c.options::jsonb,
                         explanation_en = c.exp_en,
-                        explanation_hu = c.exp_hu
+                        explanation_hu = c.exp_hu, updated_at = NOW()
                     FROM (
                         SELECT
                             unnest($1::int[]) as id,
@@ -516,26 +578,16 @@ exports.adminBatchUpload = catchAsync(async (req, res, next) => {
                     ) as c
                     WHERE questions.id = c.id
                 `;
-        await client.query(query, [
-          ids,
-          qEn,
-          qHu,
-          topicId,
-          bloom,
-          type,
-          correctAns,
-          options,
-          expEn,
-          expHu,
-        ]);
+          await client.query(query, [ids, qEn, qHu, topicId, bloom, type, correctAns, options, expEn, expHu]);
+        }
       }
     }
-  });
+  );
 
   res.json({
     message: `Successfully processed ${successCount} questions`,
     imported: successCount,
-    errors: errors.length > 0 ? errors : null,
+    errors: errors.length > 0 ? errors : null
   });
 });
 

@@ -1,10 +1,10 @@
+import 'package:arbor_med/core/models/topic_hierarchy.dart';
 import 'package:flutter/material.dart';
 import '../../../theme/cozy_theme.dart';
 import '../../../generated/l10n/app_localizations.dart';
 
 class QuestionMetadataSection extends StatelessWidget {
-  final List<dynamic> topics;
-  final Map<int, int> subjectByTopic;
+  final TopicHierarchy hierarchy;
   final List<String> excludedTopicSlugs;
   final String questionType;
   final int bloomLevel;
@@ -17,8 +17,7 @@ class QuestionMetadataSection extends StatelessWidget {
 
   const QuestionMetadataSection({
     super.key,
-    required this.topics,
-    required this.subjectByTopic,
+    required this.hierarchy,
     this.excludedTopicSlugs = const ['ecg'],
     required this.questionType,
     required this.bloomLevel,
@@ -32,20 +31,11 @@ class QuestionMetadataSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subjects = topics
-        .where((t) =>
-            t['parent_id'] == null &&
-            (!excludedTopicSlugs.contains(t['slug']) || t['id'] == selectedSubjectId))
-        .toList();
-
-    List<dynamic> sections = [];
-    if (selectedSubjectId != null) {
-      sections = topics
-          .where((t) => subjectByTopic[t['id']] == selectedSubjectId &&
-              (t['id'] != selectedSubjectId || t['id'] == selectedTopicId))
-          .toList();
-    }
-
+    final l = AppLocalizations.of(context)!;
+    final subjects = hierarchy.roots.where((id) =>
+        !excludedTopicSlugs.contains(hierarchy.byId[id]!.slug) ||
+        id == selectedSubjectId);
+    final sections = hierarchy.members(selectedSubjectId);
     return Column(
       children: [
         Row(
@@ -54,7 +44,16 @@ class QuestionMetadataSection extends StatelessWidget {
               flex: 3,
               child: DropdownButtonFormField<String>(
                 key: ValueKey('type_$questionType'),
-                initialValue: questionType,
+                initialValue: const [
+                  'single_choice',
+                  'multiple_choice',
+                  'relation_analysis',
+                  'matching',
+                  'true_false'
+                ].contains(questionType)
+                    ? questionType
+                    : null,
+                validator: (value) => value == null ? l.adminRequired : null,
                 isExpanded: true,
                 decoration: CozyTheme.inputDecoration(
                   context,
@@ -112,7 +111,9 @@ class QuestionMetadataSection extends StatelessWidget {
               flex: 2,
               child: DropdownButtonFormField<int>(
                 key: ValueKey('bloom_$bloomLevel'),
-                initialValue: bloomLevel,
+                initialValue:
+                    [1, 2, 3, 4].contains(bloomLevel) ? bloomLevel : null,
+                validator: (value) => value == null ? l.adminRequired : null,
                 isExpanded: true,
                 decoration: CozyTheme.inputDecoration(
                   context,
@@ -158,11 +159,9 @@ class QuestionMetadataSection extends StatelessWidget {
                 ),
                 items: subjects.map<DropdownMenuItem<int>>((s) {
                   return DropdownMenuItem(
-                    value: s['id'] as int,
+                    value: s,
                     child: Text(
-                      s['name']?.toString() ??
-                          s['name_en']?.toString() ??
-                          'Unnamed Subject',
+                      hierarchy.label(s, l.localeName, l.adminSubjectFallback),
                       overflow: TextOverflow.ellipsis,
                     ),
                   );
@@ -189,7 +188,8 @@ class QuestionMetadataSection extends StatelessWidget {
                 ),
                 validator: (val) {
                   if (selectedSubjectId != null && val == null) {
-                    return AppLocalizations.of(context)!.adminErrorSelectSection;
+                    return AppLocalizations.of(context)!
+                        .adminErrorSelectSection;
                   }
                   return null;
                 },
@@ -197,11 +197,10 @@ class QuestionMetadataSection extends StatelessWidget {
                     ? []
                     : sections.map<DropdownMenuItem<int>>((s) {
                         return DropdownMenuItem(
-                          value: s['id'] as int,
+                          value: s,
                           child: Text(
-                            s['name']?.toString() ??
-                                s['name_en']?.toString() ??
-                                'Unnamed Topic',
+                            hierarchy.label(
+                                s, l.localeName, l.adminUnnamedSection),
                             overflow: TextOverflow.ellipsis,
                           ),
                         );
@@ -215,4 +214,3 @@ class QuestionMetadataSection extends StatelessWidget {
     );
   }
 }
-

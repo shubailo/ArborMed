@@ -502,6 +502,8 @@
   "adminErrorReadBytes": "Nem sikerült beolvasni a fájlt.",
   "adminProcessingUpload": "Feltöltés feldolgozása",
   "adminUploadFailed": "Feltöltés sikertelen",
+  "adminImportFileTooLarge": "Legfeljebb 5 MiB méretű fájlt válassz.",
+  "adminImportWithErrors": "Az importálás hibákkal fejeződött be",
   "adminUploadComplete": "Feltöltés kész",
   "adminParsing": "Feldolgozás:",
   "adminUploadSuccess": "{count} kérdés sikeresen feltöltve.",

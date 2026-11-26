@@ -1,141 +1,121 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:provider/provider.dart';
-import '../../../services/admin_question_provider.dart';
+import 'package:arbor_med/core/models/topic_hierarchy.dart';
 import 'package:arbor_med/features/quiz/providers/topic_provider.dart';
+import '../../../services/admin_question_provider.dart';
 import '../../../generated/l10n/app_localizations.dart';
+import 'admin_question_action.dart';
 
 class BulkActionHandler {
-  static Future<void> handleBulkDelete({
-    required BuildContext context,
-    required AdminQuestionProvider questionProvider,
-    required Set<int> selectedIds,
-    required VoidCallback onSuccess,
-  }) async {
-    final l10n = AppLocalizations.of(context)!;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.adminConfirmBatchDelete),
-        content: Text(
-          l10n.adminConfirmBatchDeleteSubtitle(selectedIds.length),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: Text(l10n.adminDeleteAll),
-          ),
-        ],
-      ),
-    );
+  static Future<void> handleBulkDelete(
+          {required BuildContext context,
+          required AdminQuestionProvider questionProvider,
+          required Set<int> selectedIds,
+          required VoidCallback onSuccess}) =>
+      _run(context, questionProvider, selectedIds, onSuccess, move: false);
 
-    if (confirmed == true) {
-      final success = await questionProvider.bulkActionQuestions(
-        action: 'delete',
-        ids: selectedIds.toList(),
-      );
-      if (!context.mounted) return;
-      if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.adminSuccessDeletedCount(selectedIds.length)),
-          ),
-        );
-        onSuccess();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.adminErrorDeleteBulk),
-          ),
-        );
-      }
-    }
-  }
+  static Future<void> handleBulkMove(
+          {required BuildContext context,
+          required AdminQuestionProvider questionProvider,
+          required Set<int> selectedIds,
+          required VoidCallback onSuccess}) =>
+      _run(context, questionProvider, selectedIds, onSuccess, move: true);
 
-  static Future<void> handleBulkMove({
-    required BuildContext context,
-    required AdminQuestionProvider questionProvider,
-    required Set<int> selectedIds,
-    required VoidCallback onSuccess,
-  }) async {
-    final l10n = AppLocalizations.of(context)!;
-    int? targetId;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          title: Text(l10n.adminMoveQuestionsTitle),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(l10n.adminMoveQuestionsSubtitle(selectedIds.length)),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<int>(
-                initialValue: targetId,
-                items: Provider.of<TopicProvider>(context, listen: false)
-                    .topics
-                    .map<DropdownMenuItem<int>>(
-                      (topic) => DropdownMenuItem(
-                        value: topic['id'],
-                        child: Text(
-                          topic['name_en'] ?? topic['name'] ?? 'Untitled',
-                        ),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (val) => setDialogState(() => targetId = val),
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: l10n.adminTargetTopic,
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: targetId == null
-                  ? null
-                  : () => Navigator.pop(context, true),
-              child: Text(l10n.adminMoveNow),
-            ),
-          ],
-        ),
-      ),
-    );
+  static Future<void> _run(BuildContext context, AdminQuestionProvider provider,
+          Set<int> selectedIds, VoidCallback onSuccess,
+          {required bool move}) =>
+      runQuestionAction(context, provider, (active) async {
+        final ids = List<int>.unmodifiable(selectedIds);
+        if (ids.isEmpty) return;
+        final l = AppLocalizations.of(context)!;
+        final catalog = move ? context.read<TopicProvider>() : null;
+        int? target;
+        List<int>? selectedPath;
+        bool sameTarget(TopicHierarchy h) =>
+            target != null && listEquals(h.branch(target!), selectedPath);
+        final confirmed = await showDialog<bool>(
+            context: context,
+            builder: (dialog) {
+              void close(bool result) {
+                if (ModalRoute.of(dialog)?.isCurrent == true) {
+                  Navigator.pop(dialog, result);
+                }
+              }
 
-    if (confirmed == true && targetId != null) {
-      final success = await questionProvider.bulkActionQuestions(
-        action: 'move',
-        ids: selectedIds.toList(),
-        targetTopicId: targetId,
-      );
-      if (!context.mounted) return;
-      if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.adminSuccessQuestionsMoved,
-            ),
-          ),
-        );
-        onSuccess();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.adminErrorMoveQuestions,
-            ),
-          ),
-        );
-      }
-    }
-  }
+              Widget prompt(TopicHierarchy? hierarchy, StateSetter rebuild) {
+                final valid = move && sameTarget(hierarchy!);
+                return AlertDialog(
+                    scrollable: true,
+                    title: Text(move
+                        ? l.adminMoveQuestionsTitle
+                        : l.adminConfirmBatchDelete),
+                    content: Column(mainAxisSize: MainAxisSize.min, children: [
+                      Text(move
+                          ? l.adminMoveQuestionsSubtitle(ids.length)
+                          : l.adminConfirmBatchDeleteSubtitle(ids.length)),
+                      if (hierarchy != null)
+                        DropdownButtonFormField<int>(
+                            key: ValueKey(valid ? target : null),
+                            initialValue: valid ? target : null,
+                            isExpanded: true,
+                            decoration:
+                                InputDecoration(labelText: l.adminTargetTopic),
+                            items: [
+                              for (final id in hierarchy.subjectOf.keys)
+                                DropdownMenuItem(
+                                    value: id,
+                                    child: Text(
+                                        hierarchy.label(id, l.localeName,
+                                            l.adminUnnamedSection,
+                                            includeRoot: true),
+                                        overflow: TextOverflow.ellipsis))
+                            ],
+                            onChanged: (id) => rebuild(() {
+                                  target = id;
+                                  selectedPath =
+                                      id == null ? null : hierarchy.branch(id);
+                                })),
+                    ]),
+                    actions: [
+                      TextButton(
+                          onPressed: () => close(false), child: Text(l.cancel)),
+                      TextButton(
+                          onPressed:
+                              (!move || valid) ? () => close(true) : null,
+                          style: move
+                              ? null
+                              : TextButton.styleFrom(
+                                  foregroundColor:
+                                      Theme.of(dialog).colorScheme.error),
+                          child: Text(move ? l.adminMoveNow : l.adminDeleteAll))
+                    ]);
+              }
+
+              return StatefulBuilder(
+                  builder: (context, rebuild) => catalog == null
+                      ? prompt(null, rebuild)
+                      : ListenableBuilder(
+                          listenable: catalog,
+                          builder: (_, __) =>
+                              prompt(TopicHierarchy(catalog.topics), rebuild)));
+            });
+        if (confirmed != true ||
+            !active() ||
+            !context.mounted || ModalRoute.of(context)?.isCurrent != true) {
+          return;
+        }
+        if (move && !sameTarget(TopicHierarchy(catalog!.topics))) return;
+        final success = await provider.bulkActionQuestions(
+            action: move ? 'move' : 'delete', ids: ids, targetTopicId: target);
+        if (!active() || !context.mounted) return;
+        final message = success
+            ? (move
+                ? l.adminSuccessQuestionsMoved
+                : l.adminSuccessDeletedCount(ids.length))
+            : (move ? l.adminErrorMoveQuestions : l.adminErrorDeleteBulk);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(message)));
+        if (success) onSuccess();
+      });
 }

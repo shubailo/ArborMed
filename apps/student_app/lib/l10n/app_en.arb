@@ -526,6 +526,8 @@
   "adminErrorReadBytes": "Could not read file bytes.",
   "adminProcessingUpload": "Processing Upload",
   "adminUploadFailed": "Upload Failed",
+  "adminImportFileTooLarge": "Select a file of up to 5 MiB.",
+  "adminImportWithErrors": "Import completed with errors",
   "adminUploadComplete": "Upload Complete",
   "adminParsing": "Parsing",
   "adminUploadSuccess": "Successfully uploaded {count} questions.",

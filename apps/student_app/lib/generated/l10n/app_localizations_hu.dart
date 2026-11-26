@@ -1488,6 +1488,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get adminUploadFailed => 'Feltöltés sikertelen';
 
   @override
+  String get adminImportFileTooLarge =>
+      'Legfeljebb 5 MiB méretű fájlt válassz.';
+
+  @override
+  String get adminImportWithErrors => 'Az importálás hibákkal fejeződött be';
+
+  @override
   String get adminUploadComplete => 'Feltöltés kész';
 
   @override

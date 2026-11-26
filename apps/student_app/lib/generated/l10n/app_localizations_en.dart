@@ -1489,6 +1489,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adminUploadFailed => 'Upload Failed';
 
   @override
+  String get adminImportFileTooLarge => 'Select a file of up to 5 MiB.';
+
+  @override
+  String get adminImportWithErrors => 'Import completed with errors';
+
+  @override
   String get adminUploadComplete => 'Upload Complete';
 
   @override

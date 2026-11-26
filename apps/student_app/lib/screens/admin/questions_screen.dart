@@ -1,3 +1,4 @@
+import 'package:arbor_med/core/models/topic_hierarchy.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -59,6 +60,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
 
   @override
   void dispose() {
+    _catalog?.removeListener(_catalogChanged);
     _debounceTimer?.cancel();
     _searchController.dispose();
     super.dispose();
@@ -71,12 +73,62 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   final Set<int> _selectedIds = {};
   bool get _isSelectionMode => _selectedIds.isNotEmpty;
 
-  List<Map<String, dynamic>> _tabs = [];
+  TopicProvider? _catalog;
+  List<Map<String, dynamic>>? _snapshot;
+  late TopicHierarchy _hierarchy;
+  bool _catalogFailed = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final catalog = context.read<TopicProvider>();
+    if (identical(catalog, _catalog)) return;
+    _catalog?.removeListener(_catalogChanged);
+    _catalog = catalog..addListener(_catalogChanged);
+    _snapshot = catalog.topics;
+    _hierarchy = TopicHierarchy(catalog.topics);
+  }
+
+  void _catalogChanged() {
+    final catalog = _catalog!;
+    if (identical(_snapshot, catalog.topics) &&
+        _catalogFailed == catalog.loadFailed) {
+      return;
+    }
+    final previousSubject = _currentSubjectId;
+    final previousTopic = _selectedTopicId;
+    setState(() {
+      _catalogFailed = catalog.loadFailed;
+      if (!identical(_snapshot, catalog.topics)) {
+        _snapshot = catalog.topics;
+        _hierarchy = TopicHierarchy(catalog.topics);
+        _subjectLastTopic
+            .removeWhere((root, id) => !_hierarchy.containsSection(root, id));
+        if (!_hierarchy.roots.contains(_currentSubjectId)) {
+          _currentSubjectId = null;
+        }
+        if (!_hierarchy.containsSection(_currentSubjectId, _selectedTopicId)) {
+          _selectedTopicId = null;
+        }
+      }
+      if (previousSubject != _currentSubjectId ||
+          previousTopic != _selectedTopicId) {
+        _clearTableContext();
+        _currentPage = 1;
+      }
+    });
+    if (previousSubject != _currentSubjectId ||
+        previousTopic != _selectedTopicId) {
+      _refresh();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _catalog!.fetchTopics();
       _refresh();
     });
   }
@@ -86,8 +138,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     final request = ++_pageRequest;
     final questionProvider =
         Provider.of<AdminQuestionProvider>(context, listen: false);
-    final userProvider = Provider.of<AdminUserProvider>(context, listen: false);
-    final topicProvider = Provider.of<TopicProvider>(context, listen: false);
 
     // Determine which topic ID to use:
     // - If a section is selected (_selectedTopicId), use that
@@ -98,9 +148,6 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     debugPrint(
         ' [AdminQuestions] Refresh: Subject=$_currentSubjectId, Topic=$_selectedTopicId, Effective=$effectiveTopicId, Type=$_selectedType');
 
-    // 1. Fetch Questions
-
-    // 1. Fetch Data
     if (_selectedType == 'ecg') {
       questionProvider.fetchECGCases();
       // Also fetch diagnoses for the dropdowns
@@ -115,35 +162,44 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         sortBy: _sortBy,
         order: _isAscending ? 'ASC' : 'DESC',
       ).then((_) {
-        if (!mounted || request != _pageRequest || _searchPending || questionProvider.questionsFailed) return;
-        final lastPage = ((questionProvider.adminTotalQuestions - 1) ~/ 200) + 1;
-        if (_currentPage > lastPage) {
-          setState(() { _clearTableContext(); _currentPage = lastPage; });
-          _refresh();
-          return;
-        }
-        setState(() {
-          final rows = questionProvider.adminQuestions;
-          _selectedIds.retainAll(rows.map((q) => q.id));
-          _selectedPreviewQuestion = rows.where((q) => q.id == _selectedPreviewQuestion?.id).firstOrNull;
-        });
+        if (mounted && request == _pageRequest) _reconcilePage(questionProvider);
       });
     }
+    _refreshSummary();
+  }
 
+  void _reconcilePage(AdminQuestionProvider provider) {
+    if (_searchPending || provider.questionsFailed) return;
+    final lastPage = ((provider.adminTotalQuestions - 1) ~/ 200) + 1;
+    if (_currentPage > lastPage) {
+      setState(() {
+        _clearTableContext();
+        _currentPage = lastPage;
+      });
+      _refresh();
+      return;
+    }
+    setState(() {
+      final rows = provider.adminQuestions;
+      _selectedIds.retainAll(rows.map((q) => q.id));
+      _selectedPreviewQuestion = rows.where((q) => q.id == _selectedPreviewQuestion?.id).firstOrNull;
+    });
+  }
+
+  void _afterBatchWrite() {
+    setState(() => _selectedIds.clear());
+    _reconcilePage(context.read<AdminQuestionProvider>());
+    _refreshSummary();
+  }
+
+  void _refreshSummary() {
     // Fetch inventory summary ONLY if on "All" tab (no subject selected) and no specific filtering
     if (_currentSubjectId == null &&
         _selectedType.isEmpty &&
         _selectedBloom == null &&
         _searchController.text.isEmpty &&
         _selectedTopicId == null) {
-      userProvider.fetchInventorySummary();
-    }
-
-    // 2. Fetch Topics if tabs are empty
-    if (_tabs.isEmpty) {
-      topicProvider.fetchTopics().then((_) {
-        if (mounted) _buildDynamicTabs();
-      });
+      context.read<AdminUserProvider>().fetchInventorySummary();
     }
   }
 
@@ -173,57 +229,8 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     _refresh();
   }
 
-  void _buildDynamicTabs() {
-    final l10n = AppLocalizations.of(context)!;
-    final subjects = [
-      l10n.quizSubjectPathophysiology,
-      l10n.quizSubjectPathology,
-      l10n.quizSubjectMicrobiology,
-      l10n.quizSubjectPharmacology,
-    ];
-
-    // Map localized names to stable database slugs
-    final subjectSlugs = {
-      l10n.quizSubjectPathophysiology: 'pathophysiology',
-      l10n.quizSubjectPathology: 'pathology',
-      l10n.quizSubjectMicrobiology: 'microbiology',
-      l10n.quizSubjectPharmacology: 'pharmacology',
-    };
-
-    final topicProvider = Provider.of<TopicProvider>(context, listen: false);
-    setState(() {
-      _tabs = [
-        {'label': l10n.quizSubjects, 'type': '', 'topicId': null},
-        ...subjects.expand((name) {
-          final slug = subjectSlugs[name];
-          final t = topicProvider.topics.firstWhere(
-            (topic) =>
-                (topic['slug']?.toString() == slug) ||
-                (topic['name_en']?.toString() == name) ||
-                (topic['name_hu']?.toString() == name) ||
-                (topic['name']?.toString() == name),
-            orElse: () => {'id': null},
-          );
-          if (t['id'] == null) return <Map<String, dynamic>>[];
-          return [{
-            'label': name,
-            'type': '', // Empty type - filter by topicId only
-            'topicId': t['id'],
-          }];
-        }),
-        {'label': l10n.quizECG, 'type': 'ecg', 'topicId': null},
-        {'label': l10n.adminCaseStudies, 'type': 'case_study', 'topicId': null},
-      ];
-    });
-  }
-
-
   @override
   Widget build(BuildContext context) {
-    if (_tabs.isEmpty) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(32), // Matched Dashboard padding
@@ -241,7 +248,15 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 const SizedBox(height: 24),
 
                 // 2. Toolbar (Search, Filters, Batch, New)
+                if (_catalogFailed)
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton.icon(
+                          onPressed: _catalog!.fetchTopics,
+                          icon: const Icon(Icons.refresh),
+                          label: Text(AppLocalizations.of(context)!.retry))),
                 QuestionsFilterBar(
+                  hierarchy: _hierarchy,
                   searchController: _searchController,
                   selectedType: _selectedType,
                   selectedBloom: _selectedBloom,
@@ -478,11 +493,33 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
   }
 
   Widget _buildHeader(AdminQuestionProvider questionProvider) {
-    final activeTab = _tabs.firstWhere(
-      (t) => t['topicId'] == _currentSubjectId &&
+    final l = AppLocalizations.of(context)!;
+    final tabs = <Map<String, dynamic>>[
+      {'key': 0, 'label': l.quizSubjects, 'type': '', 'topicId': null},
+      for (final id in _hierarchy.roots)
+        if (_hierarchy.byId[id]!.slug != 'ecg')
+          {
+            'key': id,
+            'label': _hierarchy.label(id, l.localeName, l.adminSubjectFallback),
+            'type': '',
+            'topicId': id
+          },
+      {'key': -1, 'label': l.quizECG, 'type': 'ecg', 'topicId': null},
+      {
+        'key': -2,
+        'label': l.adminCaseStudies,
+        'type': 'case_study',
+        'topicId': null
+      },
+    ];
+    final activeTab = tabs.firstWhere(
+      (t) =>
+          t['topicId'] == _currentSubjectId &&
           (t['type'] == _selectedType ||
-           (t['type'] == '' && _selectedType != 'ecg' && _selectedType != 'case_study')),
-      orElse: () => _tabs[0],
+              (t['type'] == '' &&
+                  _selectedType != 'ecg' &&
+                  _selectedType != 'case_study')),
+      orElse: () => tabs.first,
     );
 
     return Row(
@@ -497,14 +534,18 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              onSelected: (index) {
+              onSelected: (key) {
+                final tab = tabs.where((t) => t['key'] == key).firstOrNull;
+                if (tab == null || (key > 0 && !_hierarchy.roots.contains(key))) {
+                  return;
+                }
                 setState(() {
                   _clearTableContext();
                   // 1. Save current selection for previous subject before switching
                   _subjectLastTopic[_currentSubjectId] = _selectedTopicId;
 
-                  _selectedType = _tabs[index]['type']!;
-                  _currentSubjectId = _tabs[index]['topicId'];
+                  _selectedType = tab['type']!;
+                  _currentSubjectId = tab['topicId'];
 
                   // 2. Restore last selection for the new subject
                   _selectedTopicId = _subjectLastTopic[_currentSubjectId];
@@ -513,11 +554,11 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
                 });
                 _refresh();
               },
-              itemBuilder: (context) => _tabs.asMap().entries.map((entry) {
+              itemBuilder: (context) => tabs.map((entry) {
                 return PopupMenuItem<int>(
-                  value: entry.key,
+                  value: entry['key'],
                   child: Text(
-                    entry.value['label'],
+                    entry['label'],
                     style: GoogleFonts.quicksand(
                       color: CozyTheme.of(context, listen: false).textPrimary,
                     ),
@@ -617,7 +658,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
       context: context,
       builder: (context) => QuestionEditorDialog(
         question: q,
-        topics: Provider.of<TopicProvider>(context, listen: false).topics,
+        topics: context.watch<TopicProvider>().topics,
         onSaved: () {
           _refresh();
         },
@@ -762,7 +803,7 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
     await BatchUploadDialog.show(
       context,
       questionProvider: questionProvider,
-      onComplete: _refresh,
+      onComplete: _afterBatchWrite,
     );
   }
   void _onSort(String sortKey, bool ascending) {
@@ -783,19 +824,13 @@ class AdminQuestionsScreenState extends State<AdminQuestionsScreen> {
         context: context,
         questionProvider: questionProvider,
         selectedIds: Set.of(_selectedIds),
-        onSuccess: () {
-          setState(() => _selectedIds.clear());
-          _refresh();
-        },
+        onSuccess: _afterBatchWrite,
       ),
       onDelete: () => BulkActionHandler.handleBulkDelete(
         context: context,
         questionProvider: questionProvider,
         selectedIds: Set.of(_selectedIds),
-        onSuccess: () {
-          setState(() => _selectedIds.clear());
-          _refresh();
-        },
+        onSuccess: _afterBatchWrite,
       ),
     );
   }

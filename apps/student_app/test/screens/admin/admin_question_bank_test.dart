@@ -118,14 +118,109 @@ void main() {
     expect(find.byType(BulkActionToolbar), findsNothing);
     await tester.pump(const Duration(milliseconds: 550));
     await tester.pumpAndSettle();
-    expect(tester.widget<QuestionsDataTable>(find.byType(QuestionsDataTable)).selectedIds, isEmpty);
+    expect(
+        tester
+            .widget<QuestionsDataTable>(find.byType(QuestionsDataTable))
+            .selectedIds,
+        isEmpty);
   });
 
-  testWidgets('ECG and case-study tabs render with a valid filter', (tester) async {
-    api.onGet = (endpoint) async => Uri.parse(endpoint).path == ApiEndpoints.quizAdminQuestions
-        ? {'questions': [], 'total': 0} : [];
+  testWidgets('a committed bulk edit reloads the current question list only once', (t) async {
+    int reads = 0;
+    api.onGet = (endpoint) async {
+      if (Uri.parse(endpoint).path != ApiEndpoints.quizAdminQuestions) return [];
+      reads++;
+      return _page(101);
+    };
+    api.onPost = (_, __) async => {};
+    await open(t);
+    await t.enterText(find.byType(TextField), 'Question');
+    await t.pump(const Duration(milliseconds: 550));
+    await t.pumpAndSettle();
+    await t.tap(find.byType(Checkbox).last);
+    await t.pumpAndSettle();
+    final toolbar = t.widget<BulkActionToolbar>(find.byType(BulkActionToolbar));
+    final l = AppLocalizations.of(t.element(find.byType(BulkActionToolbar)))!;
+    final before = reads;
+    toolbar.onDelete();
+    await t.pumpAndSettle();
+    await t.tap(find.text(l.adminDeleteAll));
+    await t.pumpAndSettle();
+    expect(reads - before, 1);
+    expect(find.byType(BulkActionToolbar), findsNothing);
+  });
+
+  testWidgets(
+      'subject switching uses rooted descendants, local names and valid remembered selections',
+      (t) async {
+    var parent = 2;
+    final queries = <String?>[];
+    api.onGet = (endpoint) async {
+      final u = Uri.parse(endpoint);
+      if (u.path == ApiEndpoints.quizTopics) {
+        return [
+          {
+            'id': 1,
+            'slug': 'new-root',
+            'name_en': 'New root',
+            'name_hu': 'Új tárgy'
+          },
+          {'id': 2, 'parent_id': 1, 'name_en': 'Parent', 'name_hu': 'Szülő'},
+          {'id': 3, 'parent_id': parent, 'name_en': 'Deep', 'name_hu': ''},
+          {'id': 4, 'name_en': 'Other subject', 'slug': 'other'},
+        ];
+      }
+      if (u.path == ApiEndpoints.quizAdminQuestions) {
+        queries.add(u.queryParameters['topic_id']);
+        return _page(42);
+      }
+      return [];
+    };
+    await open(t);
+    Future<void> subject(String label) async {
+      await t.tap(find.byType(PopupMenuButton<int>));
+      await t.pumpAndSettle();
+      await t.tap(find.widgetWithText(PopupMenuItem<int>, label));
+      await t.pumpAndSettle();
+    }
+
+    await subject('Új tárgy');
+    expect(queries.last, '1');
+    final filter = find.byWidgetPredicate((w) =>
+        w is DropdownButton<int?> &&
+        w.items!.any((e) =>
+            e.child is Text && (e.child as Text).data == 'Szülő › Deep'));
+    await t.ensureVisible(filter);
+    await t.tap(filter);
+    await t.pumpAndSettle();
+    await t.tap(find.text('Szülő › Deep').last);
+    await t.pumpAndSettle();
+    expect(queries.last, '3');
+    await subject('Other subject');
+    expect(queries.last, '4');
+    await subject('Új tárgy');
+    expect(queries.last, '3');
+    final catalog =
+        t.element(find.byType(AdminQuestionsScreen)).read<TopicProvider>();
+    parent = 4;
+    await catalog.fetchTopics();
+    await t.pumpAndSettle();
+    expect(queries.last, '1');
+    await subject('Other subject');
+    await subject('Új tárgy');
+    expect(queries.last, '1');
+    expect(t.takeException(), isNull);
+  });
+
+  testWidgets('ECG and case-study tabs render with a valid filter',
+      (tester) async {
+    api.onGet = (endpoint) async =>
+        Uri.parse(endpoint).path == ApiEndpoints.quizAdminQuestions
+            ? {'questions': [], 'total': 0}
+            : [];
     await open(tester);
-    final labels = AppLocalizations.of(tester.element(find.byType(AdminQuestionsScreen)))!;
+    final labels =
+        AppLocalizations.of(tester.element(find.byType(AdminQuestionsScreen)))!;
     for (final label in [labels.quizECG, labels.adminCaseStudies]) {
       await tester.tap(find.byType(PopupMenuButton<int>));
       await tester.pumpAndSettle();
