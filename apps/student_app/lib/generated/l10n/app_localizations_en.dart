@@ -155,6 +155,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quizSelectAllCorrect => 'Select all correct answers.';
 
   @override
+  String get adminMatchingRepairKey =>
+      'The stored answer disagrees with these pairs. Save the displayed pairs as the new answer key.';
+
+  @override
+  String get adminMatchingMinimum => 'Enter at least two pairs.';
+
+  @override
+  String get adminMatchingDuplicate =>
+      'This label must be unique in its column.';
+
+  @override
+  String get quizMatchPairs => 'Match the pairs.';
+
+  @override
+  String quizPairedWith(String term) {
+    return 'Paired with $term';
+  }
+
+  @override
   String get quizNoOptions => 'No options available';
 
   @override

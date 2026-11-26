@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
+import 'package:arbor_med/widgets/cozy/liquid_button.dart';
+import 'package:arbor_med/features/quiz/widgets/questions/matching_renderer.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:arbor_med/features/quiz/widgets/components/quiz_body.dart';
@@ -257,6 +260,62 @@ void main() {
       expect(await database.customSelect('SELECT * FROM pending_submissions').get(), isEmpty);
       final sent = verify(mockApiService.post('/quiz/answer', captureAny)).captured;
       expect(sent.map((p) => p['submissionId']).toSet(), {id});
+    });
+
+    testWidgets('matching submit becomes available only after a complete one-to-one attempt', (t) async {
+      SharedPreferences.setMockInitialValues({});
+      controller = buildController(review: [18], initialData: {
+        'id': 17, 'question_type': 'matching', 'correct_answer': {'A':'X','B':'Y'},
+        'matching_data': {'left':['A','B'], 'right':['Y','X']},
+      });
+      await t.pumpWidget(MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => ThemeService()),
+          ChangeNotifierProvider.value(value: controller),
+        ],
+        child: const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(body: QuizBody(systemName: 'Renal')),
+        ),
+      ));
+      await t.pumpAndSettle();
+      LiquidButton submit() => t.widget<LiquidButton>(
+        find.widgetWithText(LiquidButton, 'Submit Answer'));
+      expect(submit().onPressed, isNull);
+      controller.selectAnswer({'A':'Y'});
+      await t.pump();
+      expect(submit().onPressed, isNull);
+      controller.selectAnswer({'A':'Y','B':'X'});
+      await t.pump();
+      expect(submit().onPressed, isNotNull);
+      final outgoing = t.widget<MatchingInputWidget>(find.byType(MatchingInputWidget)).onAnswerChanged;
+      when(mockApiService.get(any)).thenAnswer((_) async => {'id': 18});
+      await t.runAsync(controller.loadNextQuestion);
+      expect(controller.state.currentQuestion?['id'], 18);
+      outgoing({'A':'X','B':'Y'});
+      expect(controller.state.userAnswer, isNull);
+      await t.pumpWidget(const SizedBox());
+    });
+
+    test('a partial or out-of-board matching answer never enters the submission queue', () async {
+      controller = buildController(initialData:{
+        'id': 17, 'question_type':'matching', 'correct_answer':{'A':'X','B':'Y'},
+        'matching_data':{'left':['B','A'],'right':['X','Y']},
+      });
+      when(mockApiService.post('/quiz/answer', any)).thenThrow(const NetworkException());
+      for (final draft in [{}, {'A':'X'}, {'A':'X','B':'X'}, {'A':'X','C':'Y'}]) {
+        controller.selectAnswer(draft);
+        await controller.submitAnswer();
+        expect(controller.state.isAnswerChecked, isFalse);
+        expect(await database.customSelect('SELECT * FROM pending_submissions').get(), isEmpty);
+      }
+      verifyNever(mockApiService.post('/quiz/answer', any));
+      controller.selectAnswer({'B':'Y','A':'X'});
+      await controller.submitAnswer();
+      expect(controller.state.isCorrect,isTrue);
+      final call=verify(mockApiService.post('/quiz/answer',captureAny)).captured.single;
+      expect(call['userAnswer'],{'A':'X','B':'Y'});
     });
 
     test('submitAnswer() validates locally and calls API', () async {

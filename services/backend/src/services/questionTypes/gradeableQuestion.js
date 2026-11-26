@@ -2,34 +2,7 @@ const { choiceOptions, distinctChoices, gradeChoices, createChoiceResolver } = r
 const { decodeStoredAnswer, scalarAnswer } = require('./storedAnswer');
 const registry = require('./registry');
 
-const splitPair = require('./splitPair');
-
-function pairMap(pairs) {
-  if (!Array.isArray(pairs) || pairs.length < 2 ||
-      pairs.some(pair => !Array.isArray(pair) || pair.length !== 2 ||
-        pair.some(value => typeof value !== 'string' || !value.trim()))) return null;
-  const unique = side => new Set(pairs.map(pair => pair[side].trim().toLowerCase())).size === pairs.length;
-  return unique(0) && unique(1) ? Object.fromEntries(pairs) : null;
-}
-
-function matchingAnswer(question) {
-  const stored = decodeStoredAnswer(question.correct_answer);
-  const explicit = question.content?.pairs;
-  if (explicit != null && !Array.isArray(explicit)) return null;
-  const displayed = explicit?.length ? pairMap(explicit.map(pair => [pair?.left?.en, pair?.right?.en])) : null;
-  if (explicit?.length && !displayed) return null;
-  if (stored && typeof stored === 'object' && !Array.isArray(stored) && Object.keys(stored).length) {
-    const map = pairMap(Object.entries(stored));
-    if (!map || (displayed && (Object.keys(map).length !== Object.keys(displayed).length ||
-        Object.entries(map).some(([left, right]) => displayed[left] !== right)))) return null;
-    return map;
-  }
-  if (stored != null && (typeof stored !== 'object' || Array.isArray(stored))) return null;
-  if (displayed) return displayed;
-  const options = decodeStoredAnswer(question.options);
-  const lines = Array.isArray(options) ? options : options?.en;
-  return Array.isArray(lines) ? pairMap(lines.map(splitPair)) : null;
-}
+const matchingDefinition = require('./matchingDefinition');
 
 // Some historical imports split every comma, including commas inside labels.
 // Accept only a unique full partition of the recorded key into displayed options.
@@ -82,7 +55,7 @@ function fromType(question, declaredType) {
   if (type === 'case_study') type = 'single_choice';
   let key = input;
   if (type === 'matching') {
-    key = matchingAnswer(question);
+    key = matchingDefinition(question).answer;
     if (!key) return null;
   } else if (type === 'single_choice' || type === 'multiple_choice') {
     const choices = choiceOptions(question);

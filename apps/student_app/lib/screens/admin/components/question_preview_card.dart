@@ -56,24 +56,16 @@ class QuestionPreviewCard extends StatelessWidget {
     }
 
     // Extract matching data if present
-    final matchingData =
-        question!.content != null && question!.content['pairs'] != null
-            ? {
-                'left': (question!.content['pairs'] as List).map((p) {
-                  final val = p['left'];
-                  if (val is Map) return val[language] ?? val['en'];
-                  return val;
-                }).toList(),
-                'right': (question!.content['pairs'] as List).map((p) {
-                  final val = p['right'];
-                  if (val is Map) return val[language] ?? val['en'];
-                  return val;
-                }).toList(),
-              }
-            : null;
+    final content = question!.content;
+    final pairs = content is Map ? content['pairs'] : null;
+    final matchingData = pairs is List ? {
+      'left': [for (final pair in pairs) if (pair is Map) pair['left']],
+      'right': [for (final pair in pairs) if (pair is Map) pair['right']],
+    } : null;
 
     // Convert AdminQuestion to Map for the renderer
     final questionMap = {
+      'id': question!.id,
       'text': language == 'hu'
           ? (question!.questionTextHu ?? question!.text)
           : question!.text,

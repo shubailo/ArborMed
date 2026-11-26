@@ -156,6 +156,25 @@ class AppLocalizationsHu extends AppLocalizations {
   String get quizSelectAllCorrect => 'Válassz ki minden helyes választ!';
 
   @override
+  String get adminMatchingRepairKey =>
+      'A tárolt megoldókulcs eltér a pároktól. A megjelenített párokat mentem új megoldókulcsként.';
+
+  @override
+  String get adminMatchingMinimum => 'Adj meg legalább két párt.';
+
+  @override
+  String get adminMatchingDuplicate =>
+      'Ebben az oszlopban minden feliratnak egyedinek kell lennie.';
+
+  @override
+  String get quizMatchPairs => 'Párosítsd a kifejezéseket!';
+
+  @override
+  String quizPairedWith(String term) {
+    return 'Kiválasztott pár: $term';
+  }
+
+  @override
   String get quizNoOptions => 'Nincsenek válaszlehetőségek.';
 
   @override

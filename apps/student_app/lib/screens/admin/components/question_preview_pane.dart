@@ -464,25 +464,40 @@ class _SavedQuestionDetailsState extends State<_SavedQuestionDetails> {
         .firstOrNull;
   }
 
-  List<String>? _splitPair(String line) {
-    final arrow = RegExp(r'\s+(?:->|→)\s+');
-    final parts = line
-        .split(arrow.hasMatch(line) ? arrow : RegExp(r':\s+'))
-        .map((part) => part.trim())
-        .toList();
-    return parts.length == 2 && parts.every((part) => part.isNotEmpty)
-        ? parts
-        : null;
-  }
-
   Iterable<String> _answers(
       AdminQuestion q, String lang, AppLocalizations l) sync* {
     final keys = q.answerKeys;
+    if (q.type == 'matching') {
+      final pairs = q.matchingPairs;
+      final stored = keys.singleOrNull;
+      if (pairs.isEmpty || (keys.isNotEmpty && stored is! Map)) {
+        yield l.adminAnswerKeyUnresolved;
+        return;
+      }
+      final left = <String, String>{};
+      final right = <String, String>{};
+      for (final pair in pairs) {
+        for (final (side, labels) in [('left', left), ('right', right)]) {
+          final en = pair.text(side, 'en');
+          final translated = pair.text(side, lang);
+          labels[en] = translated.trim().isEmpty ? en : translated;
+        }
+      }
+      final answers = stored is Map && stored.isNotEmpty
+          ? stored
+          : {
+              for (final pair in pairs)
+                pair.text('left', 'en'): pair.text('right', 'en')
+            };
+      for (final entry in answers.entries) {
+        yield '${left[entry.key] ?? entry.key} → ${right[entry.value] ?? entry.value}';
+      }
+      return;
+    }
     if (keys.isEmpty) {
       yield l.adminAnswerKeyUnresolved;
       return;
     }
-    final pairs = q.content is Map ? q.content['pairs'] : null;
     for (final key in keys) {
       if (q.type == 'single_choice' ||
           q.type == 'multiple_choice' ||
@@ -491,31 +506,6 @@ class _SavedQuestionDetailsState extends State<_SavedQuestionDetails> {
         yield index == null
             ? '${l.adminAnswerKeyUnresolved} ($key)'
             : q.choices[index].label(lang);
-      } else if (q.type == 'matching' && key is Map) {
-        final translations = <String, String>{};
-        if (pairs is List && pairs.isNotEmpty) {
-          for (final pair in pairs.whereType<Map>()) {
-            for (final field in ['left', 'right']) {
-              final base = _translation(pair[field], 'en');
-              final localized = _translation(pair[field], lang);
-              if (base != null && localized != null) {
-                translations[base] = localized;
-              }
-            }
-          }
-        } else if (lang == 'hu') {
-          // Older imports stored the translated pairs as two parallel lists.
-          for (final choice in q.choices) {
-            final en = _splitPair(choice.en);
-            final hu = _splitPair(choice.hu);
-            if (en == null || hu == null) continue;
-            translations[en.first] = hu.first;
-            translations[en.last] = hu.last;
-          }
-        }
-        for (final entry in key.entries) {
-          yield '${translations[entry.key] ?? entry.key} → ${translations[entry.value] ?? entry.value}';
-        }
       } else if (q.type == 'true_false') {
         final value = key.toString().trim().toLowerCase();
         if (const {'true', 'igaz', '1'}.contains(value)) {

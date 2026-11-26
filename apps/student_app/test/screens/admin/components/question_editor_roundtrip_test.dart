@@ -1,3 +1,6 @@
+import 'package:arbor_med/screens/admin/components/question_metadata_section.dart';
+import 'package:arbor_med/screens/admin/components/question_preview_card.dart';
+import 'package:arbor_med/screens/admin/components/quiz_forms/matching_editor.dart';
 import 'package:arbor_med/core/models/admin_question.dart';
 import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import 'package:arbor_med/screens/admin/components/question_editor_dialog.dart';
@@ -189,6 +192,179 @@ void main() {
     final reopened = choice({'en': saved['options_en'], 'hu': saved['options_hu']}, saved['correct_answer']);
     expect(reopened.choices[1].en, isEmpty);
     expect(reopened.choiceIndex(reopened.correctAnswer), 1);
+  });
+
+  AdminQuestion matching({Object? pairs, Object? answer, Object? options}) =>
+      AdminQuestion.fromJson({
+        'id': 51, 'topic_id': 2, 'type': 'matching',
+        'content': {if (pairs != null) 'pairs':pairs}, 'options':options,
+        'correct_answer': answer, 'text':'Match the pairs',
+        'explanation':'Reason', 'explanation_hu':'Indok',
+      });
+  MatchingEditor matchingForm(WidgetTester t) =>
+      t.widget<MatchingEditor>(find.byType(MatchingEditor).first);
+  Map<String, dynamic> pair(String l, String r, {String lh = '', String rh = ''}) =>
+      {'left':{'en':l,'hu':lh}, 'right':{'en':r,'hu':rh}};
+
+  testWidgets('legacy matching keys reopen with side-specific translations and survive saving', (t) async {
+    await open(t, matching(answer:'{"Pulse":"Rate","Rate":"Time"}', options:{
+      'en':['Rate: Time','Pulse -> Rate'], 'hu':['Ütem: Idő','Pulzus → Frekvencia']
+    }));
+    final groups=matchingForm(t).matchingGroups;
+    expect(groups.map((p)=>[p.leftEn.text,p.leftHu.text,p.rightEn.text,p.rightHu.text]),
+      [['Pulse','Pulzus','Rate','Frekvencia'],['Rate','Ütem','Time','Idő']]);
+    await save(t);
+    expect(saved['correct_answer'], {'Pulse':'Rate','Rate':'Time'});
+    expect(saved['content']['pairs'], [
+      pair('Pulse','Rate',lh:'Pulzus',rh:'Frekvencia'),pair('Rate','Time',lh:'Ütem',rh:'Idő')
+    ]);
+  });
+
+  testWidgets('matching lines with no stored key open for editing and keep unknown translations blank', (t) async {
+    await open(t, matching(options:{'en':['A: X','B → Y'], 'hu':['Eltolt: Fordítás']}));
+    final groups=matchingForm(t).matchingGroups;
+    expect(groups.map((g)=>g.leftHu.text), ['', '']);
+    await save(t);
+    expect(saved['correct_answer'], {'A':'X','B':'Y'});
+  });
+
+  testWidgets('saving preserves original lengths of unaligned historical matching translations', (t) async {
+    final options={'en':['A: X','B: Y','Unused'], 'hu':['Alfa: Első','Béta: Második']};
+    await open(t, matching(options:options, answer:{'A':'X','B':'Y'}));
+    await save(t);
+    expect(saved['options_en'],options['en']);
+    expect(saved['options_hu'],options['hu']);
+  });
+
+  testWidgets('conversion to matching does not store the original multiple-choice distractors', (t) async {
+    await open(t, choice(palette, 'Green'));
+    t.widget<QuestionMetadataSection>(find.byType(QuestionMetadataSection)).onQuestionTypeChanged('matching');
+    await t.pumpAndSettle();
+    final form=matchingForm(t);
+    if(form.matchingGroups.length == 1) {
+      form.onAddPair();
+      await t.pumpAndSettle();
+    }
+    final rows=matchingForm(t).matchingGroups;
+    rows.first.leftEn.text='A';
+    rows.first.rightEn.text='X';
+    rows.last.leftEn.text='B';
+    rows.last.rightEn.text='Y';
+    await save(t);
+    expect(saved['correct_answer'],{'A':'X','B':'Y'});
+    expect(saved['options_en'],isEmpty);
+    expect(saved['options_hu'],isEmpty);
+  });
+
+  testWidgets('a malformed matching row is editable and blocks the write until repaired', (t) async {
+    await open(t, matching(pairs:[null,pair('B','Y')]));
+    expect(t.takeException(), isNull);
+    final groups=matchingForm(t).matchingGroups;
+    expect(groups.first.leftEn.text,'');
+    await save(t);
+    expect(saved,isEmpty);
+    groups.first.leftEn.text='A';
+    groups.first.rightEn.text='X';
+    await save(t);
+    expect(saved['correct_answer'],{'A':'X','B':'Y'});
+  });
+
+  testWidgets('repeated deletion removes only the intended pair and releases all four controllers', (t) async {
+    await open(t, matching(pairs:[pair('A','X'),pair('B','Y'),pair('C','Z')]));
+    final groups=matchingForm(t).matchingGroups;
+    final removed=groups.first;
+    final field=find.descendant(of:find.byType(MatchingEditor).first,matching:find.byType(TextField)).at(2);
+    final element=t.element(field);
+    final delete=find.descendant(of:find.byType(MatchingEditor).first,matching:find.byIcon(Icons.close)).first;
+    final remove=t.widget<IconButton>(find.ancestor(of:delete,matching:find.byType(IconButton)).first).onPressed!;
+    remove();
+    remove();
+    await t.pumpAndSettle();
+    expect(matchingForm(t).matchingGroups.map((g)=>g.leftEn.text),['B','C']);
+    expect(t.element(find.descendant(of:find.byType(MatchingEditor).first,matching:find.byType(TextField)).first),same(element));
+    for(final ctrl in [removed.leftEn,removed.leftHu,removed.rightEn,removed.rightHu]) {
+      expect(()=>ctrl.addListener((){}), throwsFlutterError);
+    }
+    await save(t);
+    expect(saved['correct_answer'], {'B':'Y','C':'Z'});
+  });
+
+  testWidgets('matching drafts reject incomplete pairs and duplicate labels in either displayed language', (t) async {
+    await open(t, matching(pairs:[pair('A','X',lh:'B'),pair('B','Y')]));
+    final groups=matchingForm(t).matchingGroups;
+    await save(t);
+    expect(saved,isEmpty);
+    groups.first.leftHu.text='Első';
+    groups.last.rightEn.text=' x ';
+    await save(t);
+    expect(saved,isEmpty);
+    groups.last.rightEn.text='';
+    await save(t);
+    expect(saved,isEmpty);
+    groups.last.rightEn.text='Y';
+    await save(t);
+    expect(saved['correct_answer'], {'A':'X','B':'Y'});
+  });
+
+  testWidgets('matching edits preserve structured pair and term metadata', (t) async {
+    final first=pair('A','X',lh:'Alfa')..['reference']='annotation';
+    first['left']['source']='glossary';
+    await open(t, matching(pairs:[first,pair('B','Y')]));
+    final groups=matchingForm(t).matchingGroups;
+    groups.first.leftHu.text='Átírva';
+    await save(t);
+    expect(saved['content']['pairs'][0], {
+      'reference':'annotation','left':{'en':'A','hu':'Átírva','source':'glossary'},
+      'right':{'en':'X','hu':''}
+    });
+  });
+
+  testWidgets('repairing a contradictory stored matching key requires explicitly choosing the displayed pairs', (t) async {
+    await open(t, matching(pairs:[pair('A','X'),pair('B','Y')], answer:{'A':'Y','B':'X'}));
+    await save(t);
+    expect(saved,isEmpty);
+    final warning = find.descendant(of: find.byType(MatchingEditor).first, matching: find.byType(CheckboxListTile));
+    final consent=t.widget<CheckboxListTile>(warning);
+    expect(consent.value,isFalse);
+    expect((consent.subtitle as Text).data,contains('"A":"Y"'));
+    consent.onChanged!(true);
+    await t.pumpAndSettle();
+    final edited=find.descendant(of:find.byType(MatchingEditor).first,matching:find.byType(TextField)).first;
+    await t.enterText(edited,'Updated');
+    await t.pumpAndSettle();
+    expect(t.widget<CheckboxListTile>(warning).value,isFalse);
+    await t.enterText(edited,matchingForm(t).isEn ? 'A' : '');
+    await t.pumpAndSettle();
+    t.widget<CheckboxListTile>(warning).onChanged!(true);
+    await t.pumpAndSettle();
+    await save(t);
+    expect(saved['correct_answer'],{'A':'X','B':'Y'});
+  });
+
+  testWidgets('switching to matching wires the initial rows to the preview and releases retained drafts on close', (t) async {
+    await open(t, choice(palette, 'Green'));
+    void change(String type) => t.widget<QuestionMetadataSection>(find.byType(QuestionMetadataSection)).onQuestionTypeChanged(type);
+    change('matching');
+    await t.pumpAndSettle();
+    final form=matchingForm(t);
+    expect(form.matchingGroups.length,2);
+    final first=form.matchingGroups.first;
+    final input=find.descendant(of:find.byType(MatchingEditor).first, matching:find.byType(TextField)).first;
+    await t.enterText(input,'New term');
+    await t.pump();
+    final preview=t.widget<QuestionPreviewCard>(find.byType(QuestionPreviewCard)).question!;
+    expect(preview.content['pairs'][0]['left'][form.isEn ? 'en' : 'hu'],'New term');
+    change('true_false');
+    await t.pumpAndSettle();
+    change('matching');
+    await t.pumpAndSettle();
+    expect(matchingForm(t).matchingGroups.first,same(first));
+    final labels=AppLocalizations.of(t.element(find.byType(QuestionEditorDialog)))!;
+    await t.tap(find.text(labels.cancel));
+    await t.pumpAndSettle();
+    for(final ctrl in [first.leftEn,first.leftHu,first.rightEn,first.rightHu]) {
+      expect(()=>ctrl.addListener((){}), throwsFlutterError);
+    }
   });
 
   for (final topicId in [1, 3]) {

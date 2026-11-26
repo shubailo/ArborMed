@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'question.dart';
+import 'admin_matching_pair.dart';
 
 class AdminQuestion extends CoreQuestion {
   final String? topicNameEn;
@@ -51,6 +52,20 @@ class AdminQuestion extends CoreQuestion {
   late final List<AdminChoice> choices =
       List.unmodifiable(AdminChoice._read(options));
   late final List<Object?> answerKeys = _keys(correctAnswer);
+
+  late final List<AdminMatchingPair> matchingPairs = List.unmodifiable(
+      AdminMatchingPair.read(content, options, answerKeys.singleOrNull));
+
+  late final bool hasMatchingKeyConflict = _matchingKeyConflicts();
+
+  bool _matchingKeyConflicts() {
+    if (type != 'matching') return false;
+    final stored = _decoded(correctAnswer);
+    if (stored == null || stored is Map && stored.isEmpty) return false;
+    if (stored is! Map || stored.length != matchingPairs.length) return true;
+    return matchingPairs.any(
+        (pair) => stored[pair.text('left', 'en')] != pair.text('right', 'en'));
+  }
 
   static List<Object?> _keys(Object? raw) {
     final value = _decoded(raw);

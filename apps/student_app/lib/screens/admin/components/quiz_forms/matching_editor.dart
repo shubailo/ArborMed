@@ -7,7 +7,11 @@ class MatchingEditor extends StatelessWidget {
   final List<MatchingPairControllerGroup> matchingGroups;
   final bool isEn;
   final VoidCallback onAddPair;
-  final void Function(int index) onRemovePair;
+  final ValueChanged<MatchingPairControllerGroup> onRemovePair;
+  final VoidCallback onTextChanged;
+  final String? conflictingKey;
+  final bool repairKey;
+  final ValueChanged<bool> onRepairKeyChanged;
 
   const MatchingEditor({
     super.key,
@@ -15,6 +19,10 @@ class MatchingEditor extends StatelessWidget {
     required this.isEn,
     required this.onAddPair,
     required this.onRemovePair,
+    required this.onTextChanged,
+    this.conflictingKey,
+    required this.repairKey,
+    required this.onRepairKeyChanged,
   });
 
   @override
@@ -26,16 +34,25 @@ class MatchingEditor extends StatelessWidget {
           AppLocalizations.of(context)!.adminMatchingPairs,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
+        if (conflictingKey != null)
+          CheckboxListTile(
+            title: Text(AppLocalizations.of(context)!.adminMatchingRepairKey),
+            subtitle: Text(conflictingKey!),
+            value: repairKey,
+            onChanged: (value) => onRepairKeyChanged(value == true),
+          ),
         const SizedBox(height: 12),
         ...matchingGroups.asMap().entries.map((entry) {
           final idx = entry.key;
           final group = entry.value;
           return Padding(
+            key: ObjectKey(group),
             padding: const EdgeInsets.only(bottom: 12.0),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
+                    onChanged: (_) => onTextChanged(),
                     controller: isEn ? group.leftEn : group.leftHu,
                     decoration: CozyTheme.inputDecoration(
                       context,
@@ -49,6 +66,7 @@ class MatchingEditor extends StatelessWidget {
                 ),
                 Expanded(
                   child: TextField(
+                    onChanged: (_) => onTextChanged(),
                     controller: isEn ? group.rightEn : group.rightHu,
                     decoration: CozyTheme.inputDecoration(
                       context,
@@ -58,7 +76,8 @@ class MatchingEditor extends StatelessWidget {
                 ),
                 IconButton(
                   icon: Icon(Icons.close, color: CozyTheme.of(context).error),
-                  onPressed: () => onRemovePair(idx),
+                  tooltip: AppLocalizations.of(context)!.delete,
+                  onPressed: () => onRemovePair(group),
                 ),
               ],
             ),
@@ -73,4 +92,3 @@ class MatchingEditor extends StatelessWidget {
     );
   }
 }
-

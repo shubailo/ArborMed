@@ -1,281 +1,279 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:arbor_med/services/audio_provider.dart';
-import 'question_renderer.dart';
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
+import 'question_renderer.dart';
 
-/// Renderer for Matching (Connect Two) questions
-/// Implements a Duolingo-style tap-to-connect interface
+Object? _decode(Object? raw) {
+  if (raw is! String) return raw;
+  try {
+    return jsonDecode(raw);
+  } on FormatException {
+    return null;
+  }
+}
+
+Map<String, String>? _answerMap(Object? raw) {
+  final value = _decode(raw);
+  if (value is! Map) return null;
+  final pairs = <String, String>{};
+  for (final entry in value.entries) {
+    final key = entry.key, answer = entry.value;
+    if (key is! String ||
+        key.trim().isEmpty ||
+        answer is! String ||
+        answer.trim().isEmpty) {
+      return null;
+    }
+    pairs[key] = answer;
+  }
+  return pairs;
+}
+
+// Keys are the stored English labels. Translation and display order are independent on each side.
+class _MatchingBoard {
+  final Map<String, String> left;
+  final Map<String, String> right;
+  const _MatchingBoard(this.left, this.right);
+
+  static _MatchingBoard? read(Object? raw) {
+    final data = _decode(raw);
+    if (data is! Map) return null;
+    final left = _side(data['left']), right = _side(data['right']);
+    if (left == null || right == null || left.length != right.length) {
+      return null;
+    }
+    return _MatchingBoard(left, right);
+  }
+
+  static Map<String, String>? _side(Object? items) {
+    if (items is! List || items.length < 2) return null;
+    final result = <String, String>{};
+    final enLabels = <String>{}, huLabels = <String>{};
+    for (final item in items) {
+      final key = item is Map ? item['en'] : item;
+      if (key is! String ||
+          key.trim().isEmpty ||
+          !enLabels.add(key.trim().toLowerCase())) {
+        return null;
+      }
+      final translation = item is Map ? item['hu'] : null;
+      final label = translation is String && translation.trim().isNotEmpty
+          ? translation
+          : key;
+      if (!huLabels.add(label.trim().toLowerCase())) return null;
+      result[key] = label;
+    }
+    return result;
+  }
+
+  bool complete(Map<String, String> pairs) =>
+      pairs.length == left.length &&
+      pairs.keys.every(left.containsKey) &&
+      pairs.values.toSet().length == right.length &&
+      pairs.values.every(right.containsKey);
+}
+
 class MatchingRenderer extends QuestionRenderer {
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
-    final palette = CozyTheme.of(context);
-    final locale = Localizations.localeOf(context).languageCode;
-    final isHu = locale == 'hu';
-
+    final text = getLocalizedText(context, question);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Text(
-        isHu ? 'Párosítsd a kifejezéseket!' : 'Match the pairs!',
-        style: GoogleFonts.outfit(
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-          color: palette.textPrimary,
-        ),
-        textAlign: TextAlign.center,
-      ),
-    );
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Text(
+            text.isEmpty ? AppLocalizations.of(context)!.quizMatchPairs : text,
+            style: GoogleFonts.outfit(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: CozyTheme.of(context).textPrimary),
+            textAlign: TextAlign.center));
   }
 
   @override
-  Widget buildAnswerInput(
-    BuildContext context,
-    Map<String, dynamic> question,
-    dynamic currentAnswer,
-    Function(dynamic) onAnswerChanged, {
-    bool isChecked = false,
-    dynamic correctAnswer,
-  }) {
-    return MatchingInputWidget(
-      question: question,
-      currentAnswer: currentAnswer,
-      onAnswerChanged: onAnswerChanged,
-      isChecked: isChecked,
-      correctAnswer: correctAnswer,
-    );
+  Widget buildAnswerInput(BuildContext context, Map<String, dynamic> question,
+          dynamic currentAnswer, Function(dynamic) onAnswerChanged,
+          {bool isChecked = false, dynamic correctAnswer}) =>
+      MatchingInputWidget(
+          key: ValueKey(question['id']),
+          question: question,
+          currentAnswer: currentAnswer,
+          onAnswerChanged: onAnswerChanged,
+          isChecked: isChecked,
+          correctAnswer: correctAnswer);
+
+  @override
+  bool hasAnswer(dynamic answer) => _answerMap(answer)?.isNotEmpty == true;
+
+  @override
+  bool canSubmit(Map<String, dynamic> question, dynamic answer) {
+    final pairs = _answerMap(answer);
+    return pairs != null &&
+        _MatchingBoard.read(question['matching_data'])?.complete(pairs) == true;
   }
 
   @override
-  bool hasAnswer(dynamic answer) {
-    if (answer == null) return false;
-    // For matching, the answer is usually a Map of pairs
-    if (answer is Map) {
-      return answer.isNotEmpty;
+  dynamic formatAnswer(dynamic answer) => _answerMap(answer);
+
+  @override
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer,
+      Map<String, dynamic> question) {
+    final actual = _answerMap(userAnswer), expected = _answerMap(correctAnswer);
+    if (actual == null ||
+        expected == null ||
+        actual.length != expected.length ||
+        _MatchingBoard.read(question['matching_data'])?.complete(expected) !=
+            true) {
+      return false;
     }
-    return false;
-  }
-
-  @override
-  dynamic formatAnswer(dynamic answer) {
-    return answer;
-  }
-
-  @override
-  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer, Map<String, dynamic> question) {
-    if (userAnswer == null || correctAnswer == null) return false;
-    if (userAnswer is! Map) return false;
-
-    Map<String, String> cMap = {};
-    if (correctAnswer is Map) {
-      cMap = correctAnswer.map((k, v) => MapEntry(k.toString().trim().toLowerCase(), v.toString().trim().toLowerCase()));
-    } else if (correctAnswer is String) {
-      try {
-        final decoded = json.decode(correctAnswer);
-        if (decoded is Map) {
-          cMap = decoded.map((k, v) => MapEntry(k.toString().trim().toLowerCase(), v.toString().trim().toLowerCase()));
-        }
-      } catch (e) {
-        debugPrint('Error parsing matching correct answer: $e');
-      }
-    }
-
-    if (userAnswer.length != cMap.length) return false;
-
-    for (var entry in userAnswer.entries) {
-      final uKey = entry.key.toString().trim().toLowerCase();
-      final uVal = entry.value.toString().trim().toLowerCase();
-      if (cMap[uKey] != uVal) return false;
-    }
-
-    return true;
+    return expected.entries
+        .every((entry) => actual[entry.key]?.trim() == entry.value.trim());
   }
 
   @override
   dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question,
-      int index, dynamic currentAnswer) {
-    return currentAnswer; // Matching not supported by simple index shortcuts
-  }
+          int index, dynamic currentAnswer) =>
+      currentAnswer;
 }
 
 class MatchingInputWidget extends StatefulWidget {
   final Map<String, dynamic> question;
   final dynamic currentAnswer;
-  final Function(dynamic) onAnswerChanged;
-
+  final ValueChanged<dynamic> onAnswerChanged;
   final bool isChecked;
   final dynamic correctAnswer;
-
-  const MatchingInputWidget({
-    super.key,
-    required this.question,
-    required this.currentAnswer,
-    required this.onAnswerChanged,
-    this.isChecked = false,
-    this.correctAnswer,
-  });
-
+  const MatchingInputWidget(
+      {super.key,
+      required this.question,
+      required this.currentAnswer,
+      required this.onAnswerChanged,
+      this.isChecked = false,
+      this.correctAnswer});
   @override
-  createState() => _MatchingInputWidgetState();
+  State<MatchingInputWidget> createState() => _MatchingInputWidgetState();
 }
 
 class _MatchingInputWidgetState extends State<MatchingInputWidget> {
-  String? selectedLeft;
-  String? selectedRight;
-
-  // Local state to track paired items
-  // Format: { leftValue: rightValue }
-  Map<String, String> pairs = {};
+  Map<String, String> _pairs = const {};
+  Map<String, String> _rightToLeft = const {};
+  String? _pending;
+  bool _pendingLeft = false;
+  _MatchingBoard? _board;
 
   @override
   void initState() {
     super.initState();
-    if (widget.currentAnswer != null && widget.currentAnswer is Map) {
-      final mapData = widget.currentAnswer as Map;
-      pairs = mapData.map((key, value) => MapEntry(key.toString(), value.toString()));
-    }
+    _board = _MatchingBoard.read(widget.question['matching_data']);
+    _replacePairs(_answerMap(widget.currentAnswer) ?? {});
   }
 
-  void _handleLeftTap(String item) {
-    if (pairs.containsKey(item)) {
-      // Remove connection if already paired
-      setState(() {
-        pairs.remove(item);
-        widget.onAnswerChanged(pairs);
-      });
-      return;
-    }
-
-    setState(() {
-      if (selectedLeft == item) {
-        selectedLeft = null;
-      } else {
-        selectedLeft = item;
-        _checkMatch();
+  void _replacePairs(Map<String, String> pairs) {
+    final leftToRight = <String, String>{};
+    final rightToLeft = <String, String>{};
+    final board = _board;
+    if (board != null) {
+      for (final entry in pairs.entries) {
+        if (board.left.containsKey(entry.key) &&
+            board.right.containsKey(entry.value) &&
+            !rightToLeft.containsKey(entry.value)) {
+          leftToRight[entry.key] = entry.value;
+          rightToLeft[entry.value] = entry.key;
+        }
       }
-    });
+    }
+    _pairs = Map.unmodifiable(leftToRight);
+    _rightToLeft = rightToLeft;
   }
 
-  void _handleRightTap(String item) {
-    // Check if right item is already paired
-    String? existingLeft;
-    pairs.forEach((left, right) {
-      if (right == item) existingLeft = left;
-    });
-
-    if (existingLeft != null) {
-      // Remove connection if already paired
-      setState(() {
-        pairs.remove(existingLeft);
-        widget.onAnswerChanged(pairs);
-      });
-      return;
+  @override
+  void didUpdateWidget(MatchingInputWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final newQuestion = widget.question['id'] != oldWidget.question['id'];
+    final newBoard = newQuestion ||
+        oldWidget.question['matching_data'] != widget.question['matching_data'];
+    if (newBoard) {
+      _board = _MatchingBoard.read(widget.question['matching_data']);
+      _replacePairs(_pairs);
+      final side = _pendingLeft ? _board?.left : _board?.right;
+      if (side?.containsKey(_pending) != true) _pending = null;
     }
-
-    setState(() {
-      if (selectedRight == item) {
-        selectedRight = null;
-      } else {
-        selectedRight = item;
-        _checkMatch();
+    if (newQuestion || oldWidget.currentAnswer != widget.currentAnswer) {
+      final incoming = _answerMap(widget.currentAnswer) ?? {};
+      if (newQuestion || !mapEquals(incoming, _pairs)) {
+        _replacePairs(incoming);
+        _pending = null;
       }
-    });
+    }
+    if (widget.isChecked) _pending = null;
   }
 
-  void _checkMatch() {
-    if (selectedLeft != null && selectedRight != null) {
+  void _tap(bool left, String key) {
+    if (widget.isChecked) return;
+    final linked =
+        left ? (_pairs.containsKey(key) ? key : null) : _rightToLeft[key];
+    if (linked != null) {
+      _publish({..._pairs}..remove(linked));
+    } else if (_pending == null || _pendingLeft == left) {
       setState(() {
-        pairs[selectedLeft!] = selectedRight!;
-        selectedLeft = null;
-        selectedRight = null;
-        widget.onAnswerChanged(pairs);
+        _pending = (_pendingLeft == left && _pending == key) ? null : key;
+        _pendingLeft = left;
       });
+    } else {
+      final leftKey = left ? key : _pending!;
+      final rightKey = left ? _pending! : key;
+      _publish({..._pairs, leftKey: rightKey});
     }
+  }
+
+  void _publish(Map<String, String> pairs) {
+    setState(() {
+      _replacePairs(pairs);
+      _pending = null;
+    });
+    widget.onAnswerChanged(_pairs);
   }
 
   @override
   Widget build(BuildContext context) {
+    final board = _board;
+    if (board == null) {
+      return Center(child: Text(AppLocalizations.of(context)!.quizNoOptions));
+    }
+    final hu = Localizations.localeOf(context).languageCode == 'hu';
     final palette = CozyTheme.of(context);
-    dynamic rawMatching = widget.question['matching_data'];
-    if (rawMatching is String) {
-      try {
-        rawMatching = json.decode(rawMatching);
-      } catch (_) {}
+    final expected = widget.isChecked ? _answerMap(widget.correctAnswer) : null;
+    String rightLabel(String key) => hu ? board.right[key] ?? key : key;
+    Widget column(bool left) {
+      final items = left ? board.left : board.right;
+      return Expanded(
+          child: Column(children: [
+        for (final entry in items.entries)
+          _buildItem(
+              context: context,
+              label: hu ? entry.value : entry.key,
+              isSelected: _pendingLeft == left && _pending == entry.key,
+              isPaired: left
+                  ? _pairs.containsKey(entry.key)
+                  : _rightToLeft.containsKey(entry.key),
+              partner: left && _pairs[entry.key] != null
+                  ? rightLabel(_pairs[entry.key]!)
+                  : null,
+              correction: left &&
+                      expected?[entry.key] != null &&
+                      expected![entry.key] != _pairs[entry.key]
+                  ? rightLabel(expected[entry.key]!)
+                  : null,
+              onTap: widget.isChecked ? null : () => _tap(left, entry.key),
+              activeColor: left ? palette.primary : palette.secondary),
+      ]));
     }
-    final matchingData = rawMatching is Map<String, dynamic>
-        ? rawMatching
-        : (rawMatching is Map ? Map<String, dynamic>.from(rawMatching) : null);
-    if (matchingData == null || matchingData['left'] == null || matchingData['right'] == null) {
-      return const Center(child: Text('Error: No matching data'));
-    }
-
-    final locale = Localizations.localeOf(context).languageCode;
-
-    // Helper to get localized string from item (which is now a Map {en: ..., hu: ...})
-    String getLabel(dynamic item) {
-      if (item is Map) {
-        return item[locale]?.toString() ?? item['en']?.toString() ?? '';
-      }
-      return item.toString();
-    }
-
-    // Use the localized text for the internal logic, or better, the English text as a stable key
-    String getKey(dynamic item) {
-      if (item is Map) return item['en']?.toString() ?? item.toString();
-      return item.toString();
-    }
-
-    final leftItems = matchingData['left'] is List ? List<dynamic>.from(matchingData['left']) : <dynamic>[];
-    final rightItems = matchingData['right'] is List ? List<dynamic>.from(matchingData['right']) : <dynamic>[];
 
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Left Column
-        Expanded(
-          child: Column(
-            children: leftItems.map((item) {
-              final key = getKey(item);
-              final label = getLabel(item);
-              return _buildItem(
-                context: context,
-                label: label,
-                isSelected: selectedLeft == key,
-                isPaired: pairs.containsKey(key),
-                onTap: widget.isChecked ? null : () => _handleLeftTap(key),
-                color: palette.paperCream,
-                activeColor: palette.primary,
-              );
-            }).toList(),
-          ),
-        ),
-        const SizedBox(width: 12),
-        // Right Column
-        Expanded(
-          child: Column(
-            children: rightItems.map((item) {
-              final key = getKey(item);
-              final label = getLabel(item);
-              bool isPaired = false;
-              pairs.forEach((k, v) {
-                if (v == key) isPaired = true;
-              });
-
-              return _buildItem(
-                context: context,
-                label: label,
-                isSelected: selectedRight == key,
-                isPaired: isPaired,
-                onTap: widget.isChecked ? null : () => _handleRightTap(key),
-                color: palette.paperCream,
-                activeColor: palette.secondary,
-              );
-            }).toList(),
-          ),
-        ),
-      ],
-    );
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [column(true), const SizedBox(width: 12), column(false)]);
   }
 
   Widget _buildItem({
@@ -284,7 +282,8 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
     required bool isSelected,
     required bool isPaired,
     VoidCallback? onTap,
-    required Color color,
+    String? partner,
+    String? correction,
     required Color activeColor,
   }) {
     final palette = CozyTheme.of(context);
@@ -294,66 +293,72 @@ class _MatchingInputWidgetState extends State<MatchingInputWidget> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
-            if (onTap != null) {
-              Provider.of<AudioProvider>(context, listen: false)
-                  .playSfx('click');
-              onTap();
-            }
-          },
+          onTap: onTap == null
+              ? null
+              : () {
+                  Provider.of<AudioProvider>(context, listen: false)
+                      .playSfx('click');
+                  onTap();
+                },
           borderRadius: BorderRadius.circular(16),
-        child: AnimatedScale(
-          scale: isSelected ? 1.05 : 1.0,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.elasticOut,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOutCubic,
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? activeColor
-                  : (isPaired
-                      ? activeColor.withValues(alpha: 0.1)
-                      : palette.paperCream),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: isSelected || isPaired
-                    ? activeColor
-                    : palette.textPrimary.withValues(alpha: 0.1),
-                width: isSelected || isPaired ? 2.5 : 1.5,
-              ),
-              boxShadow: isSelected || isPaired
-                  ? [
-                      BoxShadow(
-                          color: activeColor.withValues(alpha: 0.2),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5))
-                    ]
-                  : [
-                      BoxShadow(
-                          color: palette.textPrimary.withValues(alpha: 0.02),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2))
-                    ],
-            ),
-            child: Text(
-              label,
-              style: GoogleFonts.outfit(
-                fontSize: 15,
-                fontWeight:
-                    isSelected || isPaired ? FontWeight.w700 : FontWeight.w500,
+          child: AnimatedScale(
+            scale: isSelected ? 1.05 : 1.0,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.elasticOut,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutCubic,
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              decoration: BoxDecoration(
                 color: isSelected
-                    ? palette.textInverse
-                    : (isPaired ? activeColor : palette.textPrimary),
+                    ? activeColor
+                    : (isPaired
+                        ? activeColor.withValues(alpha: 0.1)
+                        : palette.paperCream),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isSelected || isPaired
+                      ? activeColor
+                      : palette.textPrimary.withValues(alpha: 0.1),
+                  width: isSelected || isPaired ? 2.5 : 1.5,
+                ),
+                boxShadow: isSelected || isPaired
+                    ? [
+                        BoxShadow(
+                            color: activeColor.withValues(alpha: 0.2),
+                            blurRadius: 10,
+                            offset: const Offset(0, 5))
+                      ]
+                    : [
+                        BoxShadow(
+                            color: palette.textPrimary.withValues(alpha: 0.02),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2))
+                      ],
               ),
-              textAlign: TextAlign.center,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
+              child: Column(children: [
+                Text(label,
+                    style: GoogleFonts.outfit(
+                        fontSize: 15,
+                        fontWeight: isSelected || isPaired
+                            ? FontWeight.w700
+                            : FontWeight.w500,
+                        color: isSelected
+                            ? palette.textInverse
+                            : palette.textPrimary),
+                    textAlign: TextAlign.center),
+                if (partner != null)
+                  Text(AppLocalizations.of(context)!.quizPairedWith(partner),
+                      textAlign: TextAlign.center),
+                if (correction != null)
+                  Text(
+                      '${AppLocalizations.of(context)!.correctAnswer}: $correction',
+                      style: TextStyle(color: palette.error),
+                      textAlign: TextAlign.center),
+              ]),
             ),
           ),
-        ),
         ),
       ),
     );

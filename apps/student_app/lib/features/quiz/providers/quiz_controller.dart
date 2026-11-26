@@ -349,7 +349,7 @@ class QuizController extends ChangeNotifier {
   dynamic _formatAnswer(Map<String, dynamic> q, dynamic answer) {
      final qType = q['question_type'] ?? 'single_choice';
      final renderer = QuestionRendererRegistry.getRenderer(qType);
-     return renderer.formatAnswer(answer);
+     return renderer.canSubmit(q, answer) ? renderer.formatAnswer(answer) : null;
   }
 
   String _getExplanation(Map<String, dynamic> data) {

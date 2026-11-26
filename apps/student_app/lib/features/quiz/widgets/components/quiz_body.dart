@@ -196,7 +196,7 @@ class QuizBody extends StatelessWidget {
         final q = state.currentQuestion!;
         final qType = q['question_type'] ?? 'single_choice';
         final renderer = QuestionRendererRegistry.getRenderer(qType);
-        final hasAnswer = renderer.hasAnswer(state.userAnswer);
+        final hasAnswer = renderer.canSubmit(q, state.userAnswer);
 
         // Determine if we should show the submit button for this question type
         final showSubmitButton = const {
@@ -246,21 +246,25 @@ class QuizBody extends StatelessWidget {
                           const SizedBox(height: 24),
 
                           // Delegate Answer Input Rendering
-                          renderer.buildAnswerInput(
-                            context,
-                            q,
-                            state.userAnswer,
-                            state.isAnswerChecked
-                                ? (_) {} // Disable input if checked
-                                : (val) {
-                                    controller.selectAnswer(val);
-                                    // Auto-submit for specific types
-                                    if (qType == 'single_choice' || qType == 'true_false') {
-                                      controller.submitAnswer();
-                                    }
-                                  },
-                            isChecked: state.isAnswerChecked,
-                            correctAnswer: state.correctAnswer,
+                          IgnorePointer(
+                            ignoring: state.isSubmitting || state.submissionRejected,
+                            child: renderer.buildAnswerInput(
+                              context,
+                              q,
+                              state.userAnswer,
+                              state.isAnswerChecked
+                                  ? (_) {} // Disable input if checked
+                                  : (val) {
+                                      if (!identical(q, controller.state.currentQuestion)) return;
+                                      controller.selectAnswer(val);
+                                      // Auto-submit for specific types
+                                      if (qType == 'single_choice' || qType == 'true_false') {
+                                        controller.submitAnswer();
+                                      }
+                                    },
+                              isChecked: state.isAnswerChecked,
+                              correctAnswer: state.correctAnswer,
+                            ),
                           ),
 
                           const SizedBox(height: 32),

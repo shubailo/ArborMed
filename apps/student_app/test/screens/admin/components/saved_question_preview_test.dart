@@ -86,6 +86,15 @@ void main() {
         findsOneWidget);
   });
 
+  testWidgets('the same English term can have different translations on each matching side', (t) async {
+    await show(t, record({
+      'type':'matching','correct_answer':{'A':'B','B':'C'},
+      'options':{'en':['A: B','B: C'],'hu':['Alfa: Béta','Bal: Cél']},
+    }));
+    expect(find.text('Alfa → Béta'),findsOneWidget);
+    expect(find.text('Bal → Cél'),findsOneWidget);
+  });
+
   testWidgets('renders translated legacy pairs and boolean answers', (t) async {
     await show(
         t,

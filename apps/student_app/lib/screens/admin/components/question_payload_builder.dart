@@ -17,12 +17,6 @@ class QuestionPayloadBuilder {
     required TextEditingController textControllerHu,
     required void Function(int) setCorrectIndex,
     required void Function(int) addMultipleCorrectIndex,
-    required void Function({
-      required String leftE,
-      required String leftH,
-      required String rightE,
-      required String rightH,
-    }) addMatchingGroup,
   }) {
     if (question == null) return;
     final content = question.content is Map ? question.content as Map : const {};
@@ -51,18 +45,6 @@ class QuestionPayloadBuilder {
       final key = answer.toString().trim().toLowerCase();
       if (const {'true', 'igaz', '1'}.contains(key)) setCorrectIndex(0);
       if (const {'false', 'hamis', '0'}.contains(key)) setCorrectIndex(1);
-    } else if (questionType == 'matching') {
-      final List<dynamic>? pairs = content['pairs'];
-      if (pairs != null) {
-        for (var p in pairs) {
-          addMatchingGroup(
-            leftE: p['left']?['en'] ?? '',
-            leftH: p['left']?['hu'] ?? '',
-            rightE: p['right']?['en'] ?? '',
-            rightH: p['right']?['hu'] ?? '',
-          );
-        }
-      }
     } else if (questionType == 'multiple_choice') {
       final indices = question.answerKeys.map(question.choiceIndex).toList();
       if (indices.isNotEmpty && indices.every((i) => i != null)) {
@@ -80,6 +62,7 @@ class QuestionPayloadBuilder {
     required List<int> multipleCorrectIndices,
     List<AdminChoice?> originalChoices = const [],
     Map<String, dynamic> originalContent = const {},
+    Object? originalMatchingOptions,
     required List<String> currentOptionsEn,
     required List<String> currentOptionsHu,
     required List<MatchingPairControllerGroup> matchingGroups,
@@ -99,7 +82,7 @@ class QuestionPayloadBuilder {
     final contentPayload = {...originalContent, 'image_url': existingImageUrl};
     List<dynamic> optionsEn = currentOptionsEn;
     // Drop whitespace-only translations while retaining the authored text of nonempty choices.
-    final optionsHu = currentOptionsHu.map((v) => v.trim().isEmpty ? '' : v).toList();
+    List<dynamic> optionsHu = currentOptionsHu.map((v) => v.trim().isEmpty ? '' : v).toList();
     final choiceFormat = questionType == 'single_choice' || questionType == 'multiple_choice';
     if (choiceFormat) {
       optionsEn = List.generate(currentOptionsEn.length, (i) {
@@ -169,13 +152,17 @@ class QuestionPayloadBuilder {
       correctAnswerPayload =
           String.fromCharCode('A'.codeUnitAt(0) + (correctIndex ?? 0));
     } else if (questionType == 'matching') {
+      // These legacy columns can contain extra distractors and unaligned translations.
+      // The current editor writes the pairing definition to content.pairs.
+      final legacy = originalMatchingOptions;
+      final en = legacy is Map ? legacy['en'] : legacy;
+      final hu = legacy is Map ? legacy['hu'] : null;
+      optionsEn = en is List ? en : const [];
+      optionsHu = hu is List ? hu : const [];
       final List<Map<String, dynamic>> pairs = [];
       final Map<String, String> correctMap = {};
       for (var group in matchingGroups) {
-        pairs.add({
-          'left': {'en': group.leftEn.text, 'hu': group.leftHu.text},
-          'right': {'en': group.rightEn.text, 'hu': group.rightHu.text}
-        });
+        pairs.add(group.toJson());
         if (group.leftEn.text.isNotEmpty) {
           correctMap[group.leftEn.text] = group.rightEn.text;
         }

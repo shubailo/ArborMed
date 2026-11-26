@@ -24,6 +24,8 @@ abstract class QuestionRenderer {
   /// Validate if the user has provided an answer
   bool hasAnswer(dynamic answer);
 
+  bool canSubmit(Map<String, dynamic> question, dynamic answer) => hasAnswer(answer);
+
   /// Get the user's answer in the format expected by the backend
   dynamic formatAnswer(dynamic answer);
 

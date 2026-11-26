@@ -83,6 +83,24 @@ const { app } = require('../../server');
             expect(await (await call(11, path+'/'+id)).json()).toMatchObject({correct_answer:'A', metadata:{}, difficulty:1});
         } finally { await call(11, path+'/'+id, 'DELETE'); }
     });
+    test('a matching question rejects indistinguishable translated terms without changing the stored pairs', async () => {
+        const pairs = [
+            {left:{en:'A', hu:'Bal A'}, right:{en:'X', hu:'Jobb X'}},
+            {left:{en:'B', hu:'Bal B'}, right:{en:'Y', hu:'Jobb Y'}},
+        ];
+        const definition = {topic_id:2, question_type:'matching', question_text_en:'Match',
+            content:{pairs}, correct_answer:{A:'X', B:'Y'}};
+        const created = await call(11, path, 'POST', definition);
+        expect(created.status).toBe(201);
+        const {id} = await created.json();
+        try {
+            const duplicate = [pairs[0], {...pairs[1], right:{en:'Y',hu:' Jobb X '}}];
+            const response = await call(11, path+'/'+id, 'PUT', {...definition, content:{pairs:duplicate}});
+            expect(response.status).toBe(400);
+            const persisted = await call(11, path+'/'+id);
+            expect((await persisted.json()).content.pairs).toEqual(pairs);
+        } finally { await call(11, path+'/'+id, 'DELETE'); }
+    });
     test('the question bank filters nested topics by Bloom level and returns editor data and numeric metrics', async () => {
         const { rows: [q] } = await pg.query(`INSERT INTO questions
             (created_by,topic_id,bloom_level,difficulty,question_type,type,question_text_en,question_text_hu,content)

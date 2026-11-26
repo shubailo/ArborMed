@@ -374,6 +374,36 @@ abstract class AppLocalizations {
   /// **'Select all correct answers.'**
   String get quizSelectAllCorrect;
 
+  /// No description provided for @adminMatchingRepairKey.
+  ///
+  /// In en, this message translates to:
+  /// **'The stored answer disagrees with these pairs. Save the displayed pairs as the new answer key.'**
+  String get adminMatchingRepairKey;
+
+  /// No description provided for @adminMatchingMinimum.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter at least two pairs.'**
+  String get adminMatchingMinimum;
+
+  /// No description provided for @adminMatchingDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'This label must be unique in its column.'**
+  String get adminMatchingDuplicate;
+
+  /// No description provided for @quizMatchPairs.
+  ///
+  /// In en, this message translates to:
+  /// **'Match the pairs.'**
+  String get quizMatchPairs;
+
+  /// No description provided for @quizPairedWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Paired with {term}'**
+  String quizPairedWith(String term);
+
   /// No description provided for @quizNoOptions.
   ///
   /// In en, this message translates to:

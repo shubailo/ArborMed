@@ -1,3 +1,4 @@
+import '../../../core/models/admin_matching_pair.dart';
 import 'package:arbor_med/core/models/topic_hierarchy.dart';
 import 'package:flutter/material.dart';
 
@@ -81,11 +82,20 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
   late TextEditingController _linkEnController;
   late TextEditingController _linkHuController;
 
+  bool _repairMatchingKey = false;
+
   // Matching fields (1-to-1)
   final List<MatchingPairControllerGroup> _matchingGroups = [];
 
   // Multiple Choice (Multi-select)
-  final List<int> _multipleCorrectIndices = [];
+  Set<int> _multipleCorrectIndices = {};
+  List<LocalKey> _multipleRowKeys = const [];
+
+  void _resetMultipleRowKeys() {
+    _multipleRowKeys = _questionType == 'multiple_choice'
+        ? List.generate(_currentOptionsEn.length, (_) => UniqueKey())
+        : const [];
+  }
 
   // Metadata Fields
   int? _selectedTopicId;
@@ -144,7 +154,11 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     _tfStatementController = TextEditingController();
 
     _initOptions();
+    _resetMultipleRowKeys();
     _loadTypeSpecificData();
+    if (_questionType == 'matching') {
+      _matchingGroups.addAll(widget.question!.matchingPairs.map(MatchingPairControllerGroup.fromPair));
+    }
 
     _textControllerEn.addListener(() => setState(() {}));
     _textControllerHu.addListener(() => setState(() {}));
@@ -201,6 +215,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
   @override
   void didUpdateWidget(QuestionEditorDialog oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.question, widget.question)) _repairMatchingKey = false;
     if (identical(oldWidget.topics, widget.topics)) return;
     _hierarchy = TopicHierarchy(widget.topics);
     if (!_hierarchy.roots.contains(_selectedSubjectId)) {
@@ -226,7 +241,6 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       textControllerHu: _textControllerHu,
       setCorrectIndex: (idx) => _correctIndex = idx,
       addMultipleCorrectIndex: (idx) => _multipleCorrectIndices.add(idx),
-      addMatchingGroup: _addMatchingGroup,
     );
   }
 
@@ -259,33 +273,43 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
             'en': _linkEnController.text,
             'hu': _linkHuController.text
           },
-          'pairs': _matchingGroups
-              .map((g) => {
-                    'left': {'en': g.leftEn.text, 'hu': g.leftHu.text},
-                    'right': {'en': g.rightEn.text, 'hu': g.rightHu.text},
-                  })
-              .toList(),
+          'pairs': _matchingGroups.map((g) => g.toJson()).toList(),
         });
   }
 
-  void _addMatchingGroup(
-      {String leftE = '',
-      String leftH = '',
-      String rightE = '',
-      String rightH = ''}) {
-    final group = MatchingPairControllerGroup(
-      leftEn: TextEditingController(text: leftE),
-      leftHu: TextEditingController(text: leftH),
-      rightEn: TextEditingController(text: rightE),
-      rightHu: TextEditingController(text: rightH),
-    );
-    group.leftEn.addListener(() => setState(() {}));
-    group.leftHu.addListener(() => setState(() {}));
-    group.rightEn.addListener(() => setState(() {}));
-    group.rightHu.addListener(() => setState(() {}));
+  void _removeMatchingGroup(MatchingPairControllerGroup group) {
+    if (!_matchingGroups.contains(group)) return;
     setState(() {
-      _matchingGroups.add(group);
+      _repairMatchingKey = false;
+      _matchingGroups.remove(group);
     });
+    // Both language panels may still have text fields attached until this frame ends.
+    WidgetsBinding.instance.addPostFrameCallback((_) => group.dispose());
+  }
+
+  String? _matchingError(AppLocalizations l) {
+    if (_matchingGroups.length < 2) return l.adminMatchingMinimum;
+    final seen = List.generate(4, (_) => <String>{});
+    for (var i = 0; i < _matchingGroups.length; i++) {
+      final g = _matchingGroups[i];
+      final en = [g.leftEn.text.trim(), g.rightEn.text.trim()];
+      final hu = [g.leftHu.text.trim(), g.rightHu.text.trim()];
+      for (var side = 0; side < 2; side++) {
+        final field = side == 0 ? l.adminLeftLabel(i + 1) : l.adminRightLabel(i + 1);
+        if (en[side].isEmpty) return '${l.languageEnglish} · $field · ${l.adminRequired}';
+        if (!seen[side].add(en[side].toLowerCase())) {
+          return '${l.languageEnglish} · $field · ${l.adminMatchingDuplicate}';
+        }
+        final displayed = hu[side].isEmpty ? en[side] : hu[side];
+        if (!seen[2 + side].add(displayed.toLowerCase())) {
+          return '${l.languageHungarian} · $field · ${l.adminMatchingDuplicate}';
+        }
+      }
+    }
+    if (widget.question?.hasMatchingKeyConflict == true && !_repairMatchingKey) {
+      return l.adminMatchingRepairKey;
+    }
+    return null;
   }
 
   @override
@@ -451,6 +475,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
   }
 
   void _onTypeChanged() {
+    _repairMatchingKey = false;
     if (_questionType == 'relation_analysis') {
       _currentOptionsEn = ["A", "B", "C", "D", "E"];
       _currentOptionsHu = ["A", "B", "C", "D", "E"];
@@ -465,17 +490,15 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       _correctIndex = 0;
     } else if (_questionType == 'matching') {
       if (_matchingGroups.isEmpty) {
-        _matchingGroups.add(MatchingPairControllerGroup(
-            leftEn: TextEditingController(),
-            leftHu: TextEditingController(),
-            rightEn: TextEditingController(),
-            rightHu: TextEditingController()));
+        _matchingGroups.addAll(List.generate(2,
+            (_) => MatchingPairControllerGroup.fromPair(const AdminMatchingPair())));
       }
     } else if (_currentOptionsEn.length < 2) {
       _currentOptionsEn = ["", "", "", ""];
       _currentOptionsHu = ["", "", "", ""];
     }
     _multipleCorrectIndices.clear();
+    _resetMultipleRowKeys();
     if (_questionType == 'single_choice') _correctIndex = null;
   }
 
@@ -534,6 +557,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
         return;
       }
       final isTargetHu = target == 'hu';
+      if (type == 'matching') _repairMatchingKey = false;
       final newOpts = QuestionTranslationHelper.applyTranslationResult(
         result: result,
         questionType: _questionType,
@@ -669,43 +693,59 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
         return MatchingEditor(
           matchingGroups: _matchingGroups,
           isEn: lang == 'en',
-          onAddPair: _addMatchingGroup,
-          onRemovePair: (idx) => setState(() => _matchingGroups.removeAt(idx)),
+          onTextChanged: () => setState(() => _repairMatchingKey = false),
+          onAddPair: () => setState(() {
+            _repairMatchingKey = false;
+            _matchingGroups.add(MatchingPairControllerGroup.fromPair(const AdminMatchingPair()));
+          }),
+          onRemovePair: _removeMatchingGroup,
+          conflictingKey: widget.question?.hasMatchingKeyConflict == true
+              ? jsonEncode(widget.question!.answerKeys.singleOrNull ?? widget.question!.correctAnswer) : null,
+          repairKey: _repairMatchingKey,
+          onRepairKeyChanged: (value) => setState(() => _repairMatchingKey = value),
         );
       case 'multiple_choice':
         final isEn = lang == 'en';
+        final rows = _multipleRowKeys;
         return MultipleChoiceEditor(
+          rowKeys: rows,
           options: isEn ? _currentOptionsEn : _currentOptionsHu,
           correctIndices: _multipleCorrectIndices,
-          onOptionChanged: (index, val) => setState(() {
-            if (isEn) {
-              _currentOptionsEn[index] = val;
-            } else {
-              _currentOptionsHu[index] = val;
-            }
-          }),
-          onToggleCorrect: (index, isSelected) => setState(() {
-            if (isSelected) {
-              _multipleCorrectIndices.add(index);
-            } else {
-              _multipleCorrectIndices.remove(index);
-            }
-          }),
-          onAddOption: () => setState(() {
-            _currentOptionsEn = [..._currentOptionsEn, ""];
-            _currentOptionsHu = [..._currentOptionsHu, ""];
-          }),
-          onRemoveOption: (index) => setState(() {
-            if (index < _originalChoices.length) _originalChoices.removeAt(index);
-            _currentOptionsEn = List.of(_currentOptionsEn)..removeAt(index);
-            _currentOptionsHu = List.of(_currentOptionsHu)..removeAt(index);
-            _multipleCorrectIndices.remove(index);
-            for (int i = 0; i < _multipleCorrectIndices.length; i++) {
-              if (_multipleCorrectIndices[i] > index) {
-                _multipleCorrectIndices[i]--;
+          onOptionChanged: (index, value) {
+            if (!identical(rows, _multipleRowKeys)) return;
+            setState(() => (isEn ? _currentOptionsEn : _currentOptionsHu)[index] = value);
+          },
+          onToggleCorrect: (index, isSelected) {
+            if (!identical(rows, _multipleRowKeys)) return;
+            setState(() {
+              if (isSelected) {
+                _multipleCorrectIndices.add(index);
+              } else {
+                _multipleCorrectIndices.remove(index);
               }
-            }
-          }),
+            });
+          },
+          onAddOption: () {
+            if (!identical(rows, _multipleRowKeys)) return;
+            setState(() {
+              _multipleRowKeys = [...rows, UniqueKey()];
+              _currentOptionsEn = [..._currentOptionsEn, ''];
+              _currentOptionsHu = [..._currentOptionsHu, ''];
+            });
+          },
+          onRemoveOption: (index) {
+            if (!identical(rows, _multipleRowKeys) || rows.length <= 2) return;
+            setState(() {
+              _multipleRowKeys = List.of(rows)..removeAt(index);
+              if (index < _originalChoices.length) _originalChoices.removeAt(index);
+              _currentOptionsEn = List.of(_currentOptionsEn)..removeAt(index);
+              _currentOptionsHu = List.of(_currentOptionsHu)..removeAt(index);
+              _multipleCorrectIndices = {
+                for (final selected in _multipleCorrectIndices)
+                  if (selected != index) selected > index ? selected - 1 : selected,
+              };
+            });
+          },
         );
       case 'true_false':
         return TrueFalseEditor(
@@ -814,6 +854,13 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     final questionProvider =
         Provider.of<AdminQuestionProvider>(context, listen: false);
     if (!_formKey.currentState!.validate()) return;
+    if (_questionType == 'matching') {
+      final message = _matchingError(AppLocalizations.of(context)!);
+      if (message != null) {
+        setState(() => _formError = message);
+        return;
+      }
+    }
     if ((_questionType == 'single_choice' && _correctIndex == null) ||
         (_questionType == 'multiple_choice' && _multipleCorrectIndices.isEmpty)) {
       final l = AppLocalizations.of(context)!;
@@ -833,8 +880,9 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       questionType: _questionType,
       existingImageUrl: _existingImageUrl,
       correctIndex: _correctIndex,
-      multipleCorrectIndices: _multipleCorrectIndices,
+      multipleCorrectIndices: _multipleCorrectIndices.toList(),
       originalChoices: _originalChoices,
+      originalMatchingOptions: widget.question?.type == 'matching' ? widget.question?.options : null,
       originalContent: widget.question?.type == _questionType && widget.question?.content is Map
           ? Map<String, dynamic>.from(widget.question!.content as Map)
           : const {},
