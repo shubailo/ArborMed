@@ -29,25 +29,37 @@ function choiceOptions(question) {
   }).filter(c => c.en.trim() || c.hu.trim());
 }
 
-function resolveChoice(choices, value) {
-  const text = String(value).trim();
-  const label = text.toLowerCase();
-  const authorId = stableId(text);
-  const stable = choices.find(choice => choice.id === label);
-  if (stable) return stable;
-  const matches = choices.filter(choice => choice.id === authorId ||
-    [choice.en, choice.hu].some(text => text.trim().toLowerCase() === label));
-  return matches.length === 1 ? matches[0] : undefined;
+function createChoiceResolver(choices) {
+  const byId = new Map();
+  const byLabel = new Map();
+  for (const choice of choices) {
+    byId.set(choice.id, choice);
+    for (const text of [choice.en, choice.hu]) {
+      const label = text.trim().toLowerCase();
+      if (!byLabel.has(label)) byLabel.set(label, choice);
+      else if (byLabel.get(label) !== choice) byLabel.set(label, null);
+    }
+  }
+  return value => {
+    const text = String(value).trim();
+    const label = text.toLowerCase();
+    if (byId.has(label)) return byId.get(label);
+    const authored = byId.get(stableId(text));
+    if (!byLabel.has(label)) return authored;
+    const named = byLabel.get(label);
+    return named && (!authored || authored === named) ? named : undefined;
+  };
 }
 
 function gradeChoices(question, answer, multiple = false) {
   const choices = choiceOptions(question);
+  const resolve = createChoiceResolver(choices);
   function key(value) {
     if (typeof value !== 'string' && typeof value !== 'number') return null;
     const label = String(value).trim().toLowerCase();
     if (!label) return null;
     if (!choices.length) return label;
-    return resolveChoice(choices, value)?.id ?? null;
+    return resolve(value)?.id ?? null;
   }
   function keys(input) {
     const parsed = decodeStoredAnswer(input);
@@ -71,4 +83,8 @@ function distinctChoices(choices) {
   return new Set(choices.map(choice => choice.id)).size === choices.length;
 }
 
-module.exports = { choiceOptions, distinctChoices, gradeChoices, resolveChoice };
+function resolveChoice(choices, value) {
+  return createChoiceResolver(choices)(value);
+}
+
+module.exports = { choiceOptions, distinctChoices, gradeChoices, createChoiceResolver, resolveChoice };

@@ -1,6 +1,6 @@
 const choiceSchema = require('./choiceSchema');
 const QuestionType = require('./QuestionType');
-const { choiceOptions, distinctChoices, gradeChoices, resolveChoice } = require('./choiceOptions');
+const { choiceOptions, distinctChoices, gradeChoices, createChoiceResolver } = require('./choiceOptions');
 
 /**
  * Multiple Choice Question Type (Multi-select)
@@ -20,6 +20,7 @@ class MultipleChoiceType extends QuestionType {
         }
 
         const choices = choiceOptions(questionData);
+        const resolve = createChoiceResolver(choices);
         if (choices.length < 2) errors.push('At least 2 options are required');
         else if (!distinctChoices(choices)) errors.push('Each option needs a distinct identity');
 
@@ -37,7 +38,7 @@ class MultipleChoiceType extends QuestionType {
                 } else {
                     const ids = new Set();
                     for (const value of correctArr) {
-                        const choice = typeof value === 'string' && value.trim() && resolveChoice(choices, value);
+                        const choice = typeof value === 'string' && value.trim() && resolve(value);
                         if (!choice) errors.push('Correct answer not in the options list: ' + String(value));
                         else if (ids.has(choice.id)) errors.push('Each correct option may appear only once');
                         else ids.add(choice.id);

@@ -1,4 +1,4 @@
-const { choiceOptions, distinctChoices, gradeChoices, resolveChoice } = require('./choiceOptions');
+const { choiceOptions, distinctChoices, gradeChoices, createChoiceResolver } = require('./choiceOptions');
 const { decodeStoredAnswer, scalarAnswer } = require('./storedAnswer');
 const registry = require('./registry');
 
@@ -33,13 +33,13 @@ function matchingAnswer(question) {
 
 // Some historical imports split every comma, including commas inside labels.
 // Accept only a unique full partition of the recorded key into displayed options.
-function recoverChoices(choices, input, multiple) {
+function recoverChoices(choices, resolve, input, multiple) {
   const parts = Array.isArray(input) ? input : [input];
   if (!parts.length || !parts.every(value => typeof value === 'string')) return null;
   const normalize = value => value.trim().toLowerCase().replace(/\s*[,;]\s*/g, ',').replace(/\s+/g, ' ');
   const source = normalize(parts.join(','));
   const labels = choices.flatMap(choice => {
-    const aliases = [choice.en, choice.hu].filter(value => resolveChoice(choices, value)?.id === choice.id);
+    const aliases = [choice.en, choice.hu].filter(value => resolve(value)?.id === choice.id);
     return [...new Set(aliases.map(normalize))].filter(Boolean).map(label => ({ label, choice }));
   });
   if (!source) return null;
@@ -65,12 +65,12 @@ function recoverChoices(choices, input, multiple) {
     pos = step.start;
   }
   if (!distinctChoices(recovered)) return null;
-  const keys = recovered.reverse().map(choice => visibleKey(choices, choice));
+  const keys = recovered.reverse().map(choice => visibleKey(resolve, choice));
   return multiple ? keys : keys[0];
 }
 
-function visibleKey(choices, choice) {
-  return resolveChoice(choices, choice.en)?.id === choice.id ? choice.en : choice.id;
+function visibleKey(resolve, choice) {
+  return resolve(choice.en)?.id === choice.id ? choice.en : choice.id;
 }
 
 function fromType(question, declaredType) {
@@ -87,16 +87,17 @@ function fromType(question, declaredType) {
     const choices = choiceOptions(question);
     if (choices.length < 2 || !distinctChoices(choices)) return null;
     const multiple = type === 'multiple_choice';
+    const resolve = createChoiceResolver(choices);
     if (!gradeChoices(question, input, multiple).correct) {
-      key = recoverChoices(choices, input, multiple);
+      key = recoverChoices(choices, resolve, input, multiple);
       if (key == null || !gradeChoices({...question, correct_answer: key}, key, multiple).correct) return null;
     }
     // A historical authoring ID (e.g. "a") is distinct from the stable
     // ID sent to the app. Use a visible label for the offline answer key.
     const visible = value => {
-      const choice = resolveChoice(choices, value);
+      const choice = resolve(value);
       const normalized = String(value).trim().toLowerCase();
-      return [choice.id, choice.en.trim().toLowerCase(), choice.hu.trim().toLowerCase()].includes(normalized) ? value : visibleKey(choices, choice);
+      return [choice.id, choice.en.trim().toLowerCase(), choice.hu.trim().toLowerCase()].includes(normalized) ? value : visibleKey(resolve, choice);
     };
     key = Array.isArray(key) ? key.map(visible) : visible(key);
   } else {
