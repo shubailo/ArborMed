@@ -59,3 +59,29 @@ test('preserves older authoring IDs and the legacy type column', () => {
     correct_answer: ['a','b']};
   expect(gradeableQuestion(question)).toMatchObject({question_type:'multiple_choice', correct_answer:['Red','Blue']});
 });
+
+
+test('a broken explicit type cannot be graded as a different legacy type', () => {
+  const row = {type: 'single_choice', options: ['Red', 'Blue'], correct_answer: 'Red'};
+  expect(gradeableQuestion({...row, question_type: 'matching'})).toBeNull();
+  expect(gradeableQuestion({...row, question_type: 'retired_type'})).toBeNull();
+  expect(gradeableQuestion(row)).toMatchObject({question_type: 'single_choice'});
+});
+
+test('scalar keys accept one historical wrapper and reject remaining containers', () => {
+  const {scalarAnswer, decodeStoredAnswer} = require('../../../../src/services/questionTypes/storedAnswer');
+  for (const key of ['["A"]', ['A'], '"A"', 'A']) expect(scalarAnswer(key)).toBe('A');
+  expect(scalarAnswer('[false]')).toBe(false);
+  expect(scalarAnswer('[0]')).toBe(0);
+  for (const value of [{toString: 'not a method'}, '[{"a":1}]', '[[1]]', ['a','b']]) {
+    expect(scalarAnswer(value)).toBeNull();
+  }
+  expect(decodeStoredAnswer('{"left":"right"}')).toEqual({left:'right'});
+});
+
+test('structured keys produce a validation result for a single-choice question', () => {
+  const registry = require('../../../../src/services/questionTypes/registry');
+  const q = {content: {question_text: 'Pick one', options: ['A','B']},
+    correct_answer: '{"toString":0}'};
+  expect(registry.validate('single_choice', q).valid).toBe(false);
+});

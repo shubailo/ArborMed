@@ -197,12 +197,12 @@ class QuizBody extends StatelessWidget {
         final q = state.currentQuestion!;
         final qType = q['question_type'] ?? 'single_choice';
         final renderer = QuestionRendererRegistry.getRenderer(qType);
-        if (!renderer.isPlayable(q)) {
+        if (renderer == null || !renderer.isPlayable(q)) {
           final labels = AppLocalizations.of(context)!;
           return Center(child: CozyPanel(
             title: systemName,
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Text(labels.quizIncompleteQuestion),
+              Text(renderer == null ? labels.quizUnsupportedQuestionType : labels.quizIncompleteQuestion),
               const SizedBox(height: 16),
               LiquidButton(label: labels.quizNext, onPressed: controller.loadNextQuestion),
             ]),

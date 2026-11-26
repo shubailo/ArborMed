@@ -1796,6 +1796,12 @@ abstract class AppLocalizations {
   /// **'Both statements are false.'**
   String get relationAnswerE;
 
+  /// No description provided for @quizUnsupportedQuestionType.
+  ///
+  /// In en, this message translates to:
+  /// **'This question type is not supported.'**
+  String get quizUnsupportedQuestionType;
+
   /// No description provided for @quizIncompleteQuestion.
   ///
   /// In en, this message translates to:

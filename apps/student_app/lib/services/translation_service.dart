@@ -3,7 +3,9 @@ import 'api_service.dart';
 import 'package:arbor_med/core/api_endpoints.dart';
 
 class TranslationService {
-  final ApiService _apiService = ApiService();
+  final ApiService _apiService;
+
+  TranslationService([ApiService? apiService]) : _apiService = apiService ?? ApiService();
 
   /// Translate a single text string
   Future<String?> translateText(String text, String from, String to) async {

@@ -258,7 +258,9 @@ class QuizController extends ChangeNotifier {
       return;
     }
     final question = _state.currentQuestion!;
-    final answer = _formatAnswer(question, _state.userAnswer);
+    final renderer = QuestionRendererRegistry.getRenderer(question['question_type'] ?? 'single_choice');
+    if (renderer == null || !renderer.canSubmit(question, _state.userAnswer)) return;
+    final answer = renderer.formatAnswer(_state.userAnswer);
     if (answer == null) return;
     _stopwatch.stop();
     _state = _state.copyWith(isSubmitting: true, error: null);
@@ -283,7 +285,6 @@ class QuizController extends ChangeNotifier {
     if (!_disposed && _apiService.userId == _userId && identical(question, _state.currentQuestion)) {
       _progressBeforeAnswer = _state.levelProgress;
       _visibleSubmission = id;
-      final renderer = QuestionRendererRegistry.getRenderer(question['question_type'] ?? 'single_choice');
       final correct = renderer.validateAnswer(answer, question['correct_answer'], question);
       _state = _state.copyWith(
         isAnswerChecked: true, isCorrect: correct,
@@ -344,12 +345,6 @@ class QuizController extends ChangeNotifier {
       _effectController.add(QuizEffect(QuizEffectType.confetti));
     }
     notifyListeners();
-  }
-
-  dynamic _formatAnswer(Map<String, dynamic> q, dynamic answer) {
-     final qType = q['question_type'] ?? 'single_choice';
-     final renderer = QuestionRendererRegistry.getRenderer(qType);
-     return renderer.canSubmit(q, answer) ? renderer.formatAnswer(answer) : null;
   }
 
   String _getExplanation(Map<String, dynamic> data) {

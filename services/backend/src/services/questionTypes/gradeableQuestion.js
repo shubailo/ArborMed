@@ -91,7 +91,7 @@ function gradeableQuestion(question) {
   if (!question) return null;
   const primary = question.question_type || question.type || 'single_choice';
   const result = fromType(question, primary);
-  if (result || !question.type || question.type === primary) return result;
+  if (result || primary !== 'single_choice' || !question.type || question.type === primary) return result;
   // Some seeders only populated the legacy type while the newer column
   // retained its default. Accept its declared type only if it actually grades.
   return fromType(question, question.type);

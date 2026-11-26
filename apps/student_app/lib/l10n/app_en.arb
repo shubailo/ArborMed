@@ -324,6 +324,7 @@
   "relationAnswerC": "Only the first statement is true.",
   "relationAnswerD": "Only the second statement is true.",
   "relationAnswerE": "Both statements are false.",
+  "quizUnsupportedQuestionType": "This question type is not supported.",
   "quizIncompleteQuestion": "This question is incomplete.",
   "adminRelational": "Relational",
   "adminLevel": "Level",

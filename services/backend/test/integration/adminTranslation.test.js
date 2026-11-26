@@ -1,6 +1,7 @@
 const express = require('express');
 const { once } = require('node:events');
 
+jest.mock('../../src/config/db', () => ({query: jest.fn()}));
 jest.mock('google-translate-api-x', () => jest.fn());
 jest.mock('../../src/middleware/authMiddleware', () => ({protect: (req,res,next) => next()}));
 
@@ -25,6 +26,7 @@ describe('editor translation over HTTP', () => {
             LIBRETRANSLATE_URL:'http://127.0.0.1:' + provider.address().port});
         const api = express();
         api.use(express.json());
+        api.use('/quiz', require('../../src/routes/quizRoutes'));
         api.use('/api', require('../../src/routes/translate'));
         api.use(require('../../src/middleware/errorHandler'));
         app = await run(api);
@@ -41,6 +43,26 @@ describe('editor translation over HTTP', () => {
     });
     const post = (path, body) => fetch(address + '/api/translate' + path, {
         method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({from:'en',to:'hu',...body}),
+    });
+    test.each(['/quiz/translate', '/api/translate'])('%s rejects invalid input before translation and retains provider errors', async route => {
+        const send = body => fetch(address + route, {
+            method: 'POST',
+            headers: body === undefined ? {} : {'content-type':'application/json'},
+            body: JSON.stringify(body),
+        });
+        for (const body of [undefined, {}, {text:'Q',from:'bad tag',to:'hu'},
+            {text:'Q',from:'en',to:'auto'}, {text:[],from:'en',to:'hu'}]) {
+            expect((await send(body)).status).toBe(400);
+        }
+        expect(calls).toEqual([]);
+        expect(require('google-translate-api-x')).not.toHaveBeenCalled();
+        const valid = {text:' Q ',from:' auto ',to:' hu '};
+        const ok = await send(valid);
+        expect(ok.status).toBe(200);
+        expect(await ok.json()).toEqual({translated:' Q  (hu)'});
+        expect(calls[0]).toEqual({q:' Q ',source:'auto',target:'hu',format:'text'});
+        response = 'error';
+        expect((await send(valid)).status).toBe(502);
     });
     test('retains every translated field, option order and empty option slots', async () => {
         const res = await post('/question', {questionData:{questionText:'Example', options:['One','','Two'], explanation:'Reason'}});

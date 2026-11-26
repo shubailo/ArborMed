@@ -909,6 +909,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get relationAnswerE => 'Mindkét állítás hamis.';
 
   @override
+  String get quizUnsupportedQuestionType => 'Ez a kérdéstípus nem támogatott.';
+
+  @override
   String get quizIncompleteQuestion => 'A kérdés hiányos.';
 
   @override

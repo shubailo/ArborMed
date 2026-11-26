@@ -38,6 +38,13 @@ describe('quizController Unit Tests', () => {
     next = jest.fn();
   });
 
+  it('rejects a missing submission body before any database query', async () => {
+    delete req.body;
+    await quizController.submitAnswer(req, res, next);
+    expect(next).toHaveBeenCalledWith(expect.objectContaining({statusCode: 400}));
+    expect(db.query).not.toHaveBeenCalled();
+  });
+
   it('lists registered question types', async () => {
     await quizController.getQuestionTypes(req, res, next);
     expect(res.json).toHaveBeenCalledWith(expect.arrayContaining([

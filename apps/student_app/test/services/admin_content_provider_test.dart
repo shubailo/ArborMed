@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -349,7 +350,7 @@ void main() {
   group('AdminContentProvider Translation', () {
     test('translateText returns translated string on success', () async {
       mockApi.onPost = (endpoint, data) async {
-        if (endpoint == ApiEndpoints.quizTranslate) {
+        if (endpoint == ApiEndpoints.apiTranslate) {
           expect(data['text'], 'Hello');
           expect(data['from'], 'en');
           expect(data['to'], 'hu');
@@ -361,6 +362,18 @@ void main() {
       final result = await provider.translateText('Hello', 'en', 'hu');
 
       expect(result, 'Szia');
+    });
+
+    test('blank and malformed responses preserve the draft and omit response details from logs', () async {
+      final logs = <String>[];
+      final original = debugPrint;
+      addTearDown(() => debugPrint = original);
+      debugPrint = (message, {wrapWidth}) => logs.add(message ?? '');
+      mockApi.onPost = (_, __) async => {'translated': '   '};
+      expect(await provider.translateText('Hello', 'en', 'hu'), isNull);
+      mockApi.onPost = (_, __) async => throw const FormatException('private draft');
+      expect(await provider.translateText('Hello', 'en', 'hu'), isNull);
+      expect(logs.join(), isNot(contains('private draft')));
     });
 
     test('translateText returns null on error', () async {

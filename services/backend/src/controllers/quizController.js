@@ -5,7 +5,7 @@ const { createHash } = require('node:crypto');
 const pedagogicalEngine = require('../services/pedagogicalEngine');
 const questionTypeRegistry = require('../services/questionTypes/registry');
 const gradeableQuestion = require('../services/questionTypes/gradeableQuestion');
-const translationService = require('../services/translationService');
+const translationController = require('./translationController');
 const AppError = require('../utils/AppError');
 const { secureShuffleArray } = require('../utils/cryptoUtils');
 const catchAsync = require('../utils/catchAsync');
@@ -99,6 +99,9 @@ function sameSubmittedAnswer(first, second) {
 }
 
 exports.submitAnswer = catchAsync(async (req, res) => {
+  if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
+    throw new AppError('A submission object is required', 400);
+  }
   const { sessionId, questionId, userAnswer, responseTimeMs, quality, selectionReason } = req.body;
   const userId = req.user.id;
   if (req.body.submissionUserId != null && req.body.submissionUserId !== userId) {
@@ -230,11 +233,4 @@ exports.getQuestionById = catchAsync(async (req, res, next) => {
   res.json(questionTypeRegistry.prepareForClient(practice));
 });
 
-exports.translate = catchAsync(async (req, res, next) => {
-  const { text, from, to } = req.body;
-  if (![text, from, to].every(value => typeof value === 'string' && value.trim())) {
-    return next(new AppError('Missing required fields: text, from, to', 400));
-  }
-  const translated = await translationService.translateText(text, from, to);
-  res.json({ translated });
-});
+exports.translate = translationController.translateText;

@@ -27,6 +27,7 @@ import 'package:mockito/annotations.dart';
 import 'quiz_controller_test.mocks.dart';
 
 void main() {
+
   late MockApiService mockApiService;
   late QuestionCacheService cache;
   late AppDatabase database;
@@ -62,6 +63,47 @@ void main() {
   }
 
   group('QuizController', () {
+    test('legacy practice type survives normalization and canonical type takes precedence', () {
+      controller = buildController(initialData: {'id': 1, 'type': 'true_false'});
+      expect(controller.state.currentQuestion?['question_type'], 'true_false');
+      expect(normalizePracticeQuestion({'id': 1, 'type': 'relational_analysis'})['question_type'], 'relation_analysis');
+      expect(normalizePracticeQuestion({'id': 1, 'type': 'single_choice', 'question_type': 'future_type'})['question_type'], 'future_type');
+    });
+
+    for (final type in ['future_type', 7]) {
+      testWidgets('unsupported question type $type can be skipped without a submission', (tester) async {
+        SharedPreferences.setMockInitialValues({});
+        when(mockApiService.get(any)).thenAnswer((_) async => {'id': 8});
+        controller = buildController(initialData: {
+          'id': 7, 'question_type': type, 'correct_answer': 'A',
+          'options': ['A', 'B'], 'streakProgress': 0.3,
+        });
+        await tester.pumpWidget(MultiProvider(
+          providers: [
+            ChangeNotifierProvider<ThemeService>(create: (_) => ThemeService()),
+            ChangeNotifierProvider<QuizController>.value(value: controller),
+          ],
+          child: const MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(body: QuizBody(systemName: 'Renal')),
+          ),
+        ));
+        await tester.pumpAndSettle();
+        expect(find.text('This question type is not supported.'), findsOneWidget);
+        expect(find.text('A'), findsNothing);
+        controller.selectAnswer('A');
+        await tester.runAsync(controller.submitAnswer);
+        expect(controller.state.isAnswerChecked, false);
+        expect(controller.state.levelProgress, 0.3);
+        verifyNever(mockApiService.post('/quiz/answer', any));
+        await tester.tap(find.text('Next Question'));
+        await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+        await tester.pumpWidget(const SizedBox());
+        expect(controller.state.currentQuestion?['id'], 8);
+      });
+    }
+
     test('a mismatched review result leaves the requested question available for retry', () async {
       when(mockApiService.get('/quiz/questions/5')).thenAnswer((_) async => {'id': 6});
       controller = buildController(review: [5]);

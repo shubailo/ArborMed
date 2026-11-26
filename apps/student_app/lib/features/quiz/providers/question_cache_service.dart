@@ -14,9 +14,10 @@ Map<String, dynamic> normalizePracticeQuestion(Object? result, {int? expectedId}
       (expectedId != null && id != expectedId)) {
     throw const FormatException('Invalid practice question ID');
   }
+  final type = result['question_type'] ?? result['type'];
   return {
     ...result, 'id': id,
-    if (result['question_type'] == 'relational_analysis') 'question_type': 'relation_analysis',
+    if (type != null) 'question_type': type == 'relational_analysis' ? 'relation_analysis' : type,
   };
 }
 

@@ -40,6 +40,10 @@ class QuestionPreviewCard extends StatelessWidget {
     // Get the appropriate renderer
     final renderer = QuestionRendererRegistry.getRenderer(questionType);
 
+    if (renderer == null) {
+      return Center(child: Text(AppLocalizations.of(context)!.quizUnsupportedQuestionType));
+    }
+
     // Extract localized options for the renderer
     dynamic localizedOptions = question!.options;
     if (question!.options is Map) {

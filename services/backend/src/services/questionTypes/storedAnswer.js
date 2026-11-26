@@ -8,8 +8,8 @@ function decodeStoredAnswer(value) {
 
 function scalarAnswer(value) {
   const decoded = decodeStoredAnswer(value);
-  if (Array.isArray(decoded)) return decoded.length === 1 ? decoded[0] : null;
-  return decoded;
+  const candidate = Array.isArray(decoded) && decoded.length === 1 ? decoded[0] : decoded;
+  return ['string', 'number', 'boolean'].includes(typeof candidate) ? candidate : null;
 }
 
 module.exports = { decodeStoredAnswer, scalarAnswer };

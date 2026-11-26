@@ -902,6 +902,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get relationAnswerE => 'Both statements are false.';
 
   @override
+  String get quizUnsupportedQuestionType =>
+      'This question type is not supported.';
+
+  @override
   String get quizIncompleteQuestion => 'This question is incomplete.';
 
   @override

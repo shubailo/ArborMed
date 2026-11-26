@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:arbor_med/services/auth_provider.dart';
 import 'api_service.dart';
+import 'translation_service.dart';
 import 'package:arbor_med/core/api_endpoints.dart';
 import 'package:arbor_med/features/analytics/models/quote.dart';
 
@@ -20,6 +21,9 @@ class AdminContentProvider with ChangeNotifier {
   bool _quoteLoadFailed = false;
   bool get quoteLoadFailed => _quoteLoadFailed;
   int _quoteRequest = 0;
+  int _currentQuoteRequest = 0;
+  int _iconRequest = 0;
+  int _accountGeneration = 0;
 
   List<Quote> _adminQuotes = [];
   List<Quote> get adminQuotes => _adminQuotes;
@@ -112,8 +116,10 @@ class AdminContentProvider with ChangeNotifier {
   }
 
   Future<void> fetchCurrentQuote() async {
+    final request = ++_currentQuoteRequest;
     try {
       final data = await apiService.get(ApiEndpoints.quizSingleQuote);
+      if (request != _currentQuoteRequest) return;
       _currentQuote = Quote.fromJson(data);
       notifyListeners();
     } catch (e) {
@@ -128,9 +134,11 @@ class AdminContentProvider with ChangeNotifier {
   }
 
   Future<void> fetchUploadedIcons() async {
+    final request = ++_iconRequest;
     try {
       final data =
           await apiService.get('${ApiEndpoints.apiUpload}?folder=icons');
+      if (request != _iconRequest) return;
       _uploadedIcons = List<String>.from(data['images']);
       notifyListeners();
     } catch (e) {
@@ -139,11 +147,15 @@ class AdminContentProvider with ChangeNotifier {
   }
 
   Future<bool> deleteUploadedIcon(String iconUrl) async {
+    final account = _accountGeneration;
     try {
-      final filename = iconUrl.split('/').last;
-      final stored = Uri.parse(iconUrl).path.startsWith('/uploads/stored/');
+      final uri = Uri.parse(iconUrl);
+      final filename = Uri.encodeComponent(uri.pathSegments.last);
+      final stored = uri.path.startsWith('/uploads/stored/');
       await apiService.delete('${ApiEndpoints.apiUpload}/$filename?folder=icons&stored=$stored');
-      _uploadedIcons.removeWhere((url) => url.endsWith(filename));
+      if (account != _accountGeneration) return true;
+      ++_iconRequest;
+      _uploadedIcons.remove(iconUrl);
       notifyListeners();
       return true;
     } catch (e) {
@@ -154,22 +166,13 @@ class AdminContentProvider with ChangeNotifier {
 
   // --- Translation ---
 
-  Future<String?> translateText(
-      String text, String sourceLang, String targetLang) async {
-    try {
-      final data = await apiService.post(ApiEndpoints.quizTranslate, {
-        'text': text,
-        'from': sourceLang,
-        'to': targetLang,
-      });
-      return data['translated'];
-    } catch (e) {
-      debugPrint('Error translating text: $e');
-      return null;
-    }
-  }
+  Future<String?> translateText(String text, String sourceLang, String targetLang) =>
+      TranslationService(apiService).translateText(text, sourceLang, targetLang);
 
   void resetState() {
+    ++_accountGeneration;
+    ++_iconRequest;
+    ++_currentQuoteRequest;
     ++_quoteRequest;
     _quoteLoadFailed = false;
     _isLoading = false;

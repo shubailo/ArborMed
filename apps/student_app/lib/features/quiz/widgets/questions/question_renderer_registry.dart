@@ -18,14 +18,17 @@ class QuestionRendererRegistry {
   };
 
   /// Get the appropriate renderer for a question type
-  /// Falls back to SingleChoiceRenderer if type is unknown
-  static QuestionRenderer getRenderer(String questionType) {
-    return _renderers[questionType] ?? SingleChoiceRenderer();
+  static QuestionRenderer? getRenderer(Object? questionType) {
+    return _renderers[switch (questionType) {
+      'case_study' => 'single_choice',
+      'relational_analysis' => 'relation_analysis',
+      _ => questionType,
+    }];
   }
 
   /// Check if a question type has a registered renderer
   static bool hasRenderer(String questionType) {
-    return _renderers.containsKey(questionType);
+    return getRenderer(questionType) != null;
   }
 
   /// Get all registered question types

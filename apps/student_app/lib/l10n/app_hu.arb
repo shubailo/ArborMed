@@ -307,6 +307,7 @@
   "relationAnswerC": "Csak az első állítás igaz.",
   "relationAnswerD": "Csak a második állítás igaz.",
   "relationAnswerE": "Mindkét állítás hamis.",
+  "quizUnsupportedQuestionType": "Ez a kérdéstípus nem támogatott.",
   "quizIncompleteQuestion": "A kérdés hiányos.",
   "adminRelational": "Relációs analízis",
   "adminLevel": "Szint",
