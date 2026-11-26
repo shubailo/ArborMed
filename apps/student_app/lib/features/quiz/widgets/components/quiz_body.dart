@@ -138,7 +138,7 @@ class QuizBody extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.cloud_off_rounded,
+                    Icon(state.error == null ? Icons.check_circle_outline : Icons.cloud_off_rounded,
                         color: palette.textSecondary.withValues(alpha: 0.5), size: 48),
                     const SizedBox(height: 16),
                     Text(
@@ -149,8 +149,9 @@ class QuizBody extends StatelessWidget {
                         color: palette.textPrimary,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
+                    if (state.error != null) ...[
+                      const SizedBox(height: 8),
+                      Text(
                       isHu ? "Jelenleg nem sikerült kérdéseket betölteni ehhez a témához. Kérjük, ellenőrizd az internetkapcsolatot és próbáld újra." : "We couldn't load questions for this topic right now. Please check your connection and retry.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -159,6 +160,7 @@ class QuizBody extends StatelessWidget {
                         height: 1.4,
                       ),
                     ),
+                    ],
                     const SizedBox(height: 24),
                     LiquidButton(
                       label: isHu ? "ÚJRAPRÓBÁLKOZÁS" : "RETRY",

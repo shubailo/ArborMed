@@ -110,6 +110,18 @@ integration('PostgreSQL quiz receipts and rewards', () => {
     expect((await pool.query('SELECT * FROM user_claimed_quests')).rowCount).toBe(1);
   });
 
+  test('an explicit unsupported type cannot create a receipt, progress or reward', async () => {
+    for (const type of ['', 'future_type']) {
+      await pool.query(
+        `INSERT INTO questions (id, topic_id, question_type, correct_answer, options, bloom_level)
+         SELECT 107, topic_id, $1, correct_answer, options, bloom_level FROM questions WHERE id = 7
+         ON CONFLICT (id) DO UPDATE SET question_type = EXCLUDED.question_type`, [type]
+      );
+      await expect(submit(attempt(107))).rejects.toMatchObject({statusCode: 422});
+      expect(await counts()).toEqual({coins: 0, answers: 0, activity: 0, progress: 0});
+    }
+  });
+
   test('concurrent retries replay one receipt, fresh attempts update progress and credit distinct questions', async () => {
     const first = attempt();
     const [a, replay, b] = await Promise.all([

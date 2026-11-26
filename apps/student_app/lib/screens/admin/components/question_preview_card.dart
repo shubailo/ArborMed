@@ -44,43 +44,27 @@ class QuestionPreviewCard extends StatelessWidget {
       return Center(child: Text(AppLocalizations.of(context)!.quizUnsupportedQuestionType));
     }
 
-    // Extract localized options for the renderer
-    dynamic localizedOptions = question!.options;
-    if (question!.options is Map) {
-      localizedOptions = question!.options[language] ??
-          (language == 'hu' ? question!.options['en'] : []);
-    }
-
-    // Special handling for True/False options format required by TrueFalseRenderer
-    if (questionType == 'true_false') {
-      localizedOptions = [
-        {'value': 'true', 'label': language == 'hu' ? AppLocalizations.of(context)!.adminTrue : 'True'},
-        {'value': 'false', 'label': language == 'hu' ? AppLocalizations.of(context)!.adminFalse : 'False'},
-      ];
-    }
-
-    // Extract matching data if present
-    final content = question!.content;
-    final pairs = content is Map ? content['pairs'] : null;
-    final matchingData = pairs is List ? {
-      'left': [for (final pair in pairs) if (pair is Map) pair['left']],
-      'right': [for (final pair in pairs) if (pair is Map) pair['right']],
-    } : null;
-
-    // Convert AdminQuestion to Map for the renderer
-    final questionMap = {
-      'id': question!.id,
-      'text': language == 'hu'
-          ? (question!.questionTextHu ?? question!.text)
-          : question!.text,
-      'question_text_en': question!.text,
-      'question_text_hu': question!.questionTextHu,
-      'options': localizedOptions,
-      'content': question!.content,
-      'matching_data': matchingData,
-      'bloom_level': question!.bloomLevel,
-      'difficulty': 3, // Mock difficulty for preview
+    final q = question!;
+    final questionMap = <String, dynamic>{
+      'id': q.id,
+      'question_text_en': q.text,
+      'question_text_hu': q.questionTextHu,
+      'options': q.options,
+      'content': q.content,
+      if (const {'single_choice', 'multiple_choice', 'case_study'}.contains(questionType))
+        'choice_options': [
+          for (final choice in q.choices)
+            {'id': choice.id, 'en': choice.label('en'), 'hu': choice.label('hu')},
+        ],
+      if (questionType == 'matching')
+        'matching_data': {
+          for (final side in ['left', 'right'])
+            side: [for (final pair in q.matchingPairs) pair.fields[side]],
+        },
     };
+    if (!renderer.isPlayable(questionMap)) {
+      return Center(child: Text(AppLocalizations.of(context)!.quizIncompleteQuestion));
+    }
 
     final showSubmitButton = [
       'multiple_choice',
@@ -94,13 +78,8 @@ class QuestionPreviewCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Question Header (Chips)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildMockChip("${AppLocalizations.of(context)!.adminLevel} ${question!.bloomLevel}"),
-              _buildMockChip("${AppLocalizations.of(context)!.adminDifficultyShort} 3"),
-            ],
+          Align(alignment: Alignment.centerLeft,
+            child: _buildMockChip("${AppLocalizations.of(context)!.adminLevel} ${q.bloomLevel}"),
           ),
           const SizedBox(height: 16),
 

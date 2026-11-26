@@ -105,6 +105,38 @@ void main() {
       expect(events.single.containsKey('error'), permanent);
     });
   }
+  test('sparse acknowledgements count once without resetting known progress', () async {
+    final first = await queue.enqueue(1, 'ekg', {'questionId': 10});
+    await queue.enqueue(1, 'ekg', {'questionId': 11});
+    when(api.post(any, any)).thenAnswer((call) async {
+      final id = call.positionalArguments[1]['submissionId'];
+      return {'submissionId': id, 'isCorrect': id == first, if (id == first) ...{
+        'currentBloom': 4, 'streak': 3, 'mastery': 74, 'level_correct_count': 2
+      }};
+    });
+    await queue.flush();
+    await queue.flush();
+    final progress = await db.select(db.topicProgress).getSingle();
+    expect([progress.currentBloomLevel, progress.currentStreak, progress.masteryScore,
+        progress.levelCorrectCount, progress.totalAnswered, progress.correctAnswered],
+        [4, 3, 74, 2, 2, 1]);
+  });
+
+  test('malformed receipt metrics retain the original answer until a valid retry', () async {
+    final id = await queue.enqueue(1, 'ekg', {'questionId': 10});
+    when(api.post(any, any)).thenAnswer((_) async =>
+        {'submissionId': id, 'isCorrect': true, 'currentBloom': 'high'});
+    await queue.flush();
+    expect(events, isEmpty);
+    expect(await db.customSelect('SELECT * FROM topic_progress').get(), isEmpty);
+    expect((await db.customSelect('SELECT submission_id FROM pending_submissions').getSingle()).data['submission_id'], id);
+    when(api.post(any, any)).thenAnswer((_) async =>
+        {'submissionId': id, 'isCorrect': true, 'currentBloom': 2});
+    await queue.flush();
+    expect(events.single['submissionId'], id);
+    expect((await db.select(db.topicProgress).getSingle()).totalAnswered, 1);
+  });
+
   test('an invalid network receipt leaves the local answer available to retry',
       () async {
     final id = await queue.enqueue(1, 'ekg', {'questionId': 10});

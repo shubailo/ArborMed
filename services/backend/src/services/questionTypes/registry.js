@@ -3,6 +3,11 @@ const MultipleChoiceType = require('./MultipleChoiceType');
 const RelationAnalysisType = require('./RelationAnalysisType');
 const TrueFalseType = require('./TrueFalseType');
 const MatchingType = require('./MatchingType');
+const AppError = require('../../utils/AppError');
+
+function unknownTypeMessage(id) {
+    return typeof id === 'string' ? `Unknown question type: ${id}` : 'Unknown question type';
+}
 
 /**
  * Question Type Registry
@@ -44,6 +49,7 @@ class QuestionTypeRegistry {
      * @returns {QuestionType|null}
      */
     getType(typeId) {
+        if (typeId === 'case_study') typeId = 'single_choice';
         if (typeId === 'relational_analysis') typeId = 'relation_analysis';
         return this.types.get(typeId) || null;
     }
@@ -72,10 +78,17 @@ class QuestionTypeRegistry {
         if (!type) {
             return {
                 valid: false,
-                errors: [`Unknown question type: ${typeId}`]
+                errors: [unknownTypeMessage(typeId)]
             };
         }
         return type.validate(questionData);
+    }
+
+    typeForQuestion(question) {
+        const id = question.question_type ?? question.type ?? 'single_choice';
+        const type = this.getType(id);
+        if (!type) throw new AppError(unknownTypeMessage(id), 422);
+        return type;
     }
 
     /**
@@ -85,24 +98,16 @@ class QuestionTypeRegistry {
      * @returns {Object} { correct: boolean, score: number, feedback: string }
      */
     checkAnswer(question, userAnswer) {
-        const type = this.getType(question.question_type);
-        if (!type) {
-            throw new Error(`Unknown question type: ${question.question_type}`);
-        }
-        return type.checkAnswer(question, userAnswer);
+        return this.typeForQuestion(question).checkAnswer(question, userAnswer);
     }
 
     /**
-     * Prepare question for client (hide answers)
+     * Prepare a question for practice, including offline grading data
      * @param {Object} question - The full question object
      * @returns {Object} Client-safe question object
      */
     prepareForClient(question) {
-        const type = this.getType(question.question_type || question.type || 'single_choice');
-        if (!type) {
-            return { ...question };
-        }
-        return type.prepareForClient(question);
+        return this.typeForQuestion(question).prepareForClient(question);
     }
 
     /**
@@ -111,11 +116,7 @@ class QuestionTypeRegistry {
      * @returns {Object} Admin-friendly question object
      */
     prepareForAdmin(question) {
-        const type = this.getType(question.question_type);
-        if (!type) {
-            throw new Error(`Unknown question type: ${question.question_type}`);
-        }
-        return type.prepareForAdmin(question);
+        return this.typeForQuestion(question).prepareForAdmin(question);
     }
 }
 

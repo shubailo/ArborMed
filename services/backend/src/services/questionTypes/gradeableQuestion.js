@@ -66,7 +66,7 @@ function fromType(question, declaredType) {
     if (choices.length < 2 || !distinctChoices(choices)) return null;
     const multiple = type === 'multiple_choice';
     const resolve = createChoiceResolver(choices);
-    if (!gradeChoices(question, question.correct_answer, multiple).correct) {
+    if (!gradeChoices(question, input, multiple).correct) {
       key = recoverChoices(choices, resolve, input, multiple);
       if (key == null || !gradeChoices({...question, correct_answer: key}, key, multiple).correct) return null;
     }
@@ -89,7 +89,7 @@ function fromType(question, declaredType) {
 
 function gradeableQuestion(question) {
   if (!question) return null;
-  const primary = question.question_type || question.type || 'single_choice';
+  const primary = question.question_type ?? question.type ?? 'single_choice';
   const result = fromType(question, primary);
   if (result || primary !== 'single_choice' || !question.type || question.type === primary) return result;
   // Some seeders only populated the legacy type while the newer column

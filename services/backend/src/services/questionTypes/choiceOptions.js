@@ -50,7 +50,9 @@ function choiceOptions(question) {
     const choice = { id: stableId(key), en: en || hu, hu: hu || en };
     const previousKey = raw?.id ?? raw?.value ?? raw?.en ?? raw?.label ?? raw?.text ??
       raw?.hu ?? (typeof raw === 'string' ? raw : '');
-    if (String(previousKey) !== key) historicalIds.set(choice, stableId(previousKey));
+    if ((typeof previousKey === 'string' || typeof previousKey === 'number') && String(previousKey) !== key) {
+      historicalIds.set(choice, stableId(previousKey));
+    }
     choices.push(choice);
   });
   return choices;
@@ -97,7 +99,12 @@ function gradeChoices(question, answer, multiple = false) {
     return (Array.isArray(parsed) ? parsed : [parsed]).map(key);
   }
   const expected = keys(question.correct_answer);
-  const actual = keys(answer);
+  // A displayed label can itself look like a JSON array. Only unwrap the
+  // legacy wire encoding when the submitted text isn't an option label.
+  const literal = typeof answer === 'string' && ['[', '{', '"'].includes(answer.trim()[0])
+    && choices.some(choice => [choice.en, choice.hu].some(text =>
+      text.trim().toLowerCase() === answer.trim().toLowerCase()));
+  const actual = literal ? [key(answer)] : keys(answer);
   const actualSet = new Set(actual);
   const correct = expected.length > 0 && distinctChoices(choices) && (multiple || expected.length === 1)
     && expected.length === actual.length && actualSet.size === actual.length

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:arbor_med/core/api_exceptions.dart';
 
 import 'package:arbor_med/features/quiz/providers/question_cache_service.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -94,6 +95,23 @@ void main() {
     stale.complete({'id': 2});
     expect((await pending)?['id'], 3);
     expect(calls, 2);
+  });
+
+  test('a prefetched end-of-topic is consumed without another selection', () async {
+    when(api.get(any)).thenAnswer((_) async => throw const ApiException(
+        statusCode: 404, message: 'No more questions available for this topic'));
+    final session = cache.open('renal')..prefetch();
+    await Future<void>.delayed(Duration.zero);
+    expect(await session.next(prefetchNext: false), isNull);
+    verify(api.get(any)).called(1);
+    when(api.get(any)).thenAnswer((_) async => {'id': 19});
+    expect((await session.next(prefetchNext: false))?['id'], 19);
+  });
+
+  test('other 404s remain ordinary request failures', () async {
+    when(api.get(any)).thenAnswer((_) async => throw const ApiException(
+        statusCode: 404, message: 'Route not found'));
+    await expectLater(cache.open('renal').next(), throwsA(isA<ApiException>()));
   });
 
   test('duplicate responses stop after one request and allow a later retry', () async {

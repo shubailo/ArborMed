@@ -1,4 +1,5 @@
 import '../../../core/api_endpoints.dart';
+import '../../../core/api_exceptions.dart';
 import '../../../services/api_service.dart';
 
 Map<String, dynamic> normalizePracticeQuestion(Object? result, {int? expectedId}) {
@@ -69,10 +70,17 @@ class QuestionSession {
       'topic': _topic,
       if (_shown.isNotEmpty) 'exclude': _shown.join(','),
     });
-    final result = await _api.get(endpoint.toString());
-    _checkActive();
-    if (result == null) return null;
-    return normalizePracticeQuestion(result);
+    try {
+      final result = await _api.get(endpoint.toString());
+      _checkActive();
+      return result == null ? null : normalizePracticeQuestion(result);
+    } on ApiException catch (e) {
+      _checkActive();
+      if (e.statusCode == 404 && e.message == 'No more questions available for this topic') {
+        return null;
+      }
+      rethrow;
+    }
   }
 
   void prefetch() {
