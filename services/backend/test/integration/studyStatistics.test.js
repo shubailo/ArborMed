@@ -41,6 +41,17 @@ postgres('study statistics from recorded answers', () => {
         expect(res.json).toHaveBeenCalledWith([expect.objectContaining({ attempts: 3, sessions_count: 1, avg_time_ms: 200 })]);
     });
 
+    test('subject timing assigns an imported answer to its recorded owner before considering the session', async () => {
+        await pg.query('BEGIN');
+        try {
+            await pg.query('INSERT INTO responses(id,user_id,question_id,session_id,response_time_ms) VALUES(50,2,3,10,2000)');
+            const [section] = await read(stats.getSubjectDetail, { params: { subjectSlug: 'pathophysiology' } });
+            expect(section).toMatchObject({ avg_time_ms: 200, sessions_count: 1 });
+        } finally {
+            await pg.query('ROLLBACK');
+        }
+    });
+
     test('history includes both legacy sessions and independently synchronized answers', async () => {
         const res = { json: jest.fn() };
         await stats.getUserHistory({ params: { userId: 1 }, query: {} }, res, e => { throw e; });

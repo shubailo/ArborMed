@@ -1,5 +1,5 @@
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 import 'dart:math';
 import 'package:arbor_med/theme/cozy_theme.dart';
 import 'widgets/ecg_monitor_painter.dart';
@@ -31,25 +31,11 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
   late LoadingVariant _variant;
   late AnimationController _mainController;
   late AnimationController _transitionController;
-  late AnimationController _statusFadeController;
   late AnimationController _floatingController;
-
-  String _currentStatus = "Initializing clinical environment...";
-  late Timer _statusTimer;
-  final List<String> _statuses = [
-    "Calibrating diagnostic tools...",
-    "Indexing pathology database...",
-    "Readying clinical case...",
-    "Sterilizing instruments...",
-    "Reviewing patient history...",
-    "Preparing examination room...",
-    "Syncing with medical records...",
-    "Loading anatomical references...",
-  ];
 
   Map<String, dynamic>? _fetchedData;
   bool _isAnimationDone = false;
-  String? _error;
+  bool _failed = false;
 
   // Floating icons data
   late List<_FloatingIcon> _floatingIcons;
@@ -84,51 +70,47 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
         }
       });
 
-    // Start fetching data immediately
-    widget.dataFuture.then((data) {
-      if (mounted) {
-        setState(() => _fetchedData = data);
-        _checkIfReady();
-      }
-    }).catchError((e) {
-      if (mounted) {
-        _statusTimer.cancel();
-        setState(() => _error = e.toString());
-        // Do NOT call _checkIfReady() — show error UI instead
-      }
-    });
-
     // Transition animation
     _transitionController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
 
-    _statusFadeController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    )..forward();
-
     // Floating icons animation (continuous loop)
     _floatingController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 20),
-    )..repeat();
+    );
 
-    _mainController.forward();
+    _startLoading();
+  }
 
-    // Status cycler
-    _statusTimer = Timer.periodic(const Duration(milliseconds: 2200), (timer) {
-      if (mounted) {
-        _statusFadeController.reverse().then((_) {
-          if (mounted) {
-            setState(() {
-              _currentStatus = _statuses[Random().nextInt(_statuses.length)];
-            });
-            _statusFadeController.forward();
-          }
-        });
-      }
+  @override
+  void didUpdateWidget(QuizLoadingScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.dataFuture, widget.dataFuture)) {
+      _startLoading();
+    }
+  }
+
+  void _startLoading() {
+    final request = widget.dataFuture;
+    _fetchedData = null;
+    _isAnimationDone = false;
+    _failed = false;
+    _transitionController.reset();
+    _floatingController.repeat();
+    _mainController.forward(from: 0);
+
+    request.then<void>((data) {
+      if (!mounted || !identical(request, widget.dataFuture)) return;
+      _fetchedData = data;
+      _checkIfReady();
+    }, onError: (Object error, StackTrace trace) {
+      if (!mounted || !identical(request, widget.dataFuture)) return;
+      _mainController.stop();
+      _floatingController.stop();
+      setState(() => _failed = true);
     });
   }
 
@@ -156,9 +138,11 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
       return;
     }
 
+    final request = widget.dataFuture;
+    final data = _fetchedData!;
     _transitionController.forward().then((_) {
-      if (mounted) {
-        widget.onComplete(_fetchedData!);
+      if (mounted && identical(request, widget.dataFuture)) {
+        widget.onComplete(data);
       }
     });
   }
@@ -167,9 +151,7 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
   void dispose() {
     _mainController.dispose();
     _transitionController.dispose();
-    _statusFadeController.dispose();
     _floatingController.dispose();
-    _statusTimer.cancel();
     super.dispose();
   }
 
@@ -178,7 +160,7 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
     final CozyPalette palette = CozyTheme.of(context);
 
     // Show error state if data fetch failed (e.g. backend cold start timeout)
-    if (_error != null) {
+    if (_failed) {
       return _buildErrorState(context, palette);
     }
 
@@ -194,27 +176,29 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
 
           // Main content
           Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Header
-                _buildHeader(context, palette),
-                const SizedBox(height: 60),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Header
+                  _buildHeader(context, palette),
+                  const SizedBox(height: 60),
 
-                // Central animation
-                _buildAnimationVariant(palette),
-                const SizedBox(height: 60),
-
-                // Status text
-                _buildStatusText(context, palette),
-                const SizedBox(height: 40),
-              ],
+                  // Central animation
+                  _buildAnimationVariant(palette),
+                  const SizedBox(height: 60),
+                ],
+              ),
             ),
           ),
         ],
       ),
     );
   }
+
+  AppLocalizations get _strings =>
+      AppLocalizations.of(context) ??
+      lookupAppLocalizations(const Locale('en'));
 
   Widget _buildErrorState(BuildContext context, CozyPalette palette) {
     return Scaffold(
@@ -223,49 +207,52 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
         children: [
           _buildVignetteBackground(palette),
           Center(
-            child: Padding(
-              padding: const EdgeInsets.all(32),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.wifi_off_outlined,
-                    size: 64,
-                    color: palette.textSecondary.withValues(alpha: 0.5),
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    'Could not reach the server',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: palette.textPrimary,
-                          fontWeight: FontWeight.w600,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.wifi_off_outlined,
+                      size: 64,
+                      color: palette.textSecondary.withValues(alpha: 0.5),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      _strings.quizLoadFailed,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: palette.textPrimary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      _strings.quizLoadRetryHint,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: palette.textSecondary.withValues(alpha: 0.8),
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 36),
+                    FilledButton.icon(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.arrow_back_rounded),
+                      label: Text(
+                          MaterialLocalizations.of(context).backButtonTooltip),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: palette.primary,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 28, vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'The server may be starting up. Please wait a moment and try again.',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: palette.textSecondary.withValues(alpha: 0.8),
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 36),
-                  FilledButton.icon(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.arrow_back_rounded),
-                    label: const Text('Go Back & Retry'),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: palette.primary,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 28, vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -325,7 +312,7 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
     return Column(
       children: [
         Text(
-          "Preparing ${widget.systemName}",
+          _strings.quizPreparingSystem(widget.systemName),
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 color: palette.textPrimary.withValues(alpha: 0.95),
                 fontWeight: FontWeight.w600,
@@ -424,27 +411,6 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
           ),
         );
       },
-    );
-  }
-
-  Widget _buildStatusText(BuildContext context, CozyPalette palette) {
-    return FadeTransition(
-      opacity: _statusFadeController,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-        decoration: BoxDecoration(
-          color: palette.primary.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          _currentStatus,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: palette.textSecondary.withValues(alpha: 0.8),
-                fontStyle: FontStyle.italic,
-                letterSpacing: 0.2,
-              ),
-        ),
-      ),
     );
   }
 }

@@ -32,7 +32,27 @@ enum SubjectQuizState { initial, loading, loaded, empty, error }
 class StatsProvider with ChangeNotifier {
   final AuthProvider authProvider;
 
-  StatsProvider(this.authProvider);
+  StatsProvider(this.authProvider) : _owner = authProvider.user?.id {
+    authProvider.addListener(_syncOwner);
+  }
+
+  int? _owner;
+  bool _disposed = false;
+  final _requests = <String, Object>{};
+  String? _today;
+  int _todayCount = 0;
+
+  void _syncOwner() {
+    final owner = authProvider.user?.id;
+    if (_owner == owner) return;
+    _owner = owner;
+    resetState();
+  }
+
+  Object? _begin(String key) {
+    if (_disposed || _owner == null) return null;
+    return _requests[key] = Object();
+  }
 
   ApiService get apiService => authProvider.apiService;
 
@@ -59,156 +79,169 @@ class StatsProvider with ChangeNotifier {
   SubjectQuizState getSectionState(String slug) =>
       _sectionStates[slug] ?? SubjectQuizState.initial;
 
-  /// Returns the total correct answers for the current calendar day.
-  /// Used for "Daily Rounds" progress.
-  int get todayCorrectAnswers {
-    final now = DateTime.now();
-    final todayStr =
-        "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+  String _date(DateTime date) => date.toIso8601String().split('T').first;
 
-    return _activity.where((a) {
-      final dateStr = a.date.toIso8601String().substring(0, 10);
-      return dateStr == todayStr;
-    }).fold(0, (sum, item) => sum + item.correctCount);
-  }
+  int get todayCorrectAnswers =>
+      _today == _date(DateTime.now()) ? _todayCount : 0;
 
-  // --- Student Methods ---
-
-  Future<void> fetchSummary() async {
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      final data = await authProvider.apiService.get(ApiEndpoints.statsSummary);
-      if (data is List) {
-        _subjectMastery =
-            data.map((item) => SubjectMastery.fromJson(item)).toList();
-      }
-    } catch (e) {
-      debugPrint('Error fetching summary: $e');
-    } finally {
-      _isLoading = false;
+  Future<void> _read(String key, String endpoint, void Function(dynamic) apply,
+      {VoidCallback? start, VoidCallback? failed, VoidCallback? finish}) async {
+    final token = _begin(key);
+    if (token == null) return;
+    if (start != null) {
+      start();
       notifyListeners();
     }
+    try {
+      final data = await apiService.get(endpoint);
+      if (_requests[key] == token) apply(data);
+    } catch (e) {
+      if (_requests[key] == token) {
+        failed?.call();
+        debugPrint('Stats request failed ($key): ${e.runtimeType}');
+      }
+    } finally {
+      if (_requests[key] == token) {
+        _requests.remove(key);
+        finish?.call();
+        notifyListeners();
+      }
+    }
   }
+
+  Future<void> fetchSummary() => _read(
+      'summary',
+      ApiEndpoints.statsSummary,
+      (data) => _subjectMastery =
+          (data as List).map((item) => SubjectMastery.fromJson(item)).toList(),
+      start: () => _isLoading = true,
+      finish: () => _isLoading = false);
 
   Future<void> preFetchData() async {
-    debugPrint("🚀 Snappy Mode: Pre-fetching essential stats...");
-    await fetchSummary();
-    Future.delayed(const Duration(milliseconds: 500),
-        () => fetchActivity(timeframe: 'week'));
-    Future.delayed(const Duration(milliseconds: 1000),
-        () => fetchActivity(timeframe: 'day'));
-    Future.delayed(
-        const Duration(milliseconds: 1500), () => fetchSmartReview());
-    Future.delayed(const Duration(milliseconds: 2000), () => fetchReadiness());
-    debugPrint("✅ Snappy Mode: Stats scheduled.");
+    await Future.wait([
+      fetchSummary(),
+      _fetchActivity('week', DateTime.now(), preload: true),
+      fetchSmartReview(),
+      fetchReadiness()
+    ]);
   }
+
+  String _periodUrl(String path, String timeframe, DateTime anchor) =>
+      Uri(path: path, queryParameters: {
+        'timeframe': timeframe,
+        'anchorDate': _date(anchor)
+      }).toString();
 
   Future<void> fetchActivity(
+          {String timeframe = 'week', DateTime? anchorDate}) =>
+      _fetchActivity(timeframe, anchorDate ?? DateTime.now());
+
+  Future<void> _fetchActivity(String timeframe, DateTime anchor,
+      {bool preload = false}) async {
+    if (_disposed || _owner == null) return;
+    final chart =
+        preload && (_activity.isNotEmpty || _requests.containsKey('chart'))
+            ? null
+            : _begin('chart');
+    final today = _date(DateTime.now());
+    final daily = _date(anchor) == today ? _begin('today') : null;
+    try {
+      final data = await apiService
+          .get(_periodUrl(ApiEndpoints.statsActivity, timeframe, anchor));
+      if ((chart == null || _requests['chart'] != chart) &&
+          (daily == null || _requests['today'] != daily)) {
+        return;
+      }
+      final rows =
+          (data as List).map((item) => ActivityData.fromJson(item)).toList();
+      if (daily != null && _requests['today'] == daily) {
+        _today = today;
+        _todayCount = rows
+            .where((row) =>
+                (row.calendarDate ?? _date(row.date.toLocal())) == today)
+            .fold(0, (sum, row) => sum + row.correctCount);
+      }
+      if (chart != null && _requests['chart'] == chart) _activity = rows;
+      notifyListeners();
+    } catch (e) {
+      if (chart != null && _requests['chart'] == chart) {
+        debugPrint('Activity request failed: ${e.runtimeType}');
+      }
+    } finally {
+      if (chart != null && _requests['chart'] == chart) {
+        _requests.remove('chart');
+      }
+      if (daily != null && _requests['today'] == daily) {
+        _requests.remove('today');
+      }
+    }
+  }
+
+  /// Null indicates a superseded request. An empty list is a successful result.
+  Future<List<int>?> fetchMistakeIds(
       {String timeframe = 'week', DateTime? anchorDate}) async {
+    final token = _begin('mistakes');
+    if (token == null) return null;
     try {
-      String endpoint = '${ApiEndpoints.statsActivity}?timeframe=$timeframe';
-      if (anchorDate != null) {
-        String dateStr = anchorDate.toIso8601String().split('T')[0];
-        endpoint += '&anchorDate=$dateStr';
-      }
-
-      final data = await authProvider.apiService.get(endpoint);
-      if (data is List) {
-        _activity = data.map((item) => ActivityData.fromJson(item)).toList();
-        notifyListeners();
-      }
-    } catch (e) {
-      debugPrint('Error fetching activity: $e');
+      final data = await apiService.get(_periodUrl(
+          ApiEndpoints.statsMistakes, timeframe, anchorDate ?? DateTime.now()));
+      if (_requests['mistakes'] != token) return null;
+      if (data is! List) throw const FormatException('Expected mistake IDs');
+      return data.map((value) {
+        final id = int.tryParse(value.toString());
+        if (id == null || id <= 0) {
+          throw const FormatException('Invalid mistake ID');
+        }
+        return id;
+      }).toList();
+    } catch (_) {
+      if (_requests['mistakes'] != token) return null;
+      rethrow;
+    } finally {
+      if (_requests['mistakes'] == token) _requests.remove('mistakes');
     }
   }
 
-  Future<List<int>> fetchMistakeIds(
-      {String timeframe = 'week', DateTime? anchorDate}) async {
-    try {
-      String endpoint = '${ApiEndpoints.statsMistakes}?timeframe=$timeframe';
-      if (anchorDate != null) {
-        String dateStr = anchorDate.toIso8601String().split('T')[0];
-        endpoint += '&anchorDate=$dateStr';
-      }
+  Future<void> fetchSmartReview() => _read(
+      'review',
+      ApiEndpoints.statsSmartReview,
+      (data) => _smartReview = (data['recommendations'] as List)
+          .map((item) => SmartReviewItem.fromJson(item))
+          .toList());
 
-      final data = await authProvider.apiService.get(endpoint);
-      if (data is List) {
-        return data.map((id) => int.parse(id.toString())).toList();
-      }
-      return [];
-    } catch (e) {
-      debugPrint('Error fetching mistakes: $e');
-      return [];
-    }
-  }
+  Future<void> fetchReadiness() => _read(
+      'readiness',
+      ApiEndpoints.statsReadiness,
+      (data) => _readiness = ReadinessScore.fromJson(data));
 
-  Future<void> fetchSmartReview() async {
-    try {
-      final data =
-          await authProvider.apiService.get(ApiEndpoints.statsSmartReview);
-      if (data != null && data['recommendations'] is List) {
-        _smartReview = (data['recommendations'] as List)
-            .map((e) => SmartReviewItem.fromJson(e))
-            .toList();
-        notifyListeners();
-      }
-    } catch (e) {
-      debugPrint('Error fetching smart review: $e');
-    }
-  }
-
-  Future<void> fetchReadiness() async {
-    try {
-      final data =
-          await authProvider.apiService.get(ApiEndpoints.statsReadiness);
-      if (data != null) {
-        _readiness = ReadinessScore.fromJson(data);
-        notifyListeners();
-      }
-    } catch (e) {
-      debugPrint('Error fetching readiness: $e');
-    }
-  }
-
-  Future<void> fetchSubjectDetail(String slug) async {
-    _sectionStates[slug] = SubjectQuizState.loading;
-    notifyListeners();
-
-    try {
-      final data = await authProvider.apiService
-          .get('${ApiEndpoints.statsSubject}/$slug');
-      if (data is List) {
-        final List<Map<String, dynamic>> systems =
-            data.cast<Map<String, dynamic>>();
+  Future<void> fetchSubjectDetail(String slug) => _read('section:$slug',
+          '${ApiEndpoints.statsSubject}/${Uri.encodeComponent(slug)}', (data) {
+        final systems = List<Map<String, dynamic>>.from(data as List);
         _sectionMastery[slug] = systems;
         _sectionStates[slug] =
             systems.isEmpty ? SubjectQuizState.empty : SubjectQuizState.loaded;
-      } else {
-        _sectionStates[slug] = SubjectQuizState.error;
-      }
-      notifyListeners();
-    } catch (e) {
-      debugPrint('Error fetching subject detail for $slug: $e');
-      _sectionStates[slug] = SubjectQuizState.error;
-      notifyListeners();
-    }
-  }
+      },
+          start: () => _sectionStates[slug] = SubjectQuizState.loading,
+          failed: () => _sectionStates[slug] = SubjectQuizState.error);
 
-  Future<void> fetchCurrentQuote() async {
-    try {
-      final data =
-          await authProvider.apiService.get(ApiEndpoints.quizSingleQuote);
-      _currentQuote = Quote.fromJson(data);
-      notifyListeners();
-    } catch (e) {
-      debugPrint('Error fetching current quote: $e');
-    }
+  Future<void> fetchCurrentQuote() => _read(
+      'quote',
+      ApiEndpoints.quizSingleQuote,
+      (data) => _currentQuote = Quote.fromJson(data));
+
+  @override
+  void dispose() {
+    _disposed = true;
+    _requests.clear();
+    authProvider.removeListener(_syncOwner);
+    super.dispose();
   }
 
   /// Resets all user-specific statistics.
   void resetState() {
+    _requests.clear();
+    _today = null;
+    _todayCount = 0;
     _subjectMastery = [];
     _activity = [];
     _isLoading = false;

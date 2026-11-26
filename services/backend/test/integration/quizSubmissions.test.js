@@ -163,6 +163,28 @@ integration('PostgreSQL quiz receipts and rewards', () => {
     expect((await pool.query('SELECT repetition_count FROM user_question_progress')).rows).toEqual([{repetition_count:1}]);
   });
 
+  test.each([
+    ['day', [4], 24], ['week', [3, 4], 7], ['month', [2, 3, 4, 5, 6], 30],
+  ])('the %s activity buckets and mistake IDs cover the same calendar period and owner', async (timeframe, ids, buckets) => {
+    const stats = require('../../src/controllers/statsController');
+    await pool.query(`INSERT INTO responses(user_id,question_id,session_id,is_correct,created_at) VALUES
+      (1,1,NULL,false,'2026-10-31 23:59'), (1,2,NULL,false,'2026-11-08 23:59'),
+      (NULL,3,10,false,'2026-11-09'), (1,4,NULL,false,'2026-11-15 23:59'),
+      (1,5,NULL,false,'2026-11-16'), (1,6,NULL,false,'2026-11-30 23:59'),
+      (1,7,NULL,false,'2026-12-01'), (2,8,10,false,'2026-11-15')`);
+    const req = { user: { id: 1 }, query: { timeframe, anchorDate: '2026-11-15' } };
+    const read = async handler => {
+      const res = { json: jest.fn() };
+      await handler(req, res, err => { throw err; });
+      return res.json.mock.calls[0][0];
+    };
+    expect(await read(stats.getMistakesByTimeframe)).toEqual(ids);
+    const rows = await read(stats.getActivity);
+    expect(rows).toHaveLength(buckets);
+    expect(rows.reduce((sum, row) => sum + row.count, 0)).toBe(ids.length);
+    expect(rows.find(row => row.calendar_date === '2026-11-15')).toBeDefined();
+  });
+
   test('readiness omits seeded topics and retains legacy sections with recorded study', async () => {
     const stats = require('../../src/controllers/statsController');
     await addSubject();

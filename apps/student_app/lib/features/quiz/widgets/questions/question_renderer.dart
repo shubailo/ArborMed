@@ -1,3 +1,4 @@
+import 'package:arbor_med/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
 import 'dart:convert';
@@ -41,6 +42,23 @@ abstract class QuestionRenderer {
     int index,
     dynamic currentAnswer,
   );
+
+  String? questionImageUrl(Map<String, dynamic> question) {
+    final content = question['content'];
+    final raw = content is Map ? content['image_url'] : null;
+    Uri? image;
+    if (raw is String && raw.trim().isNotEmpty) {
+      final reference = Uri.tryParse(raw.trim());
+      if (reference != null) {
+        final uri = Uri.parse(ApiService.baseUrl).resolveUri(reference);
+        if ((uri.scheme == 'https' || uri.scheme == 'http') &&
+            uri.host.isNotEmpty) {
+          image = uri;
+        }
+      }
+    }
+    return image?.toString();
+  }
 
   /// Helper: Show full-screen zoomed image
   void showZoomedImage(BuildContext context, String imageUrl) {
@@ -98,9 +116,14 @@ abstract class QuestionRenderer {
     final content = question['content'];
     final prompt = content is Map ? content['question_text'] : null;
     for (final candidate in [
-      question['question_text_$lang'], if (prompt is Map) prompt[lang],
-      defaultText, question['question_text_en'], question['text'],
-      if (prompt is Map) prompt['en'], prompt, question['question_text_hu'],
+      question['question_text_$lang'],
+      if (prompt is Map) prompt[lang],
+      defaultText,
+      question['question_text_en'],
+      question['text'],
+      if (prompt is Map) prompt['en'],
+      prompt,
+      question['question_text_hu'],
       if (prompt is Map) prompt['hu'],
     ]) {
       if (candidate is String && candidate.trim().isNotEmpty) return candidate;
@@ -136,7 +159,9 @@ abstract class QuestionRenderer {
   // questions still submit the label accepted by the server.
   String choiceValue(Map<String, dynamic> question, int index, String label) {
     final choices = question['choice_options'];
-    return choices is List && index < choices.length ? choices[index]['id'] as String : label;
+    return choices is List && index < choices.length
+        ? choices[index]['id'] as String
+        : label;
   }
 
   /// Helper: Get localized options
@@ -150,80 +175,47 @@ abstract class QuestionRenderer {
     if (choices is List && choices.isNotEmpty) {
       return choices.map((c) => (c[lang] ?? c['en']).toString()).toList();
     }
-    dynamic optionsData = question['options'];
+    return _legacyOptions(question, lang)
+        .where((label) => label.trim().isNotEmpty)
+        .toList();
+  }
 
-    // Parse if string
-    if (optionsData is String) {
+  List<String> _legacyOptions(Map<String, dynamic> question, String lang) {
+    dynamic decode(dynamic value) {
+      if (value is! String) return value;
       try {
-        optionsData = json.decode(optionsData);
-      } catch (e) {
-        // Fallback: it might be a single string (weird but possible legacy)
-        return [];
+        return jsonDecode(value);
+      } on FormatException {
+        return null;
       }
     }
 
-    String extract(dynamic e) {
-      if (e == null) return '';
-      if (e is String) return e;
-      if (e is Map) {
-        return e[lang]?.toString() ??
-            e['en']?.toString() ??
-            e['label']?.toString() ??
-            e['text']?.toString() ??
-            e.toString();
-      }
-      return e.toString();
+    final content = question['content'];
+    for (final source in [
+      question['options'],
+      if (content is Map) content['options'],
+      question['options_$lang'],
+      question['options_en'],
+      question['options_hu'],
+    ]) {
+      final options = decode(source);
+      final rows = options is Map
+          ? decode(options[lang] ?? options['en'] ?? options['hu'])
+          : options;
+      if (rows is! List || rows.isEmpty) continue;
+      return rows.map((row) {
+        final label = row is Map
+            ? row[lang] ??
+                row['en'] ??
+                row['hu'] ??
+                row['label'] ??
+                row['text'] ??
+                row['value']
+            : row;
+        return label?.toString() ?? '';
+      }).toList();
     }
-
-    List<String> result = [];
-
-    // Handle Map (Dual Language)
-    if (optionsData is Map) {
-      if (optionsData.containsKey(lang)) {
-        final data = optionsData[lang];
-        if (data is List) {
-          result = data.map((e) => extract(e)).toList();
-        }
-      } else if (optionsData.containsKey('en')) {
-        final data = optionsData['en'];
-        if (data is List) {
-          result = data.map((e) => extract(e)).toList();
-        }
-      }
-    }
-    // Handle List (Legacy / Single Language)
-    else if (optionsData is List) {
-      result = optionsData.map((e) => extract(e)).toList();
-    }
-    // 3. Fallback: Check content options (Legacy)
-    else {
-      final content = question['content'] as Map<String, dynamic>?;
-      if (content != null &&
-          content['options'] != null &&
-          content['options'] is List) {
-        result = (content['options'] as List).map((e) => extract(e)).toList();
-      }
-    }
-
-    // 4. Fallback: Check localized columns (options_en, options_hu)
-    if (result.isEmpty) {
-      final colData = question['options_$lang'] ?? question['options_en'];
-      if (colData != null) {
-        if (colData is List) {
-          result = colData.map((e) => extract(e)).toList();
-        } else if (colData is String) {
-          try {
-            final decoded = json.decode(colData);
-            if (decoded is List) {
-              result = decoded.map((e) => extract(e)).toList();
-            }
-          } catch (_) {}
-        }
-      }
-    }
-
-    // 🔥 Filter empty options
-    return result.where((opt) => opt.trim().isNotEmpty).toList();
+    return [];
   }
 
   String normalizeAnswerLabel(String value) => value.trim().toLowerCase();
@@ -238,140 +230,81 @@ abstract class QuestionRenderer {
     if (userAnswer == null || correctAnswer == null) return false;
 
     final choices = question?['choice_options'];
-    // 1. Try Direct Comparison (Fast Path)
-    final uStr = normalizeAnswerLabel(userAnswer.toString());
-    final cStr = normalizeAnswerLabel(correctAnswer.toString());
+    List<String> labels(dynamic input) => (input is List ? input : [input])
+        .map<String>((item) => normalizeAnswerLabel(item.toString()))
+        .toList();
 
-    // Check for List/JSON structure in Correct Answer
-    List<String> cList = [];
-    if (correctAnswer is List) {
-      cList = correctAnswer.map((e) => normalizeAnswerLabel(e.toString())).toList();
-    } else {
-      if (cStr.startsWith('[') && cStr.endsWith(']')) {
-        try {
-          final List<dynamic> list = json.decode(cStr);
-          cList = list.map((e) => normalizeAnswerLabel(e.toString())).toList();
-        } catch (_) {
-          cList = [cStr];
-        }
-      } else {
-        cList = [cStr];
+    dynamic stored = correctAnswer;
+    if (stored is String && stored.trimLeft().startsWith('[')) {
+      try {
+        final parsed = jsonDecode(stored);
+        if (parsed is List) stored = parsed;
+      } on FormatException {
+        // A historical option label can start with a literal bracket.
       }
     }
+    final uList = labels(userAnswer);
+    final cList = labels(stored);
+    if (uList.isEmpty ||
+        cList.isEmpty ||
+        uList.contains('') ||
+        cList.contains('')) {
+      return false;
+    }
 
-    // Check for List in User Answer (Multi-Select)
-    List<String> uList = [];
-    if (userAnswer is List) {
-      uList = userAnswer.map((e) => normalizeAnswerLabel(e.toString())).toList();
-    } else {
-      uList = [uStr];
+    bool matches<T>(T? Function(String) resolve) {
+      final actual = uList.map(resolve).toSet();
+      final expected = cList.map(resolve).toSet();
+      if (actual.contains(null) ||
+          expected.contains(null) ||
+          actual.length != uList.length ||
+          expected.length != cList.length) {
+        return false;
+      }
+      return expected.containsAll(actual) &&
+          (!exactMatch || actual.length == expected.length);
     }
 
     if (choices is List && choices.isNotEmpty) {
       String? key(String value) {
-        for (final field in ['id', 'en', 'hu']) {
-          for (final choice in choices) {
-            if (choice[field] != null && normalizeAnswerLabel(choice[field].toString()) == value) {
-              return choice['id'] as String;
-            }
+        String? match;
+        for (final choice in choices) {
+          if (normalizeAnswerLabel(choice['id'].toString()) == value) {
+            return choice['id'] as String;
           }
         }
-        return null;
+        for (final choice in choices) {
+          if (['en', 'hu'].any((field) =>
+              choice[field] != null &&
+              normalizeAnswerLabel(choice[field].toString()) == value)) {
+            if (match != null) return null;
+            match = choice['id'] as String;
+          }
+        }
+        return match;
       }
-      final actual = uList.map(key).toSet();
-      final expected = cList.map(key).toSet();
-      if (actual.isEmpty || expected.isEmpty || actual.contains(null) || expected.contains(null) ||
-          actual.length != uList.length || expected.length != cList.length) {
-        return false;
-      }
-      return expected.containsAll(actual) && (!exactMatch || actual.length == expected.length);
+
+      return matches<String>(key);
     }
 
-    // Direct Match Attempt
-    bool directMatch = false;
-    if (uList.length == cList.length) {
-      directMatch = uList.every((u) => cList.contains(u));
-    } else if (!exactMatch && cList.isNotEmpty && uList.length == 1) {
-      // Highlighting check: Is this single user answer ONE OF the correct answers?
-      directMatch = cList.contains(uList.first);
-    }
-
-    if (directMatch) return true;
-
-    // 2. Bilingual Index-Based Comparison (Slow Path)
     if (question != null) {
-      // Let's try to find indices for User Answers
-      Set<int> userIndices = {};
-
-      // We need strict lists of EN and HU to map indices
-      List<String> enOpts = [];
-      List<String> huOpts = [];
-
-      void parseOpts(dynamic source, List<String> target) {
-        if (source == null) return;
-        dynamic data = source;
-        if (data is String) {
-          try {
-            data = json.decode(data);
-          } catch (_) {
-            return;
-          }
+      final enOpts =
+          _legacyOptions(question, 'en').map(normalizeAnswerLabel).toList();
+      final huOpts =
+          _legacyOptions(question, 'hu').map(normalizeAnswerLabel).toList();
+      if (enOpts.isNotEmpty || huOpts.isNotEmpty) {
+        int? indexOf(String value) {
+          final matches = <int>{
+            for (final labels in [enOpts, huOpts])
+              for (var i = 0; i < labels.length; i++)
+                if (labels[i] == value) i,
+          };
+          return matches.length == 1 ? matches.single : null;
         }
-        if (data is List) {
-          target.addAll(data.map((e) => normalizeAnswerLabel(e.toString())));
-        }
-      }
 
-      // Extract from 'options' map
-      if (question['options'] is Map) {
-        parseOpts(question['options']['en'], enOpts);
-        parseOpts(question['options']['hu'], huOpts);
-      }
-
-      // Extract from columns if empty
-      if (enOpts.isEmpty && question['options_en'] != null) {
-        parseOpts(question['options_en'], enOpts);
-      }
-      if (huOpts.isEmpty && question['options_hu'] != null) {
-        parseOpts(question['options_hu'], huOpts);
-      }
-
-      // Fallback: if we only have one list in 'options' (legacy)
-      if (enOpts.isEmpty && huOpts.isEmpty && question['options'] is List) {
-        parseOpts(question['options'], enOpts);
-      }
-
-      int getIndex(String val) {
-        int idx = enOpts.indexOf(val);
-        if (idx == -1) idx = huOpts.indexOf(val);
-        return idx;
-      }
-
-      for (var u in uList) {
-        int idx = getIndex(u);
-        if (idx != -1) userIndices.add(idx);
-      }
-
-      Set<int> correctIndices = {};
-      for (var c in cList) {
-        int idx = getIndex(c);
-        if (idx != -1) correctIndices.add(idx);
-      }
-
-      if (correctIndices.isNotEmpty && userIndices.isNotEmpty) {
-        if (exactMatch) {
-          return correctIndices.length == userIndices.length &&
-              correctIndices.every((i) => userIndices.contains(i));
-        } else {
-          // For highlighting, check if single answer index is in correct indices
-          if (userIndices.length == 1) {
-            return correctIndices.contains(userIndices.first);
-          }
-          return userIndices.every((i) => correctIndices.contains(i));
-        }
+        return matches<int>(indexOf);
       }
     }
-
-    return false;
+    return matches<String>((value) => value);
   }
 }

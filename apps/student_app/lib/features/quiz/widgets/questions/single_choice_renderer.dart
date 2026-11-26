@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:arbor_med/services/audio_provider.dart';
 import 'question_renderer.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
-import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/widgets/cozy/pressable_answer_button.dart';
 
 /// Renderer for Single Choice questions
@@ -15,17 +14,7 @@ class SingleChoiceRenderer extends QuestionRenderer {
     final palette = CozyTheme.of(context);
     final questionText = getLocalizedText(context, question);
 
-    final content = question['content'];
-    final raw = content is Map ? content['image_url'] : null;
-    Uri? image;
-    if (raw is String && raw.trim().isNotEmpty) {
-      final reference = Uri.tryParse(raw.trim());
-      if (reference != null) {
-        final uri = Uri.parse(ApiService.baseUrl).resolveUri(reference);
-        if ((uri.scheme == 'https' || uri.scheme == 'http') && uri.host.isNotEmpty) image = uri;
-      }
-    }
-    final imageUrl = image?.toString();
+    final imageUrl = questionImageUrl(question);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,

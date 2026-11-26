@@ -429,23 +429,41 @@ class _ActivityViewState extends State<ActivityView> {
               ).playSfx('click');
               HapticFeedback.mediumImpact();
               final stats = Provider.of<StatsProvider>(context, listen: false);
-              final mistakeIds = await stats.fetchMistakeIds(
-                timeframe: _timeframe.name,
-                anchorDate: _anchorDate,
-              );
-
-              if (mistakeIds.isNotEmpty && mounted) {
+              final timeframe = _timeframe;
+              final anchor = _anchorDate;
+              final owner = stats.authProvider.user?.id;
+              List<int>? mistakeIds;
+              try {
+                mistakeIds = await stats.fetchMistakeIds(timeframe: timeframe.name, anchorDate: anchor);
+              } catch (_) {
+                if (!mounted) return;
+                if (owner != stats.authProvider.user?.id ||
+                    timeframe != _timeframe || anchor != _anchorDate) {
+                  return;
+                }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(AppLocalizations.of(context)!.mistakeReviewLoadFailed)),
+                );
+                return;
+              }
+              if (!mounted) return;
+              if (mistakeIds == null || owner != stats.authProvider.user?.id ||
+                  timeframe != _timeframe || anchor != _anchorDate) {
+                return;
+              }
+              if (mistakeIds.isNotEmpty) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (_) => QuizSessionScreen(
                       questionIds: mistakeIds,
+                      ownerId: owner,
                       systemName: "Mistake Review",
                       systemSlug: "review",
                     ),
                   ),
                 );
-              } else if (mounted) {
+              } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(AppLocalizations.of(context)!.noMistakes),

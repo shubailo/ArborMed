@@ -1,5 +1,6 @@
+const choiceSchema = require('./choiceSchema');
 const QuestionType = require('./QuestionType');
-const { choiceOptions, gradeChoices } = require('./choiceOptions');
+const { choiceOptions, distinctChoices, gradeChoices, resolveChoice } = require('./choiceOptions');
 
 /**
  * Multiple Choice Question Type (Multi-select)
@@ -13,16 +14,14 @@ class MultipleChoiceType extends QuestionType {
     validate(questionData) {
         const errors = [];
 
-        if (!questionData.content) {
+        if (!questionData?.content || typeof questionData.content !== 'object' || Array.isArray(questionData.content)) {
             errors.push('content is required');
             return { valid: false, errors };
         }
 
-        const { options } = questionData.content;
-
-        if (!options || !options.en || !Array.isArray(options.en) || options.en.length < 2) {
-            errors.push('At least 2 English options are required in content.options.en');
-        }
+        const choices = choiceOptions(questionData);
+        if (choices.length < 2) errors.push('At least 2 options are required');
+        else if (!distinctChoices(choices)) errors.push('Each option needs a distinct identity');
 
         if (questionData.correct_answer === undefined || questionData.correct_answer === null) {
             errors.push('correct_answer is required');
@@ -35,10 +34,13 @@ class MultipleChoiceType extends QuestionType {
 
                 if (!Array.isArray(correctArr) || correctArr.length === 0) {
                     errors.push('correct_answer must be a non-empty array of strings');
-                } else if (options?.en) {
-                    const invalid = correctArr.filter(ans => !options.en.includes(ans));
-                    if (invalid.length > 0) {
-                        errors.push(`Some correct answers are not in the options list: ${invalid.join(', ')}`);
+                } else {
+                    const ids = new Set();
+                    for (const value of correctArr) {
+                        const choice = typeof value === 'string' && value.trim() && resolveChoice(choices, value);
+                        if (!choice) errors.push('Correct answer not in the options list: ' + String(value));
+                        else if (ids.has(choice.id)) errors.push('Each correct option may appear only once');
+                        else ids.add(choice.id);
                     }
                 }
             } catch {
@@ -63,18 +65,11 @@ class MultipleChoiceType extends QuestionType {
                 content: {
                     type: 'object',
                     properties: {
-                        options: {
-                            type: 'object',
-                            properties: {
-                                en: { type: 'array', items: { type: 'string' }, minItems: 2 },
-                                hu: { type: 'array', items: { type: 'string' } }
-                            },
-                            required: ['en']
-                        }
+                        options: choiceSchema.options
                     },
                     required: ['options']
                 },
-                correct_answer: { type: 'array', items: { type: 'string' } },
+                correct_answer: { type: 'array', minItems: 1, uniqueItems: true, items: { type: 'string' } },
                 explanation: { type: 'string' }
             },
             required: ['content', 'correct_answer']

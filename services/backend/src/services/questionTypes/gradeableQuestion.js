@@ -38,27 +38,39 @@ function recoverChoices(choices, input, multiple) {
   if (!parts.length || !parts.every(value => typeof value === 'string')) return null;
   const normalize = value => value.trim().toLowerCase().replace(/\s*[,;]\s*/g, ',').replace(/\s+/g, ' ');
   const source = normalize(parts.join(','));
-  const labels = choices.flatMap(choice => [...new Set([normalize(choice.en), normalize(choice.hu)])]
-    .filter(Boolean).map(label => ({ label, choice })));
-  const memo = new Map();
-  function partitions(start) {
-    if (memo.has(start)) return memo.get(start);
-    const matches = [];
+  const labels = choices.flatMap(choice => {
+    const aliases = [choice.en, choice.hu].filter(value => resolveChoice(choices, value)?.id === choice.id);
+    return [...new Set(aliases.map(normalize))].filter(Boolean).map(label => ({ label, choice }));
+  });
+  if (!source) return null;
+  // Count complete paths at each token boundary. Two paths already mean ambiguity.
+  const paths = new Map([[0, { count: 1 }]]);
+  for (let start = 0; start < source.length; start++) {
+    const prefix = paths.get(start);
+    if (!prefix) continue;
     for (const { label, choice } of labels) {
       if (!source.startsWith(label, start)) continue;
       const end = start + label.length;
-      if (end === source.length) matches.push([choice]);
-      else if (multiple && source[end] === ',') {
-        for (const suffix of partitions(end + 1)) matches.push([choice, ...suffix]);
-      }
-      if (matches.length > 1) break;
+      if (end !== source.length && (!multiple || source[end] !== ',' || end + 1 === source.length)) continue;
+      const next = end === source.length ? end : end + 1;
+      const existing = paths.get(next);
+      paths.set(next, { count: Math.min(2, (existing?.count || 0) + prefix.count), start, choice });
     }
-    memo.set(start, matches);
-    return matches;
   }
-  const matches = partitions(0);
-  if (matches.length !== 1 || new Set(matches[0].map(choice => choice.id)).size !== matches[0].length) return null;
-  return multiple ? matches[0].map(choice => choice.en) : matches[0][0].en;
+  if (paths.get(source.length)?.count !== 1) return null;
+  const recovered = [];
+  for (let pos = source.length; pos > 0;) {
+    const step = paths.get(pos);
+    recovered.push(step.choice);
+    pos = step.start;
+  }
+  if (!distinctChoices(recovered)) return null;
+  const keys = recovered.reverse().map(choice => visibleKey(choices, choice));
+  return multiple ? keys : keys[0];
+}
+
+function visibleKey(choices, choice) {
+  return resolveChoice(choices, choice.en)?.id === choice.id ? choice.en : choice.id;
 }
 
 function fromType(question, declaredType) {
@@ -73,7 +85,7 @@ function fromType(question, declaredType) {
     if (!key) return null;
   } else if (type === 'single_choice' || type === 'multiple_choice') {
     const choices = choiceOptions(question);
-    if (choices.length < 2 || (type === 'single_choice' && !distinctChoices(choices))) return null;
+    if (choices.length < 2 || !distinctChoices(choices)) return null;
     const multiple = type === 'multiple_choice';
     if (!gradeChoices(question, input, multiple).correct) {
       key = recoverChoices(choices, input, multiple);
@@ -84,7 +96,7 @@ function fromType(question, declaredType) {
     const visible = value => {
       const choice = resolveChoice(choices, value);
       const normalized = String(value).trim().toLowerCase();
-      return [choice.id, choice.en.trim().toLowerCase(), choice.hu.trim().toLowerCase()].includes(normalized) ? value : choice.en;
+      return [choice.id, choice.en.trim().toLowerCase(), choice.hu.trim().toLowerCase()].includes(normalized) ? value : visibleKey(choices, choice);
     };
     key = Array.isArray(key) ? key.map(visible) : visible(key);
   } else {

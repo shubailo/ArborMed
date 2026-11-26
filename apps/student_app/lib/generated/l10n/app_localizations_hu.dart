@@ -141,6 +141,31 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
+  String quizPreparingSystem(String system) {
+    return '$system – a kvíz előkészítése';
+  }
+
+  @override
+  String get quizLoadFailed => 'A kvízt nem sikerült betölteni';
+
+  @override
+  String get quizLoadRetryHint =>
+      'Lépj vissza az előző képernyőre, és próbáld újra.';
+
+  @override
+  String get quizSelectAllCorrect => 'Válassz ki minden helyes választ!';
+
+  @override
+  String get quizNoOptions => 'Nincsenek válaszlehetőségek.';
+
+  @override
+  String get quizEnlargeImage => 'Koppints a kép nagyításához';
+
+  @override
+  String get mistakeReviewLoadFailed =>
+      'Az időszak hibás válaszait nem sikerült betölteni. Próbáld újra.';
+
+  @override
   String get quizStart => 'Kvíz indítása';
 
   @override

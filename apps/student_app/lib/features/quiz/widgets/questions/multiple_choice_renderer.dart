@@ -1,46 +1,42 @@
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:arbor_med/services/audio_provider.dart';
 import 'question_renderer.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
-import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/widgets/cozy/pressable_answer_button.dart';
 
 /// Renderer for Multiple Choice (Multi-Select) questions
 class MultipleChoiceRenderer extends QuestionRenderer {
+  AppLocalizations _strings(BuildContext context) =>
+      AppLocalizations.of(context) ??
+      lookupAppLocalizations(const Locale('en'));
+
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
     final palette = CozyTheme.of(context);
     final questionText = getLocalizedText(context, question);
 
-    String? imageUrl;
-    if (question['content'] != null && question['content'] is Map) {
-      imageUrl = question['content']['image_url'];
-    }
+    final imageUrl = questionImageUrl(question);
+    final strings = _strings(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        if (imageUrl != null && imageUrl.isNotEmpty) ...[
+        if (imageUrl != null) ...[
           Tooltip(
-            message: 'Tap to enlarge image',
+            message: strings.quizEnlargeImage,
             child: GestureDetector(
               onTap: () {
                 Provider.of<AudioProvider>(context, listen: false)
                     .playSfx('click');
-                showZoomedImage(
-                    context,
-                    imageUrl!.startsWith('http')
-                        ? imageUrl
-                        : '${ApiService.baseUrl}$imageUrl');
+                showZoomedImage(context, imageUrl);
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  imageUrl.startsWith('http')
-                      ? imageUrl
-                      : '${ApiService.baseUrl}$imageUrl',
+                  imageUrl,
                   width: double.infinity,
                   height: 200,
                   fit: BoxFit.cover,
@@ -68,7 +64,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
         ),
         const SizedBox(height: 8),
         Text(
-          "(Válassz ki minden helyes választ!)",
+          strings.quizSelectAllCorrect,
           textAlign: TextAlign.center,
           style: GoogleFonts.outfit(
             fontSize: 13,
@@ -95,7 +91,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
         (currentAnswer is List) ? List<String>.from(currentAnswer) : [];
 
     if (options.isEmpty) {
-      return const Text("No options available");
+      return Text(_strings(context).quizNoOptions);
     }
 
     return Column(
@@ -104,7 +100,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
         final option = entry.value;
         final optionId = choiceValue(question, index, option);
         final isSelected = selectedOptions.contains(optionId);
-        final bool isOptionCorrect =
+        final bool isOptionCorrect = isChecked &&
             commonValidateAnswer(optionId, correctAnswer, question, false);
 
         Color backgroundColor = palette.paperCream;
@@ -191,7 +187,7 @@ class MultipleChoiceRenderer extends QuestionRenderer {
 
   @override
   dynamic formatAnswer(dynamic answer) {
-    return answer;
+    return hasAnswer(answer) ? answer : null;
   }
 
   @override

@@ -15,7 +15,7 @@ test('bilingual multiple-choice options retain gradeable identities in the stude
 
 test.each([
   [{}, 'content is required'],
-  [{content: {options:{en:['one']}}, correct_answer:['one']}, 'At least 2 English options'],
+  [{content: {options:{en:['one']}}, correct_answer:['one']}, 'At least 2 options'],
   [{content:{options}}, 'correct_answer is required'],
   [{content:{options}, correct_answer:[]}, 'non-empty array'],
   [{content:{options}, correct_answer:'malformed'}, 'valid JSON array'],

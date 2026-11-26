@@ -60,6 +60,14 @@
       }
     }
   },
+  "quizPreparingSystem": "Preparing {system}",
+  "quizLoadFailed": "Could not load the quiz",
+  "quizLoadRetryHint": "Return to the previous screen and try again.",
+  "quizSelectAllCorrect": "Select all correct answers.",
+  "quizNoOptions": "No options available",
+  "quizEnlargeImage": "Tap to enlarge image",
+  "mistakeReviewLoadFailed": "Could not load the mistakes for this period. Try again.",
+  "@quizPreparingSystem": {"placeholders": {"system": {"type": "String"}}},
   "quizStart": "Start Quiz",
   "quizContinue": "Continue",
   "quizSubmit": "Submit Answer",

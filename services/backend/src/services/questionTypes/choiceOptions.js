@@ -33,10 +33,11 @@ function resolveChoice(choices, value) {
   const text = String(value).trim();
   const label = text.toLowerCase();
   const authorId = stableId(text);
-  return choices.find(choice => choice.id === label)
-    ?? choices.find(choice => choice.en.trim().toLowerCase() === label)
-    ?? choices.find(choice => choice.hu.trim().toLowerCase() === label)
-    ?? choices.find(choice => choice.id === authorId);
+  const stable = choices.find(choice => choice.id === label);
+  if (stable) return stable;
+  const matches = choices.filter(choice => choice.id === authorId ||
+    [choice.en, choice.hu].some(text => text.trim().toLowerCase() === label));
+  return matches.length === 1 ? matches[0] : undefined;
 }
 
 function gradeChoices(question, answer, multiple = false) {
@@ -55,7 +56,7 @@ function gradeChoices(question, answer, multiple = false) {
   const expected = keys(question.correct_answer);
   const actual = keys(answer);
   const actualSet = new Set(actual);
-  const correct = expected.length > 0 && (multiple || (expected.length === 1 && distinctChoices(choices)))
+  const correct = expected.length > 0 && distinctChoices(choices) && (multiple || expected.length === 1)
     && expected.length === actual.length && actualSet.size === actual.length
     && new Set(expected).size === expected.length
     && expected.every(id => id !== null && actualSet.has(id));

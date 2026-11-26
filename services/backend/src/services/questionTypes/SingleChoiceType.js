@@ -1,3 +1,4 @@
+const choiceSchema = require('./choiceSchema');
 const QuestionType = require('./QuestionType');
 const { choiceOptions, distinctChoices, gradeChoices, resolveChoice } = require('./choiceOptions');
 
@@ -50,21 +51,14 @@ class SingleChoiceType extends QuestionType {
     }
 
     getSchema() {
-        const text = { type: 'string', minLength: 1 };
-        const localized = { type: 'object', properties: { en: text, hu: text },
-            anyOf: [{ required: ['en'] }, { required: ['hu'] }] };
-        const option = { type: 'object', properties: { en: text, hu: text, label: text, text, value: text },
-            anyOf: ['en', 'hu', 'label', 'text', 'value'].map(field => ({ required: [field] })) };
-        const list = { type: 'array', items: { anyOf: [text, option] }, minItems: 2 };
         return {
             type: 'object',
             properties: {
                 content: {
                     type: 'object',
                     properties: {
-                        question_text: { anyOf: [text, localized] },
-                        options: { anyOf: [list, { type: 'object', properties: { en: list, hu: list },
-                            anyOf: [{ required: ['en'] }, { required: ['hu'] }] }] }
+                        question_text: choiceSchema.localizedText,
+                        options: choiceSchema.options
                     },
                     required: ['question_text', 'options']
                 },

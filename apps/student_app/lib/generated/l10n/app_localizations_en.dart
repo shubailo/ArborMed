@@ -140,6 +140,31 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String quizPreparingSystem(String system) {
+    return 'Preparing $system';
+  }
+
+  @override
+  String get quizLoadFailed => 'Could not load the quiz';
+
+  @override
+  String get quizLoadRetryHint =>
+      'Return to the previous screen and try again.';
+
+  @override
+  String get quizSelectAllCorrect => 'Select all correct answers.';
+
+  @override
+  String get quizNoOptions => 'No options available';
+
+  @override
+  String get quizEnlargeImage => 'Tap to enlarge image';
+
+  @override
+  String get mistakeReviewLoadFailed =>
+      'Could not load the mistakes for this period. Try again.';
+
+  @override
   String get quizStart => 'Start Quiz';
 
   @override

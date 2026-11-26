@@ -350,6 +350,48 @@ abstract class AppLocalizations {
   /// **'Registration Failed: {reason}'**
   String authRegFailed(String reason);
 
+  /// No description provided for @quizPreparingSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing {system}'**
+  String quizPreparingSystem(String system);
+
+  /// No description provided for @quizLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load the quiz'**
+  String get quizLoadFailed;
+
+  /// No description provided for @quizLoadRetryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Return to the previous screen and try again.'**
+  String get quizLoadRetryHint;
+
+  /// No description provided for @quizSelectAllCorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select all correct answers.'**
+  String get quizSelectAllCorrect;
+
+  /// No description provided for @quizNoOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'No options available'**
+  String get quizNoOptions;
+
+  /// No description provided for @quizEnlargeImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to enlarge image'**
+  String get quizEnlargeImage;
+
+  /// No description provided for @mistakeReviewLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load the mistakes for this period. Try again.'**
+  String get mistakeReviewLoadFailed;
+
   /// No description provided for @quizStart.
   ///
   /// In en, this message translates to:

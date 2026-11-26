@@ -96,60 +96,50 @@ exports.getSummary = catchAsync(async (req, res) => {
   res.json(result.rows);
 });
 
-exports.getActivity = catchAsync(async (req, res, next) => {
+function activityWindow(timeframe, anchorDate) {
+  if (!['day', 'week', 'month'].includes(timeframe)) throw new AppError('Invalid timeframe', 400);
+  if (anchorDate !== undefined) {
+    const date = typeof anchorDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(anchorDate)
+      && !anchorDate.startsWith('0000') && new Date(anchorDate + 'T00:00:00Z');
+    if (!date || !Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== anchorDate) {
+      throw new AppError('Invalid anchorDate format. Use YYYY-MM-DD', 400);
+    }
+  }
+
+  const anchor = 'COALESCE($2::date, CURRENT_DATE)';
+  if (timeframe === 'month') {
+    const start = "date_trunc('month', " + anchor + ')';
+    return { start, end: start + " + INTERVAL '1 month'", step: '1 day', label: 'Dy' };
+  }
+  const end = '(' + anchor + ' + 1)::timestamptz';
+  if (timeframe === 'day') return { start: anchor, end, step: '1 hour', label: 'HH24:00' };
+  return { start: '(' + anchor + ' - 6)', end, step: '1 day', label: 'Dy' };
+}
+
+exports.getActivity = catchAsync(async (req, res) => {
   const userId = req.user.id;
   const { timeframe = 'week', anchorDate } = req.query; // anchorDate: YYYY-MM-DD
 
-  // Validation
-  if (!['day', 'week', 'month'].includes(timeframe)) {
-    return next(new AppError('Invalid timeframe', 400));
-  }
-  if (anchorDate && !/^\d{4}-\d{2}-\d{2}$/.test(anchorDate)) {
-    return next(new AppError('Invalid anchorDate format. Use YYYY-MM-DD', 400));
-  }
-
-  // Anchor (Target Date)
-  let seriesStart, seriesEnd, seriesInterval, dateTruncUnit, labelFormat;
-
-  if (timeframe === 'day') {
-    // Hour-by-hour for the specific day [00:00 - 23:00]
-    dateTruncUnit = 'hour';
-    seriesInterval = '1 hour';
-    labelFormat = 'HH24:00';
-    seriesStart = "date_trunc('day', COALESCE($2::date, CURRENT_DATE))";
-    seriesEnd = "date_trunc('day', COALESCE($2::date, CURRENT_DATE)) + INTERVAL '23 hours'";
-  } else if (timeframe === 'month') {
-    // Day-by-day for the specific month [1st - End of Month]
-    dateTruncUnit = 'day';
-    seriesInterval = '1 day';
-    labelFormat = 'Dy';
-    seriesStart = "date_trunc('month', COALESCE($2::date, CURRENT_DATE))";
-    seriesEnd = "date_trunc('month', COALESCE($2::date, CURRENT_DATE)) + INTERVAL '1 month' - INTERVAL '1 day'";
-  } else {
-    // Week view (Last 7 days relative to anchor)
-    dateTruncUnit = 'day';
-    seriesInterval = '1 day';
-    labelFormat = 'Dy';
-    seriesStart = "COALESCE($2::date, CURRENT_DATE) - INTERVAL '6 days'";
-    seriesEnd = "COALESCE($2::date, CURRENT_DATE)";
-  }
+  const { start, end, step, label } = activityWindow(timeframe, anchorDate);
 
   const query = `
         WITH time_series AS (
             SELECT generate_series(
-                CAST(${seriesStart} AS timestamptz), 
-                CAST(${seriesEnd} AS timestamptz), 
+                CAST(${start} AS timestamptz),
+                CAST(${end} AS timestamptz) - $3::interval,
                 CAST($3 AS interval)
             ) as series_date
         )
         SELECT 
             ts.series_date as date,
+            TO_CHAR(ts.series_date, 'YYYY-MM-DD') as calendar_date,
             TO_CHAR(ts.series_date, $4) as day_label,
             COUNT(r.id)::int as count,
             COUNT(CASE WHEN r.is_correct THEN 1 END)::int as correct_count
         FROM time_series ts
-        LEFT JOIN responses r ON date_trunc($5, r.created_at) = ts.series_date
-            AND (r.user_id = $1 OR EXISTS (SELECT 1 FROM quiz_sessions qs WHERE qs.id = r.session_id AND qs.user_id = $1))
+        LEFT JOIN responses r ON r.created_at >= ts.series_date
+            AND r.created_at < ts.series_date + $3::interval
+            AND (r.user_id = $1 OR (r.user_id IS NULL AND EXISTS (SELECT 1 FROM quiz_sessions qs WHERE qs.id = r.session_id AND qs.user_id = $1)))
         GROUP BY ts.series_date, day_label
         ORDER BY ts.series_date ASC
     `;
@@ -157,9 +147,8 @@ exports.getActivity = catchAsync(async (req, res, next) => {
   const params = [
     userId,
     anchorDate || null,
-    seriesInterval,
-    labelFormat,
-    dateTruncUnit,
+    step,
+    label,
   ];
   const result = await db.query(query, params);
   res.json(result.rows);
@@ -168,37 +157,24 @@ exports.getActivity = catchAsync(async (req, res, next) => {
 /**
  * Get question IDs missed by user in a specific timeframe for review
  */
-exports.getMistakesByTimeframe = catchAsync(async (req, res, next) => {
+exports.getMistakesByTimeframe = catchAsync(async (req, res) => {
   const userId = req.user.id;
   const { timeframe = 'week', anchorDate } = req.query;
 
-  // Validation
-  if (!['day', 'week', 'month'].includes(timeframe)) {
-    return next(new AppError('Invalid timeframe', 400));
-  }
-  if (anchorDate && !/^\d{4}-\d{2}-\d{2}$/.test(anchorDate)) {
-    return next(new AppError('Invalid anchorDate format. Use YYYY-MM-DD', 400));
-  }
-
-  let interval = '7 days';
-  if (timeframe === 'month') interval = '30 days';
-  if (timeframe === 'day') interval = '0 day';
-
-  const sqlAnchorLe = "COALESCE($2::date, CURRENT_DATE) + INTERVAL '1 day'";
-  const sqlAnchorGe = "COALESCE($2::date, CURRENT_DATE) - CAST($3 AS interval)";
+  const { start, end } = activityWindow(timeframe, anchorDate);
 
   const query = `
         SELECT DISTINCT r.question_id
         FROM responses r
         LEFT JOIN quiz_sessions s ON r.session_id = s.id
-        WHERE (r.user_id = $1 OR s.user_id = $1)
+        WHERE COALESCE(r.user_id, s.user_id) = $1
           AND r.is_correct = false
-          AND r.created_at <= ${sqlAnchorLe}
-          AND r.created_at >= ${sqlAnchorGe}
+          AND r.created_at < ${end}
+          AND r.created_at >= ${start}
         ORDER BY r.question_id
     `;
 
-  const params = [userId, anchorDate || null, interval];
+  const params = [userId, anchorDate || null];
   const result = await db.query(query, params);
   res.json(result.rows.map((row) => row.question_id));
 });
@@ -224,7 +200,7 @@ exports.getSubjectDetail = catchAsync(async (req, res) => {
             FROM responses r
             JOIN questions q ON q.id = r.question_id
             LEFT JOIN quiz_sessions qs ON qs.id = r.session_id
-            WHERE (r.user_id = $1 OR qs.user_id = $1)
+            WHERE COALESCE(r.user_id, qs.user_id) = $1
             GROUP BY q.topic_id
         )
         SELECT 

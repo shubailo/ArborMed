@@ -99,3 +99,11 @@ describe('statsController.getMistakesByTimeframe', () => {
         expect(params).toContain('2023-01-01');
     });
 });
+
+test.each(['getActivity', 'getMistakesByTimeframe'])('%s rejects an impossible calendar day before querying', async name => {
+    db.query.mockClear();
+    const next = jest.fn();
+    await statsController[name]({user:{id:1},query:{anchorDate:'2026-02-30'}}, {}, next);
+    expect(next).toHaveBeenCalledWith(expect.objectContaining({statusCode:400}));
+    expect(db.query).not.toHaveBeenCalled();
+});
