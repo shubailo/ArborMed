@@ -12,7 +12,7 @@ postgres('study statistics from recorded answers', () => {
         await pg.connect();
         await pg.query(`
             CREATE TEMP TABLE topics (id int PRIMARY KEY, parent_id int, slug text, name_en text, name_hu text);
-            CREATE TEMP TABLE questions (id int PRIMARY KEY, topic_id int, question_text_en text, bloom_level int, difficulty int);
+            CREATE TEMP TABLE questions (id int PRIMARY KEY, topic_id int, question_text_en text, bloom_level int, difficulty int, active boolean DEFAULT TRUE);
             CREATE TEMP TABLE quiz_sessions (id int, user_id int, started_at timestamp, completed_at timestamp);
             CREATE TEMP TABLE users (id int, email text, role text, last_activity_at timestamptz, created_at timestamp default now());
             INSERT INTO users(id,email,role) VALUES (1,'student-one@example.test','student'), (2,'another@example.test','student');
@@ -34,6 +34,36 @@ postgres('study statistics from recorded answers', () => {
         db.query.mockImplementation((sql, args) => pg.query(sql, args));
     });
     afterAll(async () => { await pg.end(); });
+
+    test('quiz catalog includes new roots and their nested progress without mixing students or activating empty topics', async () => {
+        await pg.query('BEGIN');
+        try {
+            await pg.query(`INSERT INTO topics VALUES
+              (20,NULL,'new-course','New course','Új tárgy'),(21,20,'part','Part','Rész'),
+              (22,21,'leaf','Leaf','Levél'),(23,20,'empty','Empty','Üres');
+              INSERT INTO questions(id,topic_id,active) VALUES (20,20,true),(21,22,true),(22,23,false);
+              INSERT INTO user_topic_progress(user_id,topic_slug,total_answered,correct_answered,mastery_score)
+              VALUES (1,'leaf',4,3,75),(1,'new-course',2,1,50),(2,'leaf',100,100,100)`);
+            const summary = await read(stats.getSummary);
+            expect(summary.find(s => s.slug === 'new-course')).toMatchObject({
+                name_hu:'Új tárgy',has_direct_questions:true,total_answered:6,correct_answered:4
+            });
+            expect(summary.some(s => s.slug === 'leaf')).toBe(false);
+            const sections = await read(stats.getSubjectDetail,{params:{subjectSlug:'new-course'}});
+            expect(sections.find(s => s.slug === 'part')).toMatchObject({has_children:true,has_direct_questions:false});
+            const nested = await read(stats.getSubjectDetail,{params:{subjectSlug:'part'}});
+            expect(nested[0]).toMatchObject({slug:'leaf',has_children:false,has_direct_questions:true});
+            expect(sections.find(s => s.slug === 'empty')).toMatchObject({has_children:false,has_direct_questions:false});
+        } finally { await pg.query('ROLLBACK'); }
+    });
+
+    test('review and readiness deliver the same Hungarian topic identity', async () => {
+        const { recommendations } = await read(stats.getSmartReview);
+        const { breakdown } = await read(stats.getReadiness);
+        for (const row of [recommendations[0],breakdown[0]]) {
+            expect(row).toMatchObject({topic:'Section',topicHu:'Téma',slug:'section'});
+        }
+    });
 
     test('counts distinct recorded sessions and includes offline answers in subject timing', async () => {
         const res = { json: jest.fn() };

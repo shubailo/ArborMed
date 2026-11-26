@@ -195,6 +195,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
         stats.fetchActivity(),
         stats.fetchSubjectDetail(slug),
         stats.fetchSmartReview(),
+        stats.fetchReadiness(),
       ]);
     } catch (error) {
       debugPrint('Quiz return refresh failed: ${error.runtimeType}');

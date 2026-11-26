@@ -2,6 +2,7 @@ class SubjectMastery {
   final String subjectEn;
   final String? subjectHu;
   final String slug;
+  final bool hasDirectQuestions;
   final int totalAnswered;
   final int correctAnswered;
   final int masteryPercent;
@@ -10,6 +11,7 @@ class SubjectMastery {
     required this.subjectEn,
     this.subjectHu,
     required this.slug,
+    this.hasDirectQuestions = false,
     required this.totalAnswered,
     required this.correctAnswered,
     required this.masteryPercent,
@@ -20,6 +22,7 @@ class SubjectMastery {
       subjectEn: json['name_en'] ?? json['subject'] ?? 'Unknown',
       subjectHu: json['name_hu'],
       slug: json['slug'] ?? '',
+      hasDirectQuestions: json['has_direct_questions'] == true,
       totalAnswered:
           int.tryParse(json['total_answered']?.toString() ?? '0') ?? 0,
       correctAnswered:

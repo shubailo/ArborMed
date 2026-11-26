@@ -1788,4 +1788,62 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get roundsRefresh => 'Haladás frissítése';
+
+  @override
+  String get quizFallbackQuote => 'Tiszta fejjel könnyebb a célra figyelni.';
+
+  @override
+  String get quizPracticeSubject => 'Gyakorlás a tantárgyból';
+
+  @override
+  String get quizSectionsRetry => 'A témaköröket nem sikerült betölteni. Újra';
+
+  @override
+  String get quizNoQuestions => 'Még nincs aktív kérdés';
+
+  @override
+  String get quizReviewTitle => 'Okos ismétlés';
+
+  @override
+  String get quizReadinessRetry =>
+      'A felkészültséget nem sikerült betölteni. Újra';
+
+  @override
+  String get quizNoReadiness =>
+      'Az első kvíz után itt láthatod a felkészültségedet.';
+
+  @override
+  String quizReadyPercent(int score) {
+    return 'Felkészültség $score%';
+  }
+
+  @override
+  String get quizRecommendations => 'Ismétlésre javasolt témák';
+
+  @override
+  String get quizReviewRetry => 'A javaslatokat nem sikerült betölteni. Újra';
+
+  @override
+  String get quizReviewEmpty => 'Most nincs ismétlésre javasolt téma.';
+
+  @override
+  String quizRetention(int percent) {
+    return 'Becsült tudásmegtartás $percent%';
+  }
+
+  @override
+  String quizDaysSince(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days napja gyakoroltad',
+      one: 'Egy napja',
+      zero: 'Kevesebb mint egy napja',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get quizReviewSessionEnded =>
+      'Ez az ismétlés az előző bejelentkezéshez tartozott.';
 }

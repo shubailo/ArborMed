@@ -1,82 +1,67 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:arbor_med/theme/cozy_theme.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
-import 'package:arbor_med/utils/extensions/list_extensions.dart';
+import '../../../generated/l10n/app_localizations.dart';
+import '../models/readiness.dart';
 
 class WeaknessRadarChart extends StatelessWidget {
   final List<ReadinessDetail> data;
-
   const WeaknessRadarChart({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
-    if (data.isEmpty) {
-      return Center(
-        child: Text(
-          "No data yet. Complete some quizzes!",
-          style: TextStyle(color: CozyTheme.of(context).textSecondary),
-        ),
-      );
-    }
-
-    // Limit to top 6 dimensions for readability
-    final chartData = data.length > 6 ? data.sublist(0, 6) : data;
-    final palette = CozyTheme.of(context);
-
-    return AspectRatio(
-      aspectRatio: 1.3,
-      child: RadarChart(
-        key: ValueKey(chartData.length),
-        RadarChartData(
-          radarTouchData: RadarTouchData(enabled: true),
-
-          // Data Sets
-          dataSets: [
-            RadarDataSet(
-              fillColor: palette.primary.withValues(alpha: 0.2),
-              borderColor: palette.primary,
-              entryRadius: 3,
-              dataEntries: chartData
-                  .map((e) => RadarEntry(value: e.score.toDouble()))
-                  .toList(),
-              borderWidth: 2,
-            ),
-          ],
-
-          // Chart Appearance
-          radarBackgroundColor: Colors.transparent,
-          borderData: FlBorderData(show: false),
-          radarBorderData: const BorderSide(color: Colors.transparent),
-
-          // Title (Labels) Configuration
-          titlePositionPercentageOffset: 0.1,
-          titleTextStyle: TextStyle(
-              color: palette.textPrimary,
-              fontSize: 10,
-              fontWeight: FontWeight.bold),
-          getTitle: (index, angle) {
-            final item = chartData.safeGet(index);
-            if (item == null) return const RadarChartTitle(text: '');
-            return RadarChartTitle(text: _formatLabel(item.topic));
-          },
-
-          // Ticks (Grid) Configuration
-          tickCount: 3,
-          ticksTextStyle: const TextStyle(color: Colors.transparent),
-          tickBorderData:
-              BorderSide(color: palette.textSecondary.withValues(alpha: 0.1)),
-          gridBorderData: BorderSide(
-              color: palette.textSecondary.withValues(alpha: 0.1), width: 1),
-        ),
-      ),
-    );
-  }
-
-  String _formatLabel(String text) {
-    if (text.length > 10) {
-      return '${text.substring(0, 8)}...';
-    }
-    return text;
+    final strings = AppLocalizations.of(context)!;
+    if (data.isEmpty) return Text(strings.quizNoReadiness);
+    final sorted = [...data]..sort((a, b) {
+        final byScore = a.score.compareTo(b.score);
+        return byScore == 0 ? a.slug.compareTo(b.slug) : byScore;
+      });
+    final topics = sorted.take(6).toList();
+    final hu = Localizations.localeOf(context).languageCode == 'hu';
+    final primary = Theme.of(context).colorScheme.primary;
+    final drawRadar = topics.length >= 3;
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      if (drawRadar)
+        ExcludeSemantics(
+            child: SizedBox(
+                height: 180,
+                child: RadarChart(
+                  key: ValueKey(topics.length),
+                  RadarChartData(
+                    isMinValueAtCenter: true,
+                    tickCount: 4,
+                    radarTouchData: RadarTouchData(enabled: false),
+                    ticksTextStyle: const TextStyle(color: Colors.transparent),
+                    getTitle: (index, angle) =>
+                        RadarChartTitle(text: '${index + 1}'),
+                    dataSets: [
+                      // fl_chart derives the radial domain from its datasets. Anchor percentages at 0 and 100.
+                      RadarDataSet(
+                          dataEntries: [
+                            for (int i = 0; i < topics.length; i++)
+                              RadarEntry(value: i == 0 ? 100 : 0)
+                          ],
+                          fillColor: Colors.transparent,
+                          borderColor: Colors.transparent,
+                          borderWidth: 0,
+                          entryRadius: 0),
+                      RadarDataSet(
+                          dataEntries: [
+                            for (final topic in topics)
+                              RadarEntry(value: topic.score.toDouble())
+                          ],
+                          fillColor: primary.withValues(alpha: 0.2),
+                          borderColor: primary,
+                          borderWidth: 2,
+                          entryRadius: 3),
+                    ],
+                  ),
+                  duration: Duration.zero,
+                ))),
+      for (final (index, topic) in topics.indexed)
+        Padding(
+            padding: const EdgeInsets.symmetric(vertical: 3),
+            child: Text(
+                '${drawRadar ? "${index + 1}. " : ""}${topic.label(hu)} · ${topic.score}%')),
+    ]);
   }
 }

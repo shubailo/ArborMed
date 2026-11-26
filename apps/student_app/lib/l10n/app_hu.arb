@@ -590,5 +590,19 @@
   "roundsSubjectStats": "Tantárgyi válaszok száma: {count} · {percent}% helyes",
   "roundsNoResponses": "Még nincs rögzített tantárgyi válasz.",
   "roundsSummaryRetry": "A tantárgyi eredmények betöltése sikertelen. Újra",
-  "roundsRefresh": "Haladás frissítése"
+  "roundsRefresh": "Haladás frissítése",
+  "quizFallbackQuote": "Tiszta fejjel könnyebb a célra figyelni.",
+  "quizPracticeSubject": "Gyakorlás a tantárgyból",
+  "quizSectionsRetry": "A témaköröket nem sikerült betölteni. Újra",
+  "quizNoQuestions": "Még nincs aktív kérdés",
+  "quizReviewTitle": "Okos ismétlés",
+  "quizReadinessRetry": "A felkészültséget nem sikerült betölteni. Újra",
+  "quizNoReadiness": "Az első kvíz után itt láthatod a felkészültségedet.",
+  "quizReadyPercent": "Felkészültség {score}%",
+  "quizRecommendations": "Ismétlésre javasolt témák",
+  "quizReviewRetry": "A javaslatokat nem sikerült betölteni. Újra",
+  "quizReviewEmpty": "Most nincs ismétlésre javasolt téma.",
+  "quizRetention": "Becsült tudásmegtartás {percent}%",
+  "quizDaysSince": "{days, plural, =0{Kevesebb mint egy napja} =1{Egy napja} other{{days} napja gyakoroltad}}",
+  "quizReviewSessionEnded": "Ez az ismétlés az előző bejelentkezéshez tartozott."
 }

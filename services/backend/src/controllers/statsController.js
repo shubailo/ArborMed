@@ -23,6 +23,7 @@ function calculateTopicMetrics(rows) {
     );
     return {
       topic: row.name_en,
+      topicHu: row.name_hu,
       slug: row.slug,
       retention,
       readiness,
@@ -40,6 +41,7 @@ function buildReadinessResponse(metrics) {
     breakdown: metrics
       .map((m) => ({
         topic: m.topic,
+        topicHu: m.topicHu,
         slug: m.slug,
         score: m.readiness,
         metrics: { mastery: m.mastery, retention: m.retention },
@@ -53,7 +55,7 @@ function reviewTopics(metrics) {
 }
 
 const PROGRESS_QUERY = `
-    SELECT t.name_en, t.slug, utp.last_studied_at, utp.stability,
+    SELECT t.name_en, t.name_hu, t.slug, utp.last_studied_at, utp.stability,
            utp.retention_score as last_retention, utp.mastery_score
     FROM user_topic_progress utp
     JOIN topics t ON utp.topic_slug = t.slug
@@ -71,26 +73,23 @@ const PROGRESS_QUERY = `
 exports.getSummary = catchAsync(async (req, res) => {
   const userId = req.user.id;
 
-  // Optimized Query: Read aggregated stats from user_topic_progress
   const query = `
-        SELECT 
-            t_parent.name_en as subject,
-            t_parent.name_en as name_en,
-            t_parent.name_hu as name_hu,
-            t_parent.slug as slug,
-            COALESCE(SUM(utp.total_answered), 0)::int as total_answered,
-            COALESCE(SUM(utp.correct_answered), 0)::int as correct_answered,
-            
-            -- Weighted Mastery for Parent Subject (Avg of children for now)
-            COALESCE(ROUND(AVG(utp.mastery_score)), 0)::int as mastery_percent
-
-        FROM topics t_parent
-        LEFT JOIN topics t_child ON t_child.parent_id = t_parent.id
-        LEFT JOIN user_topic_progress utp ON utp.topic_slug = t_child.slug AND utp.user_id = $1
-        WHERE t_parent.parent_id IS NULL
-        AND t_parent.slug IN ('pathophysiology', 'pathology', 'microbiology', 'pharmacology', 'ecg')
-        GROUP BY t_parent.id, t_parent.name_en, t_parent.name_hu, t_parent.slug
-    `;
+    WITH RECURSIVE members(root_id, id, slug) AS (
+      SELECT id, id, slug FROM topics WHERE parent_id IS NULL
+      UNION ALL
+      SELECT m.root_id, child.id, child.slug
+      FROM members m JOIN topics child ON child.parent_id = m.id
+    )
+    SELECT root.name_en AS subject, root.name_en, root.name_hu, root.slug,
+           EXISTS (SELECT 1 FROM questions q WHERE q.topic_id = root.id AND q.active) AS has_direct_questions,
+           COALESCE(SUM(p.total_answered), 0)::int AS total_answered,
+           COALESCE(SUM(p.correct_answered), 0)::int AS correct_answered,
+           COALESCE(ROUND(AVG(p.mastery_score)), 0)::int AS mastery_percent
+    FROM members m JOIN topics root ON root.id = m.root_id
+    LEFT JOIN user_topic_progress p ON p.topic_slug = m.slug AND p.user_id = $1
+    GROUP BY root.id, root.name_en, root.name_hu, root.slug
+    ORDER BY root.id
+  `;
 
   const result = await db.query(query, [userId]);
   res.json(result.rows);
@@ -199,6 +198,7 @@ exports.getSubjectDetail = catchAsync(async (req, res) => {
                    COUNT(DISTINCT r.session_id)::int AS sessions_count
             FROM responses r
             JOIN questions q ON q.id = r.question_id
+            JOIN SubjectTopics st ON st.id = q.topic_id
             LEFT JOIN quiz_sessions qs ON qs.id = r.session_id
             WHERE COALESCE(r.user_id, qs.user_id) = $1
             GROUP BY q.topic_id
@@ -208,6 +208,8 @@ exports.getSubjectDetail = catchAsync(async (req, res) => {
             st.name_en as name_en,
             st.name_hu as name_hu,
             st.slug as slug,
+            EXISTS (SELECT 1 FROM questions q WHERE q.active AND q.topic_id = st.id) AS has_direct_questions,
+            EXISTS (SELECT 1 FROM topics child WHERE child.parent_id = st.id) AS has_children,
             COALESCE(utp.total_answered, 0) as attempts,
             COALESCE(urt.sessions_count, 0) as sessions_count,
             COALESCE(utp.last_studied_at, '1970-01-01'::timestamp) as last_studied,

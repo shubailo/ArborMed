@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:arbor_med/widgets/cozy/cozy_panel.dart';
 import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
 import 'smart_review_sheet.dart';
+import '../../analytics/models/study_metric.dart';
 import 'study_break_icon.dart';
 import '../../ecg/screens/ecg_practice_screen.dart';
 import 'package:arbor_med/generated/l10n/app_localizations.dart';
@@ -12,247 +12,272 @@ import 'package:arbor_med/services/audio_provider.dart';
 
 enum QuizMenuState { main, subjects, systems }
 
-class QuizMenuWidget extends StatefulWidget {
-  final Function(String name, String slug) onSystemSelected;
+class QuizMenuWidget extends StatelessWidget {
+  final void Function(String name, String slug) onSystemSelected;
   final VoidCallback? onClose;
-
-  const QuizMenuWidget({
-    super.key,
-    required this.onSystemSelected,
-    this.onClose,
-  });
-
+  const QuizMenuWidget(
+      {super.key, required this.onSystemSelected, this.onClose});
   @override
-  createState() => _QuizMenuWidgetState();
+  Widget build(BuildContext context) {
+    final revision = context.select((StatsProvider p) => p.sessionRevision);
+    return _QuizMenu(
+        key: ValueKey(revision),
+        onSystemSelected: onSystemSelected,
+        session: revision);
+  }
 }
 
-class _QuizMenuWidgetState extends State<QuizMenuWidget> {
+class _QuizMenu extends StatefulWidget {
+  const _QuizMenu(
+      {super.key, required this.onSystemSelected, required this.session});
+  final void Function(String, String) onSystemSelected;
+  final int session;
+  @override
+  State<_QuizMenu> createState() => _QuizMenuState();
+}
+
+class _QuizMenuState extends State<_QuizMenu> {
   QuizMenuState _state = QuizMenuState.main;
-  String? _selectedSubjectTitle;
-  String? _selectedSubjectSlug;
-  bool _isGoingBack = false;
+  final _path = <SubjectMastery>[];
+  bool _reviewOpen = false;
+  bool _selected = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<StatsProvider>(context, listen: false).fetchCurrentQuote();
+      if (mounted) context.read<StatsProvider>().fetchCurrentQuote();
     });
   }
 
-  void _showSmartReview() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => SmartReviewSheet(
-        onReviewSelected: (name, slug) {
-          Navigator.pop(context); // Close sheet
-          widget.onSystemSelected(name, slug); // Start quiz
-        },
-      ),
-    );
-  }
-
-  final Map<String, String> _subjectSlugs = {
-    'Pathophysiology': 'pathophysiology',
-    'Pathology': 'pathology',
-    'Microbiology': 'microbiology',
-    'Pharmacology': 'pharmacology',
-  };
-
-  final List<String> _subjects = [
-    'Pathophysiology',
-    'Pathology',
-    'Microbiology',
-    'Pharmacology',
-  ];
-
-  void _onSubjectTap(String subject) {
-    String slug = _subjectSlugs[subject] ?? subject.toLowerCase();
-
-    // Trigger fetch from backend to get recency-sorted sections
-    Provider.of<StatsProvider>(context, listen: false).fetchSubjectDetail(slug);
-
-    setState(() {
-      _isGoingBack = false;
-      _selectedSubjectTitle = subject;
-      _selectedSubjectSlug = slug;
-      _state = QuizMenuState.systems;
+  void _select(String name, String slug) {
+    if (_selected ||
+        widget.session != context.read<StatsProvider>().sessionRevision ||
+        ModalRoute.of(context)?.isCurrent != true) {
+      return;
+    }
+    _selected = true;
+    widget.onSystemSelected(name, slug);
+    // Embedded menus may stay on screen after the callback.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _selected = false;
     });
   }
 
-  void _onBack() {
-    setState(() {
-      _isGoingBack = true;
-      if (_state == QuizMenuState.systems) {
-        _state = QuizMenuState.subjects;
-        _selectedSubjectTitle = null;
-        _selectedSubjectSlug = null;
-      } else if (_state == QuizMenuState.subjects) {
-        _state = QuizMenuState.main;
+  Future<void> _showSmartReview() async {
+    if (_reviewOpen) return;
+    _reviewOpen = true;
+    final stats = context.read<StatsProvider>();
+    final revision = widget.session;
+    try {
+      final choice = await showModalBottomSheet<({String name, String slug})>(
+        context: context,
+        isScrollControlled: true,
+        useSafeArea: true,
+        builder: (sheetContext) => ListenableBuilder(
+            listenable: stats,
+            builder: (context, _) {
+              if (stats.sessionRevision != revision) {
+                final strings = AppLocalizations.of(context)!;
+                return SafeArea(
+                    child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    Text(strings.quizReviewSessionEnded),
+                    TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(strings.close)),
+                  ]),
+                ));
+              }
+              return ChangeNotifierProvider.value(
+                  value: stats,
+                  child: SmartReviewSheet(onReviewSelected: (name, slug) {
+                    if (stats.sessionRevision == revision &&
+                        ModalRoute.of(sheetContext)?.isCurrent == true) {
+                      Navigator.pop(sheetContext, (name: name, slug: slug));
+                    }
+                  }));
+            }),
+      );
+      if (mounted && choice != null && stats.sessionRevision == revision) {
+        _select(choice.name, choice.slug);
       }
+    } finally {
+      _reviewOpen = false;
+    }
+  }
+
+  bool get _hu => Localizations.localeOf(context).languageCode == 'hu';
+  String _title(SubjectMastery subject) {
+    final translated = _hu ? studyText(subject.subjectHu) : '';
+    return translated.isEmpty ? subject.subjectEn : translated;
+  }
+
+  void _onSubjectTap(SubjectMastery subject) {
+    context.read<StatsProvider>().fetchSubjectDetail(subject.slug);
+    setState(() {
+      _path.add(subject);
+      _state = QuizMenuState.systems;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: Column(
-            children: [
-              // Unified Header
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (_state != QuizMenuState.main)
-                      GestureDetector(
-                        onTap: () {
-                          Provider.of<AudioProvider>(
-                            context,
-                            listen: false,
-                          ).playSfx('click');
-                          _onBack();
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.arrow_back_ios,
-                              size: 18,
-                              color: CozyTheme.of(context).textSecondary,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              _state == QuizMenuState.systems
-                                  ? _getLocalizedSubjectTitle(
-                                      _selectedSubjectTitle!,
-                                    )
-                                  : AppLocalizations.of(
-                                      context,
-                                    )!.quizSelectSubject,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: CozyTheme.of(context).textPrimary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    else
-                      const SizedBox(width: 24),
-
-                    const SizedBox(
-                      width: 40,
-                    ), // Placeholder to keep spacing balanced if needed
-                  ],
-                ),
-              ),
-
-              // Content
-              Expanded(
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
-                  switchInCurve: Curves.fastOutSlowIn,
-                  switchOutCurve: Curves.easeInQuad,
-                  transitionBuilder:
-                      (Widget child, Animation<double> animation) {
-                        final beginScale = _isGoingBack ? 1.08 : 0.92;
-                        return FadeTransition(
-                          opacity: animation,
-                          child: ScaleTransition(
-                            scale: Tween<double>(
-                              begin: beginScale,
-                              end: 1.0,
-                            ).animate(animation),
-                            child: child,
-                          ),
-                        );
-                      },
-                  child: Container(
-                    key: ValueKey(_state),
-                    color: CozyTheme.of(context).paperCream,
-                    child: _buildCurrentContent(),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+    context.select((StatsProvider p) => (p.readinessState, p.readiness));
+    final strings = AppLocalizations.of(context)!;
+    return Column(children: [
+      if (_state != QuizMenuState.main)
+        ListTile(
+            leading: const Icon(Icons.arrow_back_ios_new),
+            title: Text(
+                _state == QuizMenuState.systems
+                    ? _title(_path.last)
+                    : strings.quizSelectSubject,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis),
+            onTap: () => setState(() {
+                  if (_path.isEmpty) {
+                    _state = QuizMenuState.main;
+                  } else {
+                    _path.removeLast();
+                    _state = _path.isEmpty
+                        ? QuizMenuState.subjects
+                        : QuizMenuState.systems;
+                  }
+                })),
+      Expanded(
+          child: switch (_state) {
+        QuizMenuState.main => _buildMainMenu(),
+        QuizMenuState.subjects => _subjects(),
+        QuizMenuState.systems => _sections(_path.last),
+      }),
+    ]);
   }
 
-  Widget _buildCurrentContent() {
-    switch (_state) {
-      case QuizMenuState.main:
-        return _buildMainMenu();
-      case QuizMenuState.subjects:
-        return _buildList(_subjects, (item) => _onSubjectTap(item));
-      case QuizMenuState.systems:
-        return Consumer<StatsProvider>(
-          builder: (context, stats, _) {
-            final state = stats.getSectionState(_selectedSubjectSlug!);
-            final List<Map<String, dynamic>> systems =
-                stats.sectionMastery[_selectedSubjectSlug] ?? [];
-
-            switch (state) {
-              case SubjectQuizState.initial:
-              case SubjectQuizState.loading:
-                final palette = CozyTheme.of(context);
-                if (systems.isEmpty) {
-                  return Center(
-                    child: CircularProgressIndicator(color: palette.primary),
-                  );
-                }
-                // If we have cached data, show it while loading (snappy UX)
-                return _buildList(systems, (item) {
-                  final name = _getLocalizedSectionName(context, item);
-                  widget.onSystemSelected(name, item['slug']!);
-                });
-              case SubjectQuizState.empty:
-                final palette = CozyTheme.of(context);
-                return Center(
-                  child: Text(
-                    AppLocalizations.of(context)!.quizComingSoon,
-                    style: TextStyle(color: palette.textSecondary),
-                  ),
-                );
-              case SubjectQuizState.error:
-                final palette = CozyTheme.of(context);
-                final isHu = Localizations.localeOf(context).languageCode == 'hu';
-                return Center(
-                  child: Text(
-                    isHu ? "Hiba a témakörök betöltése közben." : "Error fetching sections.",
-                    style: TextStyle(color: palette.error),
-                  ),
-                );
-              case SubjectQuizState.loaded:
-                final palette = CozyTheme.of(context);
-                if (systems.isEmpty) {
-                  return Center(
-                    child: Text(
-                      AppLocalizations.of(context)!.quizComingSoon,
-                      style: TextStyle(color: palette.textSecondary),
-                    ),
-                  );
-                }
-                return _buildList(systems, (item) {
-                  final name = _getLocalizedSectionName(context, item);
-                  widget.onSystemSelected(name, item['slug']!);
-                });
-            }
-          },
-        );
+  Widget _subjects() {
+    final stats = context.watch<StatsProvider>();
+    final strings = AppLocalizations.of(context)!;
+    if (stats.summaryFailed) {
+      return _retry(strings.roundsSummaryRetry, stats.fetchSummary);
     }
+    if (stats.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    final subjects =
+        stats.subjectMastery.where((s) => s.slug.trim().isNotEmpty).toList();
+    if (subjects.isEmpty) return Center(child: Text(strings.masteryEmpty));
+    return ListView.builder(
+        itemCount: subjects.length,
+        itemBuilder: (context, index) {
+          final subject = subjects[index];
+          return ListTile(
+              leading: const Icon(Icons.library_books_outlined),
+              title: Text(_title(subject)),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => _onSubjectTap(subject));
+        });
+  }
+
+  Widget _retry(String text, VoidCallback action) => Center(
+      child: TextButton.icon(
+          icon: const Icon(Icons.refresh),
+          label: Text(text),
+          onPressed: action));
+
+  Widget _sections(SubjectMastery subject) {
+    final stats = context.watch<StatsProvider>();
+    final strings = AppLocalizations.of(context)!;
+    final state = stats.getSectionState(subject.slug);
+    final rows = (stats.sectionMastery[subject.slug] ?? [])
+        .where((r) => studyText(r['slug']).isNotEmpty)
+        .toList();
+    if (state == SubjectQuizState.error) {
+      return _retry(strings.quizSectionsRetry,
+          () => stats.fetchSubjectDetail(subject.slug));
+    }
+    if (state == SubjectQuizState.initial ||
+        state == SubjectQuizState.loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    DateTime? latest;
+    String? recent;
+    for (final row in rows) {
+      final date = DateTime.tryParse(studyText(row['last_studied']));
+      if (date != null &&
+          (int.tryParse(row['attempts'].toString()) ?? 0) > 0 &&
+          (latest == null || date.isAfter(latest))) {
+        latest = date;
+        recent = studyText(row['slug']);
+      }
+    }
+    final reviewButton = _reviewButton();
+    final empty = rows.isEmpty && !subject.hasDirectQuestions;
+    return ListView.builder(
+        itemCount: 1 +
+            (subject.hasDirectQuestions ? 1 : 0) +
+            (empty ? 1 : rows.length),
+        itemBuilder: (context, index) {
+          if (index == 0) return reviewButton;
+          if (subject.hasDirectQuestions && index == 1) {
+            return ListTile(
+                title: Text(strings.quizPracticeSubject),
+                leading: const Icon(Icons.school),
+                onTap: () => _select(_title(subject), subject.slug));
+          }
+          if (empty) return Center(child: Text(strings.masteryNoSections));
+          final row = rows[index - 1 - (subject.hasDirectQuestions ? 1 : 0)];
+          final slug = studyText(row['slug']);
+          final name = [
+            _hu ? studyText(row['name_hu']) : '',
+            studyText(row['name_en']),
+            studyText(row['section']),
+            slug
+          ].firstWhere((s) => s.isNotEmpty);
+          final branch = row['has_children'] == true;
+          final available = branch || row['has_direct_questions'] != false;
+          final attempts = int.tryParse(row['attempts'].toString()) ?? 0;
+          final percent = num.tryParse(row['proficiency'].toString());
+          return ListTile(
+              title: Text(name),
+              enabled: available,
+              subtitle: !available
+                  ? Text(strings.quizNoQuestions)
+                  : slug == recent
+                      ? Text(strings.quizLastStudied)
+                      : null,
+              trailing: attempts > 0 && percent != null && percent.isFinite
+                  ? Text('${percent.clamp(0, 100).round()}%')
+                  : null,
+              onTap: !available
+                  ? null
+                  : () {
+                      if (branch) {
+                        _onSubjectTap(SubjectMastery.fromJson(row));
+                      } else {
+                        _select(name, slug);
+                      }
+                    });
+        });
+  }
+
+  Widget _reviewButton() {
+    final stats = context.read<StatsProvider>();
+    final strings = AppLocalizations.of(context)!;
+    final readiness = stats.readiness;
+    final label = stats.readinessState == ReviewLoadState.ready &&
+            readiness != null &&
+            readiness.breakdown.isNotEmpty
+        ? '${strings.quizReviewTitle} · ${readiness.overall}%'
+        : strings.quizReviewTitle;
+    return TextButton.icon(
+        onPressed: _showSmartReview,
+        icon: const Icon(Icons.bolt),
+        label: Text(label));
   }
 
   Widget _buildMainMenu() {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -275,7 +300,8 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               final qc = stats.currentQuote;
               String displayTitle = AppLocalizations.of(
                 context,
-              )!.quizStudyBreak;
+              )!
+                  .quizStudyBreak;
 
               if (qc != null) {
                 if (locale == 'hu') {
@@ -307,10 +333,11 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               final locale = Localizations.localeOf(context).languageCode;
               final quoteText = locale == 'hu'
                   ? (stats.currentQuote?.textHu.isNotEmpty == true
-                        ? stats.currentQuote!.textHu
-                        : stats.currentQuote?.textEn)
+                      ? stats.currentQuote!.textHu
+                      : stats.currentQuote?.textEn)
                   : stats.currentQuote?.textEn;
-              final displayQuote = quoteText ?? "Clear mind, focused goals.";
+              final displayQuote =
+                  quoteText ?? AppLocalizations.of(context)!.quizFallbackQuote;
               final quoteAuthor = stats.currentQuote?.author ?? "ArborMed";
 
               return Column(
@@ -362,7 +389,6 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
 
           const SizedBox(height: 24),
 
-          const Spacer(),
           Row(
             children: [
               Expanded(
@@ -371,8 +397,9 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
                   Icons.library_books_rounded,
                   true,
                   () {
+                    final stats = context.read<StatsProvider>();
+                    if (!stats.isLoading) stats.fetchSummary();
                     setState(() {
-                      _isGoingBack = false;
                       _state = QuizMenuState.subjects;
                     });
                   },
@@ -397,7 +424,9 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               const SizedBox(width: 12),
               Expanded(
                 child: _buildGridOption(
-                  Localizations.localeOf(context).languageCode == 'hu' ? "Esetek" : "Cases",
+                  Localizations.localeOf(context).languageCode == 'hu'
+                      ? "Esetek"
+                      : "Cases",
                   Icons.assignment_rounded,
                   false,
                   () {},
@@ -405,6 +434,7 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
               ), // Still disabled
             ],
           ),
+          _reviewButton(),
           const SizedBox(height: 20), // Reduced from 30
           const SizedBox(height: 10), // Reduced from 20
         ],
@@ -477,311 +507,4 @@ class _QuizMenuWidgetState extends State<QuizMenuWidget> {
       ),
     );
   }
-
-  Widget _buildList(dynamic items, Function(dynamic) onTap) {
-    if (_state == QuizMenuState.subjects) {
-      final List<String> listItems = List<String>.from(items);
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
-          children: [
-            Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _buildSubjectCard(listItems[0], (s) => onTap(s)),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: _buildSubjectCard(listItems[1], (s) => onTap(s)),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _buildSubjectCard(listItems[2], (s) => onTap(s)),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: _buildSubjectCard(listItems[3], (s) => onTap(s)),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-          ],
-        ),
-      );
-    }
-
-    final List<Map<String, dynamic>> systemItems =
-        List<Map<String, dynamic>>.from(items);
-
-    // Find the most recently studied item based on timestamp
-    String? mostRecentSlug;
-    DateTime maxDate = DateTime.fromMillisecondsSinceEpoch(0);
-
-    for (var item in systemItems) {
-      if (item['last_studied'] != null) {
-        try {
-          final date = DateTime.parse(item['last_studied'].toString());
-          if (date.isAfter(maxDate)) {
-            maxDate = date;
-            mostRecentSlug = item['slug'];
-          }
-        } catch (_) {}
-      }
-    }
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        children: [
-          _buildSmartReviewPill(),
-          ...systemItems.map((item) {
-            int attempts = _parseSafeInt(item['attempts']);
-            // Check if this is the most recently studied item
-            bool isRecent =
-                mostRecentSlug != null &&
-                item['slug'] == mostRecentSlug &&
-                attempts > 0;
-
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: CozyPanel(
-                onTap: () => onTap(item),
-                isListTile: true,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  _getLocalizedSectionName(context, item),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: CozyTheme.of(context).textPrimary,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              ),
-                              if (_parseSafeInt(item['proficiency']) > 0)
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 6,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: CozyTheme.of(
-                                      context,
-                                    ).primary.withValues(alpha: 0.1),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
-                                    "${item['proficiency']}%",
-                                    style: GoogleFonts.outfit(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w900,
-                                      color: CozyTheme.of(context).primary,
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                          if (isRecent)
-                            Text(
-                              AppLocalizations.of(context)!.quizLastStudied,
-                              style: TextStyle(
-                                fontSize: 9,
-                                fontWeight: FontWeight.w900,
-                                color: CozyTheme.of(context).primary,
-                                letterSpacing: 1,
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(width: 8),
-                    Icon(
-                      Icons.arrow_forward_rounded,
-                      size: 20,
-                      color: CozyTheme.of(context).primary,
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSmartReviewPill() {
-    final palette = CozyTheme.of(context);
-    return Consumer<StatsProvider>(
-      builder: (context, stats, _) {
-        final readiness = stats.readiness?.overall ?? 0;
-        return Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 20.0),
-          child: Center(
-            child: GestureDetector(
-              onTap: () {
-                Provider.of<AudioProvider>(
-                  context,
-                  listen: false,
-                ).playSfx('click');
-                _showSmartReview();
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: palette.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: palette.primary.withValues(alpha: 0.3),
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.bolt_rounded, size: 16, color: palette.primary),
-                    const SizedBox(width: 6),
-                    Text(
-                      Localizations.localeOf(context).languageCode == 'hu'
-                          ? "OKOS ÁTTEKINTÉS: $readiness%"
-                          : "SMART REVIEW: $readiness%",
-                      style: GoogleFonts.outfit(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w900,
-                        color: palette.primary,
-                        letterSpacing: 1.1,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildSubjectCard(String subject, Function(String) onTap) {
-    return CozyPanel(
-      onTap: () => onTap(subject),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: _getSubjectColor(subject).withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              _getSubjectIcon(subject),
-              color: _getSubjectColor(subject),
-              size: 36,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            _getLocalizedSubjectTitle(subject),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: CozyTheme.of(context).textPrimary,
-              fontSize: 16,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  IconData _getSubjectIcon(String subject) {
-    switch (subject) {
-      case 'Pathophysiology':
-        return Icons.healing_rounded;
-      case 'Pathology':
-        return Icons.biotech_rounded;
-      case 'Microbiology':
-        return Icons.coronavirus_rounded;
-      case 'Pharmacology':
-        return Icons.medication_rounded;
-      default:
-        return Icons.book_rounded;
-    }
-  }
-
-  Color _getSubjectColor(String subject) {
-    final palette = CozyTheme.of(context);
-    switch (subject) {
-      case 'Pathophysiology':
-        return palette.error;
-      case 'Pathology':
-        return palette.secondary;
-      case 'Microbiology':
-        return palette.primary;
-      case 'Pharmacology':
-        return palette.warning;
-      default:
-        return palette.textSecondary;
-    }
-  }
-
-  int _parseSafeInt(dynamic value) {
-    if (value is num) return value.toInt();
-    if (value is String) return int.tryParse(value) ?? 0;
-    return 0;
-  }
-
-  String _getLocalizedSectionName(
-    BuildContext context,
-    Map<String, dynamic> item,
-  ) {
-    final locale = Localizations.localeOf(context).languageCode;
-    if (locale == 'hu') {
-      return (item['name_hu'] != null && item['name_hu'].toString().isNotEmpty)
-          ? item['name_hu']
-          : (item['name_en'] ?? item['section'] ?? '');
-    }
-    return item['name_en'] ?? item['section'] ?? '';
-  }
-
-  String _getLocalizedSubjectTitle(String englishTitle) {
-    final l10n = AppLocalizations.of(context)!;
-    switch (englishTitle) {
-      case 'Pathophysiology':
-        return l10n.quizSubjectPathophysiology;
-      case 'Pathology':
-        return l10n.quizSubjectPathology;
-      case 'Microbiology':
-        return l10n.quizSubjectMicrobiology;
-      case 'Pharmacology':
-        return l10n.quizSubjectPharmacology;
-      default:
-        return englishTitle;
-    }
-  }
-
 }
-
-

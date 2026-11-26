@@ -1785,4 +1785,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get roundsRefresh => 'Refresh progress';
+
+  @override
+  String get quizFallbackQuote => 'Clear mind, focused goals.';
+
+  @override
+  String get quizPracticeSubject => 'Practise this subject';
+
+  @override
+  String get quizSectionsRetry => 'Could not load sections. Retry';
+
+  @override
+  String get quizNoQuestions => 'No active questions yet';
+
+  @override
+  String get quizReviewTitle => 'Smart review';
+
+  @override
+  String get quizReadinessRetry => 'Could not load readiness. Retry';
+
+  @override
+  String get quizNoReadiness => 'Complete a quiz to see your readiness.';
+
+  @override
+  String quizReadyPercent(int score) {
+    return 'Readiness $score%';
+  }
+
+  @override
+  String get quizRecommendations => 'Topics to review';
+
+  @override
+  String get quizReviewRetry => 'Could not load recommendations. Retry';
+
+  @override
+  String get quizReviewEmpty => 'No topics to review right now.';
+
+  @override
+  String quizRetention(int percent) {
+    return 'Estimated retention $percent%';
+  }
+
+  @override
+  String quizDaysSince(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days since practice',
+      one: 'One day ago',
+      zero: 'Less than one day ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get quizReviewSessionEnded =>
+      'This review belonged to your previous login.';
 }

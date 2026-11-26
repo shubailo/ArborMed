@@ -669,5 +669,40 @@
   },
   "roundsNoResponses": "No recorded subject responses yet.",
   "roundsSummaryRetry": "Could not load subject results. Retry",
-  "roundsRefresh": "Refresh progress"
+  "roundsRefresh": "Refresh progress",
+  "quizFallbackQuote": "Clear mind, focused goals.",
+  "quizPracticeSubject": "Practise this subject",
+  "quizSectionsRetry": "Could not load sections. Retry",
+  "quizNoQuestions": "No active questions yet",
+  "quizReviewTitle": "Smart review",
+  "quizReadinessRetry": "Could not load readiness. Retry",
+  "quizNoReadiness": "Complete a quiz to see your readiness.",
+  "quizReadyPercent": "Readiness {score}%",
+  "@quizReadyPercent": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "quizRecommendations": "Topics to review",
+  "quizReviewRetry": "Could not load recommendations. Retry",
+  "quizReviewEmpty": "No topics to review right now.",
+  "quizRetention": "Estimated retention {percent}%",
+  "@quizRetention": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "quizDaysSince": "{days, plural, =0{Less than one day ago} =1{One day ago} other{{days} days since practice}}",
+  "@quizDaysSince": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "quizReviewSessionEnded": "This review belonged to your previous login."
 }

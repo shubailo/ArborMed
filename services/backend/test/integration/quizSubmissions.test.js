@@ -31,7 +31,7 @@ integration('PostgreSQL quiz receipts and rewards', () => {
     await pool.query(`
       CREATE TABLE users (id int PRIMARY KEY, coins int DEFAULT 0, daily_coins_earned int DEFAULT 0,
         daily_coins_softcap_progress int DEFAULT 0, last_coin_reset_date date);
-      CREATE TABLE topics (id int PRIMARY KEY, slug text, parent_id int, nexus_metadata jsonb, name_en text);
+      CREATE TABLE topics (id int PRIMARY KEY, slug text, parent_id int, nexus_metadata jsonb, name_en text, name_hu text);
       CREATE TABLE questions (id int PRIMARY KEY, topic_id int, question_type text, correct_answer text,
         options jsonb, metadata jsonb, bloom_level int, active boolean DEFAULT true);
       CREATE TABLE quiz_sessions (id int PRIMARY KEY, user_id int REFERENCES users, started_at timestamptz DEFAULT now());

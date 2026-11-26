@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../models/study_metric.dart';
 import 'package:arbor_med/services/auth_provider.dart';
 import 'package:arbor_med/services/api_service.dart';
 import '../../../core/api_endpoints.dart';
@@ -21,6 +22,8 @@ export '../models/activity_data.dart';
 export '../../quiz/models/smart_review_item.dart';
 export '../models/readiness.dart';
 
+enum ReviewLoadState { initial, loading, ready, error }
+
 enum SubjectQuizState { initial, loading, loaded, empty, error }
 
 /// Student-facing statistics provider.
@@ -32,11 +35,18 @@ enum SubjectQuizState { initial, loading, loaded, empty, error }
 class StatsProvider with ChangeNotifier {
   final AuthProvider authProvider;
 
-  StatsProvider(this.authProvider) : _owner = authProvider.user?.id {
+  StatsProvider(this.authProvider)
+      : _owner = authProvider.user?.id,
+        _authRevision = authProvider.sessionRevision {
     authProvider.addListener(_syncOwner);
   }
 
   int? _owner;
+  int _authRevision;
+  ReviewLoadState _reviewState = ReviewLoadState.initial;
+  ReviewLoadState _readinessState = ReviewLoadState.initial;
+  ReviewLoadState get reviewState => _reviewState;
+  ReviewLoadState get readinessState => _readinessState;
   int _session = 0;
   int get sessionRevision => _session;
   bool _summaryFailed = false;
@@ -48,7 +58,10 @@ class StatsProvider with ChangeNotifier {
 
   void _syncOwner() {
     final owner = authProvider.user?.id;
-    if (_owner == owner) return;
+    if (_owner == owner && _authRevision == authProvider.sessionRevision) {
+      return;
+    }
+    _authRevision = authProvider.sessionRevision;
     _owner = owner;
     resetState();
   }
@@ -221,17 +234,22 @@ class StatsProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchSmartReview() => _read(
-      'review',
-      ApiEndpoints.statsSmartReview,
-      (data) => _smartReview = (data['recommendations'] as List)
-          .map((item) => SmartReviewItem.fromJson(item))
-          .toList());
+  Future<void> fetchSmartReview() =>
+      _read('review', ApiEndpoints.statsSmartReview, (data) {
+        _smartReview =
+            studyRows(data['recommendations'], SmartReviewItem.fromJson);
+        _reviewState = ReviewLoadState.ready;
+      },
+          start: () => _reviewState = ReviewLoadState.loading,
+          failed: () => _reviewState = ReviewLoadState.error);
 
-  Future<void> fetchReadiness() => _read(
-      'readiness',
-      ApiEndpoints.statsReadiness,
-      (data) => _readiness = ReadinessScore.fromJson(data));
+  Future<void> fetchReadiness() =>
+      _read('readiness', ApiEndpoints.statsReadiness, (data) {
+        _readiness = ReadinessScore.fromJson(data);
+        _readinessState = ReviewLoadState.ready;
+      },
+          start: () => _readinessState = ReviewLoadState.loading,
+          failed: () => _readinessState = ReviewLoadState.error);
 
   Future<void> fetchSubjectDetail(String slug) => _read('section:$slug',
           '${ApiEndpoints.statsSubject}/${Uri.encodeComponent(slug)}', (data) {
@@ -259,6 +277,8 @@ class StatsProvider with ChangeNotifier {
   /// Resets all user-specific statistics.
   void resetState() {
     _session++;
+    _readinessState = ReviewLoadState.initial;
+    _reviewState = ReviewLoadState.initial;
     _summaryFailed = false;
     _requests.clear();
     _today = null;

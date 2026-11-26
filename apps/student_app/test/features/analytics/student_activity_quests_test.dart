@@ -40,7 +40,10 @@ class _Auth extends ChangeNotifier implements AuthProvider {
   @override
   User? user = User.fromJson({'id': 1});
   int? balance;
+  @override
+  int sessionRevision = 0;
   void switchTo(int? id) {
+    if (user?.id != id) sessionRevision++;
     user = id == null ? null : User.fromJson({'id': id});
     notifyListeners();
   }

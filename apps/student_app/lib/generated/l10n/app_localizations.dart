@@ -3415,6 +3415,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Refresh progress'**
   String get roundsRefresh;
+
+  /// No description provided for @quizFallbackQuote.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear mind, focused goals.'**
+  String get quizFallbackQuote;
+
+  /// No description provided for @quizPracticeSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Practise this subject'**
+  String get quizPracticeSubject;
+
+  /// No description provided for @quizSectionsRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load sections. Retry'**
+  String get quizSectionsRetry;
+
+  /// No description provided for @quizNoQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'No active questions yet'**
+  String get quizNoQuestions;
+
+  /// No description provided for @quizReviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart review'**
+  String get quizReviewTitle;
+
+  /// No description provided for @quizReadinessRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load readiness. Retry'**
+  String get quizReadinessRetry;
+
+  /// No description provided for @quizNoReadiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete a quiz to see your readiness.'**
+  String get quizNoReadiness;
+
+  /// No description provided for @quizReadyPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Readiness {score}%'**
+  String quizReadyPercent(int score);
+
+  /// No description provided for @quizRecommendations.
+  ///
+  /// In en, this message translates to:
+  /// **'Topics to review'**
+  String get quizRecommendations;
+
+  /// No description provided for @quizReviewRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load recommendations. Retry'**
+  String get quizReviewRetry;
+
+  /// No description provided for @quizReviewEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No topics to review right now.'**
+  String get quizReviewEmpty;
+
+  /// No description provided for @quizRetention.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated retention {percent}%'**
+  String quizRetention(int percent);
+
+  /// No description provided for @quizDaysSince.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =0{Less than one day ago} =1{One day ago} other{{days} days since practice}}'**
+  String quizDaysSince(int days);
+
+  /// No description provided for @quizReviewSessionEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'This review belonged to your previous login.'**
+  String get quizReviewSessionEnded;
 }
 
 class _AppLocalizationsDelegate

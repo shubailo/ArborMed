@@ -20,7 +20,10 @@ class _Auth extends ChangeNotifier implements AuthProvider {
   @override
   User? user;
   _Auth(this.apiService);
+  @override
+  int sessionRevision = 0;
   void switchTo(int? id) {
+    if (user?.id != id) sessionRevision++;
     user = id == null ? null : User.fromJson({'id': id});
     notifyListeners();
   }

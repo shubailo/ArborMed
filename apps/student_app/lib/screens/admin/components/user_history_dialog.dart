@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../generated/l10n/app_localizations.dart';
+import '../../../features/analytics/models/study_metric.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'admin_timestamp.dart';
@@ -22,6 +23,7 @@ class UserHistoryDialog extends StatefulWidget {
 
 class _UserHistoryDialogState extends State<UserHistoryDialog> {
   Map<String, dynamic>? _analytics;
+  List<SmartReviewItem> _review = [];
   bool _loadingAnalytics = true;
 
   @override
@@ -38,7 +40,14 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
   Future<void> _loadAnalytics(AdminUserProvider userProvider) async {
     final data = await userProvider.fetchAdminUserAnalytics(widget.user.id);
     if (mounted) {
+      List<SmartReviewItem> review;
+      try {
+        review = studyRows(data?['smartReview'] ?? [], SmartReviewItem.fromJson);
+      } on FormatException {
+        review = [];
+      }
       setState(() {
+        _review = review;
         _analytics = data;
         _loadingAnalytics = false;
       });
@@ -177,12 +186,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                                         ],
                                       ),
                                       const SizedBox(height: 16),
-                                      ...(_analytics?['smartReview'] as List? ??
-                                              [])
-                                          .take(5)
-                                          .map((item) {
-                                        final review =
-                                            SmartReviewItem.fromJson(item);
+                                      ..._review.take(5).map((review) {
                                         return Padding(
                                           padding: const EdgeInsets.only(
                                               bottom: 12.0),
@@ -208,7 +212,7 @@ class _UserHistoryDialogState extends State<UserHistoryDialog> {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      review.topic,
+                                                      review.label(Localizations.localeOf(context).languageCode == 'hu'),
                                                       style: GoogleFonts.outfit(
                                                           fontSize: 14,
                                                           fontWeight:
