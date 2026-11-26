@@ -7,6 +7,29 @@ describe('TrueFalseType Unit Tests', () => {
     tfHandler = new TrueFalseType();
   });
 
+  it('distinguishes scalar submissions from legacy singleton stored keys', () => {
+    for (const [key, answer] of [[0, false], ['[0]', false], [[1], true], ['"1"', true]]) {
+      expect(tfHandler.checkAnswer({correct_answer: key}, answer).score).toBe(1);
+    }
+    for (const answer of [[1], ['false'], {value: true}]) {
+      expect(tfHandler.checkAnswer({correct_answer: 'true'}, answer).score).toBe(0);
+      expect(tfHandler.checkAnswer({correct_answer: 'false'}, answer).score).toBe(0);
+    }
+  });
+
+  it('does not report a false answer for an unrecognized stored key', () => {
+    for (const key of [null, 'unknown', [true, false], [[0]]]) {
+      const result = tfHandler.checkAnswer({correct_answer: key}, false);
+      expect(result).toMatchObject({correct: false, score: 0, correctAnswer: null});
+      expect(result.feedback).not.toContain('Hamis');
+    }
+  });
+
+  it('returns validation errors for non-text statements and structured authoring keys', () => {
+    expect(tfHandler.validate({content: {statement: {en: 3}}, correct_answer: false}).valid).toBe(false);
+    expect(tfHandler.validate({content: {statement: {en: 'Q'}}, correct_answer: [1]}).valid).toBe(false);
+  });
+
   describe('prepareForClient', () => {
     it('should provide [{ value: "true", label: "Igaz" }, { value: "false", label: "Hamis" }] options', () => {
       const question = {

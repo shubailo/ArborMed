@@ -3,9 +3,9 @@ jest.mock('../../../src/utils/logger', () => ({info: jest.fn(), debug: jest.fn()
 
 const originalFetch = global.fetch;
 
-function service(provider) {
+function service(provider, libreUrl = 'http://translation.test') {
   jest.replaceProperty(process, 'env', {
-    ...process.env, TRANSLATION_PROVIDER: provider, LIBRETRANSLATE_URL: 'http://translation.test',
+    ...process.env, TRANSLATION_PROVIDER: provider, LIBRETRANSLATE_URL: libreUrl,
   });
   return require('../../../src/services/translationService');
 }
@@ -63,11 +63,48 @@ test('translates all supported question fields and retains their order', async (
   expect(global.fetch).not.toHaveBeenCalled();
 });
 
-test('a double provider failure rejects a question and labels every untranslated batch item', async () => {
+test('provider logs omit private URLs and upstream diagnostic text', async () => {
+  const {translateText} = service('LIBRE', 'https://private-host/token-value');
+  const logger = require('../../../src/utils/logger');
+  global.fetch.mockRejectedValue(new Error('private diagnostic payload'));
+  require('google-translate-api-x').mockRejectedValue(new Error('private diagnostic payload'));
+  await expect(translateText('hello', 'en', 'hu')).rejects.toMatchObject({statusCode:502});
+  expect(logger.error).toHaveBeenCalled();
+  for (const log of [logger.info, logger.debug, logger.error]) {
+    expect(JSON.stringify(log.mock.calls)).not.toMatch(/private-host|token-value|private diagnostic payload/);
+  }
+});
+
+test('non-array batches fail before any provider call', async () => {
+  const {batchTranslate} = service('GOOGLE');
+  const google = require('google-translate-api-x');
+  google.mockResolvedValue({text:'ignored'});
+  await expect(batchTranslate('hello', 'en', 'hu')).rejects.toMatchObject({statusCode:400});
+  expect(google).not.toHaveBeenCalled();
+  expect(global.fetch).not.toHaveBeenCalled();
+});
+
+test('batch shares repeated text, keeps blank slots and limits concurrent provider calls', async () => {
+  const {batchTranslate} = service('GOOGLE');
+  const google = require('google-translate-api-x');
+  let active = 0, peak = 0;
+  google.mockImplementation(async text => {
+    peak = Math.max(peak, ++active);
+    await new Promise(resolve => setImmediate(resolve));
+    active--;
+    return {text: text.toUpperCase()};
+  });
+  const input = ['a','b','c','d','e','f','a',' '];
+  await expect(batchTranslate(input, 'en', 'hu')).resolves.toEqual(['A','B','C','D','E','F','A',null]);
+  expect(peak).toBeLessThanOrEqual(4);
+  expect(google).toHaveBeenCalledTimes(6);
+});
+
+test('a double provider failure rejects both question and batch translation', async () => {
   const {translateQuestion, batchTranslate} = service('LIBRE');
   global.fetch.mockRejectedValue(new Error('unreachable'));
   const fallbackError = new Error('translation service unavailable');
   require('google-translate-api-x').mockRejectedValue(fallbackError);
   await expect(translateQuestion({questionText: 'Q'}, 'hu', 'en')).rejects.toMatchObject({statusCode:502});
-  await expect(batchTranslate(['kék', 'zöld'], 'hu', 'en')).resolves.toEqual(['[EN] kék', '[EN] zöld']);
+  await expect(batchTranslate(['kék', 'zöld'], 'hu', 'en')).rejects.toMatchObject({statusCode:502});
 });

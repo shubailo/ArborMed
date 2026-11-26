@@ -1,4 +1,5 @@
 
+import 'package:arbor_med/core/models/boolean_answer.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'question_renderer.dart';
@@ -8,12 +9,22 @@ import 'package:arbor_med/widgets/cozy/pressable_answer_button.dart';
 /// Renderer for True/False questions
 class TrueFalseRenderer extends QuestionRenderer {
   @override
-  String normalizeAnswerLabel(String value) {
-    return switch (super.normalizeAnswerLabel(value)) {
-      'igaz' => 'true',
-      'hamis' => 'false',
-      final label => label,
-    };
+  String getLocalizedText(BuildContext context, Map<String, dynamic> question,
+      {String? defaultText}) {
+    final content = question['content'];
+    final statement = content is Map ? content['statement'] : null;
+    final language = Localizations.localeOf(context).languageCode;
+    final localized = statement is Map ? statement[language] : statement;
+    if (localized is String && localized.trim().isNotEmpty) return localized;
+
+    final prompt = super.getLocalizedText(context, question, defaultText: defaultText);
+    if (prompt.isNotEmpty) return prompt;
+    if (statement is Map) {
+      for (final fallback in [statement['en'], statement['hu']]) {
+        if (fallback is String && fallback.trim().isNotEmpty) return fallback;
+      }
+    }
+    return '';
   }
 
   @override
@@ -65,15 +76,17 @@ class TrueFalseRenderer extends QuestionRenderer {
       {'value': 'false', 'label': isHu ? 'Hamis' : 'False'}
     ];
 
+    final selected = parseBooleanAnswer(currentAnswer);
+    final expected = isChecked ? parseStoredBooleanAnswer(correctAnswer) : null;
+
     return Row(
       children: options.map<Widget>((option) {
         final value = option['value'] as String;
         final label = option['label'] as String;
-        final isSelected = currentAnswer == value;
-        final isCorrect = isChecked && commonValidateAnswer(value, correctAnswer, question);
-        final isWrong = isChecked && isSelected && !isCorrect;
-
         final isTrue = value == 'true';
+        final isSelected = selected == isTrue;
+        final isCorrect = expected == isTrue;
+        final isWrong = expected != null && isSelected && !isCorrect;
 
         // Use primary (sage green) for correct like Continue button, error for wrong
         Color backgroundColor = palette.paperCream;
@@ -131,17 +144,18 @@ class TrueFalseRenderer extends QuestionRenderer {
 
   @override
   bool hasAnswer(dynamic answer) {
-    return answer != null;
+    return parseBooleanAnswer(answer) != null;
   }
 
   @override
   dynamic formatAnswer(dynamic answer) {
-    return answer;
+    return parseBooleanAnswer(answer)?.toString();
   }
 
   @override
   bool validateAnswer(dynamic userAnswer, dynamic correctAnswer, Map<String, dynamic> question) {
-    return commonValidateAnswer(userAnswer, correctAnswer, question);
+    final selected = parseBooleanAnswer(userAnswer);
+    return selected != null && selected == parseStoredBooleanAnswer(correctAnswer);
   }
 
   @override

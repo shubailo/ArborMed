@@ -8,8 +8,8 @@ const { scalarAnswer } = require('./storedAnswer');
 function toBoolean(val) {
     if (val === true || val === 1) return true;
     if (val === false || val === 0) return false;
-    if (val === null || val === undefined) return null;
-    const s = String(val).trim().toLowerCase();
+    if (typeof val !== 'string') return null;
+    const s = val.trim().toLowerCase();
     if (s === 'true' || s === 'igaz' || s === '1') return true;
     if (s === 'false' || s === 'hamis' || s === '0') return false;
     return null;
@@ -38,7 +38,7 @@ class TrueFalseType extends QuestionType {
 
         const { statement } = questionData.content;
 
-        if (!statement?.en || statement.en.trim() === '') {
+        if (typeof statement?.en !== 'string' || statement.en.trim() === '') {
             errors.push('statement.en is required in content');
         }
 
@@ -57,7 +57,15 @@ class TrueFalseType extends QuestionType {
     checkAnswer(question, userAnswer) {
         const userBool = toBoolean(userAnswer);
         const correctBool = toBoolean(scalarAnswer(question.correct_answer));
-        const correct = userBool !== null && correctBool !== null && userBool === correctBool;
+        if (correctBool === null) {
+            return {
+                correct: false,
+                score: 0,
+                correctAnswer: null,
+                feedback: 'A helyes válasz nem áll rendelkezésre.'
+            };
+        }
+        const correct = userBool === correctBool;
 
         const isCorrectHu = correctBool ? 'Igaz' : 'Hamis';
 

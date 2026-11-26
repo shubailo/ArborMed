@@ -20,9 +20,10 @@ class TranslationService {
         },
       );
 
-      return response['translated'] as String?;
+      final translated = response['translated'];
+      return translated is String && translated.trim().isNotEmpty ? translated : null;
     } catch (e) {
-      debugPrint('Translation failed: $e');
+      debugPrint('Translation failed: ${e.runtimeType}');
       return null;
     }
   }
@@ -45,7 +46,7 @@ class TranslationService {
 
       return response['translatedQuestion'] as Map<String, dynamic>?;
     } catch (e) {
-      debugPrint('Question translation failed: $e');
+      debugPrint('Question translation failed: ${e.runtimeType}');
       return null;
     }
   }

@@ -11,7 +11,6 @@ const PROVIDER = (process.env.TRANSLATION_PROVIDER || 'GOOGLE').trim().toUpperCa
 const LIBRE_URL = process.env.LIBRETRANSLATE_URL || 'http://localhost:5000';
 
 logger.info(`[TranslationService] Using provider: ${PROVIDER}`);
-if (PROVIDER === 'LIBRE') logger.info(`[TranslationService] LIBRE_URL: ${LIBRE_URL}`);
 
 const providers = {
     GOOGLE: _translateGoogle,
@@ -31,8 +30,9 @@ async function translateText(text, sourceLang, targetLang, deadline) {
             const value = await providers[name](text, sourceLang, targetLang, signal);
             if (typeof value === 'string' && value.trim()) return value;
             logger.error(`[TranslationService] ${name} returned no translation`);
-        } catch (error) {
-            logger.error(`[TranslationService] ${name} failed: ${error.message}`);
+        } catch {
+            const reason = signal.aborted ? 'cancelled or timed out' : 'request failed';
+            logger.error(`[TranslationService] ${name}: ${reason}`);
         }
     }
     throw new AppError('Translation service unavailable. Please try again.', 502);
@@ -52,7 +52,6 @@ async function _translateGoogle(text, source, target, signal) {
 // implementation: LibreTranslate (Self-Hosted)
 async function _translateLibre(text, source, target, signal) {
     const url = `${LIBRE_URL}/translate`;
-    logger.debug(`[LibreTranslate] Requesting: ${url} (${source} -> ${target})`);
 
     const response = await fetch(url, {
         method: 'POST',
@@ -106,6 +105,13 @@ async function translateQuestion(questionData, sourceLang, targetLang) {
     }
     if (!translations.size) throw new AppError('The question has no source text to translate.', 400);
 
+    await fillTranslations(translations, sourceLang, targetLang);
+    return Object.fromEntries(fields.map(([key, value]) => [key, Array.isArray(value)
+        ? value.map(text => translations.get(text) ?? '') : translations.get(value)]));
+}
+
+
+async function fillTranslations(translations, sourceLang, targetLang) {
     // Share repeated strings across the form and bound the number of provider calls.
     const remaining = translations.keys();
     const stop = new AbortController();
@@ -120,17 +126,17 @@ async function translateQuestion(questionData, sourceLang, targetLang) {
     } finally {
         stop.abort();
     }
-    return Object.fromEntries(fields.map(([key, value]) => [key, Array.isArray(value)
-        ? value.map(text => translations.get(text) ?? '') : translations.get(value)]));
 }
 
-
 async function batchTranslate(texts, sourceLang, targetLang) {
-    try {
-        return await Promise.all(texts.map(t => translateText(t, sourceLang, targetLang)));
-    } catch {
-        return texts.map(t => `[${targetLang.toUpperCase()}] ${t}`);
+    if (!Array.isArray(texts)) throw new AppError('A list of translation texts is required.', 400);
+    const translations = new Map();
+    for (const text of texts) {
+        if (text != null && typeof text !== 'string') throw new AppError('Invalid translation text.', 400);
+        if (text?.trim()) translations.set(text, null);
     }
+    await fillTranslations(translations, sourceLang, targetLang);
+    return texts.map(text => translations.get(text) ?? null);
 }
 
 module.exports = {

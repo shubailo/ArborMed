@@ -60,6 +60,19 @@ describe('editor translation over HTTP', () => {
         response='ok';
         expect((await post('/question', {questionData:{options:['One']}})).status).toBe(200);
     });
+    test('auto is accepted only as a source language', async () => {
+        expect((await post('', {text:'Blue', from:'auto'})).status).toBe(200);
+        expect(calls).toHaveLength(1);
+        expect(calls[0].source).toBe('auto');
+        expect((await post('/question', {questionData:{questionText:'Blue'}, to:'auto'})).status).toBe(400);
+        expect(calls).toHaveLength(1);
+    });
+    test('invalid language tags are rejected before provider calls on both routes', async () => {
+        expect((await post('', {text:'Blue', from:'bad tag'})).status).toBe(400);
+        expect((await post('/question', {questionData:{questionText:'Blue'}, to:'hu\nen'})).status).toBe(400);
+        expect(calls).toHaveLength(0);
+        expect(require('google-translate-api-x')).not.toHaveBeenCalled();
+    });
     test('invalid or empty forms never make a provider request', async () => {
         for (const questionData of [[], {}, {questionText:' '}, {questionText:'Example',options:[{}]}, {lefts:'One'}]) {
             expect((await post('/question', {questionData})).status).toBe(400);

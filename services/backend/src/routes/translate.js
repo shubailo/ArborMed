@@ -9,7 +9,15 @@ function languages(body) {
     if (![body?.from, body?.to].every(value => typeof value === 'string' && value.trim())) {
         throw new AppError('Source and target languages are required.', 400);
     }
-    return [body.from.trim(), body.to.trim()];
+    const pair = [body.from.trim(), body.to.trim()];
+    if (pair[1].toLowerCase() === 'auto') throw new AppError('A target language is required.', 400);
+    try {
+        if (pair[0] !== 'auto') Intl.getCanonicalLocales(pair[0]);
+        Intl.getCanonicalLocales(pair[1]);
+    } catch {
+        throw new AppError('Invalid source or target language tag.', 400);
+    }
+    return pair;
 }
 
 router.post('/translate', protect, catchAsync(async (req, res) => {

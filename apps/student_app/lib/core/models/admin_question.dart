@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'question.dart';
+import 'boolean_answer.dart';
 import 'admin_matching_pair.dart';
 
 class AdminQuestion extends CoreQuestion {
@@ -53,18 +54,7 @@ class AdminQuestion extends CoreQuestion {
       List.unmodifiable(AdminChoice._read(options));
   late final List<Object?> answerKeys = _keys(correctAnswer);
 
-  bool? get booleanAnswer {
-    final raw = answerKeys.singleOrNull;
-    if (raw is bool) return raw;
-    if (raw == 1) return true;
-    if (raw == 0) return false;
-    if (raw is! String) return null;
-    return switch (raw.trim().toLowerCase()) {
-      'true' || 'igaz' || '1' => true,
-      'false' || 'hamis' || '0' => false,
-      _ => null,
-    };
-  }
+  bool? get booleanAnswer => parseBooleanAnswer(answerKeys.singleOrNull);
 
   late final List<AdminMatchingPair> matchingPairs = List.unmodifiable(
       AdminMatchingPair.read(content, options, answerKeys.singleOrNull));
