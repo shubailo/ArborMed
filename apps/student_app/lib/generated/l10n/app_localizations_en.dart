@@ -1725,4 +1725,64 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get duelLeaveFailed =>
       'Could not confirm leaving the queue. Try again.';
+
+  @override
+  String get profileRefreshRetry => 'Profile refresh failed. Retry';
+
+  @override
+  String get nicknameLength => 'Enter a nickname between 1 and 255 characters.';
+
+  @override
+  String get nicknameSaveFailed => 'Could not save your nickname. Try again.';
+
+  @override
+  String get profileSessionChanged =>
+      'Your active account has changed. Close this editor.';
+
+  @override
+  String get roundsTitle => 'Daily clinical rounds';
+
+  @override
+  String get roundsConfirmed => 'Today’s rounds are complete.';
+
+  @override
+  String roundsRequirement(int goal) {
+    return 'Give $goal correct answers during the UTC day to complete your rounds.';
+  }
+
+  @override
+  String roundsProgressCount(int progress, int goal) {
+    return '$progress / $goal correct answers';
+  }
+
+  @override
+  String get roundsPractice => 'Start practice';
+
+  @override
+  String get roundsConfirm => 'Confirm daily rounds';
+
+  @override
+  String get roundsRetry => 'Could not verify clinical standing. Retry';
+
+  @override
+  String roundsStrikes(int count) {
+    return 'Strikes: $count';
+  }
+
+  @override
+  String get roundsProbation => 'Clinical probation';
+
+  @override
+  String roundsSubjectStats(int count, int percent) {
+    return 'Subject responses: $count · $percent% correct';
+  }
+
+  @override
+  String get roundsNoResponses => 'No recorded subject responses yet.';
+
+  @override
+  String get roundsSummaryRetry => 'Could not load subject results. Retry';
+
+  @override
+  String get roundsRefresh => 'Refresh progress';
 }

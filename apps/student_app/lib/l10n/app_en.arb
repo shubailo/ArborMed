@@ -618,5 +618,56 @@
   },
   "duelLowBalance": "Your balance is too low for this wager.",
   "duelRefreshFailed": "Could not refresh your balance. Try again.",
-  "duelLeaveFailed": "Could not confirm leaving the queue. Try again."
+  "duelLeaveFailed": "Could not confirm leaving the queue. Try again.",
+  "profileRefreshRetry": "Profile refresh failed. Retry",
+  "nicknameLength": "Enter a nickname between 1 and 255 characters.",
+  "nicknameSaveFailed": "Could not save your nickname. Try again.",
+  "profileSessionChanged": "Your active account has changed. Close this editor.",
+  "roundsTitle": "Daily clinical rounds",
+  "roundsConfirmed": "Today’s rounds are complete.",
+  "roundsRequirement": "Give {goal} correct answers during the UTC day to complete your rounds.",
+  "@roundsRequirement": {
+    "placeholders": {
+      "goal": {
+        "type": "int"
+      }
+    }
+  },
+  "roundsProgressCount": "{progress} / {goal} correct answers",
+  "@roundsProgressCount": {
+    "placeholders": {
+      "progress": {
+        "type": "int"
+      },
+      "goal": {
+        "type": "int"
+      }
+    }
+  },
+  "roundsPractice": "Start practice",
+  "roundsConfirm": "Confirm daily rounds",
+  "roundsRetry": "Could not verify clinical standing. Retry",
+  "roundsStrikes": "Strikes: {count}",
+  "@roundsStrikes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "roundsProbation": "Clinical probation",
+  "roundsSubjectStats": "Subject responses: {count} · {percent}% correct",
+  "@roundsSubjectStats": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "roundsNoResponses": "No recorded subject responses yet.",
+  "roundsSummaryRetry": "Could not load subject results. Retry",
+  "roundsRefresh": "Refresh progress"
 }

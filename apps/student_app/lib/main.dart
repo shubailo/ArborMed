@@ -187,12 +187,7 @@ class MyApp extends StatelessWidget {
           update: (context, auth, previous) =>
               (previous ?? QuestionCacheService(auth.apiService))..watchAccount(auth.user?.id),
         ),
-        ChangeNotifierProxyProvider<AuthProvider, RankProvider>(
-          create: (context) =>
-              RankProvider(Provider.of<AuthProvider>(context, listen: false)),
-          update: (context, auth, previous) =>
-              previous ?? RankProvider(auth),
-        ),
+        ChangeNotifierProvider(create: (context) => RankProvider(context.read<AuthProvider>())),
         ChangeNotifierProxyProvider<AuthProvider, DuelProvider>(
           create: (context) => DuelProvider(
               Provider.of<AuthProvider>(context, listen: false).apiService),

@@ -2,40 +2,14 @@ const { withTransaction } = require('../utils/dbHelpers');
 const residencyService = require('../services/residencyService');
 const catchAsync = require('../utils/catchAsync');
 
-/**
- * Controller for clinical residency gamification logic.
- * Handles rounds synchronization and clinical status reporting.
- */
-
 exports.getStatus = catchAsync(async (req, res) => {
-    const userId = req.user.id;
-
-    const standing = await withTransaction(client => residencyService.ensureDailyClinicalStatus(client, userId));
-
-    res.status(200).json({
-        status: 'success',
-        data: {
-            rank: standing.rank,
-            malpracticeStrikes: standing.malpractice_strikes,
-            lastRoundsDate: standing.last_rounds_date,
-            isOnProbation: standing.malpractice_strikes >= 3
-        }
-    });
+    const data = await withTransaction(client => residencyService.dailyStatus(client, req.user.id));
+    res.status(200).json({ status: 'success', data });
 });
 
 exports.syncRounds = catchAsync(async (req, res) => {
-    const userId = req.user.id;
-
-    // We use a transaction to ensure either everything updates (strikes removed + rounds saved) or nothing
-    const standing = await withTransaction(client => residencyService.syncCompletedRounds(client, userId));
-
-    res.status(200).json({
-        status: 'success',
-        data: {
-            rank: standing.rank,
-            malpracticeStrikes: standing.malpractice_strikes,
-            lastRoundsDate: standing.last_rounds_date,
-            isOnProbation: standing.malpractice_strikes >= 3
-        }
-    });
+    const data = await withTransaction(client => residencyService.dailyStatus(client, req.user.id, {
+        complete: true, studyDay: req.body?.studyDay
+    }));
+    res.status(200).json({ status: data.roundsCompleted ? 'success' : 'incomplete', data });
 });

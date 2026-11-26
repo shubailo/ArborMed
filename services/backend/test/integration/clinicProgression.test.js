@@ -127,6 +127,55 @@ run('colleagues, clinics and residency rounds', () => {
         expect((await call(residency.getStatus,1)).data).toMatchObject({rank:'resident',malpracticeStrikes:1,isOnProbation:false});
     });
 
+    it('counts only recorded answers up to the transaction time and reports incomplete rounds', async () => {
+        await pool.query(`UPDATE users SET last_rounds_date=${today}-1, malpractice_strikes=3 WHERE id=1;
+            INSERT INTO responses(user_id,is_correct) SELECT 1,true FROM generate_series(1,9);
+            INSERT INTO responses(user_id,is_correct,created_at) VALUES(1,true,now()+interval '1 day')`);
+        const response = await call(residency.syncRounds,1);
+        expect(response).toMatchObject({status:'incomplete',data:{
+            roundsGoal:10,roundsProgress:9,roundsCompleted:false,malpracticeStrikes:3}});
+        expect((await call(residency.getStatus,1)).data).toEqual(response.data);
+    });
+
+    it('rejects a stale displayed day without applying a pardon, then accepts a current or legacy retry', async () => {
+        await pool.query(`UPDATE users SET last_rounds_date=${today}-1,malpractice_strikes=3 WHERE id=1;
+            INSERT INTO responses(user_id,is_correct) SELECT 1,true FROM generate_series(1,12)`);
+        await expect(call(residency.syncRounds,1,{body:{studyDay:'2001-01-01'}})).rejects.toMatchObject({statusCode:409});
+        const before = (await call(residency.getStatus,1)).data;
+        expect(before).toMatchObject({roundsProgress:10,roundsCompleted:false,malpracticeStrikes:3});
+        const result = await call(residency.syncRounds,1,{body:{studyDay:before.studyDay}});
+        expect(result).toMatchObject({status:'success',data:{roundsCompleted:true,malpracticeStrikes:2}});
+        expect(await call(residency.syncRounds,1)).toEqual(result);
+    });
+
+    it('does not rewind a newer standing when an older study day is evaluated', async () => {
+        await pool.query(`UPDATE users SET last_rounds_date=${today}+1,malpractice_strikes=3 WHERE id=1;
+            INSERT INTO responses(user_id,is_correct) SELECT 1,true FROM generate_series(1,10)`);
+        const {data} = await call(residency.syncRounds,1);
+        expect(data.malpracticeStrikes).toBe(3);
+        const result = await pool.query(`SELECT last_rounds_date = ${today}+1 AS preserved FROM users WHERE id=1`);
+        expect(result.rows[0].preserved).toBe(true);
+    });
+
+    it('returns a controlled missing-user error from both residency transactions', async () => {
+        for (const handler of [residency.getStatus,residency.syncRounds]) {
+            await expect(call(handler,987654)).rejects.toMatchObject({statusCode:404});
+        }
+    });
+
+    it('rolls back a rejected daily pardon and allows one subsequent credit', async () => {
+        await pool.query(`UPDATE users SET last_rounds_date=${today}-1,malpractice_strikes=3 WHERE id=1;
+            INSERT INTO responses(user_id,is_correct) SELECT 1,true FROM generate_series(1,10);
+            ALTER TABLE users ADD CONSTRAINT deny_test_pardon CHECK(id<>1 OR malpractice_strikes>=3)`);
+        try {
+            await expect(call(residency.syncRounds,1)).rejects.toMatchObject({code:'23514'});
+            expect((await call(residency.getStatus,1)).data).toMatchObject({roundsCompleted:false,malpracticeStrikes:3});
+        } finally {
+            await pool.query('ALTER TABLE users DROP CONSTRAINT deny_test_pardon');
+        }
+        expect((await call(residency.syncRounds,1)).data).toMatchObject({roundsCompleted:true,malpracticeStrikes:2});
+    });
+
     it('requires ten qualifying answers on the UTC study day and pardons at most one strike on retries', async () => {
         await pool.query(`UPDATE users SET last_rounds_date=${today}-1,malpractice_strikes=3 WHERE id=1;
             INSERT INTO quiz_sessions VALUES(21,1),(22,2);

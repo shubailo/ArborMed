@@ -3313,6 +3313,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not confirm leaving the queue. Try again.'**
   String get duelLeaveFailed;
+
+  /// No description provided for @profileRefreshRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile refresh failed. Retry'**
+  String get profileRefreshRetry;
+
+  /// No description provided for @nicknameLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a nickname between 1 and 255 characters.'**
+  String get nicknameLength;
+
+  /// No description provided for @nicknameSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save your nickname. Try again.'**
+  String get nicknameSaveFailed;
+
+  /// No description provided for @profileSessionChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Your active account has changed. Close this editor.'**
+  String get profileSessionChanged;
+
+  /// No description provided for @roundsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily clinical rounds'**
+  String get roundsTitle;
+
+  /// No description provided for @roundsConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Today’s rounds are complete.'**
+  String get roundsConfirmed;
+
+  /// No description provided for @roundsRequirement.
+  ///
+  /// In en, this message translates to:
+  /// **'Give {goal} correct answers during the UTC day to complete your rounds.'**
+  String roundsRequirement(int goal);
+
+  /// No description provided for @roundsProgressCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{progress} / {goal} correct answers'**
+  String roundsProgressCount(int progress, int goal);
+
+  /// No description provided for @roundsPractice.
+  ///
+  /// In en, this message translates to:
+  /// **'Start practice'**
+  String get roundsPractice;
+
+  /// No description provided for @roundsConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm daily rounds'**
+  String get roundsConfirm;
+
+  /// No description provided for @roundsRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not verify clinical standing. Retry'**
+  String get roundsRetry;
+
+  /// No description provided for @roundsStrikes.
+  ///
+  /// In en, this message translates to:
+  /// **'Strikes: {count}'**
+  String roundsStrikes(int count);
+
+  /// No description provided for @roundsProbation.
+  ///
+  /// In en, this message translates to:
+  /// **'Clinical probation'**
+  String get roundsProbation;
+
+  /// No description provided for @roundsSubjectStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject responses: {count} · {percent}% correct'**
+  String roundsSubjectStats(int count, int percent);
+
+  /// No description provided for @roundsNoResponses.
+  ///
+  /// In en, this message translates to:
+  /// **'No recorded subject responses yet.'**
+  String get roundsNoResponses;
+
+  /// No description provided for @roundsSummaryRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load subject results. Retry'**
+  String get roundsSummaryRetry;
+
+  /// No description provided for @roundsRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh progress'**
+  String get roundsRefresh;
 }
 
 class _AppLocalizationsDelegate

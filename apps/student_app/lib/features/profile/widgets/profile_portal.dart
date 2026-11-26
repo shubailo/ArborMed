@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:arbor_med/services/auth_provider.dart';
-import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
 import 'package:arbor_med/widgets/cozy/cozy_dialog_sheet.dart';
 import 'package:arbor_med/widgets/cozy/cozy_panel.dart';
@@ -25,12 +24,30 @@ class ProfilePortal extends StatefulWidget {
 class _ProfilePortalState extends State<ProfilePortal> {
   ProfileTab _activeTab = ProfileTab.profile;
 
+  int? _failedSession;
+  bool _editorOpen = false;
+  Future<void> _refresh() async {
+    final auth = context.read<AuthProvider>();
+    final session = auth.sessionRevision;
+    try {
+      await auth.refreshUser();
+      if (mounted &&
+          session == auth.sessionRevision &&
+          _failedSession != null) {
+        setState(() => _failedSession = null);
+      }
+    } catch (_) {
+      if (mounted && session == auth.sessionRevision) {
+        setState(() => _failedSession = session);
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<AuthProvider>(context, listen: false).refreshUser();
-      Provider.of<StatsProvider>(context, listen: false).fetchSummary();
+      if (mounted) _refresh();
     });
   }
 
@@ -70,6 +87,11 @@ class _ProfilePortalState extends State<ProfilePortal> {
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       children: [
+        if (_failedSession == auth.sessionRevision)
+          TextButton.icon(
+              onPressed: _refresh,
+              icon: const Icon(Icons.refresh),
+              label: Text(AppLocalizations.of(context)!.profileRefreshRetry)),
         // Avatar & Identity Header
         Center(
           child: Column(
@@ -99,16 +121,19 @@ class _ProfilePortalState extends State<ProfilePortal> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  Flexible(
+                      child: Text(
                     user.displayName ?? user.username ?? 'Doctor',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w900,
                         color: CozyTheme.of(context).textPrimary),
-                  ),
+                  )),
                   const SizedBox(width: 8),
                   Tooltip(
-                    message: "Edit Nickname",
+                    message: AppLocalizations.of(context)!.changeNickname,
                     child: GestureDetector(
                       onTap: () {
                         Provider.of<AudioProvider>(context, listen: false)
@@ -244,7 +269,7 @@ class _ProfilePortalState extends State<ProfilePortal> {
           const SizedBox(width: 12),
           Expanded(
               child: _buildBottomButton(
-                  "Activity", // This might need a key if Activity is localized as a tab title
+                  AppLocalizations.of(context)!.activityTab,
                   _activeTab == ProfileTab.activity,
                   () => setState(() => _activeTab = ProfileTab.activity))),
         ],
@@ -262,89 +287,135 @@ class _ProfilePortalState extends State<ProfilePortal> {
     );
   }
 
-  void _showChangeNicknameDialog() {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
-    final controller = TextEditingController(text: auth.user?.displayName);
-    bool isSubmitting = false;
+  Future<void> _showChangeNicknameDialog() async {
+    final auth = context.read<AuthProvider>();
+    final owner = auth.user?.id;
+    if (owner == null || _editorOpen) return;
+    final session = auth.sessionRevision;
+    final initialName = auth.user?.displayName ?? '';
+    _editorOpen = true;
+    bool? saved;
+    try {
+      saved = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => _NicknameEditor(
+            auth: auth,
+            owner: owner,
+            session: session,
+            initialName: initialName),
+      );
+    } finally {
+      _editorOpen = false;
+    }
+    if (!mounted ||
+        saved != true ||
+        auth.sessionRevision != session ||
+        auth.user?.id != owner) {
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.nicknameUpdated)));
+  }
+}
 
-    showDialog(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          backgroundColor: CozyTheme.of(context).paperCream,
-          title: Text(AppLocalizations.of(context)!.changeNickname,
-              style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  color: CozyTheme.of(context).textPrimary)),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(AppLocalizations.of(context)!.nicknameHint,
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: CozyTheme.of(context).textSecondary)),
-              const SizedBox(height: 16),
-              TextField(
-                controller: controller,
-                autofocus: true,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.changeNickname,
-                  hintText: AppLocalizations.of(context)!.enterNickname,
-                  border: const OutlineInputBorder(),
-                ),
+class _NicknameEditor extends StatefulWidget {
+  final AuthProvider auth;
+  final int owner;
+  final int session;
+  final String initialName;
+  const _NicknameEditor(
+      {required this.auth,
+      required this.owner,
+      required this.session,
+      required this.initialName});
+  @override
+  State<_NicknameEditor> createState() => _NicknameEditorState();
+}
+
+class _NicknameEditorState extends State<_NicknameEditor> {
+  final _form = GlobalKey<FormState>();
+  late String _name = widget.initialName;
+  bool _saving = false;
+  bool _failed = false;
+  bool get _current =>
+      widget.auth.sessionRevision == widget.session &&
+      widget.auth.user?.id == widget.owner;
+
+  Future<void> _save() async {
+    if (_saving || !_current || !(_form.currentState?.validate() ?? false)) {
+      return;
+    }
+    final route = ModalRoute.of(context)!;
+    final navigator = Navigator.of(context);
+    setState(() {
+      _saving = true;
+      _failed = false;
+    });
+    try {
+      await widget.auth.updateNickname(_name.trim());
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _saving = false;
+          _failed = true;
+        });
+      }
+      return;
+    }
+    if (!mounted || !route.isActive) return;
+    if (route.isCurrent) {
+      navigator.pop(_current);
+    } else {
+      navigator.removeRoute(route, _current);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppLocalizations.of(context)!;
+    return ListenableBuilder(
+        listenable: widget.auth,
+        builder: (context, _) => PopScope(
+              canPop: !_saving || !_current,
+              child: AlertDialog(
+                scrollable: true,
+                title: Text(strings.changeNickname),
+                content: _current
+                    ? Form(
+                        key: _form,
+                        child:
+                            Column(mainAxisSize: MainAxisSize.min, children: [
+                          Text(strings.nicknameHint),
+                          TextFormField(
+                              initialValue: widget.initialName,
+                              enabled: !_saving,
+                              autofocus: true,
+                              onChanged: (value) => _name = value,
+                              onFieldSubmitted: (_) => _save(),
+                              decoration: InputDecoration(
+                                  labelText: strings.enterNickname),
+                              validator: (value) {
+                                final name = value?.trim() ?? '';
+                                return name.isEmpty || name.runes.length > 255
+                                    ? strings.nicknameLength
+                                    : null;
+                              }),
+                          if (_failed) Text(strings.nicknameSaveFailed),
+                        ]))
+                    : Text(strings.profileSessionChanged),
+                actions: [
+                  TextButton(
+                      onPressed: _saving && _current
+                          ? null
+                          : () => Navigator.pop(context, false),
+                      child: Text(strings.cancel.toUpperCase())),
+                  if (_current)
+                    ElevatedButton(
+                        onPressed: _saving ? null : _save,
+                        child: Text(strings.save.toUpperCase())),
+                ],
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(AppLocalizations.of(context)!.cancel.toUpperCase(),
-                  style: TextStyle(
-                      color: CozyTheme.of(context).textSecondary,
-                      fontWeight: FontWeight.bold)),
-            ),
-            ElevatedButton(
-              onPressed: isSubmitting
-                  ? null
-                  : () async {
-                      if (controller.text.trim().isEmpty) return;
-
-                      setDialogState(() => isSubmitting = true);
-                      try {
-                        await auth.updateNickname(controller.text.trim());
-                        await auth.updateNickname(controller.text.trim());
-                        if (!context.mounted) return;
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(AppLocalizations.of(context)!
-                                .nicknameUpdated)));
-                      } catch (e) {
-                        if (!context.mounted) return;
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                "${AppLocalizations.of(context)!.error}: ${e.toString()}")));
-                      } finally {
-                        setDialogState(() => isSubmitting = false);
-                      }
-                    },
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: CozyTheme.of(context).primary),
-              child: isSubmitting
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                          strokeWidth: 2, color: Colors.white))
-                  : Text(AppLocalizations.of(context)!.save.toUpperCase(),
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: CozyTheme.of(context).textInverse)),
-            ),
-          ],
-        ),
-      ),
-    );
+            ));
   }
 }

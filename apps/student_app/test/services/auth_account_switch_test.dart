@@ -31,4 +31,33 @@ void main() {
     expect(api.userId, 2);
     auth.dispose();
   });
+
+  test(
+      'a stale profile read preserves the confirmed nickname and updates other fields',
+      () async {
+    SharedPreferences.setMockInitialValues({});
+    FlutterSecureStorage.setMockInitialValues({});
+    final pending = Completer<http.Response>();
+    final started = Completer<void>();
+    final api = ApiService()
+      ..setHttpClient(MockClient((request) async {
+        if (request.method == 'PUT') {
+          return http.Response(jsonEncode({'display_name': 'New'}), 200);
+        }
+        started.complete();
+        return pending.future;
+      }));
+    final auth = AuthProvider(apiService: api, db: _UnusedDatabase());
+    addTearDown(auth.dispose);
+    await auth.setAuthDataFromResponse(
+        {'id': 1, 'token': 'token', 'display_name': 'Old'});
+    final refresh = auth.refreshUser();
+    await started.future;
+    await auth.updateNickname('New');
+    pending.complete(http.Response(
+        jsonEncode({'id': 1, 'display_name': 'Old', 'xp': 43}), 200));
+    await refresh;
+    expect(auth.user?.displayName, 'New');
+    expect(auth.user?.xp, 43);
+  });
 }

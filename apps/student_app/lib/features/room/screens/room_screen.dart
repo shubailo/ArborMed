@@ -181,13 +181,15 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
   Future<void> _startQuizSequence(String name, String slug) async {
     final auth = context.read<AuthProvider>();
     final owner = auth.user?.id;
+    final session = auth.sessionRevision;
     if (owner == null) return;
     final finished = await openRoomQuiz(context, name, slug, owner);
-    if (!mounted || !finished || auth.user?.id != owner) return;
+    if (!mounted || !finished || auth.user?.id != owner || auth.sessionRevision != session) return;
     _centerRoom();
     final stats = context.read<StatsProvider>();
     try {
       await Future.wait([
+        context.read<RankProvider>().fetchStatus(),
         auth.refreshUser(),
         stats.fetchSummary(),
         stats.fetchActivity(),
@@ -452,7 +454,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
               if (rankProvider.isOnProbation && !rankProvider.hasDoneRoundsToday && !isVisiting)
                 Positioned.fill(
                   child: ProbationOverlay(
-                    onDismiss: () {},
+                    onStartRounds: _openQuizPortal,
                   ),
                 ),
               if (isVisiting)

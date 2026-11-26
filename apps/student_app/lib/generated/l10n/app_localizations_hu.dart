@@ -1726,4 +1726,66 @@ class AppLocalizationsHu extends AppLocalizations {
   @override
   String get duelLeaveFailed =>
       'A kilépést nem sikerült megerősíteni. Próbáld újra.';
+
+  @override
+  String get profileRefreshRetry => 'A profil frissítése sikertelen. Újra';
+
+  @override
+  String get nicknameLength => 'Adj meg egy 1–255 karakteres becenevet.';
+
+  @override
+  String get nicknameSaveFailed =>
+      'A becenév mentése sikertelen. Próbáld újra.';
+
+  @override
+  String get profileSessionChanged =>
+      'Az aktív fiók megváltozott. Zárd be a szerkesztőt.';
+
+  @override
+  String get roundsTitle => 'Napi klinikai vizit';
+
+  @override
+  String get roundsConfirmed => 'A mai vizitet teljesítetted.';
+
+  @override
+  String roundsRequirement(int goal) {
+    return 'A vizithez adj $goal helyes választ az UTC szerinti napon.';
+  }
+
+  @override
+  String roundsProgressCount(int progress, int goal) {
+    return '$progress / $goal helyes válasz';
+  }
+
+  @override
+  String get roundsPractice => 'Gyakorlás indítása';
+
+  @override
+  String get roundsConfirm => 'Napi vizit jóváírása';
+
+  @override
+  String get roundsRetry => 'A vizit állapota nem ellenőrizhető. Újra';
+
+  @override
+  String roundsStrikes(int count) {
+    return 'Figyelmeztetések száma: $count';
+  }
+
+  @override
+  String get roundsProbation => 'Klinikai próbaidő';
+
+  @override
+  String roundsSubjectStats(int count, int percent) {
+    return 'Tantárgyi válaszok száma: $count · $percent% helyes';
+  }
+
+  @override
+  String get roundsNoResponses => 'Még nincs rögzített tantárgyi válasz.';
+
+  @override
+  String get roundsSummaryRetry =>
+      'A tantárgyi eredmények betöltése sikertelen. Újra';
+
+  @override
+  String get roundsRefresh => 'Haladás frissítése';
 }

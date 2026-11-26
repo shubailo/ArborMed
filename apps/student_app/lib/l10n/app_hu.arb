@@ -573,5 +573,22 @@
   "duelWalletAmount": "{amount} sztetoszkóp",
   "duelLowBalance": "Ehhez a téthez nincs elegendő egyenleged.",
   "duelRefreshFailed": "Az egyenleg frissítése nem sikerült. Próbáld újra.",
-  "duelLeaveFailed": "A kilépést nem sikerült megerősíteni. Próbáld újra."
+  "duelLeaveFailed": "A kilépést nem sikerült megerősíteni. Próbáld újra.",
+  "profileRefreshRetry": "A profil frissítése sikertelen. Újra",
+  "nicknameLength": "Adj meg egy 1–255 karakteres becenevet.",
+  "nicknameSaveFailed": "A becenév mentése sikertelen. Próbáld újra.",
+  "profileSessionChanged": "Az aktív fiók megváltozott. Zárd be a szerkesztőt.",
+  "roundsTitle": "Napi klinikai vizit",
+  "roundsConfirmed": "A mai vizitet teljesítetted.",
+  "roundsRequirement": "A vizithez adj {goal} helyes választ az UTC szerinti napon.",
+  "roundsProgressCount": "{progress} / {goal} helyes válasz",
+  "roundsPractice": "Gyakorlás indítása",
+  "roundsConfirm": "Napi vizit jóváírása",
+  "roundsRetry": "A vizit állapota nem ellenőrizhető. Újra",
+  "roundsStrikes": "Figyelmeztetések száma: {count}",
+  "roundsProbation": "Klinikai próbaidő",
+  "roundsSubjectStats": "Tantárgyi válaszok száma: {count} · {percent}% helyes",
+  "roundsNoResponses": "Még nincs rögzített tantárgyi válasz.",
+  "roundsSummaryRetry": "A tantárgyi eredmények betöltése sikertelen. Újra",
+  "roundsRefresh": "Haladás frissítése"
 }
