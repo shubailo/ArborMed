@@ -1,263 +1,208 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:arbor_med/features/quiz/providers/topic_provider.dart';
-import 'package:arbor_med/services/auth_provider.dart';
-import 'package:arbor_med/services/api_service.dart';
+import 'dart:async';
 import 'package:arbor_med/core/api_endpoints.dart';
-
-// Mock ApiService
-class MockApiService extends Mock implements ApiService {
-  @override
-  Future<dynamic> get(String? endpoint, {Map<String, String>? headers}) async {
-    return super.noSuchMethod(
-      Invocation.method(#get, [endpoint], {#headers: headers}),
-      returnValue: Future.value([]),
-    );
-  }
-
-  @override
-  Future<dynamic> post(String? endpoint, Map<String, dynamic>? data, {Map<String, String>? headers}) async {
-    return super.noSuchMethod(
-      Invocation.method(#post, [endpoint, data], {#headers: headers}),
-      returnValue: Future.value({}),
-    );
-  }
-
-  @override
-  Future<dynamic> put(String? endpoint, Map<String, dynamic>? data, {Map<String, String>? headers}) async {
-    return super.noSuchMethod(
-      Invocation.method(#put, [endpoint, data], {#headers: headers}),
-      returnValue: Future.value({}),
-    );
-  }
-
-  @override
-  Future<dynamic> delete(String? endpoint, {Map<String, String>? headers}) async {
-    return super.noSuchMethod(
-      Invocation.method(#delete, [endpoint], {#headers: headers}),
-      returnValue: Future.value({}),
-    );
-  }
-}
-
-// Mock AuthProvider
-class MockAuthProvider extends Mock implements AuthProvider {
-  final MockApiService _apiService = MockApiService();
-
-  @override
-  ApiService get apiService => _apiService;
-}
+import 'package:arbor_med/core/api_exceptions.dart';
+import 'package:arbor_med/core/models/topic.dart';
+import 'package:arbor_med/features/quiz/providers/topic_provider.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'admin_question_provider_test.dart'
+    show MockApiService, MockAuthProvider;
 
 void main() {
-  late MockApiService mockApiService;
-  late MockAuthProvider mockAuthProvider;
-  late TopicProvider topicProvider;
-
+  late MockAuthProvider auth;
+  late MockApiService api;
+  late TopicProvider provider;
+  const root = {'id': 1, 'name_en': 'Root', 'parent_id': null, 'slug': 'root'};
+  const leaf = {
+    'id': '2',
+    'parent_id': '1',
+    'name': 'Legacy',
+    'slug': 'leaf',
+    'question_count': '12',
+    'description': 'preserved'
+  };
   setUp(() {
-    mockAuthProvider = MockAuthProvider();
-    mockApiService = mockAuthProvider.apiService as MockApiService;
-    topicProvider = TopicProvider(mockAuthProvider);
+    auth = MockAuthProvider();
+    api = auth.apiService as MockApiService;
+    provider = TopicProvider(auth);
+  });
+  tearDown(() => provider.dispose());
+
+  test('an empty catalog is distinguishable from a pending request', () async {
+    final result = Completer<dynamic>();
+    api.onGet = (_) => result.future;
+    final read = provider.fetchTopics();
+    expect(provider.loading, isTrue);
+    result.complete([]);
+    await read;
+    expect(provider.topics, isEmpty);
+    expect(provider.loading, isFalse);
+    expect(provider.loadFailed, isFalse);
   });
 
-  group('TopicProvider', () {
-    test('initial state is empty', () {
-      expect(topicProvider.topics, isEmpty);
-    });
+  test(
+      'a committed legacy acknowledgement still reloads and never repeats the POST',
+      () async {
+    var posts = 0;
+    api.onPost = (_, __) async {
+      posts++;
+      return {'success': true};
+    };
+    api.onGet = (_) async => [root, leaf];
+    await provider.createTopic('Legacy', '', 1);
+    expect(posts, 1);
+    expect(provider.topics.last['id'], 2);
+  });
 
-    test('resetState clears topics', () async {
-      when(mockApiService.get(ApiEndpoints.quizTopics)).thenAnswer((_) async => [
-        {'id': 1, 'name_en': 'Topic 1', 'name_hu': 'Téma 1', 'parent_id': null}
-      ]);
-      await topicProvider.fetchTopics();
-      expect(topicProvider.topics, isNotEmpty);
+  test(
+      'an inconsistent update receipt is replaced by the authoritative catalog',
+      () async {
+    api.onGet = (_) async => [root, leaf];
+    await provider.fetchTopics();
+    api.onPut = (_, __) async => {...root, 'name_en': 'Wrong receipt'};
+    api.onGet = (_) async => throw const NetworkException();
+    await provider.updateTopic(2, 'new', '');
+    expect(provider.topics.first['name_en'], 'Root');
+    expect(provider.topics.last['name_en'], 'Legacy');
+    expect(provider.loadFailed, isTrue);
+  });
 
-      topicProvider.resetState();
+  test(
+      'catalog normalizes PostgreSQL integers and legacy names and preserves extra fields',
+      () async {
+    expect(provider.topics, isEmpty);
+    api.onGet = (_) async => [root, leaf];
+    await provider.fetchTopics();
+    expect(provider.topics.last, containsPair('parent_id', 1));
+    expect(provider.topics.last, containsPair('question_count', 12));
+    expect(provider.topics.last, containsPair('name_en', 'Legacy'));
+    expect(provider.topics.last, containsPair('description', 'preserved'));
+    expect(() => provider.topics.last['id'] = 4, throwsUnsupportedError);
+    for (final bad in [0, -1, '1.5', 'no', true, 2147483648]) {
+      expect(() => Topic.fromJson({...root, 'id': bad}), throwsFormatException);
+    }
+    expect(() => Topic.fromJson({...leaf, 'question_count': '-1'}),
+        throwsFormatException);
+    expect(Topic.fromJson(root).questionCount, isNull);
+  });
 
-      expect(topicProvider.topics, isEmpty);
-    });
+  test('a failed catalog keeps the last complete snapshot and retry recovers',
+      () async {
+    api.onGet = (_) async => [root];
+    await provider.fetchTopics();
+    for (final payload in [
+      null,
+      {'bad': true},
+      [
+        root,
+        {'id': 'bad'}
+      ]
+    ]) {
+      api.onGet = (_) async => payload;
+      await provider.fetchTopics();
+      expect(provider.loadFailed, isTrue);
+      expect(provider.topics.single['id'], 1);
+    }
+    api.onGet = (_) async => [];
+    await provider.fetchTopics();
+    expect(provider.loadFailed, isFalse);
+    expect(provider.topics, isEmpty);
+  });
 
-    group('fetchTopics', () {
-      test('updates topics on success', () async {
-        when(mockApiService.get(ApiEndpoints.quizTopics)).thenAnswer((_) async => [
-          {'id': 1, 'name_en': 'Topic 1', 'name_hu': 'Téma 1', 'parent_id': null},
-          {'id': 2, 'name_en': 'Topic 2', 'name_hu': 'Téma 2', 'parent_id': 1}
-        ]);
+  test('a late GET cannot undo a committed rename even when its refresh fails',
+      () async {
+    api.onGet = (_) async => [leaf];
+    await provider.fetchTopics();
+    final old = Completer<dynamic>();
+    api.onGet = (_) => old.future;
+    final request = provider.fetchTopics();
+    api.onPut = (path, fields) async {
+      expect(path, '${ApiEndpoints.quizAdminTopics}/2');
+      expect(fields, {'name_en': 'New', 'name_hu': 'Új'});
+      return {...leaf, ...fields}..remove('question_count');
+    };
+    api.onGet = (_) async => throw const NetworkException();
+    await provider.updateTopic(2, ' New ', 'Új');
+    old.complete([leaf]);
+    await request;
+    expect(provider.topics.single['name_en'], 'New');
+    expect(provider.topics.single['question_count'], 12);
+    expect(provider.loadFailed, isTrue);
+  });
 
-        await topicProvider.fetchTopics();
+  test(
+      'create and delete reconcile committed rows when the subsequent GET fails',
+      () async {
+    api.onPost = (path, body) async {
+      expect(path, ApiEndpoints.quizAdminTopics);
+      expect(body, {'name_en': 'New', 'name_hu': 'Új', 'parent_id': 1});
+      return {...leaf, 'name_en': 'New'};
+    };
+    api.onGet = (_) async => throw const NetworkException();
+    await provider.createTopic('New', 'Új', 1);
+    expect(provider.topics.single['id'], 2);
+    api.onDelete = (path) async {
+      expect(path, '${ApiEndpoints.quizAdminTopics}/2');
+      return {};
+    };
+    expect(await provider.deleteTopic(2), isNull);
+    expect(provider.topics, isEmpty);
+  });
 
-        expect(topicProvider.topics.length, 2);
-        expect(topicProvider.topics[0]['name_en'], 'Topic 1');
-        expect(topicProvider.topics[1]['parent_id'], 1);
-      });
+  test('write errors retain their HTTP meaning and do not refresh the catalog',
+      () async {
+    var reads = 0;
+    api.onGet = (_) async {
+      reads++;
+      return [];
+    };
+    api.onPut = (_, __) async => throw const ForbiddenException();
+    api.onPost =
+        (_, __) async => throw const ConflictException(message: 'Duplicate');
+    api.onDelete = (_) async => throw const ConflictException(
+        message: 'Has children', body: 'ordinary conflict');
+    await expectLater(
+        provider.updateTopic(1, 'New', ''), throwsA(isA<ForbiddenException>()));
+    await expectLater(
+        provider.createTopic('New', '', 1), throwsA(isA<ConflictException>()));
+    await expectLater(
+        provider.deleteTopic(1), throwsA(isA<ConflictException>()));
+    expect(reads, 0);
+  });
 
-      test('handles non-list response gracefully', () async {
-        when(mockApiService.get(ApiEndpoints.quizTopics)).thenAnswer((_) async => {'error': 'not a list'});
+  test('only a structured confirmation is eligible for a destructive follow-up',
+      () async {
+    api.onDelete = (_) async => throw const ConflictException(
+        body:
+            '{"code":"topic_questions_confirmation","count":2,"confirmation":"v1"}');
+    final ask = await provider.deleteTopic(2);
+    expect(ask!.count, 2);
+    api.onGet = (_) async => [];
+    api.onDelete = (path) async {
+      expect(Uri.parse(path).queryParameters,
+          {'force': 'true', 'confirmation': 'v1'});
+      return {};
+    };
+    expect(await provider.deleteTopic(2, confirmation: ask.version), isNull);
+  });
 
-        await topicProvider.fetchTopics();
-
-        expect(topicProvider.topics, isEmpty);
-      });
-
-      test('handles errors gracefully', () async {
-        when(mockApiService.get(ApiEndpoints.quizTopics)).thenThrow(Exception('API Error'));
-
-        await topicProvider.fetchTopics();
-
-        expect(topicProvider.topics, isEmpty);
-      });
-    });
-
-    group('createTopic', () {
-      test('returns true and fetches topics on success', () async {
-        when(mockApiService.post(ApiEndpoints.quizAdminTopics, any)).thenAnswer((_) async => {'id': 1});
-        when(mockApiService.get(ApiEndpoints.quizTopics)).thenAnswer((_) async => [
-          {'id': 1, 'name_en': 'New Topic', 'name_hu': 'Új Téma', 'parent_id': 2}
-        ]);
-
-        final result = await topicProvider.createTopic('New Topic', 'Új Téma', 2);
-
-        expect(result, isTrue);
-        expect(topicProvider.topics.length, 1);
-        expect(topicProvider.topics[0]['name_en'], 'New Topic');
-
-        verify(mockApiService.post(ApiEndpoints.quizAdminTopics, {
-          'name_en': 'New Topic',
-          'name_hu': 'Új Téma',
-          'parent_id': 2,
-        })).called(1);
-        verify(mockApiService.get(ApiEndpoints.quizTopics)).called(1);
-      });
-
-      test('returns false on error', () async {
-        when(mockApiService.post(ApiEndpoints.quizAdminTopics, any)).thenThrow(Exception('API Error'));
-
-        final result = await topicProvider.createTopic('New Topic', 'Új Téma', 2);
-
-        expect(result, isFalse);
-        verify(mockApiService.post(ApiEndpoints.quizAdminTopics, any)).called(1);
-        verifyNever(mockApiService.get(ApiEndpoints.quizTopics));
-      });
-    });
-
-    group('deleteTopic', () {
-      test('returns null and fetches topics on success', () async {
-        when(mockApiService.delete('${ApiEndpoints.quizAdminTopics}/1')).thenAnswer((_) async => {});
-        when(mockApiService.get(ApiEndpoints.quizTopics)).thenAnswer((_) async => []);
-
-        final result = await topicProvider.deleteTopic(1);
-
-        expect(result, isNull);
-        verify(mockApiService.delete('${ApiEndpoints.quizAdminTopics}/1')).called(1);
-        verify(mockApiService.get(ApiEndpoints.quizTopics)).called(1);
-      });
-
-      test('appends force=true query param when force is true', () async {
-        when(mockApiService.delete('${ApiEndpoints.quizAdminTopics}/1?force=true')).thenAnswer((_) async => {});
-        when(mockApiService.get(ApiEndpoints.quizTopics)).thenAnswer((_) async => []);
-
-        final result = await topicProvider.deleteTopic(1, force: true);
-
-        expect(result, isNull);
-        verify(mockApiService.delete('${ApiEndpoints.quizAdminTopics}/1?force=true')).called(1);
-        verify(mockApiService.get(ApiEndpoints.quizTopics)).called(1);
-      });
-
-      test('returns parsed error message on API Error', () async {
-        when(mockApiService.delete('${ApiEndpoints.quizAdminTopics}/1')).thenThrow(Exception('API Error: Topic has children'));
-
-        final result = await topicProvider.deleteTopic(1);
-
-        expect(result, 'Topic has children');
-        verify(mockApiService.delete('${ApiEndpoints.quizAdminTopics}/1')).called(1);
-        verifyNever(mockApiService.get(ApiEndpoints.quizTopics));
-      });
-
-      test('returns "Network error" on generic error', () async {
-        when(mockApiService.delete('${ApiEndpoints.quizAdminTopics}/1')).thenThrow(Exception('Connection refused'));
-
-        final result = await topicProvider.deleteTopic(1);
-
-        expect(result, 'Network error');
-        verify(mockApiService.delete('${ApiEndpoints.quizAdminTopics}/1')).called(1);
-        verifyNever(mockApiService.get(ApiEndpoints.quizTopics));
-      });
-    });
-
-    group('updateTopic', () {
-      setUp(() async {
-        // Pre-populate topics for optimistic update test
-        when(mockApiService.get(ApiEndpoints.quizTopics)).thenAnswer((_) async => [
-          {'id': 1, 'name_en': 'Old Topic', 'name_hu': 'Régi Téma', 'parent_id': null}
-        ]);
-        await topicProvider.fetchTopics();
-        clearInteractions(mockApiService);
-      });
-
-      test('optimistically updates topics, returns null, and fetches topics in background on success', () async {
-        when(mockApiService.put('${ApiEndpoints.quizAdminTopics}/1', any)).thenAnswer((_) async => {});
-        when(mockApiService.get(ApiEndpoints.quizTopics)).thenAnswer((_) async => [
-          {'id': 1, 'name_en': 'Updated Topic', 'name_hu': 'Frissített Téma', 'parent_id': null}
-        ]);
-
-        bool listenerCalled = false;
-        topicProvider.addListener(() {
-          listenerCalled = true;
-        });
-
-        final result = await topicProvider.updateTopic(1, 'Updated Topic', 'Frissített Téma');
-
-        expect(result, isNull);
-        expect(listenerCalled, isTrue); // Should be called from optimistic update
-
-        // Check optimistic update before the background fetch completes (it should be immediate)
-        expect(topicProvider.topics[0]['name_en'], 'Updated Topic');
-        expect(topicProvider.topics[0]['name_hu'], 'Frissített Téma');
-
-        verify(mockApiService.put('${ApiEndpoints.quizAdminTopics}/1', {
-          'name_en': 'Updated Topic',
-          'name_hu': 'Frissített Téma',
-        })).called(1);
-        verify(mockApiService.get(ApiEndpoints.quizTopics)).called(1); // The background refresh
-      });
-
-      test('handles updating non-existent topic gracefully', () async {
-        when(mockApiService.put('${ApiEndpoints.quizAdminTopics}/999', any)).thenAnswer((_) async => {});
-        when(mockApiService.get(ApiEndpoints.quizTopics)).thenAnswer((_) async => [
-          {'id': 1, 'name_en': 'Old Topic', 'name_hu': 'Régi Téma', 'parent_id': null} // still same data
-        ]);
-
-        final result = await topicProvider.updateTopic(999, 'Updated Topic', 'Frissített Téma');
-
-        expect(result, isNull);
-        expect(topicProvider.topics[0]['name_en'], 'Old Topic'); // no optimistic update happened
-
-        verify(mockApiService.put('${ApiEndpoints.quizAdminTopics}/999', any)).called(1);
-        verify(mockApiService.get(ApiEndpoints.quizTopics)).called(1);
-      });
-
-      test('returns parsed error message on API Error', () async {
-        when(mockApiService.put('${ApiEndpoints.quizAdminTopics}/1', any)).thenThrow(Exception('API Error: Invalid data'));
-
-        final result = await topicProvider.updateTopic(1, 'Updated Topic', 'Frissített Téma');
-
-        expect(result, 'Invalid data');
-        expect(topicProvider.topics[0]['name_en'], 'Old Topic'); // Optimistic update did NOT happen
-
-        verify(mockApiService.put('${ApiEndpoints.quizAdminTopics}/1', any)).called(1);
-        verifyNever(mockApiService.get(ApiEndpoints.quizTopics)); // No background refresh on error
-      });
-
-      test('returns "Network error" on generic error', () async {
-        when(mockApiService.put('${ApiEndpoints.quizAdminTopics}/1', any)).thenThrow(Exception('Connection refused'));
-
-        final result = await topicProvider.updateTopic(1, 'Updated Topic', 'Frissített Téma');
-
-        expect(result, 'Network error');
-        expect(topicProvider.topics[0]['name_en'], 'Old Topic'); // Optimistic update did NOT happen
-
-        verify(mockApiService.put('${ApiEndpoints.quizAdminTopics}/1', any)).called(1);
-        verifyNever(mockApiService.get(ApiEndpoints.quizTopics)); // No background refresh on error
-      });
-    });
+  test(
+      'reset invalidates both pending reads and pending committed mutation callbacks',
+      () async {
+    final waiting = Completer<dynamic>(), write = Completer<dynamic>();
+    var reads = 0;
+    api.onGet = (_) {
+      reads++;
+      return waiting.future;
+    };
+    api.onPost = (_, __) => write.future;
+    final read = provider.fetchTopics(),
+        create = provider.createTopic('New', '', 1);
+    provider.resetState();
+    waiting.complete([root]);
+    write.complete(leaf);
+    await Future.wait([read, create]);
+    expect(provider.topics, isEmpty);
+    expect(provider.loading, isFalse);
+    expect(reads, 1);
   });
 }

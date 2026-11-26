@@ -70,6 +70,8 @@ class MockApiService extends Mock implements ApiService {
 
 // Mock AuthProvider
 class MockAuthProvider extends Mock implements AuthProvider {
+  @override
+  int get sessionRevision => 0;
   final MockApiService _apiService = MockApiService();
 
   @override

@@ -210,24 +210,7 @@ exports.submitAnswer = catchAsync(async (req, res) => {
   res.json(result);
 });
 
-exports.getTopics = catchAsync(async (req, res, _next) => {
-  const query = `
-        WITH direct_counts AS (
-            SELECT q.topic_id, count(*) AS n FROM questions q WHERE q.active = TRUE GROUP BY q.topic_id
-        ), child_counts AS (
-            SELECT child.parent_id, sum(d.n)::bigint AS n
-            FROM topics child JOIN direct_counts d ON d.topic_id = child.id
-            WHERE child.parent_id IS NOT NULL GROUP BY child.parent_id
-        )
-        SELECT t.*, coalesce(own.n, 0) + coalesce(children.n, 0) AS question_count
-        FROM topics t
-        LEFT JOIN direct_counts own ON own.topic_id = t.id
-        LEFT JOIN child_counts children ON children.parent_id = t.id
-        ORDER BY t.parent_id NULLS FIRST, t.id
-    `;
-  const result = await db.query(query);
-  res.json(result.rows);
-});
+exports.getTopics = require('./topicController').getTopics;
 
 exports.getQuestionTypes = catchAsync(async (req, res, _next) => {
   res.json(questionTypeRegistry.getAllTypes());

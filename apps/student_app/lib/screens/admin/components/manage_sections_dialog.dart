@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:arbor_med/core/api_exceptions.dart';
 import 'package:arbor_med/features/quiz/providers/topic_provider.dart';
-import '../../../theme/cozy_theme.dart';
 import '../../../generated/l10n/app_localizations.dart';
+import '../../../theme/cozy_theme.dart';
 
-/// Dialog for managing sections (sub-topics) under a subject.
 class ManageSectionsDialog extends StatefulWidget {
   final int subjectId;
   final String subjectName;
@@ -22,469 +22,327 @@ class ManageSectionsDialog extends StatefulWidget {
 }
 
 class _ManageSectionsDialogState extends State<ManageSectionsDialog> {
-  AppLocalizations get l10n => AppLocalizations.of(context)!;
-  final TextEditingController _nameEnController = TextEditingController();
-  final TextEditingController _nameHuController = TextEditingController();
+  final _en = TextEditingController();
+  final _hu = TextEditingController();
+  late final _provider = context.read<TopicProvider>();
+  late final int _session;
+  bool _busy = false;
 
-  bool _isCreating = false;
+  AppLocalizations get labels => AppLocalizations.of(context)!;
+  bool get _active =>
+      mounted &&
+      ModalRoute.of(context)?.isCurrent == true &&
+      _provider.sessionRevision == _session;
+
+  @override
+  void initState() {
+    super.initState();
+    _session = _provider.sessionRevision;
+  }
 
   @override
   void dispose() {
-    _nameEnController.dispose();
-    _nameHuController.dispose();
+    _en.dispose();
+    _hu.dispose();
     super.dispose();
   }
 
-  Future<void> _createSection() async {
-    if (_nameEnController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!.adminErrorSectionNameEmpty,
-          ),
-        ),
-      );
-      return;
-    }
-
-    setState(() => _isCreating = true);
-    final topicProvider = Provider.of<TopicProvider>(context, listen: false);
-    final success = await topicProvider.createTopic(
-      _nameEnController.text.trim(),
-      _nameHuController.text.trim(),
-      widget.subjectId,
-    );
-    setState(() => _isCreating = false);
-
-    if (success) {
-      _nameEnController.clear();
-      _nameHuController.clear();
-      widget.onChanged();
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.adminSuccessSectionCreated,
-            ),
-          ),
-        );
-      }
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.adminErrorSectionCreateFailed,
-            ),
-          ),
-        );
-      }
-    }
+  void _message(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
-  Future<void> _deleteSection(int topicId, String name) async {
-    final topicProvider = Provider.of<TopicProvider>(context, listen: false);
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.adminDeleteSectionTitle),
-        content: Text(l10n.adminConfirmDeleteSection(name)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(l10n.delete, style: const TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
-    );
-
-    if (confirm != true || !mounted) return;
-    String? error = await topicProvider.deleteTopic(topicId);
-
-    // Check for "has questions" error (409 Conflict)
-    if (error != null && error.contains("question(s)")) {
-      if (!mounted) return;
-
-      final confirmForce = await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            l10n.adminConfirmDataLossTitle,
-            style: const TextStyle(color: Colors.red),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                error ?? "Unknown error",
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              Text(l10n.adminDeleteSectionWarning),
-              const SizedBox(height: 12),
-              Text(l10n.adminConfirmAction),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: Text(
-                AppLocalizations.of(context)!.adminYesDeleteEverything,
-                style: const TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-
-      if (confirmForce == true) {
-        error = await topicProvider.deleteTopic(topicId, force: true);
-      } else {
-        return;
-      }
-    }
-
-    if (error == null) {
+  Future<bool> _run(Future<bool> Function() operation) async {
+    if (_busy || !_active) return false;
+    setState(() => _busy = true);
+    try {
+      final changed = await operation();
+      if (!_active || !changed) return false;
       widget.onChanged();
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.adminSuccessSectionDeleted)),
-        );
-      }
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(error)));
-      }
+      return true;
+    } on ApiException catch (error) {
+      if (_active) _message(error.message);
+    } catch (error) {
+      debugPrint('Section operation failed (${error.runtimeType}).');
+      if (_active) _message(labels.error);
+    } finally {
+      if (mounted) setState(() => _busy = false);
     }
+    return false;
+  }
+
+  Future<void> _create() async {
+    await _run(() async {
+      if (_en.text.trim().isEmpty) {
+        _message(labels.adminErrorSectionNameEmpty);
+        return false;
+      }
+      await _provider.createTopic(_en.text, _hu.text, widget.subjectId);
+      if (!_active) return false;
+      _en.clear();
+      _hu.clear();
+      _message(labels.adminSuccessSectionCreated);
+      return true;
+    });
+  }
+
+  Future<bool> _confirm(String name,
+      [TopicDeleteConfirmation? questions]) async {
+    final l = labels;
+    return await showDialog<bool>(
+          context: context,
+          builder: (dialog) {
+            void finish(bool value) {
+              if (ModalRoute.of(dialog)?.isCurrent == true) {
+                Navigator.pop(dialog, value);
+              }
+            }
+
+            return AlertDialog(
+              scrollable: true,
+              title: Text(questions == null
+                  ? l.adminDeleteSectionTitle
+                  : l.adminConfirmDataLossTitle),
+              content: Text(questions == null
+                  ? l.adminConfirmDeleteSection(name)
+                  : '$name (${questions.count})\n\n${l.adminDeleteSectionWarning}'),
+              actions: [
+                TextButton(
+                    onPressed: () => finish(false), child: Text(l.cancel)),
+                TextButton(
+                    onPressed: () => finish(true),
+                    style: TextButton.styleFrom(
+                        foregroundColor: Theme.of(dialog).colorScheme.error),
+                    child: Text(questions == null
+                        ? l.delete
+                        : l.adminYesDeleteEverything)),
+              ],
+            );
+          },
+        ) ??
+        false;
+  }
+
+  Future<void> _delete(int id, String name) async {
+    await _run(() async {
+      if (!await _confirm(name) || !_active) return false;
+      var confirmation = await _provider.deleteTopic(id);
+      while (confirmation != null) {
+        if (!_active || !await _confirm(name, confirmation) || !_active) {
+          return false;
+        }
+        confirmation =
+            await _provider.deleteTopic(id, confirmation: confirmation.version);
+      }
+      if (!_active) return false;
+      _message(labels.adminSuccessSectionDeleted);
+      return true;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<TopicProvider>();
+    final enabled = !_busy && _session == provider.sessionRevision;
+    final sections = provider.topics
+        .where((t) => t['parent_id'] == widget.subjectId)
+        .toList();
+    final indices = {
+      for (var i = 0; i < sections.length; i++) sections[i]['id']: i + 1
+    };
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Container(
-        width: 500,
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "${l10n.adminManageSectionsTitle} - ${widget.subjectName}",
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 24),
-
-            // Add Section Input
-            TextFormField(
-              controller: _nameEnController,
-              decoration: CozyTheme.inputDecoration(
-                context,
-                l10n.adminSectionNameEnLabel,
-              ),
-              textInputAction: TextInputAction.next,
-              validator: (val) =>
-                  val == null || val.isEmpty ? l10n.adminRequired : null,
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _nameHuController,
-              decoration: CozyTheme.inputDecoration(
-                context,
-                l10n.adminSectionNameHuLabel,
-              ),
-              textInputAction: TextInputAction.done,
-              onFieldSubmitted: (_) => _createSection(),
-            ),
-            const SizedBox(height: 16),
-
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton.icon(
-                onPressed: _isCreating ? null : _createSection,
-                icon: _isCreating
-                    ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
-                    : const Icon(Icons.add),
-                label: Text(l10n.adminAddSection),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: CozyTheme.of(context).primary,
-                  foregroundColor: CozyTheme.of(context).textInverse,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Sections List
-            Text(
-              l10n.adminExistingSections,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            Consumer<TopicProvider>(
-              builder: (context, topicProvider, _) {
-                final sections = topicProvider.topics
-                    .where((t) => t['parent_id'] == widget.subjectId)
-                    .toList();
-
-                if (sections.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      l10n.adminNoSectionsYet,
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                  );
-                }
-
-                return Container(
-                  constraints: const BoxConstraints(maxHeight: 300),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: sections.length,
-                    itemBuilder: (context, index) {
-                      final section = sections[index];
-                      return SectionListTile(
-                        section: section,
-                        onDelete: () => _deleteSection(
-                          section['id'],
-                          section['name_en'] ?? section['name'],
-                        ),
-                        onRename: (nameEn, nameHu) async {
-                          final error = await topicProvider.updateTopic(
-                            section['id'],
-                            nameEn,
-                            nameHu,
-                          );
-                          if (error == null) {
-                            widget.onChanged();
-                          } else {
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(
-                                context,
-                              ).showSnackBar(SnackBar(content: Text(error)));
-                            }
-                          }
-                        },
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-
-            // Close Button
-            Align(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 500),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Flexible(
+              child: ListView.builder(
+            padding: const EdgeInsets.all(20),
+            shrinkWrap: true,
+            itemCount: sections.length + 1,
+            findChildIndexCallback: (key) =>
+                key is ValueKey<int> ? indices[key.value] : null,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                          '${labels.adminManageSectionsTitle} - ${widget.subjectName}',
+                          style: Theme.of(context).textTheme.titleLarge),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                          controller: _en,
+                          enabled: enabled,
+                          textInputAction: TextInputAction.next,
+                          decoration: CozyTheme.inputDecoration(
+                              context, labels.adminSectionNameEnLabel)),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                          controller: _hu,
+                          enabled: enabled,
+                          textInputAction: TextInputAction.done,
+                          onFieldSubmitted: (_) => _create(),
+                          decoration: CozyTheme.inputDecoration(
+                              context, labels.adminSectionNameHuLabel)),
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: ElevatedButton.icon(
+                              onPressed: enabled ? _create : null,
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      CozyTheme.of(context).primary,
+                                  foregroundColor:
+                                      CozyTheme.of(context).textInverse),
+                              icon: const Icon(Icons.add),
+                              label: Text(labels.adminAddSection))),
+                      const SizedBox(height: 16),
+                      Text(labels.adminExistingSections,
+                          style: Theme.of(context).textTheme.titleMedium),
+                      if (_busy || provider.loading)
+                        const LinearProgressIndicator(),
+                      if (provider.loadFailed)
+                        TextButton.icon(
+                            onPressed: enabled ? provider.fetchTopics : null,
+                            icon: const Icon(Icons.refresh),
+                            label: Text('${labels.error} · ${labels.retry}'))
+                      else if (!provider.loading && sections.isEmpty)
+                        Text(labels.adminNoSectionsYet),
+                    ]);
+              }
+              final section = sections[index - 1];
+              final id = section['id'] as int;
+              final en = section['name_en'] as String;
+              final hu = section['name_hu'] as String;
+              final displayName =
+                  Localizations.localeOf(context).languageCode == 'hu' &&
+                          hu.isNotEmpty
+                      ? hu
+                      : en;
+              return SectionListTile(
+                key: ValueKey(id),
+                nameEn: en,
+                nameHu: hu,
+                enabled: enabled,
+                onDelete: () => _delete(id, displayName),
+                onRename: (en, hu) => _run(() async {
+                  if (en.trim().isEmpty) {
+                    _message(labels.adminErrorSectionNameEmpty);
+                    return false;
+                  }
+                  await provider.updateTopic(id, en, hu);
+                  return true;
+                }),
+              );
+            },
+          )),
+          Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(l10n.close),
-              ),
-            ),
-          ],
-        ),
+                  onPressed: () {
+                    if (ModalRoute.of(context)?.isCurrent == true) {
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Text(labels.close))),
+        ]),
       ),
     );
   }
 }
 
-/// A single editable section row within ManageSectionsDialog.
 class SectionListTile extends StatefulWidget {
-  final Map<String, dynamic> section;
+  final String nameEn, nameHu;
+  final bool enabled;
   final VoidCallback onDelete;
-  final Function(String, String) onRename;
-
-  const SectionListTile({
-    super.key,
-    required this.section,
-    required this.onDelete,
-    required this.onRename,
-  });
+  final Future<bool> Function(String, String) onRename;
+  const SectionListTile(
+      {super.key,
+      required this.nameEn,
+      required this.nameHu,
+      required this.enabled,
+      required this.onDelete,
+      required this.onRename});
 
   @override
   State<SectionListTile> createState() => _SectionListTileState();
 }
 
 class _SectionListTileState extends State<SectionListTile> {
-  AppLocalizations get l10n => AppLocalizations.of(context)!;
-  bool _isEditing = false;
-  late TextEditingController _editEnController;
-  late TextEditingController _editHuController;
-  String _editLang = 'en';
-
-  @override
-  void initState() {
-    super.initState();
-    _editEnController = TextEditingController(
-      text: widget.section['name_en'] ?? widget.section['name'] ?? '',
-    );
-    _editHuController = TextEditingController(
-      text: widget.section['name_hu'] ?? '',
-    );
-  }
+  final _en = TextEditingController();
+  final _hu = TextEditingController();
+  bool _editing = false;
+  bool _hungarian = false;
 
   @override
   void dispose() {
-    _editEnController.dispose();
-    _editHuController.dispose();
+    _en.dispose();
+    _hu.dispose();
     super.dispose();
+  }
+
+  void _edit() {
+    _en.text = widget.nameEn;
+    _hu.text = widget.nameHu;
+    setState(() {
+      _editing = true;
+      _hungarian = false;
+    });
+  }
+
+  Future<void> _save() async {
+    if (await widget.onRename(_en.text, _hu.text) && mounted) {
+      setState(() => _editing = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: const Icon(Icons.folder_outlined),
-      title: _isEditing
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ChoiceChip(
-                      label: const Text("EN"),
-                      labelStyle: TextStyle(
-                        color: _editLang == 'en'
-                            ? CozyTheme.of(context).textInverse
-                            : CozyTheme.of(context).primary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                      selected: _editLang == 'en',
-                      selectedColor: CozyTheme.of(context).primary,
-                      backgroundColor: CozyTheme.of(context).paperWhite,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        side: BorderSide(color: CozyTheme.of(context).primary),
-                      ),
-                      showCheckmark: false,
-                      onSelected: (val) => setState(() => _editLang = 'en'),
-                      visualDensity: VisualDensity.compact,
-                    ),
-                    const SizedBox(width: 8),
-                    ChoiceChip(
-                      label: const Text("HU"),
-                      labelStyle: TextStyle(
-                        color: _editLang == 'hu'
-                            ? CozyTheme.of(context).textInverse
-                            : CozyTheme.of(context).primary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                      selected: _editLang == 'hu',
-                      selectedColor: CozyTheme.of(context).primary,
-                      backgroundColor: CozyTheme.of(context).paperWhite,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        side: BorderSide(color: CozyTheme.of(context).primary),
-                      ),
-                      showCheckmark: false,
-                      onSelected: (val) => setState(() => _editLang = 'hu'),
-                      visualDensity: VisualDensity.compact,
-                    ),
-                  ],
-                ),
-                TextField(
-                  controller: _editLang == 'en'
-                      ? _editEnController
-                      : _editHuController,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    labelText:
-                        "${l10n.adminRenameSection} (${_editLang.toUpperCase()})",
-                    isDense: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        color: CozyTheme.of(context).primary,
-                        width: 2,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        color: CozyTheme.of(context).primary,
-                        width: 2,
-                      ),
-                    ),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.close, size: 16),
-                      tooltip: 'Cancel Edit',
-                      onPressed: () => setState(() => _isEditing = false),
-                    ),
-                  ),
-                  onSubmitted: (val) {
-                    widget.onRename(
-                      _editEnController.text,
-                      _editHuController.text,
-                    );
-                    setState(() => _isEditing = false);
-                  },
-                ),
-              ],
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(widget.section['name_en'] ?? widget.section['name'] ?? ''),
-                if (widget.section['name_hu'] != null &&
-                    widget.section['name_hu'].isNotEmpty)
-                  Text(
-                    widget.section['name_hu'],
-                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                  ),
-              ],
-            ),
-      trailing: _isEditing
-          ? null
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.edit, color: Colors.blue, size: 20),
-                  tooltip: 'Edit Section',
-                  onPressed: () => setState(() => _isEditing = true),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
-                const SizedBox(width: 12),
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red, size: 20),
-                  tooltip: 'Delete Section',
-                  onPressed: widget.onDelete,
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
-              ],
-            ),
-    );
+    final l = AppLocalizations.of(context)!;
+    if (!_editing) {
+      return ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: const Icon(Icons.folder_outlined),
+        title: Text(widget.nameEn),
+        subtitle: widget.nameHu.isEmpty ? null : Text(widget.nameHu),
+        trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+          IconButton(
+              onPressed: widget.enabled ? _edit : null,
+              tooltip: l.edit,
+              icon: const Icon(Icons.edit)),
+          IconButton(
+              onPressed: widget.enabled ? widget.onDelete : null,
+              tooltip: l.delete,
+              icon: const Icon(Icons.delete)),
+        ]),
+      );
+    }
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Wrap(spacing: 8, children: [
+        for (final hu in [false, true])
+          ChoiceChip(
+              label: Text(hu ? 'HU' : 'EN'),
+              selected: hu == _hungarian,
+              onSelected: widget.enabled
+                  ? (_) => setState(() => _hungarian = hu)
+                  : null),
+      ]),
+      TextField(
+          controller: _hungarian ? _hu : _en,
+          enabled: widget.enabled,
+          autofocus: true,
+          decoration: InputDecoration(
+              labelText:
+                  '${l.adminRenameSection} (${_hungarian ? 'HU' : 'EN'})'),
+          onSubmitted: (_) => _save()),
+      Wrap(children: [
+        TextButton(
+            onPressed:
+                widget.enabled ? () => setState(() => _editing = false) : null,
+            child: Text(l.cancel)),
+        TextButton(
+            onPressed: widget.enabled ? _save : null, child: Text(l.save)),
+      ]),
+    ]);
   }
 }

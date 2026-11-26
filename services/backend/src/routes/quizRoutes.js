@@ -8,18 +8,23 @@ const quoteController = require('../controllers/quoteController');
 const { protect } = require('../middleware/authMiddleware');
 const { admin } = require('../middleware/adminMiddleware');
 
-// Multer config for file uploads
-const storage = multer.memoryStorage();
-// 🛡️ Sentinel: Enforce file size limits (5MB) on memoryStorage to prevent DoS via memory exhaustion
-const upload = multer({
-    storage,
-    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
-});
+const importFile = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 5 * 1024 * 1024, files: 1, fields: 0, parts: 2 },
+}).single('file');
 
-// --- PUBLIC ROUTES ---
+function readImportFile(req, res, next) {
+    importFile(req, res, err => {
+        if (!(err instanceof multer.MulterError)) return next(err);
+        if (err.code === 'LIMIT_FILE_SIZE') return res.status(413).json({ message: 'Import files must be at most 5 MiB.' });
+        return res.status(400).json({ message: 'Select one import file.' });
+    });
+}
+
+// --- AUTHENTICATED PRACTICE ROUTES ---
 router.post('/start', protect, quizController.startSession);
 router.get('/next', protect, quizController.getNextQuestion);
-router.get('/topics', protect, quizController.getTopics);
+router.get('/topics', protect, topicController.getTopics);
 router.get('/question-types', protect, quizController.getQuestionTypes);
 router.post('/answer', protect, quizController.submitAnswer);
 router.get('/quote', protect, quoteController.getCurrentQuote);
@@ -31,7 +36,7 @@ router.get('/admin/questions', protect, admin, adminQuestionController.adminGetQ
 router.post('/admin/questions', protect, admin, adminQuestionController.adminCreateQuestion);
 router.post('/admin/questions/bulk', protect, admin, adminQuestionController.adminBulkAction);
 router.get('/admin/questions/template', protect, admin, adminQuestionController.adminDownloadTemplate);
-router.post('/admin/questions/batch', protect, admin, upload.single('file'), adminQuestionController.adminBatchUpload);
+router.post('/admin/questions/batch', protect, admin, readImportFile, adminQuestionController.adminBatchUpload);
 router.get('/admin/analytics/wall-of-pain', protect, admin, adminQuestionController.getWallOfPain);
 router.put('/admin/questions/:id', protect, admin, adminQuestionController.adminUpdateQuestion);
 router.delete('/admin/questions/:id', protect, admin, adminQuestionController.adminDeleteQuestion);

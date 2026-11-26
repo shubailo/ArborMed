@@ -153,13 +153,8 @@ class MyApp extends StatelessWidget {
             return provider;
           },
         ),
-        ChangeNotifierProxyProvider<AuthProvider, TopicProvider>(
-          create: (context) =>
-              TopicProvider(Provider.of<AuthProvider>(context, listen: false)),
-          update: (context, auth, previous) {
-            if (!auth.isAuthenticated) previous?.resetState();
-            return previous ?? TopicProvider(auth);
-          },
+        ChangeNotifierProvider<TopicProvider>(
+          create: (context) => TopicProvider(context.read<AuthProvider>()),
         ),
         ChangeNotifierProxyProvider<AuthProvider, AdminContentProvider>(
           create: (context) => AdminContentProvider(
