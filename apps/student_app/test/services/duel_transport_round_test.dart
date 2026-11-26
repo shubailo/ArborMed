@@ -46,6 +46,57 @@ void main() {
         openSocket: (_, options) => wire);
   });
   tearDown(() => service.dispose());
+  test('out-of-match scores and clocks cannot change the current duel', () async {
+    wire.ready();
+    final api = ApiService()..setToken('fixture', userId: 7);
+    final duel = DuelProvider(api, openSocket: (_, token) => service)..setAccount(7);
+    addTearDown(duel.dispose);
+    duel.joinQueue(10);
+    wire.handlers['match_found']!({
+      'matchId': 'new', 'role': 'p1',
+      'questions': [{'id': 'q1', 'q': 'Q', 'options': ['A', 'B']}],
+    });
+    await Future<void>.delayed(Duration.zero);
+    wire.handlers['score_update']!({'matchId': 'new', 'p1': 1, 'p2': 0});
+    wire.handlers['time_sync']!({'matchId': 'new', 'time': 15});
+    wire.handlers['score_update']!({'matchId': 'old', 'p1': 9, 'p2': 5});
+    wire.handlers['time_sync']!({'matchId': 'old', 'time': 0});
+    await Future<void>.delayed(Duration.zero);
+    expect([duel.p1Score, duel.p2Score, duel.timeRemaining], [1, 0, 15]);
+    wire.handlers['time_sync']!({'time': 9});
+    await Future<void>.delayed(Duration.zero);
+    expect(duel.timeRemaining, 9);
+  });
+
+  test('a disconnected or repeated tap cannot send or consume another answer', () async {
+    wire.ready();
+    final api = ApiService()..setToken('fixture', userId: 7);
+    final duel = DuelProvider(api, openSocket: (_, token) => service)..setAccount(7);
+    addTearDown(duel.dispose);
+    duel.joinQueue(10);
+    wire.handlers['match_found']!({
+      'matchId': 'm', 'role': 'p1',
+      'questions': [
+        {'id': 'first', 'options': ['A','B']}, {'id': 'last', 'options': ['C','D']},
+      ],
+    });
+    await Future<void>.delayed(Duration.zero);
+    wire.connected = false;
+    duel.submitAnswer('A');
+    expect(duel.currentQuestionIndex, 0);
+    wire.connected = true;
+    duel.submitAnswer('A');
+    duel.submitAnswer('C');
+    duel.submitAnswer('D');
+    expect(wire.sent.where((e) => e.key == 'submit_answer').map((e) => e.value['answer']), ['A', 'C']);
+  });
+
+  test('a handshake error omits raw transport diagnostics', () async {
+    final failure = service.errorStream.first;
+    wire.handlers['connect_error']!('private transport diagnostic');
+    expect(await failure, isNot(contains('private transport diagnostic')));
+  });
+
   test('a wager waits for connection, uses the current token and is sent once',
       () {
     service.joinQueue(10, 'fixture');
@@ -96,7 +147,7 @@ void main() {
     expect(() => wire.handlers['error']!('temporary'), returnsNormally);
     wire.handlers['time_sync']!({'time': 17});
     wire.handlers['score_update']!({'p1': 2, 'p2': 1});
-    expect(await time, 17);
+    expect(await time, {'time': 17});
     expect(await score, {'p1': 2, 'p2': 1});
   });
 }

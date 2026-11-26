@@ -16,7 +16,7 @@ class DuelSocketService {
   final _queueJoinedController = StreamController<Map<String, dynamic>>.broadcast();
   final _queueLeftController = StreamController<Map<String, dynamic>>.broadcast();
   final _scoreUpdateController = StreamController<Map<String, dynamic>>.broadcast();
-  final _timeSyncController = StreamController<int>.broadcast();
+  final _timeSyncController = StreamController<Map<String, dynamic>>.broadcast();
   final _receiptController = StreamController<Map<String, dynamic>>.broadcast();
   final _gameOverController = StreamController<Map<String, dynamic>>.broadcast();
   final _opponentDisconnectedController = StreamController<Map<String, dynamic>>.broadcast();
@@ -32,7 +32,7 @@ class DuelSocketService {
   Stream<Map<String, dynamic>> get queueJoinedStream => _queueJoinedController.stream;
   Stream<Map<String, dynamic>> get queueLeftStream => _queueLeftController.stream;
   Stream<Map<String, dynamic>> get scoreUpdateStream => _scoreUpdateController.stream;
-  Stream<int> get timeSyncStream => _timeSyncController.stream;
+  Stream<Map<String, dynamic>> get timeSyncStream => _timeSyncController.stream;
   Stream<Map<String, dynamic>> get receiptStream => _receiptController.stream;
   Stream<Map<String, dynamic>> get gameOverStream => _gameOverController.stream;
   Stream<Map<String, dynamic>> get opponentDisconnectedStream => _opponentDisconnectedController.stream;
@@ -67,10 +67,9 @@ class DuelSocketService {
       _connectionController.add(false);
     });
 
-    _socket!.onConnectError((err) {
+    _socket!.onConnectError((_) {
       _pendingWager = null;
-      debugPrint('Duel Socket connect error: $err');
-      _errorController.add('Connection error: $err');
+      _errorController.add('Unable to connect to the duel server.');
     });
 
     void forwardMap(String event, StreamController<Map<String, dynamic>> controller) {
@@ -92,7 +91,9 @@ class DuelSocketService {
     forwardMap('opponent_disconnected', _opponentDisconnectedController);
     _socket!.on('time_sync', (data) {
       final time = data is Map ? data['time'] : null;
-      if (time is int && time >= 0) _timeSyncController.add(time);
+      if (time is int && time >= 0) {
+        _timeSyncController.add({'time': time, if (data['matchId'] != null) 'matchId': data['matchId']});
+      }
     });
     _socket!.on('error', (data) {
       final message = data is Map ? data['message'] : data;

@@ -1,3 +1,4 @@
+import '../../generated/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/duel_provider.dart';
@@ -15,12 +16,24 @@ class DuelGameScreen extends StatefulWidget {
 }
 
 class _DuelGameScreenState extends State<DuelGameScreen> {
+  (String?, int)? _answeredRound;
   String? _selectedAnswer;
+  bool _leaving = false;
 
   @override
   Widget build(BuildContext context) {
     final duelProvider = context.watch<DuelProvider>();
 
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && duelProvider.state != DuelState.playing) _leaveArena(duelProvider);
+      },
+      child: _buildArena(context, duelProvider),
+    );
+  }
+
+  Widget _buildArena(BuildContext context, DuelProvider duelProvider) {
     // If game is over, we should show the results overlay
     // For now we'll handle it via returning a different widget tree if finished
     if (duelProvider.state == DuelState.finished) {
@@ -30,10 +43,7 @@ class _DuelGameScreenState extends State<DuelGameScreen> {
     if (duelProvider.state == DuelState.error) {
       return Scaffold(body: Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
         Text(duelProvider.errorMessage ?? 'The duel was interrupted.', textAlign: TextAlign.center),
-        TextButton(onPressed: () async {
-          await context.read<AuthProvider>().refreshUser();
-          if (context.mounted) duelProvider.checkResult();
-        },
+        TextButton(onPressed: duelProvider.checkResult,
             child: const Text('Check result')),
         TextButton(onPressed: () => _leaveArena(duelProvider), child: const Text('Leave arena')),
       ])));
@@ -44,6 +54,8 @@ class _DuelGameScreenState extends State<DuelGameScreen> {
     }
 
     final currentQuestion = duelProvider.questions[duelProvider.currentQuestionIndex];
+    final round = (duelProvider.matchId, duelProvider.currentQuestionIndex);
+    final selected = _answeredRound == round ? _selectedAnswer : null;
     final options = _getOptions(currentQuestion);
     final hu = currentQuestion['hu'];
     final display = Localizations.localeOf(context).languageCode == 'hu' && hu is Map<String, dynamic>
@@ -67,17 +79,23 @@ class _DuelGameScreenState extends State<DuelGameScreen> {
                     for (final (index, opt) in options.indexed) Padding(
                           padding: const EdgeInsets.only(bottom: 12),
                           child: PressableAnswerButton(
-                            isSelected: _selectedAnswer == opt,
+                            isSelected: selected == opt,
+                            isDisabled: !duelProvider.canSubmitAnswer || selected != null,
                             onTap: () {
-                              setState(() => _selectedAnswer = opt);
+                              if (!duelProvider.canSubmitAnswer || _answeredRound == round ||
+                                  (duelProvider.matchId, duelProvider.currentQuestionIndex) != round) {
+                                return;
+                              }
+                              setState(() {
+                                _answeredRound = round;
+                                _selectedAnswer = opt;
+                              });
                               duelProvider.submitAnswer(opt);
-                              // We don't reset _selectedAnswer here immediately because 
-                              // we wait for question index to change or game to end.
                             },
-                            backgroundColor: _selectedAnswer == opt 
+                            backgroundColor: selected == opt
                                 ? Theme.of(context).colorScheme.primaryContainer
                                 : Theme.of(context).colorScheme.surface,
-                            borderColor: _selectedAnswer == opt 
+                            borderColor: selected == opt
                                 ? Theme.of(context).colorScheme.primary
                                 : Theme.of(context).dividerColor,
                             child: SizedBox(
@@ -224,10 +242,21 @@ class _DuelGameScreenState extends State<DuelGameScreen> {
   }
 
   Future<void> _leaveArena(DuelProvider provider) async {
+    if (_leaving || ModalRoute.of(context)?.isCurrent != true) return;
+    _leaving = true;
     final auth = context.read<AuthProvider>();
+    final messenger = ScaffoldMessenger.of(context);
+    final message = AppLocalizations.of(context)?.duelRefreshFailed ?? 'Could not refresh your balance.';
+    final account = auth.user?.id;
     provider.reset();
-    Navigator.of(context).popUntil((route) => route.isFirst);
-    await auth.refreshUser();
+    Navigator.of(context).pop();
+    try {
+      await auth.refreshUser();
+    } catch (_) {
+      if (messenger.mounted && auth.user?.id == account) {
+        messenger.showSnackBar(SnackBar(content: Text(message)));
+      }
+    }
   }
 
   Widget _buildResults(BuildContext context, DuelProvider provider) {

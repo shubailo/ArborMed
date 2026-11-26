@@ -6,6 +6,7 @@ const { findSessionUser } = require('./sessionUser');
 const { isAllowedOrigin, corsOrigin } = require('../config/origins');
 const wallet = require('./walletService');
 const { choiceOptions, resolveChoice } = require('./questionTypes/choiceOptions');
+const { gradeableChoiceKey } = require('./questionTypes/gradeableQuestion');
 const { scalarAnswer } = require('./questionTypes/storedAnswer');
 const logger = require('../utils/logger');
 
@@ -143,6 +144,10 @@ async function leave(socket, disconnected) {
   // In-flight reservations and match creation observe left before announcing a match.
 }
 
+function prompt(...values) {
+  return values.find(value => typeof value === 'string' && value.trim())?.trim();
+}
+
 // The duel UI renders a single choice. Never send a database row, answer
 // metadata, or the database's reusable practice question ID to a contestant.
 async function fetchQuestions() {
@@ -151,18 +156,20 @@ async function fetchQuestions() {
     FROM questions WHERE active AND question_type = 'single_choice' ORDER BY RANDOM() LIMIT 12`);
   const questions = [];
   for (const row of rows) {
-    const text = row.question_text_en || row.question_text_hu || row.content?.question_text;
-    if (typeof text !== 'string' || !text.trim()) continue;
+    const content = row.content?.question_text;
+    const english = prompt(row.question_text_en, content?.en, content);
+    const hungarian = prompt(row.question_text_hu, content?.hu);
+    const text = english || hungarian;
+    if (!text) continue;
     const choices = choiceOptions(row);
     const labels = choices.map(choice => choice.en || choice.hu);
-    if (choices.length < 2 || labels.some(label => typeof label !== 'string' || !label.trim())
-        || new Set(labels).size !== labels.length) continue;
-    const key = scalarAnswer(row.correct_answer);
+    if (new Set(labels).size !== labels.length) continue;
+    const key = scalarAnswer(gradeableChoiceKey(choices, row.correct_answer, false));
     if (!['string','number'].includes(typeof key) || !String(key).trim()) continue;
     const correct = resolveChoice(choices, key);
-    if (!correct || choices.filter(choice => choice.id === correct.id).length !== 1) continue;
+    if (!correct) continue;
     const huLabels = choices.map((choice, i) => choice.hu.trim() || labels[i]);
-    const hu = {q: row.question_text_hu?.trim() || text,
+    const hu = {q: hungarian || text,
       options: new Set(huLabels).size === huLabels.length ? huLabels : labels};
     questions.push({
       public: {id: questions.length + 1, q: text, options: labels, hu},
@@ -223,14 +230,16 @@ async function formMatch(p1, p2) {
 }
 
 function broadcast(match, event, payload) {
-  io.to(match.p1.socket.id).emit(event, payload);
-  if (match.p2) io.to(match.p2.socket.id).emit(event, payload);
+  const update = { ...payload, matchId: match.id };
+  io.to(match.p1.socket.id).emit(event, update);
+  if (match.p2) io.to(match.p2.socket.id).emit(event, update);
 }
 
 function submit(socket, data) {
   const member = members.get(socket.userId);
   const match = matches.get(data?.matchId);
   if (!match || member?.socket !== socket || member.matchId !== match.id || Date.now() >= match.endsAt) return;
+  if (typeof data.questionId !== 'string' && typeof data.questionId !== 'number') return;
   const question = match.questions.find(q => String(q.public.id) === String(data.questionId));
   if (!question || !question.public.options.includes(data.answer)) return;
   record(match, member === match.p1 ? 'p1' : 'p2', question, data.answer === question.correct);

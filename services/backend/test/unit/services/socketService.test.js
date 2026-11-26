@@ -86,7 +86,9 @@ it('exposes only presentation data, grades a choice once, and settles once', asy
   expect(q).toEqual({id:expect.any(Number), q:'Q', options:['A','B'], hu:{q:'Q',options:['X','Y']}});
   await b.events.submit_answer({matchId:match.matchId, questionId:q.id, answer:'A'});
   await b.events.submit_answer({matchId:match.matchId, questionId:String(q.id), answer:'A'});
-  expect(io.emit).toHaveBeenLastCalledWith('score_update',{p1:1,p2:0});
+  expect(io.emit).toHaveBeenLastCalledWith('score_update',{matchId:match.matchId,p1:1,p2:0});
+  await jest.advanceTimersByTimeAsync(5000);
+  expect(io.emit).toHaveBeenCalledWith('time_sync',{matchId:match.matchId,time:55});
   await Promise.all([a.events.disconnect(),b.events.disconnect()]);
   expect(wallet.settlePayouts).toHaveBeenCalledTimes(1);
 });
@@ -219,7 +221,7 @@ it('ships translated text and labels with the same ordering as canonical submiss
   expect(question.hu).toEqual({q:'Magyar kérdés',options:['X','Y']});
   expect(question.options).toEqual(['A','B']);
   await b.events.submit_answer({matchId:match.matchId,questionId:question.id,answer:question.options[0]});
-  expect(io.emit).toHaveBeenLastCalledWith('score_update',{p1:1,p2:0});
+  expect(io.emit).toHaveBeenLastCalledWith('score_update',{matchId:match.matchId,p1:1,p2:0});
 });
 
 it('normalizes a question once, including when its stored answer is a serialized single value', async () => {
@@ -232,7 +234,7 @@ it('normalizes a question once, including when its stored answer is a serialized
   await a.events.join_queue({wager:5}); await b.events.join_queue({wager:5});
   const match=io.emit.mock.calls.find(([event])=>event==='match_found')[1];
   await a.events.submit_answer({matchId:match.matchId,questionId:1,answer:labels[25]});
-  expect(io.emit).toHaveBeenLastCalledWith('score_update',{p1:0,p2:1});
+  expect(io.emit).toHaveBeenLastCalledWith('score_update',{matchId:match.matchId,p1:0,p2:1});
   expect(reads).toBe(1);
 });
 
@@ -242,4 +244,43 @@ it('keeps the canonical choices distinct when translated labels collide', async 
   await a.events.join_queue({wager:5}); await b.events.join_queue({wager:5});
   const match=io.emit.mock.calls.find(([event])=>event==='match_found')[1];
   expect(match.questions[0].hu.options).toEqual(['A','B']);
+});
+
+it('serves the same recoverable answer key and bilingual content prompt as practice', async () => {
+  const row = {...sample, question_text_en:' ', question_text_hu:null,
+    content:{question_text:{en:'Which cause?',hu:'Mi az oka?'}},
+    options:{en:['A, B','C'],hu:['A és B','C']}, correct_answer:'["A","B"]'};
+  const gradeable = require('../../../src/services/questionTypes/gradeableQuestion')(row);
+  const registry = require('../../../src/services/questionTypes/registry');
+  expect(registry.checkAnswer(gradeable, 'A, B').correct).toBe(true);
+  db.query.mockResolvedValueOnce({rows:[row]});
+  const a=socket('a',1), b=socket('b',2);
+  await a.events.join_queue({wager:5}); await b.events.join_queue({wager:5});
+  const match=io.emit.mock.calls.find(([event])=>event==='match_found')?.[1];
+  expect(match?.questions).toEqual([{id:1,q:'Which cause?',options:['A, B','C'],
+    hu:{q:'Mi az oka?',options:['A és B','C']}}]);
+  a.events.submit_answer({matchId:match.matchId,questionId:1,answer:'A, B'});
+  b.events.submit_answer({matchId:match.matchId,questionId:1,answer:'C'});
+  expect(io.emit).toHaveBeenLastCalledWith('score_update',expect.objectContaining({p1:0,p2:1}));
+});
+
+it('skips a row with duplicate identities even if only the distractors collide', async () => {
+  const ambiguous = {...sample, options:[{id:'x',en:'A'},{id:'x',en:'B'},{id:'y',en:'C'}], correct_answer:'C'};
+  expect(require('../../../src/services/questionTypes/gradeableQuestion')(ambiguous)).toBeNull();
+  db.query.mockResolvedValueOnce({rows:[ambiguous,sample]});
+  const a=socket('a',1), b=socket('b',2);
+  await a.events.join_queue({wager:5}); await b.events.join_queue({wager:5});
+  const match=io.emit.mock.calls.find(([event])=>event==='match_found')[1];
+  expect(match.questions).toHaveLength(1);
+  expect(match.questions[0].options).toEqual(['A','B']);
+});
+
+it('ignores a structured question id before recording an answer', async () => {
+  const a=socket('a',1), b=socket('b',2);
+  await a.events.join_queue({wager:5}); await b.events.join_queue({wager:5});
+  const match=io.emit.mock.calls.find(([event])=>event==='match_found')[1];
+  a.events.submit_answer({matchId:match.matchId,questionId:[1],answer:'B'});
+  expect(io.emit.mock.calls.some(([event])=>event==='score_update')).toBe(false);
+  a.events.submit_answer({matchId:match.matchId,questionId:'1',answer:'A'});
+  expect(io.emit).toHaveBeenLastCalledWith('score_update',expect.objectContaining({p1:0,p2:1}));
 });

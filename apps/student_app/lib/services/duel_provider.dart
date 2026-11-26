@@ -25,6 +25,7 @@ class DuelProvider with ChangeNotifier {
   String? _role; // 'p1' or 'p2'
   List<Map<String, dynamic>> _rawQuestions = [];
   int _currentQuestionIndex = 0;
+  bool _answeredLastQuestion = false;
   int _p1Score = 0;
   int _p2Score = 0;
   int _timeRemaining = 60;
@@ -42,6 +43,8 @@ class DuelProvider with ChangeNotifier {
   String? get errorMessage => _errorMessage;
   String? get matchId => _matchId;
   String? get role => _role;
+  bool get canSubmitAnswer => _state == DuelState.playing && isConnected &&
+      _timeRemaining > 0 && !_answeredLastQuestion;
   int get currentQuestionIndex => _currentQuestionIndex;
   int get p1Score => _p1Score;
   int get p2Score => _p2Score;
@@ -135,14 +138,18 @@ class DuelProvider with ChangeNotifier {
     }));
 
     _listeners.add(_socketService!.scoreUpdateStream.listen((data) {
-      if (_state != DuelState.playing || data['p1'] is! int || data['p2'] is! int) return;
+      if (!_isCurrentUpdate(data) || data['p1'] is! int || data['p2'] is! int ||
+          data['p1'] < _p1Score || data['p2'] < _p2Score) {
+        return;
+      }
       _p1Score = data['p1'];
       _p2Score = data['p2'];
       notifyListeners();
     }));
 
-    _listeners.add(_socketService!.timeSyncStream.listen((time) {
-      if (_state != DuelState.playing) return;
+    _listeners.add(_socketService!.timeSyncStream.listen((data) {
+      final time = data['time'];
+      if (!_isCurrentUpdate(data) || time is! int || time < 0 || time > _timeRemaining) return;
       _timeRemaining = time;
       notifyListeners();
     }));
@@ -211,6 +218,9 @@ class DuelProvider with ChangeNotifier {
     }));
   }
 
+  bool _isCurrentUpdate(Map<String, dynamic> data) =>
+      _state == DuelState.playing && (data['matchId'] == null || data['matchId'] == _matchId);
+
   void _awaitReceipt() {
     _state = DuelState.error;
     _errorMessage = 'Waiting for the server to settle your wager.';
@@ -267,7 +277,7 @@ class DuelProvider with ChangeNotifier {
   }
 
   void submitAnswer(dynamic answer) {
-    if (_matchId == null || _state != DuelState.playing) return;
+    if (!canSubmitAnswer) return;
     
     final currentQ = _rawQuestions[_currentQuestionIndex];
     _socketService!.submitAnswer(_matchId!, currentQ['id'].toString(), answer);
@@ -275,8 +285,10 @@ class DuelProvider with ChangeNotifier {
     // Move to next question locally if possible
     if (_currentQuestionIndex < _rawQuestions.length - 1) {
       _currentQuestionIndex++;
-      notifyListeners();
+    } else {
+      _answeredLastQuestion = true;
     }
+    notifyListeners();
   }
 
   void reset() {
@@ -290,6 +302,7 @@ class DuelProvider with ChangeNotifier {
     _resolveLeave(true);
     _state = DuelState.idle;
     _currentWager = 0;
+    _answeredLastQuestion = false;
     _matchId = null;
     _role = null;
     _rawQuestions = [];

@@ -1,3 +1,4 @@
+import 'package:arbor_med/widgets/cozy/pressable_answer_button.dart';
 import 'dart:async';
 import 'package:arbor_med/core/api_exceptions.dart';
 import 'package:arbor_med/core/models/user.dart';
@@ -52,7 +53,41 @@ class _Duel extends ChangeNotifier implements DuelProvider {
   @override
   String? get errorMessage => null;
   @override
-  List<Map<String, dynamic>> get questions => [];
+  List<Map<String, dynamic>> questions = [];
+  @override
+  String? matchId;
+  @override
+  int currentQuestionIndex = 0;
+  @override
+  int timeRemaining = 60;
+  @override
+  String get role => 'p1';
+  @override
+  String? get opponentName => 'Opponent';
+  @override
+  int get p1Score => 0;
+  @override
+  int get p2Score => 0;
+  @override
+  int get potWon => 10;
+  @override
+  String get winner => 'draw';
+  @override
+  bool get hasFinalScores => false;
+  @override
+  bool get canSubmitAnswer => state == DuelState.playing && timeRemaining > 0 && answers.length < questions.length;
+  final answers = <String>[];
+  @override
+  void submitAnswer(dynamic answer) {
+    answers.add(answer as String);
+    if (currentQuestionIndex + 1 < questions.length) currentQuestionIndex++;
+    notifyListeners();
+  }
+  int resultChecks = 0;
+  @override
+  void checkResult() => resultChecks++;
+  @override
+  void reset() => state = DuelState.idle;
   final joins = <int>[];
   Future<bool> Function() leave = () async => true;
   @override
@@ -102,7 +137,12 @@ void main() {
             supportedLocales: AppLocalizations.supportedLocales,
             home: const Scaffold(body: Text('Home fixture')))));
     nav.currentState!.push(MaterialPageRoute<void>(builder: (_) => page));
-    await t.pumpAndSettle();
+    if (page is DuelGameScreen) {
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 400));
+    } else {
+      await t.pumpAndSettle();
+    }
   }
 
   CozyButton cozy(WidgetTester t, String label) =>
@@ -210,6 +250,76 @@ void main() {
     await t.pump();
     expect(find.text('Tét: 10 🩺'), findsOneWidget);
   });
+  testWidgets('an old account leave acknowledgement cannot close the new lobby', (t) async {
+    await open(t, const DuelLobbyScreen());
+    final gate = Completer<bool>();
+    duel.leave = () => gate.future;
+    await t.tap(find.byIcon(Icons.arrow_back));
+    auth.user = User.fromJson({'id': 2, 'coins': 100});
+    auth.notifyListenersForTest();
+    gate.complete(true);
+    await t.pumpAndSettle();
+    expect(find.byType(DuelLobbyScreen), findsOneWidget);
+    expect(auth.refreshes, 0);
+  });
+
+  testWidgets('a match settled behind a covering route still opens its result', (t) async {
+    await open(t, const DuelLobbyScreen());
+    nav.currentState!.push(MaterialPageRoute<void>(
+        builder: (_) => const Scaffold(body: Text('Overlay'))));
+    await t.pumpAndSettle();
+    duel.playing();
+    duel.state = DuelState.finished;
+    duel.notifyForTest();
+    await t.pump();
+    nav.currentState!.pop();
+    await t.pumpAndSettle();
+    expect(find.text('STALEMATE'), findsOneWidget);
+  });
+
+  testWidgets('an answer tap belongs to the rendered question and cannot replay', (t) async {
+    duel.state = DuelState.playing;
+    duel.matchId = 'match';
+    duel.questions = [
+      {'id': 'first', 'q': 'First?', 'options': ['A','B']},
+      {'id': 'second', 'q': 'Next?', 'options': ['A','C']},
+    ];
+    await open(t, const DuelGameScreen());
+    final first = t.widget<PressableAnswerButton>(find.byType(PressableAnswerButton).first).onTap;
+    first();
+    first();
+    expect(duel.answers, ['A']);
+    await t.pump();
+    final next = t.widget<PressableAnswerButton>(find.byType(PressableAnswerButton).first);
+    expect(next.isSelected, isFalse);
+    next.onTap();
+    next.onTap();
+    await t.pump();
+    expect(duel.answers, ['A','A']);
+    expect(t.widget<PressableAnswerButton>(find.byType(PressableAnswerButton).first).isDisabled, isTrue);
+  });
+
+  testWidgets('the active duel survives system back, result lookup survives wallet outage', (t) async {
+    duel.state = DuelState.playing;
+    duel.matchId = 'match';
+    duel.questions = [{'id':'q', 'q':'Q?', 'options':['A','B']}];
+    await open(t, const DuelGameScreen());
+    await nav.currentState!.maybePop();
+    await t.pump(const Duration(milliseconds: 400));
+    expect(find.byType(DuelGameScreen), findsOneWidget);
+    duel.state = DuelState.error;
+    duel.notifyForTest();
+    await t.pump();
+    auth.refresh = () async => throw const ServerException();
+    await t.tap(find.text('Check result'));
+    await t.pumpAndSettle();
+    expect(duel.resultChecks, 1);
+    await t.tap(find.text('Leave arena'));
+    await t.pumpAndSettle();
+    expect(find.text('Home fixture'), findsOneWidget);
+    expect(t.takeException(), isNull);
+  });
+
   testWidgets('a wager belongs to the account that requested the balance check',
       (t) async {
     await open(t, const DuelLobbyScreen());

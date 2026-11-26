@@ -31,7 +31,7 @@ class _Socket extends Fake implements DuelSocketService {
   @override
   Stream<Map<String, dynamic>> get scoreUpdateStream => const Stream.empty();
   @override
-  Stream<int> get timeSyncStream => const Stream.empty();
+  Stream<Map<String, dynamic>> get timeSyncStream => const Stream.empty();
   @override
   Stream<Map<String, dynamic>> get opponentDisconnectedStream =>
       opponent.stream;

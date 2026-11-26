@@ -47,6 +47,26 @@ function visibleKey(resolve, choice) {
   return decodeStoredAnswer(label) === label && resolve(label)?.id === choice.id ? label : choice.id;
 }
 
+function gradeableChoiceKey(choices, storedKey, multiple) {
+  const input = decodeStoredAnswer(storedKey);
+  let key = input;
+  if (choices.length < 2 || !distinctChoices(choices)) return null;
+  const resolve = createChoiceResolver(choices);
+  if (!gradeChoices({correct_answer: storedKey}, input, multiple, choices).correct) {
+    key = recoverChoices(choices, resolve, input, multiple);
+    if (key == null || !gradeChoices({correct_answer: key}, key, multiple, choices).correct) return null;
+  }
+  // A historical authoring ID (e.g. "a") is distinct from the stable
+  // ID sent to the app. Use a visible label for the offline answer key.
+  const visible = value => {
+    const choice = resolve(value);
+    if (!multiple && decodeStoredAnswer(value) !== value) return choice.id;
+    const normalized = String(value).trim().toLowerCase();
+    return [choice.id, choice.en.trim().toLowerCase(), choice.hu.trim().toLowerCase()].includes(normalized) ? value : visibleKey(resolve, choice);
+  };
+  return Array.isArray(key) ? key.map(visible) : visible(key);
+}
+
 function fromType(question, declaredType) {
   if (!question || question.active === false) return null;
   let type = declaredType;
@@ -60,25 +80,8 @@ function fromType(question, declaredType) {
     key = registry.getType(type).solutionFor(question);
     if (!key) return null;
   } else if (type === 'single_choice' || type === 'multiple_choice') {
-    const input = decodeStoredAnswer(question.correct_answer);
-    key = input;
-    const choices = choiceOptions(question);
-    if (choices.length < 2 || !distinctChoices(choices)) return null;
-    const multiple = type === 'multiple_choice';
-    const resolve = createChoiceResolver(choices);
-    if (!gradeChoices(question, input, multiple).correct) {
-      key = recoverChoices(choices, resolve, input, multiple);
-      if (key == null || !gradeChoices({...question, correct_answer: key}, key, multiple).correct) return null;
-    }
-    // A historical authoring ID (e.g. "a") is distinct from the stable
-    // ID sent to the app. Use a visible label for the offline answer key.
-    const visible = value => {
-      const choice = resolve(value);
-      if (!multiple && decodeStoredAnswer(value) !== value) return choice.id;
-      const normalized = String(value).trim().toLowerCase();
-      return [choice.id, choice.en.trim().toLowerCase(), choice.hu.trim().toLowerCase()].includes(normalized) ? value : visibleKey(resolve, choice);
-    };
-    key = Array.isArray(key) ? key.map(visible) : visible(key);
+    key = gradeableChoiceKey(choiceOptions(question), question.correct_answer, type === 'multiple_choice');
+    if (key == null) return null;
   } else {
     const handler = registry.getType(type);
     key = decodeStoredAnswer(question.correct_answer);
@@ -98,3 +101,4 @@ function gradeableQuestion(question) {
 }
 
 module.exports = gradeableQuestion;
+module.exports.gradeableChoiceKey = gradeableChoiceKey;

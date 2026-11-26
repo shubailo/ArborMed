@@ -46,6 +46,10 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
       ..showSnackBar(SnackBar(content: Text(text)));
   }
 
+  bool _hasMatch(DuelProvider duel) =>
+      duel.state == DuelState.playing || duel.state == DuelState.finished ||
+      (duel.state == DuelState.error && duel.matchId != null);
+
   Future<void> _join() async {
     if (_joining || _exiting || !_current) return;
     final auth = context.read<AuthProvider>();
@@ -60,7 +64,7 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
       if (!_current ||
           attempt != _joinAttempt ||
           auth.user?.id != userId ||
-          duel.state == DuelState.playing ||
+          _hasMatch(duel) ||
           duel.state == DuelState.searching) {
         return;
       }
@@ -100,8 +104,9 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
       final cancelled = await duel.leaveQueue();
       if (!mounted ||
           !_current ||
+          auth.user?.id != userId ||
           _openingMatch ||
-          duel.state == DuelState.playing) {
+          _hasMatch(duel)) {
         return;
       }
       if (!cancelled) {
@@ -142,11 +147,11 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
 
     // If a match is found, navigate to the game screen automatically
     if (ModalRoute.isCurrentOf(context) == true &&
-        duelProvider.state == DuelState.playing &&
+        _hasMatch(duelProvider) &&
         !_openingMatch) {
       _openingMatch = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!_current || duelProvider.state != DuelState.playing) {
+        if (!_current || !_hasMatch(duelProvider)) {
           _openingMatch = false;
           return;
         }

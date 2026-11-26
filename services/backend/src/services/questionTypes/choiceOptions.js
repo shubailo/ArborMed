@@ -84,8 +84,7 @@ function createChoiceResolver(choices) {
   };
 }
 
-function gradeChoices(question, answer, multiple = false) {
-  const choices = choiceOptions(question);
+function gradeChoices(question, answer, multiple = false, choices = choiceOptions(question)) {
   const resolve = createChoiceResolver(choices);
   function key(value) {
     if (typeof value !== 'string' && typeof value !== 'number') return null;
