@@ -892,6 +892,26 @@ class AppLocalizationsHu extends AppLocalizations {
   String get adminMatching => 'Párosítás';
 
   @override
+  String get relationAnswerA =>
+      'Mindkét állítás igaz, és van köztük ok-okozati összefüggés.';
+
+  @override
+  String get relationAnswerB =>
+      'Mindkét állítás igaz, de nincs köztük ok-okozati összefüggés.';
+
+  @override
+  String get relationAnswerC => 'Csak az első állítás igaz.';
+
+  @override
+  String get relationAnswerD => 'Csak a második állítás igaz.';
+
+  @override
+  String get relationAnswerE => 'Mindkét állítás hamis.';
+
+  @override
+  String get quizIncompleteQuestion => 'A kérdés hiányos.';
+
+  @override
   String get adminRelational => 'Relációs analízis';
 
   @override

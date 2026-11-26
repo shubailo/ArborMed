@@ -1,4 +1,5 @@
-import 'dart:convert';
+import 'package:arbor_med/core/models/relation_answer.dart';
+import 'package:arbor_med/core/models/relation_content.dart';
 import 'package:flutter/material.dart';
 import 'package:arbor_med/core/models/admin_question.dart';
 import 'matching_pair_controller_group.dart';
@@ -20,31 +21,25 @@ class QuestionPayloadBuilder {
   }) {
     if (question == null) return;
     final content = question.content is Map ? question.content as Map : const {};
-    dynamic answer = question.correctAnswer;
-    if (answer is String && (answer.trimLeft().startsWith('[') || answer.trimLeft().startsWith('"'))) {
-      try {
-        answer = jsonDecode(answer);
-      } on FormatException {
-        // A choice label can itself begin with a bracket or quotation mark.
-      }
-    }
-
     if (questionType == 'relation_analysis') {
-      s1EnController.text = content['statement1']?['en'] ?? '';
-      s1HuController.text = content['statement1']?['hu'] ?? '';
-      s2EnController.text = content['statement2']?['en'] ?? '';
-      s2HuController.text = content['statement2']?['hu'] ?? '';
-      linkEnController.text = content['link_word']?['en'] ?? 'because';
-      linkHuController.text = content['link_word']?['hu'] ?? 'mert';
-
-      final letter = answer.toString().trim().toUpperCase();
-      if (RegExp(r'^[A-E]$').hasMatch(letter)) setCorrectIndex(letter.codeUnitAt(0) - 65);
+      s1EnController.text = relationText(content, 'statement1', 'en');
+      s1HuController.text = relationText(content, 'statement1', 'hu');
+      s2EnController.text = relationText(content, 'statement2', 'en');
+      s2HuController.text = relationText(content, 'statement2', 'hu');
+      final useDefaultLink = content['link_word'] == null &&
+          (s1EnController.text.isNotEmpty || s1HuController.text.isNotEmpty) &&
+          (s2EnController.text.isNotEmpty || s2HuController.text.isNotEmpty);
+      linkEnController.text = useDefaultLink ? 'because' : relationText(content, 'link_word', 'en');
+      linkHuController.text = useDefaultLink ? 'mert' : relationText(content, 'link_word', 'hu');
+      final answer = RelationAnswer.fromStored(question.correctAnswer);
+      if (answer != null) setCorrectIndex(answer.index);
     } else if (questionType == 'true_false') {
-      textControllerEn.text = content['statement']?['en'] ?? textControllerEn.text;
-      textControllerHu.text = content['statement']?['hu'] ?? textControllerHu.text;
-      final key = answer.toString().trim().toLowerCase();
-      if (const {'true', 'igaz', '1'}.contains(key)) setCorrectIndex(0);
-      if (const {'false', 'hamis', '0'}.contains(key)) setCorrectIndex(1);
+      final en = relationText(content, 'statement', 'en');
+      final hu = relationText(content, 'statement', 'hu');
+      if (en.isNotEmpty) textControllerEn.text = en;
+      if (hu.isNotEmpty) textControllerHu.text = hu;
+      final answer = question.booleanAnswer;
+      if (answer != null) setCorrectIndex(answer ? 0 : 1);
     } else if (questionType == 'multiple_choice') {
       final indices = question.answerKeys.map(question.choiceIndex).toList();
       if (indices.isNotEmpty && indices.every((i) => i != null)) {
@@ -136,21 +131,32 @@ class QuestionPayloadBuilder {
 
     dynamic correctAnswerPayload;
 
+    Map<String, dynamic> localized(Object? old, String en, String hu) => {
+      if (old is Map) ...Map<String, dynamic>.from(old),
+      'en': en,
+      'hu': hu,
+    };
+
     if (questionType == 'relation_analysis') {
-      contentPayload['statement1'] = {
-        'en': s1EnController.text,
-        'hu': s1HuController.text
-      };
-      contentPayload['statement2'] = {
-        'en': s2EnController.text,
-        'hu': s2HuController.text
-      };
-      contentPayload['link_word'] = {
-        'en': linkEnController.text,
-        'hu': linkHuController.text
-      };
-      correctAnswerPayload =
-          String.fromCharCode('A'.codeUnitAt(0) + (correctIndex ?? 0));
+      if (contentPayload.containsKey('question_text')) {
+        contentPayload['question_text'] = localized(
+            contentPayload['question_text'], textControllerEn.text, textControllerHu.text);
+      }
+      for (final (field, alias, en, hu) in [
+        ('statement1', 'statement_1', s1EnController.text, s1HuController.text),
+        ('statement2', 'statement_2', s2EnController.text, s2HuController.text),
+        ('link_word', 'link_word', linkEnController.text, linkHuController.text),
+      ]) {
+        final legacy = alias == field ? null : contentPayload.remove(alias);
+        final original = contentPayload[field];
+        if (original != null || legacy != null || en.trim().isNotEmpty || hu.trim().isNotEmpty) {
+          contentPayload[field] = localized({
+            if (legacy is Map) ...Map<String, dynamic>.from(legacy),
+            if (original is Map) ...Map<String, dynamic>.from(original),
+          }, en, hu);
+        }
+      }
+      correctAnswerPayload = RelationAnswer.values[correctIndex!].code;
     } else if (questionType == 'matching') {
       // These legacy columns can contain extra distractors and unaligned translations.
       // The current editor writes the pairing definition to content.pairs.
@@ -174,11 +180,9 @@ class QuestionPayloadBuilder {
           multipleCorrectIndices.map(answerKey).toList();
       contentPayload['is_multi'] = true;
     } else if (questionType == 'true_false') {
-      contentPayload['statement'] = {
-        'en': textControllerEn.text,
-        'hu': textControllerHu.text
-      };
-      correctAnswerPayload = (correctIndex == 0) ? 'true' : 'false';
+      contentPayload['statement'] = localized(
+          contentPayload['statement'], textControllerEn.text, textControllerHu.text);
+      correctAnswerPayload = const ['true', 'false'][correctIndex!];
     } else {
       correctAnswerPayload = answerKey(correctIndex!);
     }

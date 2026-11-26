@@ -8,13 +8,15 @@ const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 const { questionScope, questionFilter, withQuestionWrite, readQuestion } = require('../services/adminQuestionAccess');
 
-function answerForStorage(question_type, content, options, correct_answer) {
-  const definition = { question_type: question_type || 'single_choice', content, options, correct_answer };
+function answerForStorage(definition) {
   if (['single_choice', 'multiple_choice', 'case_study'].includes(definition.question_type)
       && !validOptions(optionSource(definition))) {
     throw new AppError('Choice options must have aligned translations and a label for every row', 400);
   }
   const validated = gradeableQuestion(definition);
+  if (!validated && ['relation_analysis','relational_analysis'].includes(definition.question_type)) {
+    throw new AppError(questionTypeRegistry.getType(definition.question_type).validate(definition).errors.join(' '), 400);
+  }
   if (!validated) throw new AppError('The answer key must match the displayed question options or pairs', 400);
   const key = validated.correct_answer;
   return typeof key === 'object' ? JSON.stringify(key) : String(key);
@@ -224,7 +226,7 @@ exports.adminCreateQuestion = catchAsync(async (req, res, next) => {
   const result = await withQuestionWrite(req.user.id, { topicIds: [topic_id] }, client => client.query(query, [
     typeId,
     content || {},
-    answerForStorage(typeId, content, definitionOptions, correct_answer),
+    answerForStorage({question_type:typeId, content, options:definitionOptions, correct_answer, question_text_en, question_text_hu}),
     explanation_en || '',
     explanation_hu || '',
     topic_id,
@@ -280,7 +282,7 @@ exports.adminUpdateQuestion = catchAsync(async (req, res, next) => {
     explanation_en || '',
     explanation_hu || '',
     definitionOptions,
-    answerForStorage(question_type, content, definitionOptions, correct_answer),
+    answerForStorage({question_type:question_type || 'single_choice', content, options:definitionOptions, correct_answer, question_text_en, question_text_hu}),
     topic_id,
     difficulty ?? null,
     bloom_level ?? null,
@@ -409,21 +411,17 @@ function importQuestion(row, saved) {
   const options = importOptions(row, saved);
   const q_en = row.q_en || saved?.question_text_en || '';
   const q_hu = row.q_hu || saved?.question_text_hu || '';
-  if (type !== 'matching' && !(q_en.trim() || q_hu.trim()))
+  if (!['matching','relation_analysis','relational_analysis'].includes(type) && !(q_en.trim() || q_hu.trim()))
     throw new AppError('Question text is required.', 400);
   const answer = value =>
     type === 'multiple_choice' && typeof value === 'string' && value.includes(';')
       ? value.split(';').map(label => label.trim())
       : value;
-  const correctAns = answerForStorage(
-    type,
-    saved?.content,
-    options,
-    answer(row.correctAns || saved?.correct_answer)
-  );
+  const definition = {question_type:type, options, content:saved?.content,
+    correct_answer:answer(row.correctAns || saved?.correct_answer), question_text_en:q_en, question_text_hu:q_hu};
+  const correctAns = answerForStorage(definition);
   if (row.otherAnswer) {
-    const definition = { question_type: type, options, content: saved?.content, correct_answer: correctAns };
-    if (!questionTypeRegistry.getType(type)?.checkAnswer(definition, answer(row.otherAnswer)).correct) {
+    if (!questionTypeRegistry.getType(type)?.checkAnswer({...definition, correct_answer:correctAns}, answer(row.otherAnswer)).correct) {
       throw new AppError('The language rows disagree on the correct answer.', 400);
     }
   }

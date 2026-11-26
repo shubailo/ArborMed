@@ -1,6 +1,30 @@
 import 'package:flutter/material.dart';
 import 'matching_pair_controller_group.dart';
 
+/// A request becomes stale on the first text edit, even if the edit is undone.
+/// Moving the caret or changing the selection leaves the request valid.
+class TranslationTextWatch {
+  final _listeners = <TextEditingController, VoidCallback>{};
+  bool changed = false;
+
+  TranslationTextWatch(Iterable<TextEditingController> controllers) {
+    for (final controller in controllers) {
+      final original = controller.text;
+      void listen() {
+        if (controller.text != original) changed = true;
+      }
+      _listeners[controller] = listen;
+      controller.addListener(listen);
+    }
+  }
+
+  void dispose() {
+    for (final entry in _listeners.entries) {
+      entry.key.removeListener(entry.value);
+    }
+  }
+}
+
 class QuestionTranslationHelper {
   static String stripPrefix(String? text) {
     if (text == null) return "";
@@ -20,7 +44,7 @@ class QuestionTranslationHelper {
   }) {
     final Map<String, dynamic> srcData = {
       'explanation': explanation,
-      if (questionType != 'matching') 'questionText': questionText,
+      'questionText': questionText,
     };
 
     if (questionType == 'relation_analysis') {
@@ -44,25 +68,39 @@ class QuestionTranslationHelper {
     return srcData;
   }
 
-  // A partial response must never replace a valid draft with missing fields.
-  static bool isComplete(
+  // Validate every requested nonempty source before mutating any controller.
+  // Providers may return placeholders or extra keys for fields they did not translate.
+  static Map<String, dynamic>? validatedResult(
       Map<String, dynamic> source, Map<String, dynamic> result) {
-    bool valid(String original, dynamic translated) => original.trim().isEmpty
-        ? translated == null || translated is String
-        : translated is String && translated.trim().isNotEmpty;
+    String? normalize(dynamic value) {
+      if (value is! String) return null;
+      final text = stripPrefix(value);
+      return text.trim().isEmpty ? null : text;
+    }
+
+    final checked = <String, dynamic>{};
     for (final entry in source.entries) {
-      final original = entry.value, translated = result[entry.key];
-      if (original is String && !valid(original, translated)) return false;
-      if (original is List<String>) {
-        if (translated is! List || translated.length != original.length) {
-          return false;
-        }
+      final original = entry.value;
+      final value = result[entry.key];
+      if (original is String) {
+        if (original.trim().isEmpty) continue;
+        final text = normalize(value);
+        if (text == null) return null;
+        checked[entry.key] = text;
+      } else if (original is List<String>) {
+        if (value is! List || value.length != original.length) return null;
+        final values = <String?>[];
         for (var i = 0; i < original.length; i++) {
-          if (!valid(original[i], translated[i])) return false;
+          final text = original[i].trim().isEmpty ? null : normalize(value[i]);
+          if (text == null && original[i].trim().isNotEmpty) return null;
+          values.add(text);
         }
+        checked[entry.key] = values;
+      } else {
+        return null;
       }
     }
-    return true;
+    return checked;
   }
 
   static List<String>? applyTranslationResult({
@@ -78,21 +116,21 @@ class QuestionTranslationHelper {
     required List<String> currentOptions,
   }) {
     if (result['explanation'] != null) {
-      explanationController.text = stripPrefix(result['explanation']);
+      explanationController.text = result['explanation'];
     }
     if (result['questionText'] != null) {
-      textController.text = stripPrefix(result['questionText']);
+      textController.text = result['questionText'];
     }
 
     if (questionType == 'relation_analysis') {
       if (result['statement1'] != null) {
-        s1Controller.text = stripPrefix(result['statement1']);
+        s1Controller.text = result['statement1'];
       }
       if (result['statement2'] != null) {
-        s2Controller.text = stripPrefix(result['statement2']);
+        s2Controller.text = result['statement2'];
       }
       if (result['link_word'] != null) {
-        linkController.text = stripPrefix(result['link_word']);
+        linkController.text = result['link_word'];
       }
       return null;
     } else if (questionType == 'matching') {
@@ -102,7 +140,7 @@ class QuestionTranslationHelper {
           final ctrl =
               isTargetHu ? matchingGroups[i].leftHu : matchingGroups[i].leftEn;
           if (list[i] is String && list[i].trim().isNotEmpty) {
-            ctrl.text = stripPrefix(list[i]);
+            ctrl.text = list[i];
           }
         }
       }
@@ -113,7 +151,7 @@ class QuestionTranslationHelper {
               ? matchingGroups[i].rightHu
               : matchingGroups[i].rightEn;
           if (list[i] is String && list[i].trim().isNotEmpty) {
-            ctrl.text = stripPrefix(list[i]);
+            ctrl.text = list[i];
           }
         }
       }
@@ -124,7 +162,7 @@ class QuestionTranslationHelper {
         return List.generate(values.length, (i) {
           final value = values[i];
           if (value is String && value.trim().isNotEmpty) {
-            return stripPrefix(value);
+            return value;
           }
           return i < currentOptions.length ? currentOptions[i] : '';
         });

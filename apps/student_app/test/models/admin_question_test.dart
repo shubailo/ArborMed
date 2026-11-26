@@ -90,6 +90,21 @@ void main() {
       expect(example(['', '']).choiceIndex(oldId), isNull);
     });
 
+    test('boolean keys share scalar, numeric and singleton decoding across admin views', () {
+      bool? parse(Object? value) => AdminQuestion.fromJson({
+        'id': 1, 'topic_id': 2, 'type': 'true_false', 'correct_answer':value,
+      }).booleanAnswer;
+      for (final raw in [true, 'igaz', '1', '[1.0]', '[" TRUE "]']) {
+        expect(parse(raw), isTrue);
+      }
+      for (final raw in [false, 'hamis', '0', '[0.0]', ['false']]) {
+        expect(parse(raw), isFalse);
+      }
+      for (final raw in [null, [], [true,false], '[0.5]', 'yes', {}]) {
+        expect(parse(raw), isNull);
+      }
+    });
+
     test('malformed statistics report only the field name', () {
       expect(
           () => AdminQuestion.fromJson({

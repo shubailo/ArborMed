@@ -30,7 +30,9 @@ class TrueFalseEditor extends StatelessWidget {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
               side: BorderSide(color: CozyTheme.of(context).primary)),
-          onSelected: (val) => onIndexChanged(0),
+          onSelected: (selected) {
+            if (selected) onIndexChanged(0);
+          },
         ),
         const SizedBox(width: 24),
         ChoiceChip(
@@ -46,7 +48,9 @@ class TrueFalseEditor extends StatelessWidget {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
               side: BorderSide(color: CozyTheme.of(context).accent)),
-          onSelected: (val) => onIndexChanged(1),
+          onSelected: (selected) {
+            if (selected) onIndexChanged(1);
+          },
         ),
       ],
     );

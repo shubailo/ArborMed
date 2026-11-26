@@ -885,6 +885,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adminMatching => 'Matching';
 
   @override
+  String get relationAnswerA =>
+      'Both statements are true, and there is a causal link between them.';
+
+  @override
+  String get relationAnswerB =>
+      'Both statements are true, but there is no causal link between them.';
+
+  @override
+  String get relationAnswerC => 'Only the first statement is true.';
+
+  @override
+  String get relationAnswerD => 'Only the second statement is true.';
+
+  @override
+  String get relationAnswerE => 'Both statements are false.';
+
+  @override
+  String get quizIncompleteQuestion => 'This question is incomplete.';
+
+  @override
   String get adminRelational => 'Relational';
 
   @override

@@ -1,4 +1,5 @@
 import '../../../core/models/admin_matching_pair.dart';
+import '../../../core/models/relation_content.dart';
 import 'package:arbor_med/core/models/topic_hierarchy.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,7 @@ import '../../../services/admin_question_provider.dart';
 import '../../../services/api_service.dart';
 import '../../../theme/cozy_theme.dart';
 import 'dart:convert';
+import 'package:flutter/foundation.dart' show listEquals;
 import '../../../widgets/admin/dual_language_field.dart';
 
 import '../../../services/translation_service.dart';
@@ -73,6 +75,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
 
   // Loading States
   bool _isTranslating = false;
+  int _questionTypeRevision = 0;
 
   // Relation Analysis fields
   late TextEditingController _s1EnController;
@@ -104,7 +107,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
   int _bloomLevel = 1;
   String _questionType = 'single_choice';
   int? _correctIndex;
-  late TextEditingController _tfStatementController;
+  final _logicDraftIndices = <String, int?>{};
 
   @override
   void initState() {
@@ -151,7 +154,6 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     _s2HuController = TextEditingController();
     _linkEnController = TextEditingController(text: 'because');
     _linkHuController = TextEditingController(text: 'mert');
-    _tfStatementController = TextEditingController();
 
     _initOptions();
     _resetMultipleRowKeys();
@@ -185,7 +187,6 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     _s2HuController.dispose();
     _linkEnController.dispose();
     _linkHuController.dispose();
-    _tfStatementController.dispose();
     for (var g in _matchingGroups) {
       g.dispose();
     }
@@ -207,8 +208,6 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     if (_questionType == 'single_choice') {
       final keys = question?.answerKeys;
       _correctIndex = keys?.length == 1 ? question!.choiceIndex(keys!.single) : null;
-    } else {
-      _correctIndex = 0;
     }
   }
 
@@ -454,10 +453,15 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       selectedSubjectId: _selectedSubjectId,
       selectedTopicId: _selectedTopicId,
       onQuestionTypeChanged: (val) {
+        if (val == _questionType) return;
         setState(() {
           if (!const {'single_choice','multiple_choice'}.contains(val) ||
               !const {'single_choice','multiple_choice'}.contains(_questionType)) {
             _originalChoices.clear();
+          }
+          _questionTypeRevision++;
+          if (_questionType == 'relation_analysis' || _questionType == 'true_false') {
+            _logicDraftIndices[_questionType] = _correctIndex;
           }
           _questionType = val;
           _onTypeChanged();
@@ -479,15 +483,11 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     if (_questionType == 'relation_analysis') {
       _currentOptionsEn = ["A", "B", "C", "D", "E"];
       _currentOptionsHu = ["A", "B", "C", "D", "E"];
-      _correctIndex = 0;
-      if (_s1EnController.text.isEmpty) {
-        _linkEnController.text = 'because';
-        _linkHuController.text = 'mert';
-      }
+      _correctIndex = _logicDraftIndices[_questionType];
     } else if (_questionType == 'true_false') {
       _currentOptionsEn = ["True", "False"];
       _currentOptionsHu = ["Igaz", "Hamis"];
-      _correctIndex = 0;
+      _correctIndex = _logicDraftIndices[_questionType];
     } else if (_questionType == 'matching') {
       if (_matchingGroups.isEmpty) {
         _matchingGroups.addAll(List.generate(2,
@@ -524,7 +524,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
   }
 
   Future<void> _translateAll(String source, String target) async {
-    if (_isTranslating) return;
+    if (_isTranslating || _isSaving) return;
     final labels = AppLocalizations.of(context)!;
     final srcData = _translationFields(source);
     final hasText = srcData.values.expand((v) => v is List ? v : [v])
@@ -534,25 +534,42 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       return;
     }
     final type = _questionType;
-    final originalTarget = jsonEncode(_translationFields(target));
+    final typeRevision = _questionTypeRevision;
+    final enOptions = _currentOptionsEn;
+    final huOptions = _currentOptionsHu;
+    final pairs = List.of(_matchingGroups);
+    final watch = TranslationTextWatch([
+      _textControllerEn, _textControllerHu,
+      _explanationControllerEn, _explanationControllerHu,
+      if (type == 'relation_analysis') ...[
+        _s1EnController, _s1HuController, _s2EnController, _s2HuController,
+        _linkEnController, _linkHuController,
+      ],
+      if (type == 'matching')
+        for (final group in pairs) ...[group.leftEn, group.leftHu, group.rightEn, group.rightHu],
+    ]);
     setState(() {
       _formError = null;
       _isTranslating = true;
     });
     try {
-      final result = await _translationService.translateQuestion(
+      final response = await _translationService.translateQuestion(
         questionData: srcData,
         from: source,
         to: target,
       );
 
       if (!mounted) return;
-      if (result == null || !QuestionTranslationHelper.isComplete(srcData, result)) {
+      final result = response == null ? null
+          : QuestionTranslationHelper.validatedResult(srcData, response);
+      if (result == null) {
         _translationNotice(labels.translationFailed);
         return;
       }
-      if (type != _questionType || jsonEncode(_translationFields(source)) != jsonEncode(srcData)
-          || jsonEncode(_translationFields(target)) != originalTarget) {
+      final choiceChanged = (type == 'multiple_choice' || type == 'single_choice') &&
+          (!identical(enOptions, _currentOptionsEn) || !identical(huOptions, _currentOptionsHu));
+      if (watch.changed || typeRevision != _questionTypeRevision || choiceChanged ||
+          (type == 'matching' && !listEquals(pairs, _matchingGroups))) {
         _translationNotice(labels.adminTranslationDraftChanged);
         return;
       }
@@ -586,6 +603,7 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
     } catch (_) {
       if (mounted) _translationNotice(labels.translationFailed);
     } finally {
+      watch.dispose();
       if (mounted) setState(() => _isTranslating = false);
     }
   }
@@ -624,23 +642,24 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
                 errorBuilder: (_, error, stack) => const Icon(Icons.broken_image)),
             const SizedBox(height: 12),
           ],
-          if (_questionType != 'matching') ...[
-            DualLanguageField(
-              controllerEn: _textControllerEn,
-              controllerHu: _textControllerHu,
-              label: AppLocalizations.of(context)!.adminTableQuestionText,
-              currentLanguage: lang,
-              isMultiLine: true,
-              isTranslating: _isTranslating,
-              onTranslate: () => _translateField(
-                from: isEn ? 'hu' : 'en',
-                to: lang,
-                sourceCtrl: isEn ? _textControllerHu : _textControllerEn,
-                targetCtrl: isEn ? _textControllerEn : _textControllerHu,
-              ),
+          DualLanguageField(
+            validator: _questionType == 'matching' || _questionType == 'relation_analysis' ||
+                    (_questionType == 'true_false' && !isEn)
+                ? (_) => null : null,
+            controllerEn: _textControllerEn,
+            controllerHu: _textControllerHu,
+            label: AppLocalizations.of(context)!.adminTableQuestionText,
+            currentLanguage: lang,
+            isMultiLine: true,
+            isTranslating: _isTranslating,
+            onTranslate: () => _translateField(
+              from: isEn ? 'hu' : 'en',
+              to: lang,
+              sourceCtrl: isEn ? _textControllerHu : _textControllerEn,
+              targetCtrl: isEn ? _textControllerEn : _textControllerHu,
             ),
-            const SizedBox(height: 16),
-          ],
+          ),
+          const SizedBox(height: 16),
           if (_questionType == 'relation_analysis')
             for (final entry in [
               (AppLocalizations.of(context)!.adminFirstStatement, _s1EnController, _s1HuController),
@@ -713,7 +732,13 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
           correctIndices: _multipleCorrectIndices,
           onOptionChanged: (index, value) {
             if (!identical(rows, _multipleRowKeys)) return;
-            setState(() => (isEn ? _currentOptionsEn : _currentOptionsHu)[index] = value);
+            setState(() {
+              if (isEn) {
+                _currentOptionsEn = List.of(_currentOptionsEn)..[index] = value;
+              } else {
+                _currentOptionsHu = List.of(_currentOptionsHu)..[index] = value;
+              }
+            });
           },
           onToggleCorrect: (index, isSelected) {
             if (!identical(rows, _multipleRowKeys)) return;
@@ -788,31 +813,33 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
       required String to,
       required TextEditingController sourceCtrl,
       required TextEditingController targetCtrl}) async {
-    if (_isTranslating) return;
+    if (_isTranslating || _isSaving) return;
     final sourceText = sourceCtrl.text;
-    final targetText = targetCtrl.text;
-    final type = _questionType;
+    final typeRevision = _questionTypeRevision;
     if (sourceText.trim().isEmpty) {
       _translationNotice(AppLocalizations.of(context)!.adminSourceFieldEmpty);
       return;
     }
+    final watch = TranslationTextWatch([sourceCtrl, targetCtrl]);
     setState(() {
       _formError = null;
       _isTranslating = true;
     });
     try {
-      final translated =
+      final response =
           await _translationService.translateText(sourceText, from, to);
       if (!mounted) return;
       final labels = AppLocalizations.of(context)!;
-      if (translated == null || translated.trim().isEmpty) {
+      final translated = QuestionTranslationHelper.stripPrefix(response);
+      if (translated.trim().isEmpty) {
         _translationNotice(labels.translationFailed);
-      } else if (type != _questionType || sourceCtrl.text != sourceText || targetCtrl.text != targetText) {
+      } else if (typeRevision != _questionTypeRevision || watch.changed) {
         _translationNotice(labels.adminTranslationDraftChanged);
       } else {
         targetCtrl.text = translated;
       }
     } finally {
+      watch.dispose();
       if (mounted) {
         setState(() => _isTranslating = false);
       }
@@ -861,7 +888,26 @@ class _QuestionEditorDialogState extends State<QuestionEditorDialog>
         return;
       }
     }
-    if ((_questionType == 'single_choice' && _correctIndex == null) ||
+    if (_questionType == 'relation_analysis') {
+      final first = [_s1EnController, _s1HuController].any((c) => c.text.trim().isNotEmpty);
+      final second = [_s2EnController, _s2HuController].any((c) => c.text.trim().isNotEmpty);
+      final hasPrompt = [_textControllerEn, _textControllerHu].any((c) => c.text.trim().isNotEmpty);
+      final original = widget.question?.type == _questionType ? widget.question?.content : null;
+      bool unreadable(String field) => original is Map && !relationValueValid(original[field]);
+      final lostFirst = !first && (unreadable('statement1') || unreadable('statement_1'));
+      final lostSecond = !second && (unreadable('statement2') || unreadable('statement_2'));
+      if (first != second || (!first && !hasPrompt) || lostFirst || lostSecond) {
+        final l = AppLocalizations.of(context)!;
+        setState(() => _formError = l.quizIncompleteQuestion);
+        return;
+      }
+    }
+    if (_questionType == 'true_false' && _textControllerEn.text.trim().isEmpty) {
+      final l = AppLocalizations.of(context)!;
+      setState(() => _formError = '${l.adminTableQuestionText} (EN) · ${l.adminRequired}');
+      return;
+    }
+    if ((const {'single_choice', 'true_false', 'relation_analysis'}.contains(_questionType) && _correctIndex == null) ||
         (_questionType == 'multiple_choice' && _multipleCorrectIndices.isEmpty)) {
       final l = AppLocalizations.of(context)!;
       setState(() => _formError = '${l.correctAnswer} · ${l.adminRequired}');

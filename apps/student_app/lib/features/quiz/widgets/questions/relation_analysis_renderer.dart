@@ -2,34 +2,51 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:arbor_med/services/audio_provider.dart';
+import 'package:arbor_med/core/models/relation_answer.dart';
+import 'package:arbor_med/core/models/relation_content.dart';
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import 'question_renderer.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
 
 /// Renderer for Relation Analysis questions
 /// Medical exam format: Two statements with relationship analysis
 class RelationAnalysisRenderer extends QuestionRenderer {
+  bool _hasContent(Map<String, dynamic> question) {
+    final raw = question['content'];
+    if (raw != null && raw is! Map) return false;
+    final content = raw is Map ? raw : const {};
+    final prompt = content['question_text'];
+    final hasPrompt = [
+      question['question_text_en'],
+      question['question_text_hu'],
+      question['text'],
+      if (prompt is Map) ...[prompt['en'], prompt['hu']] else prompt,
+    ].whereType<String>().any((value) => value.trim().isNotEmpty);
+    return relationContentValid(content, hasPrompt: hasPrompt);
+  }
+
+  @override
+  bool isPlayable(Map<String, dynamic> question) =>
+      _hasContent(question) &&
+      RelationAnswer.fromStored(question['correct_answer']) != null;
+
   @override
   Widget buildQuestion(BuildContext context, Map<String, dynamic> question) {
+    if (!_hasContent(question)) {
+      return Text(AppLocalizations.of(context)!.quizIncompleteQuestion);
+    }
     final palette = CozyTheme.of(context);
-    final statement1 = getLocalizedContentField(context, question, 'statement1',
-        defaultVal: '');
-    final statement2 = getLocalizedContentField(context, question, 'statement2',
-        defaultVal: '');
-    final linkWord = getLocalizedContentField(context, question, 'link_word',
-        defaultVal: 'because');
+    final lang = Localizations.localeOf(context).languageCode;
+    final raw = question['content'];
+    final content = raw is Map ? raw : const {};
+    final s1 = relationText(content, 'statement1', lang, fallback: true);
+    final s2 = relationText(content, 'statement2', lang, fallback: true);
+    final connector = relationText(content, 'link_word', lang, fallback: true);
+    final linkWord =
+        connector.isNotEmpty ? connector : (lang == 'hu' ? 'mert' : 'because');
 
-    // If still using old snake_case keys (fallback)
-    final s1 = statement1.isNotEmpty
-        ? statement1
-        : getLocalizedContentField(context, question, 'statement_1');
-    final s2 = statement2.isNotEmpty
-        ? statement2
-        : getLocalizedContentField(context, question, 'statement_2');
-
-    // If legacy split data exists, render it.
-    // Otherwise, assume main question text covers it (Single Text Mode).
-    if (statement1.isEmpty && statement2.isEmpty) {
-      final questionText = getLocalizedText(context, question);
+    final questionText = getLocalizedText(context, question);
+    if (s1.isEmpty && s2.isEmpty) {
       return Center(
         child: Text(
           questionText,
@@ -46,7 +63,14 @@ class RelationAnalysisRenderer extends QuestionRenderer {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Statement 1
+        if (questionText.trim().isNotEmpty &&
+            questionText.trim() != s1.trim() &&
+            questionText.trim() != s2.trim())
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Text(questionText,
+                style: Theme.of(context).textTheme.titleMedium),
+          ),
         _buildStatementBox(context, '1', s1, palette.secondary),
 
         // Link word
@@ -139,199 +163,52 @@ class RelationAnalysisRenderer extends QuestionRenderer {
     bool isChecked = false,
     dynamic correctAnswer,
   }) {
-    final locale = Localizations.localeOf(context).languageCode;
-    final isHu = locale == 'hu';
-
-    // Simplified 3-State Logic
-    // S1 True/False
-    // S2 True/False
-    // Link Exists/Not (Only relevant if both are true?) -> Standard format allows all combos but Link usually mostly relevant for A/B.
-
-    // Deconstruct standard A-E answer back to booleans for UI state
-    // A: T, T, Linked
-    // B: T, T, Not Linked
-    // C: T, F
-    // D: F, T
-    // E: F, F
-
-    bool s1 = false;
-    bool s2 = false;
-    bool link = false;
-
-    if (currentAnswer != null) {
-      final ans = currentAnswer.toString().toUpperCase();
-      if (['A', 'B', 'C'].contains(ans)) s1 = true;
-      if (['A', 'B', 'D'].contains(ans)) s2 = true;
-      if (ans == 'A') link = true;
-    } else {
-      // Default state? Or empty?
-      // If empty, all false.
-    }
-
-    // Helper to calculate resulting A-E value based on booleans
-    return Column(
-      children: [
-        _buildToggle(
-            context,
-            isHu ? '1. állítás igaz' : 'Statement 1 is True',
-            s1,
-            isChecked
-                ? (_) {}
-                : (val) {
-                    onAnswerChanged(_getAnswerFromBooleans(val, s2, link));
-                  },
-            isChecked: isChecked),
-        const SizedBox(height: 12),
-        _buildToggle(
-            context,
-            isHu ? '2. állítás igaz' : 'Statement 2 is True',
-            s2,
-            isChecked
-                ? (_) {}
-                : (val) {
-                    onAnswerChanged(_getAnswerFromBooleans(s1, val, link));
-                  },
-            isChecked: isChecked),
-
-        // Link is strictly only valid for A vs B logically, logic-wise it's usually greyed out if not both true?
-        // But for simplicity let's keep it visible or maybe only enable if both are true?
-        // User asked: "a check box if there connect inbetween the statement"
-        const SizedBox(height: 12),
-        Opacity(
-          opacity: (s1 && s2) ? 1.0 : 0.5,
-          child: _buildToggle(
-              context,
-              isHu ? 'Van köztük kapcsolat' : 'Connection / Link Exists',
-              link,
-              isChecked
-                  ? (_) {}
-                  : (val) {
-                      if (s1 && s2) {
-                        onAnswerChanged(_getAnswerFromBooleans(s1, s2, val));
-                      }
-                    },
-              isLink: true,
-              isChecked: isChecked),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildToggle(
-      BuildContext context, String label, bool value, Function(bool) onChanged,
-      {bool isLink = false, bool isChecked = false}) {
+    if (!_hasContent(question)) return const SizedBox.shrink();
+    final labels = AppLocalizations.of(context)!;
+    final selected = RelationAnswer.fromInput(currentAnswer);
+    final expected =
+        isChecked ? RelationAnswer.fromStored(correctAnswer) : null;
     final palette = CozyTheme.of(context);
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: isChecked
-            ? null
-            : () {
-                Provider.of<AudioProvider>(context, listen: false)
-                    .playSfx('click');
-                onChanged(!value);
-              },
-        borderRadius: BorderRadius.circular(20),
-      child: AnimatedScale(
-        scale: value ? 1.05 : 1.0,
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.elasticOut,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOutCubic,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          decoration: BoxDecoration(
-            color: value
-                ? (isLink
-                    ? palette.secondary.withValues(alpha: 0.1)
-                    : palette.success.withValues(alpha: 0.1))
-                : palette.paperCream,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: value
-                  ? (isLink ? palette.secondary : palette.success)
-                  : palette.textPrimary.withValues(alpha: 0.1),
-              width: value ? 2.5 : 1.5,
-            ),
-            boxShadow: value
-                ? [
-                    BoxShadow(
-                      color: (isLink ? palette.secondary : palette.success)
-                          .withValues(alpha: 0.2),
-                      blurRadius: 10,
-                      offset: const Offset(0, 5),
-                    )
-                  ]
-                : [],
+    return RadioGroup<RelationAnswer>(
+      groupValue: selected,
+      onChanged: (choice) {
+        if (isChecked || choice == null) return;
+        context.read<AudioProvider>().playSfx('click');
+        onAnswerChanged(choice.code);
+      },
+      child: Column(children: [
+        for (final choice in RelationAnswer.values)
+          RadioListTile<RelationAnswer>(
+            key: ValueKey('relation-${choice.code}'),
+            value: choice,
+            enabled: !isChecked,
+            selected: selected == choice,
+            activeColor: palette.primary,
+            title: Text('${choice.code} · ${choice.label(labels)}'),
+            subtitle: expected == choice ? Text(labels.correctAnswer) : null,
           ),
-          child: Row(
-            children: [
-              const SizedBox(width: 14),
-              Expanded(
-                child: Text(
-                  label,
-                  style: GoogleFonts.outfit(
-                    fontSize: 16,
-                    fontWeight: value ? FontWeight.w700 : FontWeight.w500,
-                    color: value
-                        ? (isLink ? palette.secondary : palette.success)
-                        : palette.textPrimary,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      ),
+      ]),
     );
   }
 
   @override
-  bool hasAnswer(dynamic answer) {
-    return answer != null && answer.toString().isNotEmpty;
-  }
+  bool hasAnswer(dynamic answer) => RelationAnswer.fromInput(answer) != null;
 
   @override
-  dynamic formatAnswer(dynamic answer) {
-    return answer;
-  }
+  String? formatAnswer(dynamic answer) =>
+      RelationAnswer.fromInput(answer)?.code;
 
   @override
-  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer, Map<String, dynamic> question) {
-    return commonValidateAnswer(userAnswer, correctAnswer, question);
+  bool validateAnswer(dynamic userAnswer, dynamic correctAnswer,
+      Map<String, dynamic> question) {
+    final actual = RelationAnswer.fromInput(userAnswer);
+    return actual != null && actual == RelationAnswer.fromStored(correctAnswer);
   }
 
   @override
   dynamic getAnswerForIndex(BuildContext context, Map<String, dynamic> question,
-      int index, dynamic currentAnswer) {
-    if (index < 0 || index > 2) return currentAnswer;
-
-    bool s1 = false;
-    bool s2 = false;
-    bool link = false;
-
-    if (currentAnswer != null) {
-      final ans = currentAnswer.toString().toUpperCase();
-      if (['A', 'B', 'C'].contains(ans)) s1 = true;
-      if (['A', 'B', 'D'].contains(ans)) s2 = true;
-      if (ans == 'A') link = true;
-    }
-
-    if (index == 0) s1 = !s1;
-    if (index == 1) s2 = !s2;
-    if (index == 2 && s1 && s2) link = !link;
-
-    return _getAnswerFromBooleans(s1, s2, link);
-  }
-
-  String _getAnswerFromBooleans(bool s1, bool s2, bool link) {
-    if (s1 && s2) {
-      return link ? 'A' : 'B';
-    }
-    if (s1 && !s2) return 'C';
-    if (!s1 && s2) return 'D';
-    return 'E'; // !s1 && !s2
-  }
+          int index, dynamic currentAnswer) =>
+      index >= 0 && index < RelationAnswer.values.length
+          ? RelationAnswer.values[index].code
+          : currentAnswer;
 }

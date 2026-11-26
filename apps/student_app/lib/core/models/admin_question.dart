@@ -53,6 +53,19 @@ class AdminQuestion extends CoreQuestion {
       List.unmodifiable(AdminChoice._read(options));
   late final List<Object?> answerKeys = _keys(correctAnswer);
 
+  bool? get booleanAnswer {
+    final raw = answerKeys.singleOrNull;
+    if (raw is bool) return raw;
+    if (raw == 1) return true;
+    if (raw == 0) return false;
+    if (raw is! String) return null;
+    return switch (raw.trim().toLowerCase()) {
+      'true' || 'igaz' || '1' => true,
+      'false' || 'hamis' || '0' => false,
+      _ => null,
+    };
+  }
+
   late final List<AdminMatchingPair> matchingPairs = List.unmodifiable(
       AdminMatchingPair.read(content, options, answerKeys.singleOrNull));
 
@@ -124,6 +137,7 @@ class AdminQuestion extends CoreQuestion {
     final prompt = content?['question_text'] ?? content?['statement'];
     final top = json['text'];
     final explanation = json['explanation'];
+    final type = _firstText([json['question_type'], json['type']]) ?? 'single_choice';
     final options = [
       _decoded(json['options']),
       _decoded(content?['options']),
@@ -156,8 +170,7 @@ class AdminQuestion extends CoreQuestion {
       topicNameEn: _firstText([json['topic_name'], json['name_en']]),
       topicNameHu: _firstText([json['topic_name_hu'], json['name_hu']]),
       bloomLevel: _integer(json['bloom_level'] ?? 1, 'bloom_level'),
-      type:
-          _firstText([json['question_type'], json['type']]) ?? 'single_choice',
+      type: type == 'relational_analysis' ? 'relation_analysis' : type,
       attempts: _integer(json['attempts'] ?? 0, 'attempts'),
       successRate: _rate(json['success_rate']),
       reportCount: _integer(json['report_count'] ?? 0, 'report_count'),

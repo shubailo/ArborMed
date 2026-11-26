@@ -1766,6 +1766,42 @@ abstract class AppLocalizations {
   /// **'Matching'**
   String get adminMatching;
 
+  /// No description provided for @relationAnswerA.
+  ///
+  /// In en, this message translates to:
+  /// **'Both statements are true, and there is a causal link between them.'**
+  String get relationAnswerA;
+
+  /// No description provided for @relationAnswerB.
+  ///
+  /// In en, this message translates to:
+  /// **'Both statements are true, but there is no causal link between them.'**
+  String get relationAnswerB;
+
+  /// No description provided for @relationAnswerC.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the first statement is true.'**
+  String get relationAnswerC;
+
+  /// No description provided for @relationAnswerD.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the second statement is true.'**
+  String get relationAnswerD;
+
+  /// No description provided for @relationAnswerE.
+  ///
+  /// In en, this message translates to:
+  /// **'Both statements are false.'**
+  String get relationAnswerE;
+
+  /// No description provided for @quizIncompleteQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'This question is incomplete.'**
+  String get quizIncompleteQuestion;
+
   /// No description provided for @adminRelational.
   ///
   /// In en, this message translates to:

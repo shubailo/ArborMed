@@ -1,125 +1,71 @@
 const QuestionType = require('./QuestionType');
 const { scalarAnswer } = require('./storedAnswer');
+const { schema, hasPresentation } = require('./relationSchema');
 
-/**
- * Relation Analysis Question Type
- * Medical exam format: Two statements with relationship analysis
- */
+const options = [
+  {value:'A', en:'Both statements are true, and there is a causal link', hu:'Mindkét állítás igaz, és van köztük ok-okozati összefüggés'},
+  {value:'B', en:'Both statements are true, but there is no causal link', hu:'Mindkét állítás igaz, de nincs köztük összefüggés'},
+  {value:'C', en:'Only the first statement is true', hu:'Csak az 1. állítás igaz'},
+  {value:'D', en:'Only the second statement is true', hu:'Csak a 2. állítás igaz'},
+  {value:'E', en:'Neither statement is true', hu:'Egyik állítás sem igaz'},
+];
+
+function answerCode(value) {
+  if (typeof value !== 'string') return null;
+  const code = value.trim().toUpperCase();
+  return /^[A-E]$/.test(code) ? code : null;
+}
+
 class RelationAnalysisType extends QuestionType {
-    constructor() {
-        super('relation_analysis', 'Relation Analysis', 'Analyze the relationship between two medical statements');
-    }
+  constructor() {
+    super('relation_analysis', 'Relation Analysis', 'Analyze the relationship between two medical statements');
+  }
 
-    get shouldShuffleOptions() {
-        return false;
-    }
+  get shouldShuffleOptions() {
+    return false;
+  }
 
-    validate(questionData) {
-        const errors = [];
+  validate(question) {
+    const errors = [];
+    if (!hasPresentation(question)) errors.push('Provide both statements, or a full question prompt without a partial pair.');
+    if (!answerCode(scalarAnswer(question?.correct_answer))) errors.push('correct_answer must contain one code from A to E.');
+    return {valid:errors.length === 0, errors};
+  }
 
-        const validAnswers = ['A', 'B', 'C', 'D', 'E'];
+  solutionFor(question) {
+    return hasPresentation(question) ? answerCode(scalarAnswer(question.correct_answer)) : null;
+  }
 
-        if (!questionData.correct_answer) {
-            errors.push('correct_answer is required');
-        } else if (!validAnswers.includes(String(questionData.correct_answer).toUpperCase())) {
-            errors.push(`correct_answer must be one of: ${validAnswers.join(', ')}`);
-        }
+  checkAnswer(question, userAnswer) {
+    const correctAnswer = this.solutionFor(question);
+    const correct = correctAnswer !== null && answerCode(userAnswer) === correctAnswer;
+    const expected = options.find(option => option.value === correctAnswer);
+    return {
+      correct, correctAnswer, score:correct ? 1 : 0,
+      feedback:correct ? 'Helyes!' : expected
+        ? 'Helytelen. A helyes válasz: ' + correctAnswer + ' (' + expected.hu + ')'
+        : 'A kérdés nem értékelhető.',
+    };
+  }
 
-        return {
-            valid: errors.length === 0,
-            errors
-        };
-    }
+  getSchema() {
+    return schema;
+  }
 
-    checkAnswer(question, userAnswer) {
-        const correctAnswer = String(scalarAnswer(question.correct_answer) ?? '').trim().toUpperCase();
-        const correct = /^[A-E]$/.test(correctAnswer) && String(userAnswer).trim().toUpperCase() === correctAnswer;
+  prepareForClient(question) {
+    return {
+      ...super.prepareForClient(question),
+      correct_answer:this.solutionFor(question),
+      options:options.map(option => ({...option, label:option.hu})),
+    };
+  }
 
-        const answerLabels = {
-            'A': 'Mindkét állítás igaz, és van köztük ok-okozati összefüggés',
-            'B': 'Mindkét állítás igaz, de nincs köztük összefüggés',
-            'C': 'Csak az 1. állítás igaz',
-            'D': 'Csak a 2. állítás igaz',
-            'E': 'Egyik állítás sem igaz'
-        };
-
-        return {
-            correct,
-            correctAnswer,
-            score: correct ? 1 : 0,
-            feedback: correct
-                ? 'Helyes!'
-                : `Helytelen. A helyes válasz: ${correctAnswer} (${answerLabels[correctAnswer]})`
-        };
-    }
-
-    getSchema() {
-        return {
-            type: 'object',
-            properties: {
-                content: {
-                    type: 'object',
-                    properties: {
-                        statement1: {
-                            type: 'object',
-                            properties: {
-                                en: { type: 'string', minLength: 1 },
-                                hu: { type: 'string' }
-                            },
-                            required: ['en']
-                        },
-                        statement2: {
-                            type: 'object',
-                            properties: {
-                                en: { type: 'string', minLength: 1 },
-                                hu: { type: 'string' }
-                            },
-                            required: ['en']
-                        },
-                        link_word: {
-                            type: 'object',
-                            properties: {
-                                en: { type: 'string' },
-                                hu: { type: 'string' }
-                            }
-                        }
-                    },
-                    required: ['statement1', 'statement2']
-                },
-                correct_answer: {
-                    type: 'string',
-                    enum: ['A', 'B', 'C', 'D', 'E']
-                },
-                explanation: { type: 'string' }
-            },
-            required: ['content', 'correct_answer']
-        };
-    }
-
-    prepareForClient(question) {
-        const clientQuestion = super.prepareForClient(question);
-        // Standard Hungarian medical exam options A-E
-        clientQuestion.options = [
-            { value: 'A', label: 'Mindkét állítás igaz, és van köztük ok-okozati összefüggés' },
-            { value: 'B', label: 'Mindkét állítás igaz, de nincs köztük összefüggés' },
-            { value: 'C', label: 'Csak az 1. állítás igaz' },
-            { value: 'D', label: 'Csak a 2. állítás igaz' },
-            { value: 'E', label: 'Egyik állítás sem igaz' }
-        ];
-        return clientQuestion;
-    }
-
-    prepareForAdmin(question) {
-        const adminQuestion = super.prepareForAdmin(question);
-        adminQuestion.options = [
-            { value: 'A', label: 'A (Both True, Link True)' },
-            { value: 'B', label: 'B (Both True, Link False)' },
-            { value: 'C', label: 'C (Only 1st True)' },
-            { value: 'D', label: 'D (Only 2nd True)' },
-            { value: 'E', label: 'E (Neither True)' }
-        ];
-        return adminQuestion;
-    }
+  prepareForAdmin(question) {
+    return {
+      ...super.prepareForAdmin(question),
+      options:options.map(option => ({...option, label:option.value + ' (' + option.en + ')'})),
+    };
+  }
 }
 
 module.exports = RelationAnalysisType;

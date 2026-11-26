@@ -83,6 +83,24 @@ const { app } = require('../../server');
             expect(await (await call(11, path+'/'+id)).json()).toMatchObject({correct_answer:'A', metadata:{}, difficulty:1});
         } finally { await call(11, path+'/'+id, 'DELETE'); }
     });
+    test('relation writes validate displayed statements and preserve the last playable revision', async () => {
+        const payload = {topic_id:2, question_type:'relation_analysis', correct_answer:' b ', question_text_hu:'Első, mert második'};
+        const created = await call(11, path, 'POST', payload);
+        expect(created.status).toBe(201);
+        const {id} = await created.json();
+        try {
+            const updated = {...payload, content:{statement_1:{hu:'Első'},statement_2:{hu:'Második'}}};
+            expect((await call(11, path+'/'+id, 'PUT', updated)).status).toBe(200);
+            const partial = {...payload, content:{statement1:'First without a second'}};
+            expect((await call(11, path+'/'+id, 'PUT', partial)).status).toBe(400);
+            expect((await call(11, path, 'POST', partial)).status).toBe(400);
+            const student = await call(14, '/quiz/questions/'+id);
+            expect(student.status).toBe(200);
+            expect(await student.json()).toMatchObject({content:updated.content, correct_answer:'B'});
+            await pg.query('UPDATE questions SET content=$1 WHERE id=$2',[partial.content,id]);
+            expect((await call(14, '/quiz/questions/'+id)).status).toBe(404);
+        } finally { await call(11, path+'/'+id, 'DELETE'); }
+    });
     test('a matching question rejects indistinguishable translated terms without changing the stored pairs', async () => {
         const pairs = [
             {left:{en:'A', hu:'Bal A'}, right:{en:'X', hu:'Jobb X'}},

@@ -39,7 +39,7 @@ test('grades historical JSON text stored by bilingual seeders', () => {
   expect(matching.checkAnswer({correct_answer: '{}'}, {}).correct).toBe(false);
   expect(matching.checkAnswer({correct_answer: '{"a":"b"}'}, {q:'b'}).correct).toBe(false);
   expect(tf.checkAnswer({correct_answer: '["false"]'}, 'hamis').correct).toBe(true);
-  expect(relation.checkAnswer({correct_answer: '["A"]'}, 'A').correct).toBe(true);
+  expect(relation.checkAnswer({question_text_en:'First because second', correct_answer: '["A"]'}, 'A').correct).toBe(true);
 });
 
 test('prepares bilingual matching choices from the shipped legacy seed', () => {

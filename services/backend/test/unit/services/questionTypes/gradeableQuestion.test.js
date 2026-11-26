@@ -39,10 +39,11 @@ test('tracked practice content can be rendered and graded through the public typ
         const question = gradeableQuestion(q);
         const type = question && registry.getType(question.question_type);
         const client = type && type.prepareForClient(question);
-        if (!type || !type.checkAnswer(question, question.question_type === 'relation_analysis' ?
-            [].concat(question.correct_answer)[0] : question.correct_answer).correct ||
+        const expectedKey = question?.question_type === 'relation_analysis'
+          ? [].concat(q.correct_answer)[0] : q.correct_answer;
+        if (!type || !type.checkAnswer(question, question.correct_answer).correct ||
             (question.question_type === 'matching' && !client.matching_data?.left?.length) ||
-            JSON.stringify(q.correct_answer) !== JSON.stringify(question.correct_answer)) {
+            JSON.stringify(expectedKey) !== JSON.stringify(question.correct_answer)) {
           failures.push(path.relative(dir, filename) + ' ' + (q.id ?? index));
         }
       });

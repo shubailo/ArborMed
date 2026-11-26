@@ -51,13 +51,17 @@ function fromType(question, declaredType) {
   if (!question || question.active === false) return null;
   let type = declaredType;
   if (type === 'relational_analysis') type = 'relation_analysis';
-  const input = decodeStoredAnswer(question.correct_answer);
   if (type === 'case_study') type = 'single_choice';
-  let key = input;
+  let key;
   if (type === 'matching') {
     key = matchingDefinition(question).answer;
     if (!key) return null;
+  } else if (type === 'relation_analysis') {
+    key = registry.getType(type).solutionFor(question);
+    if (!key) return null;
   } else if (type === 'single_choice' || type === 'multiple_choice') {
+    const input = decodeStoredAnswer(question.correct_answer);
+    key = input;
     const choices = choiceOptions(question);
     if (choices.length < 2 || !distinctChoices(choices)) return null;
     const multiple = type === 'multiple_choice';
@@ -77,7 +81,8 @@ function fromType(question, declaredType) {
     key = Array.isArray(key) ? key.map(visible) : visible(key);
   } else {
     const handler = registry.getType(type);
-    if (!handler || !handler.checkAnswer(question, scalarAnswer(input)).correct) return null;
+    key = decodeStoredAnswer(question.correct_answer);
+    if (!handler || !handler.checkAnswer(question, scalarAnswer(key)).correct) return null;
   }
   return {...question, question_type: type, correct_answer: key};
 }

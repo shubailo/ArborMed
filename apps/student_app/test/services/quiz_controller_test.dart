@@ -262,6 +262,57 @@ void main() {
       expect(sent.map((p) => p['submissionId']).toSet(), {id});
     });
 
+    testWidgets('an incomplete cached relation can be skipped without recording a grade', (t) async {
+      SharedPreferences.setMockInitialValues({});
+      when(mockApiService.get('/quiz/questions/18')).thenAnswer((_) async => {'id': 18});
+      controller = buildController(review: [18], initialData: {
+        'id': 17, 'question_type': 'relation_analysis', 'correct_answer': 'B',
+        'text': 'Generic instructions', 'content': {'statement1': 'Only half the question'},
+      });
+      await t.pumpWidget(MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => ThemeService()),
+          ChangeNotifierProvider.value(value: controller),
+        ],
+        child: const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(body: QuizBody(systemName: 'Renal')),
+        ),
+      ));
+      await t.pumpAndSettle();
+      expect(find.text('Submit Answer'), findsNothing);
+      await t.runAsync(() async {
+        controller.selectAnswer('B');
+        await controller.submitAnswer();
+        expect(controller.state.isAnswerChecked, isFalse);
+        expect(await database.customSelect('SELECT * FROM pending_submissions').get(), isEmpty);
+      });
+      await t.tap(find.text('Next Question'));
+      await t.pumpAndSettle();
+      expect(controller.state.currentQuestion?['id'], 18);
+      verifyNever(mockApiService.post('/quiz/answer', any));
+      await t.pumpWidget(const SizedBox());
+    });
+
+    test('a historical relation key and the answer sent for offline replay agree', () async {
+      when(mockApiService.post('/quiz/answer', any)).thenThrow(const NetworkException());
+      controller = buildController(initialData: {
+        'id': 17, 'question_type': 'relational_analysis', 'text': 'Both statements together',
+        'correct_answer': '["E"]', 'options': [{'value': 'E', 'label': 'Neither is true'}],
+      });
+      expect(controller.state.currentQuestion?['question_type'], 'relation_analysis');
+      controller.selectAnswer(['E']);
+      await controller.submitAnswer();
+      expect(controller.state.isAnswerChecked, isFalse);
+      controller.selectAnswer(' e ');
+      await controller.submitAnswer();
+      expect(controller.state.isCorrect, isTrue);
+      final call = verify(mockApiService.post('/quiz/answer', captureAny)).captured.single;
+      expect(call['userAnswer'], 'E');
+      expect(await database.customSelect('SELECT * FROM pending_submissions').get(), hasLength(1));
+    });
+
     testWidgets('matching submit becomes available only after a complete one-to-one attempt', (t) async {
       SharedPreferences.setMockInitialValues({});
       controller = buildController(review: [18], initialData: {

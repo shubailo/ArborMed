@@ -1,3 +1,5 @@
+import '../../../core/models/relation_answer.dart';
+import '../../../core/models/relation_content.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../generated/l10n/app_localizations.dart';
@@ -438,7 +440,7 @@ class _SavedQuestionDetailsState extends State<_SavedQuestionDetails> {
       Text(q.questionLabel(lang) ?? ui.adminUntitled),
       if (q.type == 'relation_analysis' && q.content is Map)
         for (final field in ['statement1', 'link_word', 'statement2'])
-          if (_translation(q.content[field], lang) case final String value)
+          if (relationText(q.content, field, lang, fallback: true) case final value when value.isNotEmpty)
             Text(value),
       if (q.type == 'single_choice' ||
           q.type == 'multiple_choice' ||
@@ -455,18 +457,22 @@ class _SavedQuestionDetailsState extends State<_SavedQuestionDetails> {
     ]);
   }
 
-  String? _translation(Object? value, String lang) {
-    if (value is String && value.trim().isNotEmpty) return value;
-    if (value is! Map) return null;
-    return [value[lang], value[lang == 'hu' ? 'en' : 'hu']]
-        .whereType<String>()
-        .where((s) => s.trim().isNotEmpty)
-        .firstOrNull;
-  }
-
   Iterable<String> _answers(
       AdminQuestion q, String lang, AppLocalizations l) sync* {
     final keys = q.answerKeys;
+    if (q.type == 'relation_analysis') {
+      yield RelationAnswer.fromStored(q.correctAnswer)?.code ?? l.adminAnswerKeyUnresolved;
+      return;
+    }
+    if (q.type == 'true_false') {
+      final labels = lookupAppLocalizations(Locale(lang));
+      yield switch (q.booleanAnswer) {
+        true => labels.adminTrue,
+        false => labels.adminFalse,
+        null => l.adminAnswerKeyUnresolved,
+      };
+      return;
+    }
     if (q.type == 'matching') {
       final pairs = q.matchingPairs;
       final stored = keys.singleOrNull;
@@ -506,15 +512,6 @@ class _SavedQuestionDetailsState extends State<_SavedQuestionDetails> {
         yield index == null
             ? '${l.adminAnswerKeyUnresolved} ($key)'
             : q.choices[index].label(lang);
-      } else if (q.type == 'true_false') {
-        final value = key.toString().trim().toLowerCase();
-        if (const {'true', 'igaz', '1'}.contains(value)) {
-          yield lookupAppLocalizations(Locale(lang)).adminTrue;
-        } else if (const {'false', 'hamis', '0'}.contains(value)) {
-          yield lookupAppLocalizations(Locale(lang)).adminFalse;
-        } else {
-          yield l.adminAnswerKeyUnresolved;
-        }
       } else {
         yield key.toString();
       }

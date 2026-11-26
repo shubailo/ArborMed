@@ -57,7 +57,7 @@ test('matching authoring requires both sides and presents each bilingual pair ex
 });
 
 test('relation-analysis aliases share their authoring codes, presentation order and grading', () => {
-  const question = {question_type:'relational_analysis', correct_answer:'b'};
+  const question = {question_type:'relational_analysis', question_text_en:'First because second', correct_answer:'b'};
   const student = registry.prepareForClient(question).options;
   const author = registry.prepareForAdmin(question).options;
   expect(student.map(row => row.value)).toEqual(['A','B','C','D','E']);

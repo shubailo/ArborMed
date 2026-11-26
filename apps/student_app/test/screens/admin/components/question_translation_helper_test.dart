@@ -15,11 +15,36 @@ void main() {
       expect(QuestionTranslationHelper.stripPrefix(null), '');
     });
     test('rejects a partial provider response before updating the draft', () {
+      bool complete(Map<String, dynamic> source, Map<String, dynamic> response) =>
+          QuestionTranslationHelper.validatedResult(source, response) != null;
       final original = {'questionText':'Example', 'options':<String>['A','B','']};
-      expect(QuestionTranslationHelper.isComplete(original, {'questionText':'Példa','options':['Egy','Kettő',null]}), isTrue);
-      expect(QuestionTranslationHelper.isComplete(original, {'options':['Egy','Kettő',null]}), isFalse);
-      expect(QuestionTranslationHelper.isComplete(original, {'questionText':'Példa','options':['Egy']}), isFalse);
-      expect(QuestionTranslationHelper.isComplete(original, {'questionText':'Példa','options':['Egy',null,'']}), isFalse);
+      expect(complete(original, {'questionText':'Példa','options':['Egy','Kettő',null]}), isTrue);
+      expect(complete(original, {'options':['Egy','Kettő',null]}), isFalse);
+      expect(complete(original, {'questionText':'Példa','options':['Egy']}), isFalse);
+      expect(complete(original, {'questionText':'Példa','options':['Egy',null,'']}), isFalse);
+    });
+
+    test('selection changes remain eligible while an edit followed by undo invalidates the watch', () {
+      final controller = TextEditingController(text:'Example');
+      final watch = TranslationTextWatch([controller]);
+      controller.selection = const TextSelection(baseOffset:0, extentOffset:3);
+      expect(watch.changed, isFalse);
+      controller.text = 'Edited';
+      controller.text = 'Example';
+      expect(watch.changed, isTrue);
+      watch.dispose();
+      controller.dispose();
+    });
+
+    test('validated result writes only requested nonempty sources, after prefix removal', () {
+      const request = {'questionText':'Question', 'explanation':' ', 'options':<String>['A','']};
+      final result = QuestionTranslationHelper.validatedResult(request, {
+        'questionText':'[HU] Kérdés', 'explanation':'Injected', 'options':['[HU] Egy','Injected'], 'statement1':'Unexpected',
+      });
+      expect(result,{'questionText':'Kérdés','options':['Egy',null]});
+      expect(QuestionTranslationHelper.validatedResult(request,{
+        'questionText':'Kérdés','options':['[HU] ',null],
+      }), isNull);
     });
 
     test('buildTranslationPayload formats relation analysis correctly', () {

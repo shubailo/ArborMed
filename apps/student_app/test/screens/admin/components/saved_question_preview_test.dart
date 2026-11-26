@@ -95,6 +95,21 @@ void main() {
     expect(find.text('Bal → Cél'),findsOneWidget);
   });
 
+  testWidgets('saved logic previews resolve historical statements and mark ambiguous scalar keys', (t) async {
+    final l = lookupAppLocalizations(const Locale('hu'));
+    await show(t, record({'type':'relational_analysis', 'content':{
+      'statement_1':'First', 'statement_2':{'hu':'Második'}
+    }, 'correct_answer':'[" d "]'}));
+    for (final text in ['First','Második','D']) {
+      expect(find.text(text), findsOneWidget);
+    }
+    for (final type in ['true_false','relation_analysis']) {
+      await show(t, record({'type':type,'correct_answer':
+        type == 'true_false' ? [true,false] : ['A','E']}));
+      expect(find.text(l.adminAnswerKeyUnresolved), findsOneWidget);
+    }
+  });
+
   testWidgets('renders translated legacy pairs and boolean answers', (t) async {
     await show(
         t,

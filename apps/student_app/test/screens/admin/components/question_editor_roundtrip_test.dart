@@ -1,3 +1,6 @@
+import 'package:arbor_med/screens/admin/components/quiz_forms/relation_analysis_editor.dart';
+import 'package:arbor_med/screens/admin/components/quiz_forms/true_false_editor.dart';
+import 'package:arbor_med/widgets/admin/dual_language_field.dart';
 import 'package:arbor_med/screens/admin/components/question_metadata_section.dart';
 import 'package:arbor_med/screens/admin/components/question_preview_card.dart';
 import 'package:arbor_med/screens/admin/components/quiz_forms/matching_editor.dart';
@@ -433,6 +436,142 @@ void main() {
       expect(saved['question_text_en'], 'Statement?');
     });
   }
+  AdminQuestion logic(String type, Object? key, {
+    Map<String, dynamic> content = const {}, String prompt = 'Question',
+    String hu = 'Kérdés',
+  }) => AdminQuestion.fromJson({
+    'id': 19, 'topic_id': 2, 'type': type, 'correct_answer': key,
+    'question_text_en': prompt, 'question_text_hu': hu, 'content': content,
+  });
+
+  Finder inEditor(Type form, Type control) =>
+      find.descendant(of: find.byType(form).first, matching: find.byType(control));
+  Future<void> showHungarian(WidgetTester t) async {
+    await t.tap(find.byType(Tab).last);
+    await t.pumpAndSettle();
+  }
+
+  testWidgets('a historical relation singleton and full prompt survive a language switch and save', (t) async {
+    await open(t, logic('relation_analysis', '["E"]', content: {'origin':'import'}));
+    final editor = find.byType(RelationAnalysisEditor).first;
+    expect(t.widget<RelationAnalysisEditor>(editor).correctIndex, 4);
+    await showHungarian(t);
+    expect(t.widget<RelationAnalysisEditor>(editor).correctIndex, 4);
+    await save(t);
+    expect(saved['correct_answer'], 'E');
+    expect(saved['content'], containsPair('origin', 'import'));
+    expect(saved['content'], isNot(contains('statement1')));
+    expect(saved['question_text_en'], 'Question');
+  });
+  testWidgets('an unknown relation key stays unselected until the admin explicitly chooses E', (t) async {
+    await open(t, logic('relation_analysis', ['D','E']));
+    final choices = inEditor(RelationAnalysisEditor, ChoiceChip);
+    expect(t.widget<RelationAnalysisEditor>(find.byType(RelationAnalysisEditor).first).correctIndex, isNull);
+    expect(t.widgetList<ChoiceChip>(choices).where((chip) => chip.selected), isEmpty);
+    await save(t);
+    expect(saved, isEmpty);
+    await t.ensureVisible(choices.at(4));
+    await t.tap(choices.at(4));
+    await t.pumpAndSettle();
+    await save(t);
+    expect(saved['correct_answer'], 'E');
+  });
+  testWidgets('snake-case and scalar statements reopen without a separate prompt and retain annotations', (t) async {
+    await open(t, logic('relation_analysis', ['D'], prompt:'', hu:'', content:{
+      'statement_1': 'First', 'statement_2': {'hu':'Második', 'source':'manual'},
+      'link_word': 'as', 'reference':'ref',
+    }));
+    final fields = t.widgetList<DualLanguageField>(find.byType(DualLanguageField));
+    expect(fields.any((field) => field.controllerEn.text == 'First'), isTrue);
+    expect(fields.any((field) => field.controllerHu.text == 'Második'), isTrue);
+    await save(t);
+    expect(saved['correct_answer'], 'D');
+    expect(saved['content']['statement1']['en'], 'First');
+    expect(saved['content']['statement2'], {'en':'', 'hu':'Második', 'source':'manual'});
+    expect(saved['content']['link_word']['en'], 'as');
+    expect(saved['content']['reference'], 'ref');
+    expect(saved['content'], isNot(contains('statement_1')));
+  });
+  testWidgets('one incomplete relation statement cannot be saved behind a complete prompt', (t) async {
+    await open(t, logic('relation_analysis', 'B', content:{'statement1':{'en':'First'}}));
+    await save(t);
+    expect(saved, isEmpty);
+    final labels = AppLocalizations.of(t.element(find.byType(QuestionEditorDialog)))!;
+    final second = t.widgetList<DualLanguageField>(find.byType(DualLanguageField))
+        .firstWhere((field) => field.label == labels.adminSecondStatement);
+    second.controllerEn.text = 'Second';
+    await t.pump();
+    await save(t);
+    expect(saved['content']['statement2']['en'], 'Second');
+  });
+  testWidgets('a stored false singleton with a scalar statement keeps the false key when edited', (t) async {
+    await open(t, logic('true_false', '[false]', content:{'statement':'Plain statement'}));
+    final editor = find.byType(TrueFalseEditor).first;
+    expect(t.widget<TrueFalseEditor>(editor).correctIndex, 1);
+    await showHungarian(t);
+    expect(t.widget<TrueFalseEditor>(editor).correctIndex, 1);
+    await save(t);
+    expect(saved['correct_answer'], 'false');
+    expect(saved['content']['statement']['en'], 'Plain statement');
+  });
+  for (final key in [null, 'unknown']) {
+    testWidgets('unresolved true-false key $key requires an explicit choice in either tab', (t) async {
+      await open(t, logic('true_false', key, content:{
+        'statement': {'en':'Stored', 'hu':'Tárolt','source':'old'},
+      }));
+      final choices = inEditor(TrueFalseEditor, ChoiceChip);
+      expect(t.widgetList<ChoiceChip>(choices).where((chip) => chip.selected), isEmpty);
+      await save(t);
+      expect(saved, isEmpty);
+      await showHungarian(t);
+      await t.ensureVisible(choices.last);
+      await t.tap(choices.last);
+      await t.pumpAndSettle();
+      await save(t);
+      expect(saved['correct_answer'], 'false');
+      expect(saved['content']['statement']['source'], 'old');
+    });
+  }
+  testWidgets('switching away and back restores each explicitly selected logic key', (t) async {
+    await open(t, logic('relation_analysis', 'C'));
+    Future<void> change(String type) async {
+      t.widget<QuestionMetadataSection>(find.byType(QuestionMetadataSection)).onQuestionTypeChanged(type);
+      await t.pumpAndSettle();
+    }
+    await change('true_false');
+    final tf = find.byType(TrueFalseEditor).first;
+    expect(t.widget<TrueFalseEditor>(tf).correctIndex, isNull);
+    t.widget<TrueFalseEditor>(tf).onIndexChanged(1);
+    await t.pump();
+    await change('relation_analysis');
+    expect(t.widget<RelationAnalysisEditor>(find.byType(RelationAnalysisEditor).first).correctIndex, 2);
+    await change('true_false');
+    expect(t.widget<TrueFalseEditor>(tf).correctIndex, 1);
+  });
+
+  testWidgets('the registered historical relation type opens the relation editor and saves a canonical type', (t) async {
+    await open(t, logic('relational_analysis', 'B'));
+    expect(find.byType(RelationAnalysisEditor), findsWidgets);
+    await save(t);
+    expect(saved['question_type'], 'relation_analysis');
+    expect(saved['correct_answer'], 'B');
+  });
+  testWidgets('corrupt split data cannot silently disappear into the full prompt', (t) async {
+    await open(t, logic('relation_analysis', 'D', content:{
+      'statement_1': ['damaged'], 'statement_2': 7,
+      'question_text': {'en':'outdated','hu':'régi','source':'import'},
+    }));
+    await save(t);
+    expect(saved, isEmpty);
+    final labels = AppLocalizations.of(t.element(find.byType(QuestionEditorDialog)))!;
+    final fields = t.widgetList<DualLanguageField>(find.byType(DualLanguageField));
+    fields.firstWhere((f) => f.label == labels.adminFirstStatement).controllerEn.text = 'Fixed first';
+    fields.firstWhere((f) => f.label == labels.adminSecondStatement).controllerEn.text = 'Fixed second';
+    await t.pump();
+    await save(t);
+    expect(saved['content']['statement1']['en'], 'Fixed first');
+    expect(saved['content']['question_text'], {'en':'Question','hu':'Kérdés','source':'import'});
+  });
   testWidgets('a new question can add and remove an option in both languages',
       (tester) async {
     await open(tester, null);

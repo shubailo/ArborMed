@@ -160,6 +160,19 @@ const { app } = require('../../server');
             )
         ].join('\r\n');
 
+    test('both language rows of a full-prompt relation use the same canonical answer', async () => {
+        const row = {link_id:'relation', type:'relation_analysis', options:'', correct_answer:'c', question_text:'First because second'};
+        const hu = {...row, language:'hu', correct_answer:'C', question_text:'Első, mert második'};
+        const res = await sendFile(csv([flat(row), flat(hu)]));
+        expect(res.status).toBe(200);
+        expect(await res.json()).toMatchObject({imported:1, errors:null});
+        const {rows:[saved]} = await pg.query('SELECT * FROM questions WHERE question_text_en=$1',[row.question_text]);
+        expect(saved).toMatchObject({question_type:'relation_analysis', correct_answer:'C', question_text_hu:hu.question_text});
+        const rejected = await sendFile(csv([flat({...row, db_id:saved.id}), flat({...hu, db_id:saved.id, correct_answer:'D'})]));
+        expect(rejected.status).toBe(400);
+        expect((await pg.query('SELECT correct_answer FROM questions WHERE id=$1',[saved.id])).rows[0].correct_answer).toBe('C');
+    });
+
     test('the template and importer resolve duplicate names and deep sections inside the selected subject', async () => {
         await pg.query(
             "INSERT INTO topics(id,parent_id,name_en) VALUES (20,4,'Basics'),(21,20,'Deep'),(22,4,'Other'),(23,22,'Deep')"
