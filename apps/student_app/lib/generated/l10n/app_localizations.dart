@@ -392,6 +392,120 @@ abstract class AppLocalizations {
   /// **'Could not load the mistakes for this period. Try again.'**
   String get mistakeReviewLoadFailed;
 
+  /// No description provided for @dailyQuests.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily quests'**
+  String get dailyQuests;
+
+  /// No description provided for @subjectMastery.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject mastery'**
+  String get subjectMastery;
+
+  /// No description provided for @analyticsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get analyticsTab;
+
+  /// No description provided for @activityTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get activityTab;
+
+  /// No description provided for @questEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No daily quests available.'**
+  String get questEmpty;
+
+  /// No description provided for @questClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim'**
+  String get questClaim;
+
+  /// No description provided for @questAward.
+  ///
+  /// In en, this message translates to:
+  /// **'You earned {count} tokens.'**
+  String questAward(int count);
+
+  /// No description provided for @questClaimFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not confirm the reward. Check the refreshed quest list.'**
+  String get questClaimFailed;
+
+  /// No description provided for @questRefreshFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not refresh daily quests.'**
+  String get questRefreshFailed;
+
+  /// No description provided for @activityLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load activity for this period.'**
+  String get activityLoadFailed;
+
+  /// No description provided for @masteryLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load subject mastery.'**
+  String get masteryLoadFailed;
+
+  /// No description provided for @masteryNoSections.
+  ///
+  /// In en, this message translates to:
+  /// **'No sections available for this subject.'**
+  String get masteryNoSections;
+
+  /// No description provided for @masteryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No subjects available.'**
+  String get masteryEmpty;
+
+  /// No description provided for @activityActiveDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Active days'**
+  String get activityActiveDays;
+
+  /// No description provided for @activityMonthIntensity.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly intensity'**
+  String get activityMonthIntensity;
+
+  /// No description provided for @activityEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No activity data for this period.'**
+  String get activityEmpty;
+
+  /// No description provided for @activityLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Less'**
+  String get activityLess;
+
+  /// No description provided for @activityMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get activityMore;
+
+  /// No description provided for @activityCorrectCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} correct'**
+  String activityCorrectCount(int count);
+
   /// No description provided for @quizStart.
   ///
   /// In en, this message translates to:

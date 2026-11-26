@@ -1,3 +1,4 @@
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
@@ -25,6 +26,7 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       Provider.of<StatsProvider>(context, listen: false)
           .fetchSubjectDetail(widget.subjectSlug);
     });
@@ -37,11 +39,21 @@ class _MasteryHeatmapState extends State<MasteryHeatmap> {
         final List<Map<String, dynamic>> rawData =
             stats.sectionMastery[widget.subjectSlug] ?? [];
 
-        if (rawData.isEmpty) {
-          final palette = CozyTheme.of(context);
+        final state = stats.getSectionState(widget.subjectSlug);
+        final strings = AppLocalizations.of(context)!;
+        if (state == SubjectQuizState.error) {
           return Center(
-              child: Text("Loading Clinical Data...",
-                  style: TextStyle(color: palette.textSecondary)));
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+            Text(strings.masteryLoadFailed),
+            TextButton(
+                onPressed: () => stats.fetchSubjectDetail(widget.subjectSlug),
+                child: Text(strings.retry)),
+          ]));
+        }
+        if (rawData.isEmpty) {
+          return state == SubjectQuizState.empty
+              ? Center(child: Text(strings.masteryNoSections))
+              : const Center(child: CircularProgressIndicator());
         }
 
         final List<Map<String, dynamic>> sortedData = List.from(rawData);

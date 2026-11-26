@@ -125,6 +125,31 @@ run('duel ledger and daily reward transactions', () => {
     await expect(claim(2,'daily_1')).rejects.toMatchObject({statusCode:409});
   });
 
+  it('returns the credited amount exactly once and binds new clients to the displayed UTC day', async () => {
+    const controller = require('../../src/controllers/questController');
+    await pg.query('INSERT INTO responses(user_id,question_id,is_correct) SELECT 1,n,true FROM generate_series(1,5) n');
+    const {date} = await economy.dailyProgress(pg, 1);
+    const claim = async body => {
+      const res = {json: jest.fn()};
+      await controller.claimQuest({user:{id:1},body}, res, error => {throw error;});
+      return res.json.mock.calls[0][0];
+    };
+    await expect(claim({questId:'daily_2',date:'2000-01-01'})).rejects.toMatchObject({statusCode:409});
+    expect(await profile(1)).toBe(100);
+    expect(await claim({questId:'daily_2',date})).toMatchObject({date,awardedTokens:20,newBalance:120});
+    expect(await claim({questId:'daily_2'})).toMatchObject({date,awardedTokens:0,newBalance:120});
+    expect((await pg.query('SELECT count(*)::int AS count FROM user_claimed_quests')).rows[0].count).toBe(1);
+  });
+
+  it('counts legacy session-owned progress while respecting explicit response ownership', async () => {
+    await pg.query(`INSERT INTO quiz_sessions(id,user_id) VALUES(10,1),(20,2);
+      INSERT INTO responses(session_id,question_id,is_correct) SELECT 10,n,true FROM generate_series(1,5) n;
+      INSERT INTO responses(user_id,session_id,question_id,is_correct) VALUES(2,10,6,true),(NULL,20,7,false)`);
+    const counts = async id => (await economy.dailyProgress(pg,id)).quests.map(q => q.currentCount);
+    expect(await counts(1)).toEqual([5,5,5]);
+    expect(await counts(2)).toEqual([2,1,0]);
+  });
+
   it('offers a perfect round after five different first answers in one owned session', async () => {
     await pg.query("INSERT INTO quiz_sessions(id,user_id) VALUES (1,1),(2,1),(3,2)");
     await pg.query(`INSERT INTO responses(user_id, session_id, question_id, is_correct)

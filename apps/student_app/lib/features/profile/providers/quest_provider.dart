@@ -10,63 +10,107 @@ class QuestProvider with ChangeNotifier {
   List<LearningQuest> _quests = [];
   int? _owner;
   String? _date;
+  int _session = 0;
   int _request = 0;
   bool _isLoading = false;
-  final Set<String> _claiming = {};
+  bool _refreshFailed = false;
+  bool _disposed = false;
+  Object? _claim;
 
-  QuestProvider(this._authProvider);
+  QuestProvider(this._authProvider) : _owner = _authProvider.user?.id {
+    _authProvider.addListener(_syncOwner);
+  }
 
-  String get _today => DateTime.now().toUtc().toIso8601String().substring(0, 10);
+  String get _today =>
+      DateTime.now().toUtc().toIso8601String().substring(0, 10);
   List<LearningQuest> get quests =>
-      _owner == _authProvider.user?.id && _date == _today ? _quests : [];
+      _owner == _authProvider.user?.id && _date == _today ? _quests : const [];
   bool get isLoading => _isLoading;
+  bool get refreshFailed => _refreshFailed;
+  bool get isClaiming => _claim != null;
+  int get sessionRevision => _session;
 
-  Future<void> fetchQuests() async {
-    final userId = _authProvider.user?.id;
-    final generation = ++_request;
-    if (userId == null) {
-      _quests = [];
-      _owner = null;
-      _isLoading = false;
-      notifyListeners();
-      return;
-    }
-    _isLoading = true;
+  void _syncOwner() {
+    if (_owner == _authProvider.user?.id) return;
+    _owner = _authProvider.user?.id;
+    _session++;
+    _request++;
+    _claim = null;
+    _date = null;
+    _quests = [];
+    _isLoading = false;
+    _refreshFailed = false;
     notifyListeners();
-    final key = 'daily_quests_$userId';
-    bool current() => generation == _request && userId == _authProvider.user?.id;
+  }
+
+  bool _current(int session, String date) =>
+      !_disposed &&
+      _owner != null &&
+      _owner == _authProvider.user?.id &&
+      _session == session &&
+      _today == date;
+
+  List<LearningQuest> _decode(dynamic snapshot, String date) {
+    if (snapshot is! Map ||
+        snapshot['date'] != date ||
+        snapshot['quests'] is! List) {
+      throw const FormatException('Invalid daily quest snapshot');
+    }
+    final result = (snapshot['quests'] as List)
+        .map((item) => LearningQuest.fromJson(Map<String, dynamic>.from(item)))
+        .toList();
+    if (result.map((q) => q.id).toSet().length != result.length) {
+      throw const FormatException('Duplicate daily quest');
+    }
+    return result;
+  }
+
+  Future<void> _save(int session, String date) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      Map<String, dynamic> snapshot;
-      try {
-        final result = await _authProvider.apiService.get('/quests/daily');
-        snapshot = Map<String, dynamic>.from(result);
-        if (!current()) return;
-        await prefs.setString(key, jsonEncode(snapshot));
-      } catch (error) {
-        debugPrint('Unable to refresh quests: $error');
-        final cached = prefs.getString(key);
-        if (cached == null) return;
-        snapshot = Map<String, dynamic>.from(jsonDecode(cached));
+      if (!_current(session, date) || _date != date) return;
+      await prefs.setString('daily_quests_$_owner',
+          jsonEncode({'date': date, 'quests': _quests}));
+    } catch (error) {
+      debugPrint('Quest cache write failed: ${error.runtimeType}');
+    }
+  }
+
+  Future<void> fetchQuests() async {
+    if (_disposed || _owner == null) return;
+    final session = _session;
+    final date = _today;
+    final request = ++_request;
+    bool current() => request == _request && _current(session, date);
+    _isLoading = true;
+    _refreshFailed = false;
+    notifyListeners();
+    try {
+      final response = await _authProvider.apiService.get('/quests/daily');
+      if (!current()) return;
+      final rows = _decode(response, date);
+      _quests = rows;
+      _date = date;
+      await _save(session, date);
+    } catch (error) {
+      if (!current()) return;
+      _refreshFailed = true;
+      debugPrint('Quest refresh failed: ${error.runtimeType}');
+      if (_date != date) {
+        try {
+          final prefs = await SharedPreferences.getInstance();
+          if (!current()) return;
+          final raw = prefs.getString('daily_quests_$_owner');
+          if (raw != null) {
+            _quests = _decode(jsonDecode(raw), date);
+            _date = date;
+          }
+        } catch (error) {
+          debugPrint('Quest cache read failed: ${error.runtimeType}');
+        }
       }
-      if (!current() || snapshot['date'] != _today) return;
-      _quests = (snapshot['quests'] as List)
-          .map((q) => LearningQuest(
-                id: q['id'],
-                period: QuestPeriod.daily,
-                type: QuestType.values.byName(q['type']),
-                title: q['title'],
-                description: q['description'],
-                targetCount: q['targetCount'],
-                currentCount: q['currentCount'],
-                rewardTokens: q['rewardTokens'],
-                status: QuestStatus.values.byName(q['status']),
-              ))
-          .toList();
-      _date = snapshot['date'];
-      _owner = userId;
     } finally {
-      if (generation == _request) {
+      if (!_disposed && request == _request) {
         _isLoading = false;
         notifyListeners();
       }
@@ -74,26 +118,55 @@ class QuestProvider with ChangeNotifier {
   }
 
   Future<int> claimQuest(String questId) async {
-    final userId = _authProvider.user?.id;
     final index = quests.indexWhere((quest) => quest.id == questId);
-    if (userId == null || index == -1) return 0;
-    final quest = quests[index];
-    final key = '$userId-$questId';
-    if (quest.status != QuestStatus.completed || !_claiming.add(key)) return 0;
-    try {
-      final response = await _authProvider.apiService.post('/quests/claim', {'questId': quest.id});
-      final balance = response?['newBalance'];
-      if (balance is! num || userId != _authProvider.user?.id) return 0;
-      _authProvider.updateCoinBalance(balance.toInt());
-      quest.status = QuestStatus.claimed;
-      notifyListeners();
-      await fetchQuests();
-      return userId == _authProvider.user?.id ? quest.rewardTokens : 0;
-    } catch (error) {
-      debugPrint('Failed to claim quest: $error');
+    if (_disposed ||
+        _claim != null ||
+        index < 0 ||
+        quests[index].status != QuestStatus.completed) {
       return 0;
-    } finally {
-      _claiming.remove(key);
     }
+    final session = _session;
+    final date = _date!;
+    final token = _claim = Object();
+    notifyListeners();
+    try {
+      final response = await _authProvider.apiService
+          .post('/quests/claim', {'questId': questId, 'date': date});
+      if (!_current(session, date)) return 0;
+      final balance = response['newBalance'];
+      // Older servers confirm the balance but do not say whether this was a replay.
+      final awarded = response['awardedTokens'] ?? 0;
+      if (balance is! int ||
+          balance < 0 ||
+          awarded is! int ||
+          awarded < 0 ||
+          (response['date'] != null && response['date'] != date)) {
+        throw const FormatException('Invalid daily claim receipt');
+      }
+      ++_request;
+      _isLoading = false;
+      for (final quest in quests.where((q) => q.id == questId)) {
+        quest.status = QuestStatus.claimed;
+      }
+      _authProvider.updateCoinBalance(balance);
+      await _save(session, date);
+      return _current(session, date) ? awarded : 0;
+    } catch (error) {
+      if (!_current(session, date)) return 0;
+      debugPrint('Quest claim failed: ${error.runtimeType}');
+      rethrow;
+    } finally {
+      if (!_disposed && identical(_claim, token)) {
+        _claim = null;
+        notifyListeners();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    _authProvider.removeListener(_syncOwner);
+    super.dispose();
   }
 }

@@ -166,6 +166,71 @@ class AppLocalizationsHu extends AppLocalizations {
       'Az időszak hibás válaszait nem sikerült betölteni. Próbáld újra.';
 
   @override
+  String get dailyQuests => 'Napi küldetések';
+
+  @override
+  String get subjectMastery => 'Tantárgyi eredmények';
+
+  @override
+  String get analyticsTab => 'Eredmények';
+
+  @override
+  String get activityTab => 'Aktivitás';
+
+  @override
+  String get questEmpty => 'Nincs elérhető napi küldetés.';
+
+  @override
+  String get questClaim => 'Jutalom felvétele';
+
+  @override
+  String questAward(int count) {
+    return 'Jóváírt jutalom: $count zseton.';
+  }
+
+  @override
+  String get questClaimFailed =>
+      'A jutalom jóváírását nem sikerült megerősíteni. Ellenőrizd a frissített küldetéslistát.';
+
+  @override
+  String get questRefreshFailed =>
+      'A napi küldetéseket nem sikerült frissíteni.';
+
+  @override
+  String get activityLoadFailed =>
+      'Az időszak aktivitását nem sikerült betölteni.';
+
+  @override
+  String get masteryLoadFailed =>
+      'A tantárgyi eredményeket nem sikerült betölteni.';
+
+  @override
+  String get masteryNoSections => 'Ehhez a tantárgyhoz nincs elérhető témakör.';
+
+  @override
+  String get masteryEmpty => 'Nincs elérhető tantárgy.';
+
+  @override
+  String get activityActiveDays => 'Aktív napok';
+
+  @override
+  String get activityMonthIntensity => 'Havi aktivitás';
+
+  @override
+  String get activityEmpty => 'Ehhez az időszakhoz nincs aktivitási adat.';
+
+  @override
+  String get activityLess => 'Kevesebb';
+
+  @override
+  String get activityMore => 'Több';
+
+  @override
+  String activityCorrectCount(int count) {
+    return '$count helyes válasz';
+  }
+
+  @override
   String get quizStart => 'Kvíz indítása';
 
   @override

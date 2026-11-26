@@ -1,10 +1,9 @@
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:arbor_med/widgets/cozy/cozy_panel.dart';
-import 'activity_chart.dart';
 import 'mastery_heatmap.dart';
 import 'package:arbor_med/widgets/cozy/cozy_dialog_sheet.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
@@ -13,18 +12,29 @@ import '../../profile/widgets/activity_view.dart';
 
 enum AnalyticsMainTab { mastery, activity }
 
-class AnalyticsPortal extends StatefulWidget {
+class AnalyticsPortal extends StatelessWidget {
   final Function(String name, String slug)? onSectionSelected;
 
   const AnalyticsPortal({super.key, this.onSectionSelected});
 
   @override
-  createState() => _AnalyticsPortalState();
+  Widget build(BuildContext context) {
+    final revision =
+        context.select<StatsProvider, int>((p) => p.sessionRevision);
+    return _PortalBody(
+        key: ValueKey(revision), onSectionSelected: onSectionSelected);
+  }
 }
 
-class _AnalyticsPortalState extends State<AnalyticsPortal> {
+class _PortalBody extends StatefulWidget {
+  final Function(String name, String slug)? onSectionSelected;
+  const _PortalBody({super.key, this.onSectionSelected});
+  @override
+  State<_PortalBody> createState() => _AnalyticsPortalState();
+}
+
+class _AnalyticsPortalState extends State<_PortalBody> {
   AnalyticsMainTab _mainTab = AnalyticsMainTab.mastery;
-  ActivityTimeframe _timeframe = ActivityTimeframe.week;
   String? _selectedSubjectTitle;
   String? _selectedSubjectSlug;
   bool _isGoingBack = false;
@@ -33,14 +43,13 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       final stats = Provider.of<StatsProvider>(context, listen: false);
       stats.fetchSummary();
-      stats.fetchActivity();
     });
   }
 
   void _onSubjectSelected(String title, String slug) {
-    Provider.of<StatsProvider>(context, listen: false).fetchSubjectDetail(slug);
     setState(() {
       _isGoingBack = false;
       _selectedSubjectTitle = title;
@@ -67,7 +76,7 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Text(
-              "FOCUS STATS",
+              AppLocalizations.of(context)!.stats.toUpperCase(),
               style: GoogleFonts.quicksand(
                 fontSize: 28,
                 fontWeight: FontWeight.w900,
@@ -76,9 +85,6 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
               ),
             ),
           ),
-
-          // Top Tab Bar
-          if (_mainTab == AnalyticsMainTab.activity) _buildTopTabBar(),
 
           Expanded(
             child: AnimatedSwitcher(
@@ -97,8 +103,7 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
                 );
               },
               child: Container(
-                key:
-                    ValueKey("${_mainTab}_${_timeframe}_$_selectedSubjectSlug"),
+                key: ValueKey("${_mainTab}_$_selectedSubjectSlug"),
                 color: palette.paperCream,
                 child: _buildBody(),
               ),
@@ -112,59 +117,9 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
     );
   }
 
-  Widget _buildTopTabBar() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: ActivityTimeframe.values
-            .map((tab) => _buildTimeframeButton(tab))
-            .toList(),
-      ),
-    );
-  }
-
-  Widget _buildTimeframeButton(ActivityTimeframe tab) {
-    final palette = CozyTheme.of(context);
-    bool isActive = _timeframe == tab;
-    return GestureDetector(
-      onTap: () {
-        final stats = Provider.of<StatsProvider>(context, listen: false);
-        setState(() {
-          _isGoingBack = false;
-          _timeframe = tab;
-        });
-        stats.fetchActivity(timeframe: tab.name, anchorDate: DateTime.now());
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 4),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: isActive
-              ? palette.primary.withValues(alpha: 0.1)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-              color: isActive
-                  ? palette.primary
-                  : palette.textSecondary.withValues(alpha: 0.2)),
-        ),
-        child: Text(
-          tab.name.toUpperCase(),
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w900,
-            color: isActive ? palette.primary : palette.textSecondary,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildBody() {
     final palette = CozyTheme.of(context);
-    if (_selectedSubjectSlug != null) {
+    if (_mainTab == AnalyticsMainTab.mastery && _selectedSubjectSlug != null) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -199,7 +154,7 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
       case AnalyticsMainTab.mastery:
         return _buildMasteryTab();
       case AnalyticsMainTab.activity:
-        return _buildActivityTab();
+        return const ActivityView();
     }
   }
 
@@ -211,10 +166,22 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
           return Center(
               child: CircularProgressIndicator(color: palette.primary));
         }
+        final strings = AppLocalizations.of(context)!;
+        if (stats.summaryFailed) {
+          return Center(
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+            Text(strings.masteryLoadFailed),
+            TextButton(
+                onPressed: stats.fetchSummary, child: Text(strings.retry)),
+          ]));
+        }
+        if (stats.subjectMastery.isEmpty) {
+          return Center(child: Text(strings.masteryEmpty));
+        }
         return ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           children: [
-            Text("Subject Mastery",
+            Text(strings.subjectMastery,
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -228,149 +195,10 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
     );
   }
 
-  Widget _buildActivityTab() {
-    final palette = CozyTheme.of(context);
-    return Consumer<StatsProvider>(
-      builder: (context, stats, _) {
-        final totalQuestions =
-            stats.activity.fold(0, (sum, item) => sum + item.count);
-        final dateStr =
-            DateFormat('EEE, MMM d, yyyy').format(DateTime.now()).toUpperCase();
-
-        return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Icon(Icons.calendar_today_rounded,
-                      size: 16, color: palette.secondary),
-                  const SizedBox(width: 10),
-                  Text(dateStr,
-                      style: TextStyle(
-                          color: palette.textPrimary,
-                          fontWeight: FontWeight.bold)),
-                ],
-              ),
-              const SizedBox(height: 10),
-              ActivityChart(data: stats.activity, timeframe: _timeframe),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                      child: _buildSummaryStatistic(
-                          "TOTAL", totalQuestions.toString(), Icons.quiz)),
-                  const SizedBox(width: 8),
-                  Expanded(
-                      child: _buildSummaryStatistic(
-                          "CORRECT",
-                          stats.activity
-                              .fold(0, (sum, item) => sum + item.correctCount)
-                              .toString(),
-                          Icons.check_circle_outline)),
-                  const SizedBox(width: 8),
-                  Expanded(
-                      child: _buildSummaryStatistic(
-                          "STREAK",
-                          "${stats.activity.where((d) => d.count > 0).length} Days",
-                          Icons.calendar_month)),
-                ],
-              ),
-              const SizedBox(height: 40),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildSummaryStatistic(String label, String value, IconData icon) {
-    final palette = CozyTheme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-      decoration: BoxDecoration(
-        color: palette.paperWhite,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: palette.textPrimary.withValues(alpha: 0.1)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: palette.textPrimary.withValues(alpha: 0.05),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(icon, size: 16, color: palette.textSecondary),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  label,
-                  style: GoogleFonts.outfit(
-                      fontSize: 8,
-                      fontWeight: FontWeight.w900,
-                      color: palette.textSecondary,
-                      letterSpacing: 0.5),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 2),
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(value,
-                      style: GoogleFonts.outfit(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w900,
-                          color: palette.textPrimary)),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildMasteryGrid(List<SubjectMastery> mastery) {
-    mastery = mastery.map((m) {
-      if (m.slug == 'unknown' ||
-          m.slug == 'none' ||
-          m.subjectEn.toLowerCase() == 'unknown') {
-        return SubjectMastery(
-            subjectEn: "Pathophysiology",
-            slug: "pathophysiology",
-            totalAnswered: m.totalAnswered,
-            correctAnswered: m.correctAnswered,
-            masteryPercent: m.masteryPercent);
-      }
-      return m;
-    }).toList();
-
-    final placeholderNames = [
-      "Pathophysiology",
-      "Pathology",
-      "Microbiology",
-      "Pharmacology"
-    ];
-    final coreSubjects = mastery.where((m) => m.slug != 'ecg').toList();
-    final ecgSubject = mastery.where((m) => m.slug == 'ecg').toList();
-
-    while (coreSubjects.length < 4) {
-      coreSubjects.add(SubjectMastery(
-          subjectEn: placeholderNames[coreSubjects.length],
-          slug: placeholderNames[coreSubjects.length].toLowerCase(),
-          totalAnswered: 0,
-          correctAnswered: 0,
-          masteryPercent: 0));
-    }
-
+    final coreSubjects =
+        mastery.where((subject) => subject.slug != 'ecg').toList();
+    final ecgSubject = mastery.where((subject) => subject.slug == 'ecg');
     List<Widget> gridItems = [];
     for (var i = 0; i < coreSubjects.length; i += 2) {
       gridItems.add(Row(children: [
@@ -385,29 +213,25 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
     }
 
     if (ecgSubject.isNotEmpty) {
-      gridItems.add(_buildMasteryTile(ecgSubject[0]));
-    } else {
-      gridItems.add(_buildMasteryTile(SubjectMastery(
-          subjectEn: "ECG",
-          slug: "ecg",
-          totalAnswered: 0,
-          correctAnswered: 0,
-          masteryPercent: 0)));
+      gridItems.add(_buildMasteryTile(ecgSubject.first));
     }
     return Column(children: gridItems);
   }
 
   Widget _buildMasteryTile(SubjectMastery item) {
     final palette = CozyTheme.of(context);
+    final name = Localizations.localeOf(context).languageCode == 'hu'
+        ? item.subjectHu ?? item.subjectEn
+        : item.subjectEn;
     return CozyPanel(
-      onTap: () => _onSubjectSelected(item.subjectEn, item.slug),
+      onTap: () => _onSubjectSelected(name, item.slug),
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text(item.subjectEn.toUpperCase(),
+            child: Text(name.toUpperCase(),
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w900,
@@ -449,13 +273,13 @@ class _AnalyticsPortalState extends State<AnalyticsPortal> {
         children: [
           Expanded(
               child: _buildBottomButton(
-                  "Analytics",
+                  AppLocalizations.of(context)!.analyticsTab,
                   _mainTab == AnalyticsMainTab.mastery,
                   () => setState(() => _mainTab = AnalyticsMainTab.mastery))),
           const SizedBox(width: 12),
           Expanded(
               child: _buildBottomButton(
-                  "Activity",
+                  AppLocalizations.of(context)!.activityTab,
                   _mainTab == AnalyticsMainTab.activity,
                   () => setState(() => _mainTab = AnalyticsMainTab.activity))),
         ],

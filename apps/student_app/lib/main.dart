@@ -133,12 +133,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<StatsProvider>(
           create: (context) => StatsProvider(context.read<AuthProvider>()),
         ),
-        ChangeNotifierProxyProvider<AuthProvider, QuestProvider>(
-          create: (context) =>
-              QuestProvider(Provider.of<AuthProvider>(context, listen: false)),
-          update: (context, auth, previous) {
-            return previous ?? QuestProvider(auth);
-          },
+        ChangeNotifierProvider<QuestProvider>(
+          create: (context) => QuestProvider(context.read<AuthProvider>()),
         ),
         ChangeNotifierProxyProvider<AuthProvider, AdminUserProvider>(
           create: (context) => AdminUserProvider(

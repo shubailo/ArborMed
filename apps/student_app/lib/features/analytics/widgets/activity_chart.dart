@@ -1,3 +1,5 @@
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
+import '../models/activity_timeframe.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
@@ -6,7 +8,6 @@ import 'package:arbor_med/features/analytics/providers/stats_provider.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
 import 'package:arbor_med/widgets/cozy/paper_texture.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../profile/widgets/activity_view.dart';
 import 'package:arbor_med/utils/extensions/list_extensions.dart';
 
 class ActivityChart extends StatefulWidget {
@@ -21,6 +22,19 @@ class ActivityChart extends StatefulWidget {
 
 class _ActivityChartState extends State<ActivityChart> {
   int touchedIndex = -1;
+  AppLocalizations get strings =>
+      AppLocalizations.of(context) ??
+      lookupAppLocalizations(const Locale('en'));
+
+  @override
+  void didUpdateWidget(ActivityChart oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.timeframe != widget.timeframe ||
+        oldWidget.data.safeGet(touchedIndex)?.date !=
+            widget.data.safeGet(touchedIndex)?.date) {
+      touchedIndex = -1;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +46,7 @@ class _ActivityChartState extends State<ActivityChart> {
           borderRadius: BorderRadius.circular(16),
         ),
         child: Center(
-            child: Text("No activity data for this period",
+            child: Text(strings.activityEmpty,
                 style: TextStyle(color: CozyTheme.of(context).textSecondary))),
       );
     }
@@ -52,10 +66,11 @@ class _ActivityChartState extends State<ActivityChart> {
       if (d.count > maxCount) maxCount = d.count;
     }
 
-    // 2. Pad data to align with grid (Start on Mon, end with padding if needed)
-    // For simplicity, we just render the days we have.
-    // Ideally, for a calendar view, we'd need to know which weekday the 1st started on.
-    // But ActivityData comes sorted by date. We can trust the backend list order.
+    final locale = Localizations.localeOf(context).toString();
+    final material = MaterialLocalizations.of(context);
+    final firstWeekday = material.firstDayOfWeekIndex;
+    final leading = (widget.data.first.calendarDay.weekday - firstWeekday) % 7;
+    final today = DateUtils.dateOnly(DateTime.now());
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -71,7 +86,7 @@ class _ActivityChartState extends State<ActivityChart> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("MONTHLY INTENSITY",
+              Text(strings.activityMonthIntensity.toUpperCase(),
                   style: GoogleFonts.outfit(
                       fontSize: 12,
                       fontWeight: FontWeight.w900,
@@ -79,7 +94,7 @@ class _ActivityChartState extends State<ActivityChart> {
                       letterSpacing: 1.2)),
               Row(
                 children: [
-                  Text("Less",
+                  Text(strings.activityLess,
                       style: GoogleFonts.inter(
                           fontSize: 10,
                           color: CozyTheme.of(context).textSecondary)),
@@ -90,7 +105,7 @@ class _ActivityChartState extends State<ActivityChart> {
                   const SizedBox(width: 2),
                   _buildLegendDot(0.9),
                   const SizedBox(width: 8),
-                  Text("More",
+                  Text(strings.activityMore,
                       style: GoogleFonts.inter(
                           fontSize: 10,
                           color: CozyTheme.of(context).textSecondary)),
@@ -99,58 +114,57 @@ class _ActivityChartState extends State<ActivityChart> {
             ],
           ),
           const SizedBox(height: 16),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final itemWidth = (constraints.maxWidth - 40) / 7; // 7 columns
-              return Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: widget.data.map((d) {
-                  final now = DateTime.now();
-                  // Check if day is strictly in the future (tomorrow onwards)
-                  bool isFuture = d.date.year > now.year ||
-                      (d.date.year == now.year && d.date.month > now.month) ||
-                      (d.date.year == now.year &&
-                          d.date.month == now.month &&
-                          d.date.day > now.day);
+          Row(
+              children: List.generate(
+                  7,
+                  (index) => Expanded(
+                      child: Center(
+                          child: Text(material
+                              .narrowWeekdays[(firstWeekday + index) % 7]))))),
+          const SizedBox(height: 6),
+          GridView.builder(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 7, crossAxisSpacing: 6, mainAxisSpacing: 6),
+            itemCount: leading + widget.data.length,
+            itemBuilder: (context, index) {
+              if (index < leading) return const SizedBox.shrink();
+              final d = widget.data[index - leading];
+              final day = d.calendarDay;
+              final isFuture = day.isAfter(today);
 
-                  if (isFuture) {
-                    return Container(
-                      width: itemWidth - 6,
-                      height: itemWidth - 6,
-                      decoration: BoxDecoration(
-                        color: Colors.grey
-                            .withValues(alpha: 0.1), // Dim disabled color
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    );
-                  }
+              if (isFuture) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey
+                        .withValues(alpha: 0.1), // Dim disabled color
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                );
+              }
 
-                  double intensity = (d.count / maxCount).clamp(0.1, 1.0);
-                  if (d.count == 0) intensity = 0.05;
+              double intensity = (d.count / maxCount).clamp(0.1, 1.0);
+              if (d.count == 0) intensity = 0.05;
 
-                  return Tooltip(
-                    message:
-                        '${DateFormat('MMM d').format(d.date)}\n${d.count} questions',
-                    child: Container(
-                      width: itemWidth - 6,
-                      height: itemWidth - 6,
-                      decoration: BoxDecoration(
-                        color: d.count > 0
-                            ? CozyTheme.of(context, listen: false)
-                                .primary
-                                .withValues(alpha: intensity)
-                            : Colors.grey.withValues(
-                                alpha: 0.2), // Darker empty state for past days
-                        borderRadius: BorderRadius.circular(4),
-                        border: d.count > 0
-                            ? null
-                            : Border.all(
-                                color: Colors.grey.withValues(alpha: 0.2)),
-                      ),
-                    ),
-                  );
-                }).toList(),
+              return Tooltip(
+                message:
+                    '${DateFormat.MMMd(locale).format(day)}\n${strings.adminQuestionCount(d.count)}',
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: d.count > 0
+                        ? CozyTheme.of(context, listen: false)
+                            .primary
+                            .withValues(alpha: intensity)
+                        : Colors.grey.withValues(
+                            alpha: 0.2), // Darker empty state for past days
+                    borderRadius: BorderRadius.circular(4),
+                    border: d.count > 0
+                        ? null
+                        : Border.all(color: Colors.grey.withValues(alpha: 0.2)),
+                  ),
+                ),
               );
             },
           ),
@@ -220,10 +234,10 @@ class _ActivityChartState extends State<ActivityChart> {
                             .textPrimary
                             .withValues(alpha: 0.1)),
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                      final data = widget.data.safeGet(groupIndex);
+                      final data = widget.data.safeGet(group.x);
                       if (data == null) return null;
                       return BarTooltipItem(
-                        '${data.count} questions\n',
+                        '${strings.adminQuestionCount(data.count)}\n',
                         GoogleFonts.outfit(
                             color: CozyTheme.of(context, listen: false)
                                 .textPrimary,
@@ -231,7 +245,8 @@ class _ActivityChartState extends State<ActivityChart> {
                             fontSize: 12),
                         children: [
                           TextSpan(
-                            text: '${data.correctCount} correct',
+                            text:
+                                strings.activityCorrectCount(data.correctCount),
                             style: TextStyle(
                                 color: CozyTheme.of(context, listen: false)
                                     .primary,
@@ -272,14 +287,20 @@ class _ActivityChartState extends State<ActivityChart> {
 
                         // Use the day label from backend
                         final activity = widget.data[index];
-                        String label = activity.dayLabel ??
-                            DateFormat('E').format(activity.date);
+                        final locale =
+                            Localizations.localeOf(context).toString();
+                        final label = widget.timeframe == ActivityTimeframe.day
+                            ? activity.dayLabel ??
+                                DateFormat.Hm(locale)
+                                    .format(activity.date.toLocal())
+                            : DateFormat.E(locale).format(activity.calendarDay);
 
                         // Special formatting for Hourly View
                         if (widget.timeframe == ActivityTimeframe.day) {
                           // label is like "HH:00" from backend
                           // Only show every 4th hour to prevent crowding if many bars
-                          if (index % 4 != 0 && index != widget.data.length - 1) {
+                          if (index % 4 != 0 &&
+                              index != widget.data.length - 1) {
                             return const SizedBox();
                           }
                         }
@@ -335,7 +356,8 @@ class _ActivityChartState extends State<ActivityChart> {
                 gridData: FlGridData(
                   show: true,
                   drawVerticalLine: false,
-                  horizontalInterval: (maxY / 4).clamp(1, double.infinity).toDouble(),
+                  horizontalInterval:
+                      (maxY / 4).clamp(1, double.infinity).toDouble(),
                   getDrawingHorizontalLine: (value) => FlLine(
                     color: CozyTheme.of(context, listen: false)
                         .textPrimary

@@ -12,6 +12,11 @@ class ActivityData {
       required this.count,
       required this.correctCount});
 
+  DateTime get calendarDay {
+    final day = DateTime.tryParse(calendarDate ?? '') ?? date.toLocal();
+    return DateTime(day.year, day.month, day.day);
+  }
+
   factory ActivityData.fromJson(Map<String, dynamic> json) {
     return ActivityData(
       date: DateTime.parse(json['date']),

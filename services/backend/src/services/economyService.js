@@ -1,8 +1,11 @@
 const AppError = require('../utils/AppError');
 const dailyQuests = [
-    { id: 'daily_1', type: 'questionsAnswered', title: 'Daily Practice', description: 'Complete 10 different questions today', targetCount: 10, rewardTokens: 10 },
-    { id: 'daily_2', type: 'correctAnswers', title: 'Accuracy Master', description: 'Answer 5 different questions correctly today', targetCount: 5, rewardTokens: 20 },
-    { id: 'daily_3', type: 'perfectScore', title: 'Perfectionist', description: 'Answer the first 5 questions in a session correctly. Each question must be different.', targetCount: 5, rewardTokens: 30 }
+    { id: 'daily_1', type: 'questionsAnswered', title: 'Daily Practice', titleHu: 'Napi gyakorlás',
+        description: 'Complete 10 different questions today', descriptionHu: 'Válaszolj ma 10 különböző kérdésre.', targetCount: 10, rewardTokens: 10 },
+    { id: 'daily_2', type: 'correctAnswers', title: 'Accuracy Master', titleHu: 'Pontos válaszok',
+        description: 'Answer 5 different questions correctly today', descriptionHu: 'Válaszolj ma helyesen 5 különböző kérdésre.', targetCount: 5, rewardTokens: 20 },
+    { id: 'daily_3', type: 'perfectScore', title: 'Perfectionist', titleHu: 'Hibátlan kezdés',
+        description: 'Answer the first 5 questions in a session correctly. Each question must be different.', descriptionHu: 'Egy kvízben az első 5 különböző kérdésre adj helyes választ.', targetCount: 5, rewardTokens: 30 }
 ];
 
 class EconomyService {
@@ -98,8 +101,11 @@ class EconomyService {
                        (today + 1)::timestamp AT TIME ZONE 'UTC' AS ends FROM clock
             ),
             daily AS (
-                SELECT r.* FROM responses r, day
-                WHERE r.user_id = $1 AND r.created_at >= starts AND r.created_at < ends
+                SELECT r.id, r.question_id, r.session_id, r.is_correct, r.created_at FROM responses r, day
+                WHERE r.created_at >= starts AND r.created_at < ends
+                  AND (r.user_id = $1 OR (r.user_id IS NULL AND EXISTS (
+                      SELECT 1 FROM quiz_sessions s WHERE s.id = r.session_id AND s.user_id = $1
+                  )))
             ), ordered AS (
                 SELECT d.*, row_number() OVER (PARTITION BY s.id ORDER BY d.created_at, d.id) AS position
                 FROM daily d JOIN quiz_sessions s ON s.id = d.session_id AND s.user_id = $1, day
@@ -128,11 +134,14 @@ class EconomyService {
         return { date: row.date, quests };
     }
 
-    async processQuestClaim(client, userId, requestedId) {
+    async processQuestClaim(client, userId, requestedId, { expectedDate } = {}) {
         // Older clients append their own timestamp. It never identifies the claim.
         const match = typeof requestedId === 'string' && /^(daily_[123])(?:_\d{13})?$/.exec(requestedId);
         if (!match) throw new AppError('Unknown daily quest', 400);
         const progress = await this.dailyProgress(client, userId);
+        if (expectedDate !== undefined && expectedDate !== progress.date) {
+            throw new AppError('Daily quest date has changed', 409);
+        }
         const quest = progress.quests.find(q => q.id === match[1]);
         if (quest.status === 'active') throw new AppError('Daily quest is incomplete', 409);
 
@@ -144,11 +153,11 @@ class EconomyService {
             if (claim.rowCount) {
                 const balance = await client.query('UPDATE users SET coins = coins + $1 WHERE id = $2 RETURNING coins',
                     [quest.rewardTokens, userId]);
-                return { success: true, newBalance: balance.rows[0].coins };
+                return { success: true, date: progress.date, awardedTokens: quest.rewardTokens, newBalance: balance.rows[0].coins };
             }
         }
         const balance = await client.query('SELECT coins FROM users WHERE id = $1', [userId]);
-        return { success: true, newBalance: balance.rows[0].coins };
+        return { success: true, date: progress.date, awardedTokens: 0, newBalance: balance.rows[0].coins };
     }
 }
 

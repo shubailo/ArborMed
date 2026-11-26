@@ -37,6 +37,10 @@ class StatsProvider with ChangeNotifier {
   }
 
   int? _owner;
+  int _session = 0;
+  int get sessionRevision => _session;
+  bool _summaryFailed = false;
+  bool get summaryFailed => _summaryFailed;
   bool _disposed = false;
   final _requests = <String, Object>{};
   String? _today;
@@ -114,7 +118,11 @@ class StatsProvider with ChangeNotifier {
       ApiEndpoints.statsSummary,
       (data) => _subjectMastery =
           (data as List).map((item) => SubjectMastery.fromJson(item)).toList(),
-      start: () => _isLoading = true,
+      start: () {
+        _isLoading = true;
+        _summaryFailed = false;
+      },
+      failed: () => _summaryFailed = true,
       finish: () => _isLoading = false);
 
   Future<void> preFetchData() async {
@@ -143,26 +151,12 @@ class StatsProvider with ChangeNotifier {
         preload && (_activity.isNotEmpty || _requests.containsKey('chart'))
             ? null
             : _begin('chart');
-    final today = _date(DateTime.now());
-    final daily = _date(anchor) == today ? _begin('today') : null;
     try {
-      final data = await apiService
-          .get(_periodUrl(ApiEndpoints.statsActivity, timeframe, anchor));
-      if ((chart == null || _requests['chart'] != chart) &&
-          (daily == null || _requests['today'] != daily)) {
-        return;
+      final rows = await readActivityPeriod(timeframe, anchor);
+      if (chart != null && _requests['chart'] == chart) {
+        _activity = rows;
+        notifyListeners();
       }
-      final rows =
-          (data as List).map((item) => ActivityData.fromJson(item)).toList();
-      if (daily != null && _requests['today'] == daily) {
-        _today = today;
-        _todayCount = rows
-            .where((row) =>
-                (row.calendarDate ?? _date(row.date.toLocal())) == today)
-            .fold(0, (sum, row) => sum + row.correctCount);
-      }
-      if (chart != null && _requests['chart'] == chart) _activity = rows;
-      notifyListeners();
     } catch (e) {
       if (chart != null && _requests['chart'] == chart) {
         debugPrint('Activity request failed: ${e.runtimeType}');
@@ -171,6 +165,31 @@ class StatsProvider with ChangeNotifier {
       if (chart != null && _requests['chart'] == chart) {
         _requests.remove('chart');
       }
+    }
+  }
+
+  /// Each visible chart owns the result of its selected period.
+  Future<List<ActivityData>> readActivityPeriod(
+      String timeframe, DateTime anchor) async {
+    if (_disposed || _owner == null) return [];
+    final session = _session;
+    final today = _date(DateTime.now());
+    final daily = _date(anchor) == today ? _begin('today') : null;
+    try {
+      final data = await apiService
+          .get(_periodUrl(ApiEndpoints.statsActivity, timeframe, anchor));
+      if (_disposed || session != _session) return [];
+      final rows =
+          (data as List).map((item) => ActivityData.fromJson(item)).toList();
+      if (daily != null && _requests['today'] == daily) {
+        _today = today;
+        _todayCount = rows
+            .where((row) => _date(row.calendarDay) == today)
+            .fold(0, (sum, row) => sum + row.correctCount);
+        notifyListeners();
+      }
+      return rows;
+    } finally {
       if (daily != null && _requests['today'] == daily) {
         _requests.remove('today');
       }
@@ -239,6 +258,8 @@ class StatsProvider with ChangeNotifier {
 
   /// Resets all user-specific statistics.
   void resetState() {
+    _session++;
+    _summaryFailed = false;
     _requests.clear();
     _today = null;
     _todayCount = 0;

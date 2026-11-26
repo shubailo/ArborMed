@@ -165,6 +165,68 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not load the mistakes for this period. Try again.';
 
   @override
+  String get dailyQuests => 'Daily quests';
+
+  @override
+  String get subjectMastery => 'Subject mastery';
+
+  @override
+  String get analyticsTab => 'Analytics';
+
+  @override
+  String get activityTab => 'Activity';
+
+  @override
+  String get questEmpty => 'No daily quests available.';
+
+  @override
+  String get questClaim => 'Claim';
+
+  @override
+  String questAward(int count) {
+    return 'You earned $count tokens.';
+  }
+
+  @override
+  String get questClaimFailed =>
+      'Could not confirm the reward. Check the refreshed quest list.';
+
+  @override
+  String get questRefreshFailed => 'Could not refresh daily quests.';
+
+  @override
+  String get activityLoadFailed => 'Could not load activity for this period.';
+
+  @override
+  String get masteryLoadFailed => 'Could not load subject mastery.';
+
+  @override
+  String get masteryNoSections => 'No sections available for this subject.';
+
+  @override
+  String get masteryEmpty => 'No subjects available.';
+
+  @override
+  String get activityActiveDays => 'Active days';
+
+  @override
+  String get activityMonthIntensity => 'Monthly intensity';
+
+  @override
+  String get activityEmpty => 'No activity data for this period.';
+
+  @override
+  String get activityLess => 'Less';
+
+  @override
+  String get activityMore => 'More';
+
+  @override
+  String activityCorrectCount(int count) {
+    return '$count correct';
+  }
+
+  @override
   String get quizStart => 'Start Quiz';
 
   @override

@@ -34,7 +34,9 @@ integration('PostgreSQL quiz receipts and rewards', () => {
       CREATE TABLE topics (id int PRIMARY KEY, slug text, parent_id int, nexus_metadata jsonb, name_en text);
       CREATE TABLE questions (id int PRIMARY KEY, topic_id int, question_type text, correct_answer text,
         options jsonb, metadata jsonb, bloom_level int, active boolean DEFAULT true);
-      CREATE TABLE quiz_sessions (id int PRIMARY KEY, user_id int REFERENCES users);
+      CREATE TABLE quiz_sessions (id int PRIMARY KEY, user_id int REFERENCES users, started_at timestamptz DEFAULT now());
+      CREATE TABLE user_claimed_quests (user_id int REFERENCES users, quest_id text, claimed_at timestamptz DEFAULT now(),
+        PRIMARY KEY (user_id, quest_id));
       CREATE TABLE user_question_progress (user_id int, question_id int, easiness_factor decimal, interval_days int,
         repetition_count int, next_review_at timestamptz, mastered boolean, PRIMARY KEY(user_id,question_id));
       CREATE TABLE user_topic_progress (user_id int, topic_slug text, current_bloom_level int, current_streak int,
@@ -86,6 +88,27 @@ integration('PostgreSQL quiz receipts and rewards', () => {
       (SELECT count(*)::int FROM user_activity) AS activity,
       COALESCE((SELECT total_answered FROM user_topic_progress WHERE user_id=1),0) AS progress
     FROM users WHERE id=1`)).rows[0];
+
+  test('a rejected quest credit leaves no claim; concurrent retries return one credit and one replay', async () => {
+    const controller = require('../../src/controllers/questController');
+    const claim = async () => {
+      const res = {json: jest.fn()};
+      await controller.claimQuest({user:{id:1},body:{questId:'daily_2'}}, res, err => {throw err;});
+      return res.json.mock.calls[0][0];
+    };
+    await pool.query(`INSERT INTO responses(user_id,question_id,is_correct) SELECT 1,n,true FROM generate_series(1,5) n;
+      ALTER TABLE users ADD CONSTRAINT test_quest_credit CHECK(coins=0)`);
+    try {
+      await expect(claim()).rejects.toMatchObject({code:'23514'});
+      expect((await pool.query('SELECT * FROM user_claimed_quests')).rowCount).toBe(0);
+    } finally {
+      await pool.query('ALTER TABLE users DROP CONSTRAINT test_quest_credit');
+    }
+    const receipts = await Promise.all([claim(), claim()]);
+    expect(receipts.map(r => r.awardedTokens).sort((a,b) => a-b)).toEqual([0,20]);
+    expect(receipts.map(r => r.newBalance)).toEqual([20,20]);
+    expect((await pool.query('SELECT * FROM user_claimed_quests')).rowCount).toBe(1);
+  });
 
   test('concurrent retries replay one receipt, fresh attempts update progress and credit distinct questions', async () => {
     const first = attempt();

@@ -10,78 +10,64 @@ import 'package:arbor_med/theme/cozy_theme.dart';
 import 'package:arbor_med/widgets/cozy/cozy_panel.dart';
 import '../../analytics/widgets/activity_chart.dart';
 import 'quests/quest_list.dart';
-import 'package:arbor_med/features/profile/providers/quest_provider.dart';
 import '../../quiz/screens/quiz_session_screen.dart';
 
-enum ActivityTimeframe { day, week, month, quests }
+import '../../analytics/models/activity_timeframe.dart';
 
-class ActivityView extends StatefulWidget {
+export '../../analytics/models/activity_timeframe.dart';
+
+class ActivityView extends StatelessWidget {
   const ActivityView({super.key});
 
   @override
-  createState() => _ActivityViewState();
+  Widget build(BuildContext context) {
+    final session =
+        context.select<StatsProvider, int>((stats) => stats.sessionRevision);
+    return _PeriodView(key: ValueKey(session));
+  }
 }
 
-class _ActivityViewState extends State<ActivityView> {
+class _PeriodView extends StatefulWidget {
+  const _PeriodView({super.key});
+  @override
+  State<_PeriodView> createState() => _ActivityViewState();
+}
+
+class _ActivityViewState extends State<_PeriodView> {
+  late Future<List<ActivityData>> _period;
+  void _load() {
+    _period = context
+        .read<StatsProvider>()
+        .readActivityPeriod(_timeframe.name, _anchorDate);
+    // A tab can be replaced before FutureBuilder attaches on the next frame.
+    _period.ignore();
+  }
+
   ActivityTimeframe _timeframe = ActivityTimeframe.week;
   DateTime _anchorDate = DateTime.now();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<StatsProvider>(
-        context,
-        listen: false,
-      ).fetchActivity(timeframe: 'week');
-    });
+    _load();
   }
 
   void _navigateDate(int direction) {
     setState(() {
-      if (_timeframe == ActivityTimeframe.day) {
-        if (direction < 0) {
-          _anchorDate = _anchorDate.subtract(const Duration(days: 1));
-        } else {
-          _anchorDate = _anchorDate.add(const Duration(days: 1));
-        }
-      } else if (_timeframe == ActivityTimeframe.week) {
-        if (direction < 0) {
-          _anchorDate = _anchorDate.subtract(const Duration(days: 7));
-        } else {
-          _anchorDate = _anchorDate.add(const Duration(days: 7));
-        }
-      } else if (_timeframe == ActivityTimeframe.month) {
-        if (direction < 0) {
-          final targetMonth = _anchorDate.month - 1;
-          final targetYear = _anchorDate.year;
-          final daysInTargetMonth = DateTime(
-            targetYear,
-            targetMonth + 1,
-            0,
-          ).day;
-          final clampedDay = _anchorDate.day.clamp(1, daysInTargetMonth);
-          _anchorDate = DateTime(targetYear, targetMonth, clampedDay);
-        } else {
-          final targetMonth = _anchorDate.month + 1;
-          final targetYear = _anchorDate.year;
-          final daysInTargetMonth = DateTime(
-            targetYear,
-            targetMonth + 1,
-            0,
-          ).day;
-          final clampedDay = _anchorDate.day.clamp(1, daysInTargetMonth);
-          _anchorDate = DateTime(targetYear, targetMonth, clampedDay);
-        }
+      if (_timeframe == ActivityTimeframe.month) {
+        final target =
+            DateTime(_anchorDate.year, _anchorDate.month + direction);
+        final lastDay = DateTime(target.year, target.month + 1, 0).day;
+        _anchorDate = DateTime(
+            target.year, target.month, _anchorDate.day.clamp(1, lastDay));
+      } else {
+        final step = _timeframe == ActivityTimeframe.week ? 7 : 1;
+        _anchorDate = DateTime(_anchorDate.year, _anchorDate.month,
+            _anchorDate.day + direction * step);
       }
-
       if (_anchorDate.isAfter(DateTime.now())) _anchorDate = DateTime.now();
+      _load();
     });
-
-    Provider.of<StatsProvider>(
-      context,
-      listen: false,
-    ).fetchActivity(timeframe: _timeframe.name, anchorDate: _anchorDate);
   }
 
   @override
@@ -92,56 +78,76 @@ class _ActivityViewState extends State<ActivityView> {
         children: [
           _buildTopTabBar(),
           Expanded(
-            child: Consumer<StatsProvider>(
-              builder: (context, stats, _) {
-                int selectedDayProgress = 0;
+            child: _timeframe == ActivityTimeframe.quests
+                ? const QuestList()
+                : FutureBuilder<List<ActivityData>>(
+                    future: _period,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState != ConnectionState.done) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (snapshot.hasError) {
+                        final strings = AppLocalizations.of(context)!;
+                        return Center(
+                            child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                              Text(strings.activityLoadFailed),
+                              TextButton(
+                                  onPressed: () => setState(_load),
+                                  child: Text(strings.retry)),
+                            ]));
+                      }
+                      final rows = snapshot.data ?? [];
+                      final selectedDayProgress = rows
+                          .where((row) =>
+                              DateUtils.isSameDay(row.calendarDay, _anchorDate))
+                          .fold(0, (sum, row) => sum + row.count);
+                      final totalQuestions = rows.fold(
+                        0,
+                        (sum, item) => sum + item.count,
+                      );
+                      final totalMistakes = rows.fold(
+                        0,
+                        (sum, item) => sum + (item.count - item.correctCount),
+                      );
 
-                if (_timeframe == ActivityTimeframe.day) {
-                  // In Day view, data is hourly, so we sum them for the selected day.
-                  selectedDayProgress = stats.activity.fold(
-                    0,
-                    (sum, item) => sum + item.count,
-                  );
-                } else if (_timeframe == ActivityTimeframe.week ||
-                    _timeframe == ActivityTimeframe.month) {
-                  // In Week/Month view, data is daily. Find the selected day's count.
-                  final selectedDayData = stats.activity.where((item) =>
-                      item.date.year == _anchorDate.year &&
-                      item.date.month == _anchorDate.month &&
-                      item.date.day == _anchorDate.day);
-
-                  if (selectedDayData.isNotEmpty) {
-                    selectedDayProgress = selectedDayData.first.count;
-                  }
-                }
-
-                final totalQuestions = stats.activity.fold(
-                  0,
-                  (sum, item) => sum + item.count,
-                );
-                final totalMistakes = stats.activity.fold(
-                  0,
-                  (sum, item) => sum + (item.count - item.correctCount),
-                );
-
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (_timeframe == ActivityTimeframe.quests)
-                        const QuestList()
-                      else ...[
-                        _buildDailyPrescription(selectedDayProgress),
-                        const SizedBox(height: 24),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      return SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            _buildDailyPrescription(selectedDayProgress),
+                            const SizedBox(height: 24),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.activityTrend,
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w900,
+                                    color: CozyTheme.of(context).textSecondary,
+                                    letterSpacing: 1.2,
+                                  ),
+                                ),
+                                _buildDateSelector(),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            ActivityChart(
+                              data: rows,
+                              timeframe: _timeframe,
+                            ),
+                            const SizedBox(height: 24),
+                            if (totalMistakes > 0)
+                              _buildReviewAction(totalMistakes),
+                            const SizedBox(height: 24),
                             Text(
-                              AppLocalizations.of(context)!.activityTrend,
+                              AppLocalizations.of(context)!.stats.toUpperCase(),
                               style: GoogleFonts.outfit(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w900,
@@ -149,38 +155,14 @@ class _ActivityViewState extends State<ActivityView> {
                                 letterSpacing: 1.2,
                               ),
                             ),
-                            _buildDateSelector(),
+                            const SizedBox(height: 12),
+                            _buildStatGrid(totalQuestions, rows),
+                            const SizedBox(height: 40),
                           ],
                         ),
-                        const SizedBox(height: 12),
-                        ActivityChart(
-                          data: stats.activity,
-                          timeframe: _timeframe,
-                        ),
-                        const SizedBox(height: 24),
-                        if (totalMistakes > 0 &&
-                            (_timeframe == ActivityTimeframe.day ||
-                                _timeframe == ActivityTimeframe.week))
-                          _buildReviewAction(totalMistakes),
-                        const SizedBox(height: 24),
-                        Text(
-                          AppLocalizations.of(context)!.stats.toUpperCase(),
-                          style: GoogleFonts.outfit(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w900,
-                            color: CozyTheme.of(context).textSecondary,
-                            letterSpacing: 1.2,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        _buildStatGrid(totalQuestions, stats),
-                      ],
-                      const SizedBox(height: 40),
-                    ],
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
         ],
       ),
@@ -228,7 +210,8 @@ class _ActivityViewState extends State<ActivityView> {
                           ? AppLocalizations.of(context)!.dailyDoseComplete
                           : AppLocalizations.of(
                               context,
-                            )!.needMoreToday(goal - todayCount),
+                            )!
+                              .needMoreToday(goal - todayCount),
                       style: GoogleFonts.inter(
                         fontSize: 11,
                         color: CozyTheme.of(context).textSecondary,
@@ -271,12 +254,12 @@ class _ActivityViewState extends State<ActivityView> {
                     decoration: BoxDecoration(
                       color: isFilled
                           ? (isComplete
-                                ? CozyTheme.of(context).primary
-                                : Color.lerp(
-                                    CozyTheme.of(context).accent,
-                                    CozyTheme.of(context).primary,
-                                    index / segments,
-                                  ))
+                              ? CozyTheme.of(context).primary
+                              : Color.lerp(
+                                  CozyTheme.of(context).accent,
+                                  CozyTheme.of(context).primary,
+                                  index / segments,
+                                ))
                           : CozyTheme.of(
                               context,
                             ).textPrimary.withValues(alpha: 0.05),
@@ -292,15 +275,15 @@ class _ActivityViewState extends State<ActivityView> {
                               ),
                             ]
                           : isComplete && isFilled
-                          ? [
-                              BoxShadow(
-                                color: CozyTheme.of(
-                                  context,
-                                ).primary.withValues(alpha: 0.2),
-                                blurRadius: 2,
-                              ),
-                            ]
-                          : [],
+                              ? [
+                                  BoxShadow(
+                                    color: CozyTheme.of(
+                                      context,
+                                    ).primary.withValues(alpha: 0.2),
+                                    blurRadius: 2,
+                                  ),
+                                ]
+                              : [],
                     ),
                   );
                 }),
@@ -314,14 +297,17 @@ class _ActivityViewState extends State<ActivityView> {
 
   String _getDateLabel() {
     if (_timeframe == ActivityTimeframe.month) {
-      return DateFormat('MMMM').format(_anchorDate);
+      return DateFormat.yMMMM(Localizations.localeOf(context).toString())
+          .format(_anchorDate);
     } else {
       // Week
       if (_timeframe == ActivityTimeframe.week) {
-        final start = _anchorDate.subtract(const Duration(days: 6));
-        return '${DateFormat('MMM d').format(start)} - ${DateFormat('MMM d').format(_anchorDate)}';
+        final start =
+            DateTime(_anchorDate.year, _anchorDate.month, _anchorDate.day - 6);
+        return '${DateFormat.MMMd(Localizations.localeOf(context).toString()).format(start)} - ${DateFormat.MMMd(Localizations.localeOf(context).toString()).format(_anchorDate)}';
       }
-      return DateFormat('MMM d').format(_anchorDate);
+      return DateFormat.MMMd(Localizations.localeOf(context).toString())
+          .format(_anchorDate);
     }
   }
 
@@ -434,21 +420,27 @@ class _ActivityViewState extends State<ActivityView> {
               final owner = stats.authProvider.user?.id;
               List<int>? mistakeIds;
               try {
-                mistakeIds = await stats.fetchMistakeIds(timeframe: timeframe.name, anchorDate: anchor);
+                mistakeIds = await stats.fetchMistakeIds(
+                    timeframe: timeframe.name, anchorDate: anchor);
               } catch (_) {
                 if (!mounted) return;
                 if (owner != stats.authProvider.user?.id ||
-                    timeframe != _timeframe || anchor != _anchorDate) {
+                    timeframe != _timeframe ||
+                    anchor != _anchorDate) {
                   return;
                 }
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(AppLocalizations.of(context)!.mistakeReviewLoadFailed)),
+                  SnackBar(
+                      content: Text(AppLocalizations.of(context)!
+                          .mistakeReviewLoadFailed)),
                 );
                 return;
               }
               if (!mounted) return;
-              if (mistakeIds == null || owner != stats.authProvider.user?.id ||
-                  timeframe != _timeframe || anchor != _anchorDate) {
+              if (mistakeIds == null ||
+                  owner != stats.authProvider.user?.id ||
+                  timeframe != _timeframe ||
+                  anchor != _anchorDate) {
                 return;
               }
               if (mistakeIds.isNotEmpty) {
@@ -484,12 +476,13 @@ class _ActivityViewState extends State<ActivityView> {
     );
   }
 
-  Widget _buildStatGrid(int total, StatsProvider stats) {
-    final correct = stats.activity.fold(
+  Widget _buildStatGrid(int total, List<ActivityData> rows) {
+    final correct = rows.fold(
       0,
       (sum, item) => sum + item.correctCount,
     );
-    final days = stats.activity.where((d) => d.count > 0).length;
+    final days =
+        rows.where((d) => d.count > 0).map((d) => d.calendarDay).toSet().length;
 
     return Row(
       children: [
@@ -511,8 +504,8 @@ class _ActivityViewState extends State<ActivityView> {
         const SizedBox(width: 8),
         Expanded(
           child: _buildStatCard(
-            AppLocalizations.of(context)!.consistency,
-            "$days ${AppLocalizations.of(context)!.days}",
+            AppLocalizations.of(context)!.activityActiveDays,
+            days.toString(),
             Icons.calendar_month,
           ),
         ),
@@ -603,15 +596,8 @@ class _ActivityViewState extends State<ActivityView> {
         setState(() {
           _timeframe = tab;
           _anchorDate = DateTime.now();
+          if (tab != ActivityTimeframe.quests) _load();
         });
-        if (tab == ActivityTimeframe.quests) {
-          Provider.of<QuestProvider>(context, listen: false).fetchQuests();
-        } else {
-          Provider.of<StatsProvider>(
-            context,
-            listen: false,
-          ).fetchActivity(timeframe: tab.name, anchorDate: DateTime.now());
-        }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 6),
@@ -658,7 +644,7 @@ class _ActivityViewState extends State<ActivityView> {
       case ActivityTimeframe.month:
         return AppLocalizations.of(context)!.month;
       case ActivityTimeframe.quests:
-        return "QUESTS";
+        return AppLocalizations.of(context)!.dailyQuests.toUpperCase();
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'quest_list.dart';
 import 'package:arbor_med/theme/cozy_theme.dart';
@@ -32,7 +33,7 @@ class QuestsPanel extends StatelessWidget {
                 const Icon(Icons.assignment_turned_in, size: 28),
                 const SizedBox(width: 12),
                 Text(
-                  "Daily Quests",
+                  AppLocalizations.of(context)!.dailyQuests,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const Spacer(),
