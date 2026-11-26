@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 import 'connection/connection.dart' as conn;
+import 'connection/browser_storage.dart';
 
 part 'database.g.dart';
 
@@ -103,15 +104,22 @@ class AppDatabase extends _$AppDatabase {
 
   AppDatabase.forTesting(super.e);
 
+  Future<void> ensureSubmissionStorage() async {
+    final storage = connection;
+    if (storage is BrowserStorageConnection) {
+      await storage.requirePersistentQueue(this);
+    }
+  }
+
   static final AppDatabase _instance = AppDatabase._internal();
 
   factory AppDatabase() => _instance;
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   Future<void> _createSubmissionQueue() => customStatement('''
-    CREATE TABLE pending_submissions (
+    CREATE TABLE IF NOT EXISTS pending_submissions (
       sequence INTEGER PRIMARY KEY,
       submission_id TEXT NOT NULL UNIQUE,
       user_id INTEGER NOT NULL,
@@ -122,14 +130,27 @@ class AppDatabase extends _$AppDatabase {
     )
   ''');
 
+  Future<void> _createAccountIndexes() async {
+    await customStatement(
+        'CREATE INDEX IF NOT EXISTS pending_submissions_ready_user '
+        'ON pending_submissions(user_id, sequence) WHERE failure IS NULL');
+    await customStatement(
+        'CREATE INDEX IF NOT EXISTS user_items_by_user ON user_items(user_id)');
+  }
+
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
-      onCreate: (m) async {
+      onCreate: (m) => transaction(() async {
         await m.createAll();
         await _createSubmissionQueue();
-      },
-      onUpgrade: (m, from, to) async {
+        await _createAccountIndexes();
+      }),
+      onUpgrade: (m, from, to) => transaction(() async {
+        if (from > to) {
+          throw UnsupportedError(
+              'Database version $from requires a newer app.');
+        }
         if (from < 2) {
           // Retire isDirty columns and SyncActions table
           await m.deleteTable('sync_actions');
@@ -139,10 +160,17 @@ class AppDatabase extends _$AppDatabase {
           await m.alterTable(TableMigration(userItems));
         }
         if (from == 2) {
-          await m.addColumn(topicProgress, topicProgress.levelCorrectCount);
+          // A previous release could commit the ALTER before updating user_version.
+          final columns =
+              await customSelect('PRAGMA table_info(topic_progress)').get();
+          if (!columns.any(
+              (row) => row.read<String>('name') == 'level_correct_count')) {
+            await m.addColumn(topicProgress, topicProgress.levelCorrectCount);
+          }
         }
         if (from < 4) await _createSubmissionQueue();
-      },
+        if (from < 5) await _createAccountIndexes();
+      }),
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
       },
@@ -156,8 +184,8 @@ class AppDatabase extends _$AppDatabase {
         batch.deleteWhere(userItems, (row) => row.userId.equals(userId));
       });
 
-  /// 🧹 Clears all user-specific data from the local database.
-  /// Used during logout to ensure user isolation.
+  /// Clears cached progress and inventory for every account.
+  /// Sign-out uses [clearUserCacheFor]. Both methods retain queued submissions.
   Future<void> clearUserData() async {
     await batch((batch) {
       batch.deleteWhere(topicProgress, (row) => const Constant(true));

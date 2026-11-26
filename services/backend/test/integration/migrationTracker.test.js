@@ -128,4 +128,40 @@ postgres('forward migrations on PostgreSQL', () => {
             WHERE polrelid = 'pg_temp.ecg_cases'::regclass AND 0 = ANY(polroles)`);
         expect(publicPolicy.rowCount).toBe(0);
     });
+
+    test('reports a busy migrator without waiting for the other session to disconnect', async () => {
+        const owner = new Client({ connectionString: process.env.TEST_DATABASE_URL });
+        await owner.connect();
+        try {
+            await owner.query('SELECT pg_advisory_lock($1)', [185872925]);
+            await pg.query("SET statement_timeout TO '750ms'");
+            await expect(baseline()).rejects.toThrow(/another migration/i);
+        } finally {
+            await owner.end();
+            await pg.query('RESET statement_timeout');
+        }
+        await baseline();
+        expect(await installed()).toContain('050_verified_legacy_schema');
+    });
+
+
+    test('retains the file and original SQL error when cleanup also fails', async () => {
+        await baseline();
+        await write(first, 'SELECT * FROM missing_phase2_fixture');
+        const releaseWarnings = jest.spyOn(console, 'warn').mockImplementation(() => {});
+        const connection = {query: async (text, args) => {
+            const result = await pg.query(text, args);
+            if (text === 'ROLLBACK' || text.includes('pg_advisory_unlock')) {
+                throw new Error('Cleanup acknowledgement lost');
+            }
+            return result;
+        }};
+        try {
+            await expect(migrate(connection, {dir})).rejects.toMatchObject({
+                message:'Migration failed in '+first, cause:{code:'42P01'}
+            });
+            expect(await installed()).not.toContain(first);
+        } finally { releaseWarnings.mockRestore(); }
+    });
+
 });

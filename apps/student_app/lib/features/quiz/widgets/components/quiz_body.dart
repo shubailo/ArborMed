@@ -172,6 +172,27 @@ class QuizBody extends StatelessWidget {
           );
         }
 
+        if (state.submissionRejected) {
+          return Center(
+            child: CozyPanel(
+              title: systemName,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(isHu
+                      ? 'A szerver elutasította a választ. Az előrehaladásod ezért a válaszért nem változott.'
+                      : 'The server rejected this answer. It did not count toward your progress.'),
+                  const SizedBox(height: 16),
+                  LiquidButton(
+                    label: isHu ? 'Következő kérdés' : 'Next question',
+                    onPressed: controller.loadNextQuestion,
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
         final q = state.currentQuestion!;
         final qType = q['question_type'] ?? 'single_choice';
         final renderer = QuestionRendererRegistry.getRenderer(qType);

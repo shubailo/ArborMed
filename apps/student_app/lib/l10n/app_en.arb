@@ -5,6 +5,61 @@
     "description": "The title of the application"
   },
   
+  "authLogin": "Login",
+  "authLearn": "Professional Medical Learning",
+  "authIdentifier": "Email or Username",
+  "authRequired": "Required",
+  "authPassword": "Password",
+  "authShow": "Show password",
+  "authHide": "Hide password",
+  "authShort": "Too short",
+  "authForgotLink": "Forgot Password?",
+  "authNoAccount": "Don't have an account? ",
+  "authCreateLink": "Create One",
+  "authForgot": "Forgot Password",
+  "authResetTitle": "Reset Password",
+  "authEmailPrompt": "Enter your email address.",
+  "authCodePrompt": "Enter the 6-digit code.",
+  "authResetSuccess": "Password reset successful! Please login.",
+  "authTryAgain": "Please try again.",
+  "authResetHelp": "Enter your email to receive a 6-digit reset code.",
+  "authEmail": "Email",
+  "authOtp": "6-digit OTP",
+  "authShowNew": "Show new password",
+  "authHideNew": "Hide new password",
+  "authSendCode": "Send Code",
+  "authReset": "Reset",
+  "authJoin": "Join ArborMed",
+  "authJourney": "Start your medical journey",
+  "authEmailRequired": "Email is required",
+  "authEmailInvalid": "Please enter a valid email address",
+  "authHandle": "Medical Handle (@username)",
+  "authUserRequired": "Username is required",
+  "authDisplayName": "Display Name",
+  "authDisplayRequired": "Display name is required",
+  "authPasswordRequired": "Password is required",
+  "authMinLength": "Min 8 characters",
+  "authUpper": "Missing uppercase letter",
+  "authNumber": "Missing number",
+  "authSpecial": "Missing special character",
+  "authCreate": "Create Account",
+  "authExisting": "Already have an account? ",
+  "authCodeSent": "Code sent to {email}",
+  "@authCodeSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authRegFailed": "Registration Failed: {reason}",
+  "@authRegFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
   "quizStart": "Start Quiz",
   "quizContinue": "Continue",
   "quizSubmit": "Submit Answer",
@@ -490,6 +545,49 @@
   "quizTypeMatching": "Matching",
   "quizTypeRelational": "Relational Analysis",
   "done": "Done",
-  "close": "Close"
+  "close": "Close",
+  "verifyEmailTitle": "Verify Your Email",
+  "verificationRequired": "Verification Required",
+  "verificationSentTo": "We sent a 6-digit verification code to:\n{email}",
+  "@verificationSentTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "verificationEnterCode": "Enter 6-digit code",
+  "verificationContinue": "Verify & Continue",
+  "verificationResend": "Resend Code",
+  "verificationSuccess": "Email verified successfully!",
+  "verificationResent": "Verification code resent!",
+  "verificationRetry": "Could not complete the request. Try again.",
+  "verificationRestart": "Start again",
+  "verificationWait": "Too many requests. Please try again later.",
+  "verificationUnavailable": "Verification is temporarily unavailable. Try again later.",
+  "verificationChanged": "This verification request has changed. Start again.",
+  "verificationSignOutFailed": "Could not finish signing out on this device. Try again.",
+  "duelSelectWager": "Select Wager",
+  "duelChooseWager": "Choose your bet for the knowledge battle:",
+  "duelFindMatch": "Find Match",
+  "duelSearching": "Searching for opponent...",
+  "duelWagerAmount": "Wager: {amount} 🩺",
+  "@duelWagerAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "duelWalletAmount": "{amount} Stethoscopes",
+  "@duelWalletAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "duelLowBalance": "Your balance is too low for this wager.",
+  "duelRefreshFailed": "Could not refresh your balance. Try again.",
+  "duelLeaveFailed": "Could not confirm leaving the queue. Try again."
 }
-

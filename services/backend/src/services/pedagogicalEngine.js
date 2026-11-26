@@ -1,6 +1,6 @@
 const db = require('../config/db');
+const { withTransaction } = require('../utils/dbHelpers');
 const analyticsEngine = require('./analyticsEngine');
-const { positiveId } = require('../utils/quizIds');
 
 // In both selection and persistence, a previously unstudied topic starts at
 // level two if any of its linked topics already meets the Nexus threshold.
@@ -113,56 +113,51 @@ class PedagogicalEngine {
         // --- 3. DIAGNOSTIC FAIL-DOWN ---
         // If student failed an L3/L4 clinical reasoning question in this topic,
         // automatically serve an unmastered prerequisite to fill the foundation gap.
-        const lastFailedInTopic = await db.query(`
-            SELECT q.id, q.metadata, q.bloom_level
+        const prerequisite = await db.query(`
+            SELECT candidate.*, target.slug AS topic_slug, failed.id AS failed_id
             FROM responses r
-            JOIN questions q ON r.question_id = q.id
-            JOIN topics t ON q.topic_id = t.id
-            WHERE r.user_id = $1
-            AND (t.slug = $2 OR t.parent_id = (SELECT id FROM topics WHERE slug = $2))
-            AND r.is_correct = FALSE
-            AND q.bloom_level >= 3 AND q.active = TRUE
-            AND NOT EXISTS (
-                SELECT 1 FROM responses newer
-                WHERE newer.user_id = r.user_id AND newer.question_id = r.question_id
-                  AND (newer.created_at, newer.id) > (r.created_at, r.id)
-            )
-            ORDER BY r.created_at DESC, r.id DESC
+            JOIN questions failed ON failed.id = r.question_id
+            JOIN topics source ON source.id = failed.topic_id
+            CROSS JOIN LATERAL jsonb_array_elements(
+                CASE WHEN jsonb_typeof(failed.metadata->'prerequisite_ids') = 'array'
+                     THEN failed.metadata->'prerequisite_ids' ELSE '[]'::jsonb END
+            ) AS link(value)
+            CROSS JOIN LATERAL (VALUES (ltrim(CASE jsonb_typeof(link.value)
+                WHEN 'number' THEN trim_scale(link.value::numeric)::text
+                WHEN 'string' THEN regexp_replace(link.value #>> '{}', '^[[:space:]]+|[[:space:]]+$', '', 'g')
+            END, '0'))) AS normalized(id)
+            JOIN questions candidate ON candidate.id = CASE
+                WHEN normalized.id ~ '^[0-9]{1,10}$' THEN normalized.id::bigint END
+            JOIN topics target ON target.id = candidate.topic_id
+            WHERE r.user_id = $1 AND r.is_correct = FALSE
+              AND (source.slug = $2 OR source.parent_id = (SELECT id FROM topics WHERE slug = $2))
+              AND failed.bloom_level >= 3 AND failed.active AND candidate.active
+              AND ($3::int[] IS NULL OR candidate.id != ALL($3::int[]))
+              AND NOT EXISTS (
+                  SELECT 1 FROM responses newer
+                  WHERE newer.user_id = r.user_id AND newer.question_id = r.question_id
+                    AND (newer.created_at, newer.id) > (r.created_at, r.id)
+              )
+              AND NOT EXISTS (
+                  SELECT 1 FROM user_question_progress p
+                  WHERE p.user_id = r.user_id AND p.question_id = candidate.id AND p.mastered
+              )
+            ORDER BY r.created_at DESC, r.id DESC, RANDOM()
             LIMIT 1
-        `, [userId, topicSlug]);
+        `, [userId, topicSlug, excludeParam]);
 
-        if (lastFailedInTopic?.rows?.length > 0) {
-            const metadata = lastFailedInTopic.rows[0].metadata;
-            const prereqs = Array.isArray(metadata?.prerequisite_ids)
-                ? metadata.prerequisite_ids.map(positiveId).filter(id => id !== null) : [];
-
-            if (prereqs.length > 0) {
-                const prereqQuestion = await db.query(`
-                    SELECT q.*, t.slug AS topic_slug FROM questions q JOIN topics t ON t.id = q.topic_id
-                    WHERE q.id = ANY($1::int[])
-                    AND q.active = TRUE
-                    AND NOT EXISTS (
-                        SELECT 1 FROM user_question_progress uqp 
-                        WHERE uqp.question_id = q.id AND uqp.user_id = $2 AND uqp.mastered = TRUE
-                    )
-                    AND ($3::int[] IS NULL OR q.id != ALL($3::int[]))
-                    ORDER BY RANDOM()
-                    LIMIT 1
-                `, [prereqs, userId, excludeParam]);
-
-                if (prereqQuestion?.rows?.length > 0) {
-                    const userProgress = await this._ensureUserTopicProgress(userId, prereqQuestion.rows[0].topic_slug);
-                    return {
-                        ...prereqQuestion.rows[0],
-                        currentBloom: userProgress.current_bloom_level || 1,
-                        is_review: false,
-                        coverage: userProgress.mastery_score || 0,
-                        streak: userProgress.current_streak || 0,
-                        streakProgress: Math.min(1.0, (userProgress.level_correct_count || userProgress.progress_counter || 0) / this.PROMOTION_THRESHOLD),
-                        selectionReason: `FAIL_DOWN_PREREQ_${lastFailedInTopic.rows[0].id}`
-                    };
-                }
-            }
+        if (prerequisite.rows.length) {
+            const { failed_id, ...question } = prerequisite.rows[0];
+            const progress = await this._ensureUserTopicProgress(userId, question.topic_slug);
+            return {
+                ...question,
+                currentBloom: progress.current_bloom_level || 1,
+                is_review: false,
+                coverage: progress.mastery_score || 0,
+                streak: progress.current_streak || 0,
+                streakProgress: Math.min(1, (progress.level_correct_count ?? progress.progress_counter ?? 0) / this.PROMOTION_THRESHOLD),
+                selectionReason: `FAIL_DOWN_PREREQ_${failed_id}`,
+            };
         }
 
         // Prefer an unseen question. For a parent subject, each section uses
@@ -213,7 +208,13 @@ class PedagogicalEngine {
      * @param {number|null} [responseTimeMs=null]
      * @returns {Promise<Object>}
      */
-    async resolveResponse(userId, topicSlug, questionId, isCorrect, quality = null, responseTimeMs = null, client = db) {
+    async resolveResponse(userId, topicSlug, questionId, isCorrect, quality = null, responseTimeMs = null, client = null) {
+        if (!client) {
+            return withTransaction(async tx => {
+                await tx.query('SELECT id FROM users WHERE id = $1 FOR UPDATE', [userId]);
+                return this.resolveResponse(userId, topicSlug, questionId, isCorrect, quality, responseTimeMs, tx);
+            });
+        }
         // Compute implicit quality from latency if not explicitly provided
         let computedQuality = quality;
         if (computedQuality === null || isNaN(parseInt(computedQuality))) {
@@ -440,26 +441,21 @@ class PedagogicalEngine {
      * @private
      */
     async _propagateNexusBoost(userId, sourceTopicSlug, client = db) {
-        try {
-            const topicRes = await client.query(`SELECT nexus_metadata FROM topics WHERE slug = $1`, [sourceTopicSlug]);
-            const links = topicRes?.rows?.[0]?.nexus_metadata?.nexus_links;
-            if (!Array.isArray(links) || links.length === 0) return;
-
-            for (const link of links) {
-                if (!link.topic_slug) continue;
-                // If the user has not started the linked topic, seed it at Level 2
-                await client.query(`
-                    INSERT INTO user_topic_progress (user_id, topic_slug, current_bloom_level, level_correct_count)
-                    VALUES ($1, $2, 2, 0)
-                    ON CONFLICT (user_id, topic_slug) DO UPDATE
-                    SET current_bloom_level = GREATEST(user_topic_progress.current_bloom_level, 2)
-                    WHERE user_topic_progress.current_bloom_level < 2 AND user_topic_progress.mastery_score = 0
-                `, [userId, link.topic_slug]);
-            }
-        } catch (err) {
-            if (client !== db) throw err;
-            console.error('[PEDAGOGICAL] Nexus propagation error:', err.message);
-        }
+        await client.query(`
+            INSERT INTO user_topic_progress (user_id, topic_slug, current_bloom_level, level_correct_count)
+            SELECT DISTINCT $1::int, target.slug, 2, 0
+            FROM topics source
+            CROSS JOIN LATERAL jsonb_array_elements(
+                CASE WHEN jsonb_typeof(source.nexus_metadata->'nexus_links') = 'array'
+                     THEN source.nexus_metadata->'nexus_links' ELSE '[]'::jsonb END
+            ) AS link(value)
+            JOIN topics target ON target.slug = link.value->>'topic_slug'
+            WHERE source.slug = $2 AND target.id <> source.id
+              AND jsonb_typeof(link.value->'topic_slug') = 'string'
+            ON CONFLICT (user_id, topic_slug) DO UPDATE
+            SET current_bloom_level = GREATEST(user_topic_progress.current_bloom_level, 2)
+            WHERE user_topic_progress.current_bloom_level < 2 AND user_topic_progress.mastery_score = 0
+        `, [userId, sourceTopicSlug]);
     }
 }
 

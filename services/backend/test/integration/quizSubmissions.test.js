@@ -118,6 +118,68 @@ integration('PostgreSQL quiz receipts and rewards', () => {
     await expect(submit(payload, 2)).rejects.toMatchObject({ statusCode: 400 });
   });
 
+  test('a newer failure with no usable prerequisite does not hide an older actionable one', async () => {
+    await addSubject();
+    await pool.query(`UPDATE questions SET bloom_level=3, metadata='{"prerequisite_ids":["junk"," 000101 ","999999999999999999999"]}' WHERE id=102;
+      UPDATE questions SET bloom_level=4, metadata='{"prerequisite_ids":[8]}' WHERE id=103;
+      INSERT INTO responses(user_id,question_id,is_correct) VALUES (1,102,false),(1,103,false)`);
+    expect(await nextQuestion('subject', '8')).toMatchObject({id:101, selectionReason:'FAIL_DOWN_PREREQ_102'});
+    expect(await nextQuestion('subject')).toMatchObject({id:8, selectionReason:'FAIL_DOWN_PREREQ_103'});
+    await pool.query('UPDATE questions SET metadata=$1 WHERE id=103', [{prerequisite_ids:false}]);
+    await pool.query('UPDATE questions SET metadata=$1::jsonb WHERE id=102', ['{"prerequisite_ids":[101.0]}']);
+    expect(await nextQuestion('subject')).toMatchObject({id:101, selectionReason:'FAIL_DOWN_PREREQ_102'});
+    await pool.query('UPDATE questions SET metadata=$1 WHERE id=102', [{prerequisite_ids:['\t00101\n']}]);
+    expect(await nextQuestion('subject')).toMatchObject({id:101, selectionReason:'FAIL_DOWN_PREREQ_102'});
+  });
+
+  test('mastery commits once with duplicate, retired and malformed Nexus links', async () => {
+    await addSubject();
+    await pool.query(`UPDATE questions SET active=false WHERE id=102;
+      UPDATE topics SET nexus_metadata='{"nexus_links":[null,5,{"topic_slug":"sibling"},{"topic_slug":"sibling"},{"topic_slug":"missing"},{"topic_slug":"section"},{"topic_slug":"test"}]}' WHERE id=101;
+      INSERT INTO user_topic_progress(user_id,topic_slug,current_bloom_level,mastery_score) VALUES (1,'test',3,65);
+      INSERT INTO user_question_progress(user_id,question_id,easiness_factor,interval_days,repetition_count)
+        VALUES(1,101,2.5,6,2)`);
+    const body = {...attempt(101), userAnswer:'Red'};
+    const receipt = await submit(body);
+    expect(receipt).toMatchObject({isCorrect:true, mastery:100, coinsEarned:1});
+    expect(await submit(body)).toEqual(receipt);
+    const progress = await pool.query('SELECT topic_slug,current_bloom_level FROM user_topic_progress ORDER BY topic_slug');
+    expect(progress.rows).toEqual([
+      {topic_slug:'section',current_bloom_level:1}, {topic_slug:'sibling',current_bloom_level:2}, {topic_slug:'test',current_bloom_level:3},
+    ]);
+  });
+
+  test('a late compatibility-adapter error rolls back the SRS row and retry advances it once', async () => {
+    const adapter = require('../../src/services/adaptiveEngine');
+    const answer = () => adapter.processAnswerResult(1, 'test', true, 7);
+    await pool.query('ALTER TABLE user_topic_progress ADD CONSTRAINT reject_progress CHECK (false) NOT VALID');
+    try {
+      await expect(answer()).rejects.toMatchObject({code:'23514'});
+      expect((await pool.query('SELECT * FROM user_question_progress')).rows).toEqual([]);
+    } finally {
+      await pool.query('ALTER TABLE user_topic_progress DROP CONSTRAINT reject_progress');
+    }
+    await answer();
+    expect((await pool.query('SELECT repetition_count FROM user_question_progress')).rows).toEqual([{repetition_count:1}]);
+  });
+
+  test('the soft cap uses the exact UTC day recorded by the locked credit operation', async () => {
+    const economy = require('../../src/services/economyService');
+    const { day } = (await pool.query("SELECT ((now() AT TIME ZONE 'UTC')::date + 1)::text AS day")).rows[0];
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      await client.query('UPDATE users SET last_coin_reset_date=$1, daily_coins_earned=50, daily_coins_softcap_progress=3 WHERE id=1', [day]);
+      expect(await economy.processQuizCoinReward(client, 1, day)).toBe(0);
+      expect(await economy.processQuizCoinReward(client, 1, day)).toBe(1);
+      const state = (await client.query('SELECT last_coin_reset_date::text AS day,daily_coins_earned,coins FROM users WHERE id=1')).rows[0];
+      expect(state).toEqual({day, daily_coins_earned:51, coins:1});
+    } finally {
+      await client.query('ROLLBACK');
+      client.release();
+    }
+  });
+
   async function nextQuestion(topic, exclude = '') {
     let question, error;
     await getNextQuestion({user:{id:1}, query:{topic, exclude}}, {json: value => { question = value; }}, err => { error = err; });
@@ -189,6 +251,32 @@ integration('PostgreSQL quiz receipts and rewards', () => {
     const saved = (await pool.query('SELECT quality FROM responses WHERE question_id=101')).rows;
     expect(saved).toEqual([{quality:first.adaptive.quality}]);
     if (useUuid) await expect(submit({...body,userAnswer:['Red','Red']})).rejects.toMatchObject({statusCode:409});
+  });
+
+  test('legacy numeric and text session IDs replay one submission and one reward', async () => {
+    const body = {sessionId: 10, questionId: 7, userAnswer: 'Piros'};
+    const first = await submit(body);
+    expect(await submit({...body, sessionId: '10'})).toEqual(first);
+    expect(await counts()).toEqual({coins: 1, answers: 1, activity: 1, progress: 1});
+  });
+
+  test('numeric retries recognize a historical receipt hashed with the text session ID', async () => {
+    const body = {sessionId: 10, questionId: 7, userAnswer: 'Piros'};
+    const first = await submit(body);
+    const hex = require('node:crypto').createHash('sha256')
+      .update(JSON.stringify([1, '10', 7, 'Piros'])).digest('hex');
+    const historicalId = [hex.slice(0,8), hex.slice(8,12), hex.slice(12,16), hex.slice(16,20), hex.slice(20,32)].join('-');
+    const receipt = {...first, submissionId: historicalId};
+    await pool.query('UPDATE responses SET submission_id=$1, submission_result=$2', [historicalId, JSON.stringify(receipt)]);
+    expect(await submit(body)).toEqual(receipt);
+    expect(await counts()).toEqual({coins: 1, answers: 1, activity: 1, progress: 1});
+  });
+
+  test('a modern retry cannot attribute a saved receipt to a different study session', async () => {
+    const first = attempt();
+    await submit(first);
+    await expect(submit({...first, sessionId: null})).rejects.toMatchObject({statusCode: 409});
+    expect(await counts()).toEqual({coins: 1, answers: 1, activity: 1, progress: 1});
   });
 
   test('installed clients can replay a submission without a UUID', async () => {

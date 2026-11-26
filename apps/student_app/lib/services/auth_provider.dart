@@ -17,11 +17,14 @@ class AuthProvider with ChangeNotifier {
   final AppDatabase _db;
   User? _user;
   int _sessionVersion = 0;
-  bool _isLoading = false;
+  int _pendingOperations = 0;
+  int _signInAttempt = 0;
+  Future<void>? _sessionWrite;
+  bool _disposed = false;
   bool _isInitialized = false;
 
   User? get user => _user;
-  bool get isLoading => _isLoading;
+  bool get isLoading => _pendingOperations > 0;
   bool get isAuthenticated => _user != null;
   bool get isInitialized => _isInitialized;
 
@@ -30,22 +33,35 @@ class AuthProvider with ChangeNotifier {
         _apiService = apiService ?? ApiService() {
     debugPrint("AuthProvider initializing. kIsWeb: $kIsWeb");
 
-    _apiService.onTokenRefreshed = (newToken) async {
-      final user = _user;
-      if (user != null) {
-        await _saveAuthData(newToken, _apiService.refreshToken, user);
-      }
-    };
+    _apiService.onTokenRefreshed = _persistRefreshedToken;
+  }
+
+  Future<void> _persistRefreshedToken(String token) async {
+    final user = _user;
+    if (user == null || _disposed) return;
+    final saved = _saveAuthData(token, _apiService.refreshToken, user);
+    notifyListeners(); // Also refresh the duel socket's next handshake credentials.
+    await saved;
+  }
+
+  void _beginOperation() {
+    _pendingOperations++;
+    if (_pendingOperations == 1) notifyListeners();
+  }
+
+  void _endOperation({bool initialized = false}) {
+    _pendingOperations--;
+    if (!_disposed && (_pendingOperations == 0 || initialized)) notifyListeners();
   }
 
   Future<void> tryAutoLogin() async {
     final version = _sessionVersion;
-    _isLoading = true;
-    notifyListeners();
+    final attempt = _signInAttempt;
+    _beginOperation();
 
     try {
       final session = await SessionStorage.read();
-      if (session != null && version == _sessionVersion) {
+      if (session != null && version == _sessionVersion && attempt == _signInAttempt) {
         final token = session['token'] as String;
         final refreshToken = session['refreshToken'] as String?;
         final userData = session['user'] as Map<String, dynamic>;
@@ -72,9 +88,8 @@ class AuthProvider with ChangeNotifier {
       debugPrint('Auto-login failed: $e');
       // The platform key store can be temporarily unavailable while locked.
     } finally {
-      _isLoading = false;
       _isInitialized = true;
-      notifyListeners();
+      _endOperation(initialized: true);
     }
   }
 
@@ -117,33 +132,58 @@ class AuthProvider with ChangeNotifier {
     }
     if (version != _sessionVersion) return;
     _user = user;
-    _isLoading = false;
     _apiService.setToken(token, refreshToken: refreshToken, userId: user.id);
     notifyListeners();
   }
 
-  Future<void> setAuthDataFromResponse(Map<String, dynamic> data) =>
-      _acceptSession(data);
-
-  Future<void> login(String identifier, String password) async {
-    _isLoading = true;
-    notifyListeners();
+  Future<void> _installSession(Map<String, dynamic> data) async {
+    final write = _sessionWrite = _acceptSession(data);
     try {
-      final data = await _apiService.postPublic(ApiEndpoints.authLogin, {
-        'username': identifier,
-        'password': password,
-      });
-      await _acceptSession(data as Map<String, dynamic>);
+      await write;
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (identical(_sessionWrite, write)) _sessionWrite = null;
     }
   }
 
+  Future<void> setAuthDataFromResponse(Map<String, dynamic> data) {
+    _signInAttempt++;
+    return _installSession(data);
+  }
+
+  Future<void> _signIn(String endpoint, Map<String, dynamic> body) async {
+    final attempt = ++_signInAttempt;
+    void checkAttempt() {
+      if (attempt != _signInAttempt || _disposed) {
+        throw const ApiException(statusCode: 0, message: 'Sign-in was superseded.');
+      }
+    }
+
+    _beginOperation();
+    try {
+      // A previous accepted session may still be committing to device storage.
+      final write = _sessionWrite;
+      if (write != null) {
+        try {
+          await write;
+        } catch (_) {
+          // The prior caller receives its own storage failure.
+        }
+        checkAttempt();
+      }
+      final data = await _apiService.postPublic(endpoint, body);
+      checkAttempt();
+      await _installSession(data as Map<String, dynamic>);
+    } finally {
+      _endOperation();
+    }
+  }
+
+  Future<void> login(String identifier, String password) =>
+      _signIn(ApiEndpoints.authLogin, {'username': identifier, 'password': password});
+
   Future<String> register(String email, String password,
       {String? username, String? displayName}) async {
-    _isLoading = true;
-    notifyListeners();
+    _beginOperation();
 
     try {
       final data = await _apiService.postPublic(ApiEndpoints.authRegister, {
@@ -153,57 +193,35 @@ class AuthProvider with ChangeNotifier {
         'display_name': displayName ?? email.split('@')[0],
       });
       return data['registrationId'] as String;
-    } catch (e) {
-      rethrow;
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      _endOperation();
     }
   }
 
   Future<void> resendRegistrationOTP(
       String email, String registrationId) async {
-    _isLoading = true;
-    notifyListeners();
+    _beginOperation();
     try {
       await _apiService.postPublic(ApiEndpoints.authResendRegistrationOtp, {
         'email': email,
         'registrationId': registrationId,
       });
-    } catch (e) {
-      rethrow;
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      _endOperation();
     }
   }
 
-  Future<void> verifyRegistration(
-      String email, String otp, String registrationId) async {
-    _isLoading = true;
-    notifyListeners();
-    try {
-      final data =
-          await _apiService.postPublic(ApiEndpoints.authVerifyRegistration, {
+  Future<void> verifyRegistration(String email, String otp, String registrationId) =>
+      _signIn(ApiEndpoints.authVerifyRegistration, {
         'email': email,
         'registrationId': registrationId,
         'otp': otp,
       });
 
-      await _acceptSession(data as Map<String, dynamic>);
-    } catch (e) {
-      rethrow;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
   /// Verifies a user's email address using an OTP (typically for existing unverified users).
   Future<void> verifyEmail(String email, String otp,
       {required String verificationId}) async {
-    _isLoading = true;
-    notifyListeners();
+    _beginOperation();
     try {
       await _apiService.postPublic(ApiEndpoints.authVerifyEmail, {
         'email': email,
@@ -211,8 +229,7 @@ class AuthProvider with ChangeNotifier {
         'verificationId': verificationId,
       });
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      _endOperation();
     }
   }
 
@@ -230,25 +247,22 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> updateNickname(String newName) async {
+    final version = _sessionVersion;
     final userId = _user?.id;
     if (userId == null) return;
-    _isLoading = true;
-    notifyListeners();
+    _beginOperation();
     try {
       final data = await _apiService.put(ApiEndpoints.authProfile, {
         'display_name': newName,
       });
-      if (_user?.id == userId) {
+      if (version == _sessionVersion && _user?.id == userId) {
         await _updateCachedUser(User.fromJson({
           ..._user!.toJson(),
           'display_name': data['display_name'],
         }));
       }
-    } catch (e) {
-      rethrow;
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      _endOperation();
     }
   }
 
@@ -296,6 +310,7 @@ class AuthProvider with ChangeNotifier {
     final token = _apiService.token;
     final refresh = _apiService.refreshToken;
     _sessionVersion++;
+    _signInAttempt++;
     _user = null;
     _apiService.setToken('');
     final cleanup = Future.wait<void>([
@@ -324,38 +339,41 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> requestOTP(String email,
       {String purpose = 'password-reset', String? verificationId}) async {
-    _isLoading = true;
-    notifyListeners();
+    _beginOperation();
     try {
       await _apiService.postPublic(ApiEndpoints.authRequestOtp, {
         'email': email,
         'purpose': purpose,
         if (verificationId != null) 'verificationId': verificationId,
       });
-    } catch (e) {
-      rethrow;
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      _endOperation();
     }
   }
 
   Future<void> resetPassword(
       String email, String otp, String newPassword) async {
-    _isLoading = true;
-    notifyListeners();
+    _beginOperation();
     try {
       await _apiService.postPublic(ApiEndpoints.authResetPassword, {
         'email': email,
         'otp': otp,
         'newPassword': newPassword,
       });
-    } catch (e) {
-      rethrow;
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      _endOperation();
     }
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    _signInAttempt++;
+    _sessionVersion++;
+    if (_apiService.onTokenRefreshed == _persistRefreshedToken) {
+      _apiService.onTokenRefreshed = null;
+    }
+    super.dispose();
   }
 
   ApiService get apiService => _apiService;

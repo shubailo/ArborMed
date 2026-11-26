@@ -8,7 +8,7 @@ const errorHandler = (err, req, res, _next) => {
 
     // Log all errors
     if (err.statusCode >= 500) {
-        console.error(`[ERROR] ${req.method} ${req.originalUrl}:`, err.message);
+        console.error(`[ERROR] ${req.method} ${req.originalUrl.split('?')[0]}:`, err.message);
         if (process.env.NODE_ENV !== 'production') {
             console.error(err.stack);
         }
@@ -26,7 +26,7 @@ const errorHandler = (err, req, res, _next) => {
     if (process.env.NODE_ENV === 'production') {
         return res.status(500).json({
             status: 'error',
-            message: err.message || 'Something went wrong'
+            message: 'Something went wrong'
         });
     }
 

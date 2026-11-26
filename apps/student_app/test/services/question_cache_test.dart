@@ -19,6 +19,39 @@ void main() {
     cache = QuestionCacheService(api)..watchAccount(7);
   });
 
+  test('a completed failed warm-up is retried on the first foreground load', () async {
+    var calls = 0;
+    when(api.get(any)).thenAnswer((_) async {
+      if (++calls == 1) throw StateError('temporary failure');
+      return {'id': 8};
+    });
+    final session = cache.open('renal')..prefetch();
+    await Future<void>.delayed(Duration.zero);
+    expect((await session.next(prefetchNext: false))?['id'], 8);
+    expect(calls, 2);
+  });
+
+  test('a foreground caller sees its own failure once and can retry', () async {
+    final pending = Completer<dynamic>();
+    when(api.get(any)).thenAnswer((_) => pending.future);
+    final session = cache.open('renal')..prefetch();
+    final check = expectLater(session.next(prefetchNext: false), throwsStateError);
+    pending.completeError(StateError('temporary failure'));
+    await check;
+    verify(api.get(any)).called(1);
+    when(api.get(any)).thenAnswer((_) async => {'id': 8});
+    expect((await session.next(prefetchNext: false))?['id'], 8);
+  });
+
+  test('practice IDs use the positive int4 contract and arrive as integers', () async {
+    for (final invalid in [0, -1, 2147483648, '0x10', '12.5', true, null]) {
+      when(api.get(any)).thenAnswer((_) async => {'id': invalid});
+      await expectLater(cache.open('renal').next(prefetchNext: false), throwsFormatException);
+    }
+    when(api.get(any)).thenAnswer((_) async => {'id': ' 0007 '});
+    expect((await cache.open('renal').next(prefetchNext: false))?['id'], 7);
+  });
+
   test('ordinary selections respect SRS and exclude shown IDs', () async {
     var id = 0;
     when(api.get(any)).thenAnswer((_) async => {'id': ++id});

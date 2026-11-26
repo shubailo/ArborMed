@@ -18,6 +18,8 @@ class QuizController extends ChangeNotifier {
   final SubmissionQueue _queue;
   late final StreamSubscription<Map<String, dynamic>> _receiptSubscription;
   String? _visibleSubmission;
+  double _progressBeforeAnswer = 0;
+  String? _progressTopic;
   bool _disposed = false;
   final String systemSlug;
   final String systemName;
@@ -55,19 +57,20 @@ class QuizController extends ChangeNotifier {
         _userId = userId,
         _mistakeIds = questionIds != null ? List.from(questionIds) : null,
         _isReviewMode = questionIds != null && questionIds.isNotEmpty {
-    _selection = _isReviewMode ? null : cacheService.open(systemSlug,
-        shown: int.tryParse(initialQuestion?['id'].toString() ?? ''));
+    final first = initialQuestion == null ? null : normalizePracticeQuestion(initialQuestion);
+    _selection = _isReviewMode ? null : cacheService.open(systemSlug, shown: first?['id'] as int?);
     _receiptSubscription = _queue.receipts.listen(_applyReceipt);
-    if (initialQuestion != null) {
+    if (first != null) {
+      _progressTopic = first['topic_slug']?.toString() ?? systemSlug;
       _sessionId = initialSessionId;
       _stopwatch.start();
       _selection?.prefetch();
       _state = _state.copyWith(
         isLoading: false,
-        currentQuestion: initialQuestion,
-        currentBloomLevel: (initialQuestion['currentBloom'] as num?)?.toInt() ?? 1,
+        currentQuestion: first,
+        currentBloomLevel: (first['currentBloom'] as num?)?.toInt() ?? 1,
         levelDirection: 'NONE',
-        levelProgress: (initialQuestion['streakProgress'] as num?)?.toDouble() ?? 0.0,
+        levelProgress: (first['streakProgress'] as num?)?.toDouble() ?? 0.0,
       );
     } else {
       _initSession();
@@ -98,7 +101,7 @@ class QuizController extends ChangeNotifier {
                 t.topicSlug.equals(systemSlug)))
           .getSingleOrNull();
 
-      if (!_disposed && existing != null) {
+      if (!_disposed && _apiService.userId == _userId && existing != null) {
         final progress = (existing.levelCorrectCount / 20.0).clamp(0.0, 1.0);
         _state = _state.copyWith(levelProgress: progress, currentBloomLevel: existing.currentBloomLevel);
         notifyListeners();
@@ -133,6 +136,7 @@ class QuizController extends ChangeNotifier {
   Future<void> loadNextQuestion() async {
     if (_disposed || _loadingQuestion) return;
     _loadingQuestion = true;
+    final previousProgress = _visibleSubmission == null ? _state.levelProgress : _progressBeforeAnswer;
     _visibleSubmission = null;
     final nextIndex = _state.currentQuestion != null
         ? _state.questionIndex + 1
@@ -141,7 +145,12 @@ class QuizController extends ChangeNotifier {
     _state = _state.copyWith(
       isLoading: true,
       currentQuestion: null,
-      userAnswer: null, // CLEAR ANSWER
+      userAnswer: null,
+      correctAnswer: null,
+      explanation: '',
+      submissionRejected: false,
+      levelProgress: previousProgress,
+      levelDirection: 'NONE',
       isAnswerChecked: false, // RESET CHECK
       isCorrect: false,
       isSubmitting: false,
@@ -172,10 +181,10 @@ class QuizController extends ChangeNotifier {
             final nextId = mistakeList.first;
             try {
               if (_apiService.userId != _userId) throw StateError('The study account changed');
-              q = await _apiService.get('/quiz/questions/$nextId');
+              final result = await _apiService.get('/quiz/questions/$nextId');
               if (_disposed) return;
               if (_apiService.userId != _userId) throw StateError('The study account changed');
-              if (q == null) throw const FormatException('Missing review question');
+              q = normalizePracticeQuestion(result, expectedId: nextId);
               mistakeList.removeAt(0);
               break;
             } on ApiException catch (e) {
@@ -217,15 +226,20 @@ class QuizController extends ChangeNotifier {
   }
 
   void _setQuestion(Map<String, dynamic> q) {
+    final topic = q['topic_slug']?.toString() ?? systemSlug;
+    // Keep cached progress only when it belongs to this section.
+    final reported = (q['streakProgress'] as num?)?.toDouble().clamp(0.0, 1.0);
+    final cachedTopic = _progressTopic ?? systemSlug;
+    final fallbackProgress = cachedTopic == topic ? _state.levelProgress : 0.0;
+    final fallbackBloom = cachedTopic == topic ? _state.currentBloomLevel : 1;
+    _progressTopic = topic;
     _state = _state.copyWith(
       currentQuestion: q,
-      currentBloomLevel: (q['currentBloom'] as num?)?.toInt() ?? _state.currentBloomLevel,
+      currentBloomLevel: (q['currentBloom'] as num?)?.toInt() ?? fallbackBloom,
       levelDirection: 'NONE',
       isLoading: false,
-      userAnswer: null, 
-      // Intentionally NOT overwriting levelProgress here. 
-      // Pre-fetched questions usually have stale progress data.
-      // Progress is managed by optimistic + background sync updates.
+      userAnswer: null,
+      levelProgress: reported ?? fallbackProgress,
     );
     _stopwatch.reset();
     _stopwatch.start();
@@ -233,13 +247,16 @@ class QuizController extends ChangeNotifier {
   }
 
   void selectAnswer(dynamic answer) {
-    if (_state.isAnswerChecked || _state.isSubmitting) return;
+    if (_state.isAnswerChecked || _state.isSubmitting || _state.submissionRejected) return;
     _state = _state.copyWith(userAnswer: answer);
     notifyListeners();
   }
 
   Future<void> submitAnswer() async {
-    if (_state.isAnswerChecked || _state.isSubmitting || _state.currentQuestion == null) return;
+    if (_disposed || _apiService.userId != _userId || _state.submissionRejected ||
+        _state.isAnswerChecked || _state.isSubmitting || _state.currentQuestion == null) {
+      return;
+    }
     final question = _state.currentQuestion!;
     final answer = _formatAnswer(question, _state.userAnswer);
     if (answer == null) return;
@@ -256,14 +273,15 @@ class QuizController extends ChangeNotifier {
         'selectionReason': question['selectionReason'],
       });
     } catch (_) {
-      if (_disposed) return;
+      if (_disposed || _apiService.userId != _userId || !identical(question, _state.currentQuestion)) return;
       _stopwatch.start();
       _state = _state.copyWith(isSubmitting: false, error: languageCode == 'hu'
           ? 'A válasz mentése sikertelen. Próbáld újra.' : 'Could not save your answer. Please retry.');
       notifyListeners();
       return;
     }
-    if (!_disposed && identical(question, _state.currentQuestion)) {
+    if (!_disposed && _apiService.userId == _userId && identical(question, _state.currentQuestion)) {
+      _progressBeforeAnswer = _state.levelProgress;
       _visibleSubmission = id;
       final renderer = QuestionRendererRegistry.getRenderer(question['question_type'] ?? 'single_choice');
       final correct = renderer.validateAnswer(answer, question['correct_answer'], question);
@@ -285,9 +303,28 @@ class QuizController extends ChangeNotifier {
   void _applyReceipt(Map<String, dynamic> receipt) {
     if (_disposed || _apiService.userId != _userId) return;
     if (!receipt.containsKey('error')) _selection?.invalidate();
-    if (receipt['submissionId'] != _visibleSubmission) return;
+    if (receipt['submissionId'] != _visibleSubmission) {
+      if (_visibleSubmission == null && _progressTopic != null &&
+          receipt['topicSlug'] == _progressTopic && !receipt.containsKey('error')) {
+        _state = _state.copyWith(
+          levelProgress: (receipt['streakProgress'] as num?)?.toDouble(),
+          currentBloomLevel: (receipt['currentBloom'] as num?)?.toInt(),
+        );
+        notifyListeners();
+      }
+      return;
+    }
+    _visibleSubmission = null;
     if (receipt.containsKey('error')) {
-      _state = _state.copyWith(error: receipt['error'], isSubmitting: false);
+      _state = _state.copyWith(
+        submissionRejected: true,
+        isSubmitting: false,
+        isAnswerChecked: false,
+        isCorrect: false,
+        correctAnswer: null,
+        explanation: '',
+        levelProgress: _progressBeforeAnswer,
+      );
       notifyListeners();
       return;
     }

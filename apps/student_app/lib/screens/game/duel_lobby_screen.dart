@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/duel_provider.dart';
@@ -17,6 +18,13 @@ class DuelLobbyScreen extends StatefulWidget {
 class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
   bool _openingMatch = false;
   bool _exiting = false;
+  bool _joining = false;
+  bool _left = false;
+  int _joinAttempt = 0;
+  bool get _current => mounted && ModalRoute.of(context)?.isCurrent == true;
+  AppLocalizations get _strings =>
+      AppLocalizations.of(context) ??
+      lookupAppLocalizations(const Locale('en'));
   DuelProvider? _duel;
   int _selectedWager = 10;
   final List<int> _wagerPresets = [5, 10, 25, 50, 100];
@@ -31,23 +39,97 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
     });
   }
 
-  Future<void> _exitLobby() async {
-    if (_exiting || _openingMatch) return;
-    _exiting = true;
+  void _message(String text) {
+    if (!_current) return;
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(text)));
+  }
+
+  Future<void> _join() async {
+    if (_joining || _exiting || !_current) return;
+    final auth = context.read<AuthProvider>();
+    final duel = context.read<DuelProvider>();
+    final userId = auth.user?.id;
+    if (userId == null) return;
+    final wager = _selectedWager;
+    final attempt = ++_joinAttempt;
+    setState(() => _joining = true);
+    try {
+      await auth.refreshUser();
+      if (!_current ||
+          attempt != _joinAttempt ||
+          auth.user?.id != userId ||
+          duel.state == DuelState.playing ||
+          duel.state == DuelState.searching) {
+        return;
+      }
+      if ((auth.user?.coins ?? 0) < wager) {
+        _message(_strings.duelLowBalance);
+        return;
+      }
+      duel.joinQueue(wager);
+    } catch (_) {
+      if (_current && attempt == _joinAttempt) {
+        _message(_strings.duelRefreshFailed);
+      }
+    } finally {
+      if (mounted && attempt == _joinAttempt) setState(() => _joining = false);
+    }
+  }
+
+  Future<void> _refreshBalance(AuthProvider auth) async {
+    try {
+      await auth.refreshUser();
+    } catch (_) {
+      if (_current && !_left) _message(_strings.duelRefreshFailed);
+    }
+  }
+
+  Future<void> _leave({required bool exitLobby}) async {
+    if (_exiting || _openingMatch || !_current) return;
     final duel = context.read<DuelProvider>();
     final auth = context.read<AuthProvider>();
-    final cancelled = await duel.leaveQueue();
-    if (!mounted) return;
-    _exiting = false;
-    if (cancelled && !_openingMatch) {
-      auth.refreshUser();
-      Navigator.of(context).pop();
+    final userId = auth.user?.id;
+    _joinAttempt++;
+    setState(() {
+      _joining = false;
+      _exiting = true;
+    });
+    try {
+      final cancelled = await duel.leaveQueue();
+      if (!mounted ||
+          !_current ||
+          _openingMatch ||
+          duel.state == DuelState.playing) {
+        return;
+      }
+      if (!cancelled) {
+        _message(_strings.duelLeaveFailed);
+        return;
+      }
+      if (exitLobby) {
+        _left = true;
+        Navigator.of(context).pop();
+      }
+      if (auth.user?.id == userId) unawaited(_refreshBalance(auth));
+    } catch (_) {
+      if (_current) _message(_strings.duelLeaveFailed);
+    } finally {
+      if (mounted && !_left) setState(() => _exiting = false);
     }
   }
 
   @override
   void dispose() {
-    if (!_openingMatch && _duel?.state == DuelState.searching) _duel?.leaveQueue();
+    if (!_openingMatch &&
+        !_exiting &&
+        !_left &&
+        _duel?.state == DuelState.searching) {
+      unawaited(_duel!.leaveQueue().then<void>((_) {}, onError: (Object error) {
+        debugPrint('Duel queue cleanup failed: ${error.runtimeType}');
+      }));
+    }
     super.dispose();
   }
 
@@ -56,13 +138,18 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
     final duelProvider = context.watch<DuelProvider>();
     final authProvider = context.watch<AuthProvider>();
     final user = authProvider.user;
-    final l10n = AppLocalizations.of(context);
+    final l10n = _strings;
 
     // If a match is found, navigate to the game screen automatically
-    if (duelProvider.state == DuelState.playing && !_openingMatch) {
+    if (ModalRoute.isCurrentOf(context) == true &&
+        duelProvider.state == DuelState.playing &&
+        !_openingMatch) {
       _openingMatch = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
+        if (!_current || duelProvider.state != DuelState.playing) {
+          _openingMatch = false;
+          return;
+        }
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const DuelGameScreen()),
         );
@@ -70,56 +157,56 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
     }
 
     return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) _exitLobby();
-      },
-      child: Scaffold(
-      appBar: AppBar(
-        title: Text(l10n?.duelArena ?? 'Duel Arena'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: _exitLobby,
-        ),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Theme.of(context).colorScheme.surface,
-              Theme.of(context).colorScheme.surfaceContainerHighest,
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildHeader(context, user?.coins ?? 0),
-                const SizedBox(height: 32),
-                if (duelProvider.state == DuelState.searching)
-                  _buildSearchingState(context, duelProvider)
-                else
-                  _buildLobbyState(context, duelProvider, user?.coins ?? 0),
-                
-                if (duelProvider.state == DuelState.error)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24),
-                    child: Text(
-                      duelProvider.errorMessage ?? 'Error occurred',
-                      style: TextStyle(color: Theme.of(context).colorScheme.error),
-                    ),
-                  ),
-              ],
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) _leave(exitLobby: true);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(l10n.duelArena),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => _leave(exitLobby: true),
             ),
           ),
-        ),
-      ),
-    ));
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Theme.of(context).colorScheme.surface,
+                  Theme.of(context).colorScheme.surfaceContainerHighest,
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildHeader(context, user?.coins ?? 0),
+                    const SizedBox(height: 32),
+                    if (duelProvider.state == DuelState.searching)
+                      _buildSearchingState(context, duelProvider)
+                    else
+                      _buildLobbyState(context, user?.coins ?? 0),
+                    if (duelProvider.state == DuelState.error)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 24),
+                        child: Text(
+                          duelProvider.errorMessage ?? l10n.error,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.error),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ));
   }
 
   Widget _buildHeader(BuildContext context, int coins) {
@@ -128,11 +215,11 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
         Icon(Icons.workspace_premium, size: 64, color: Color(0xFFC48B76)),
         const SizedBox(height: 16),
         Text(
-          "DUEL ARENA",
+          _strings.duelArena.toUpperCase(),
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2,
-          ),
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2,
+              ),
         ),
         const SizedBox(height: 8),
         Container(
@@ -147,10 +234,10 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
               const Icon(Icons.medical_services_outlined, size: 18),
               const SizedBox(width: 8),
               Text(
-                "$coins Stethoscopes",
+                _strings.duelWalletAmount(coins),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             ],
           ),
@@ -159,12 +246,12 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
     );
   }
 
-  Widget _buildLobbyState(BuildContext context, DuelProvider duelProvider, int userCoins) {
+  Widget _buildLobbyState(BuildContext context, int userCoins) {
     return CozyPanel(
-      title: "Select Wager",
+      title: _strings.duelSelectWager,
       child: Column(
         children: [
-          const Text("Choose your bet for the knowledge battle:"),
+          Text(_strings.duelChooseWager),
           const SizedBox(height: 24),
           Wrap(
             spacing: 12,
@@ -173,13 +260,15 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
             children: _wagerPresets.map((wager) {
               final isSelected = _selectedWager == wager;
               final canAfford = userCoins >= wager;
-              
+
               return ChoiceChip(
                 label: Text("$wager 🩺"),
                 selected: isSelected,
-                onSelected: canAfford ? (selected) {
-                  setState(() => _selectedWager = wager);
-                } : null,
+                onSelected: canAfford && !_joining && !_exiting
+                    ? (selected) {
+                        setState(() => _selectedWager = wager);
+                      }
+                    : null,
                 selectedColor: Theme.of(context).colorScheme.primaryContainer,
                 disabledColor: Colors.grey.shade200,
               );
@@ -187,14 +276,11 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
           ),
           const SizedBox(height: 32),
           CozyButton(
-            label: "FIND MATCH",
-            onPressed: userCoins >= _selectedWager 
-              ? () async {
-                  await context.read<AuthProvider>().refreshUser();
-                  if (!context.mounted || _exiting || ModalRoute.of(context)?.isCurrent != true) return;
-                  duelProvider.joinQueue(_selectedWager);
-                }
-              : null,
+            label: _strings.duelFindMatch,
+            isLoading: _joining,
+            onPressed: !_exiting && !_joining && userCoins >= _selectedWager
+                ? _join
+                : null,
             fullWidth: true,
           ),
         ],
@@ -208,19 +294,15 @@ class _DuelLobbyScreenState extends State<DuelLobbyScreen> {
         const CircularProgressIndicator(),
         const SizedBox(height: 24),
         Text(
-          "Searching for opponent...",
+          _strings.duelSearching,
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 8),
-        Text("Wager: ${duelProvider.currentWager} 🩺"),
+        Text(_strings.duelWagerAmount(duelProvider.currentWager)),
         const SizedBox(height: 32),
         CozyButton(
-          label: "CANCEL",
-          onPressed: () async {
-            final auth = context.read<AuthProvider>();
-            await duelProvider.leaveQueue();
-            await auth.refreshUser();
-          },
+          label: _strings.cancel,
+          onPressed: _exiting ? null : () => _leave(exitLobby: false),
           variant: CozyButtonVariant.secondary,
         ),
       ],

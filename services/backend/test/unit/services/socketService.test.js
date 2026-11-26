@@ -4,7 +4,7 @@ jest.mock('../../../src/config/db', () => ({ query: jest.fn() }));
 jest.mock('../../../src/utils/logger', () => ({ info: jest.fn(), warn: jest.fn(), error: jest.fn() }));
 jest.mock('../../../src/services/walletService', () => ({
   ...jest.requireActual('../../../src/services/walletService'),
-  reserve: jest.fn(), start: jest.fn(), cancel: jest.fn(), settle: jest.fn(), receipt: jest.fn(), recoverExpired: jest.fn()
+  reserve: jest.fn(), start: jest.fn(), cancel: jest.fn(), settlePayouts: jest.fn(), receipt: jest.fn(), recoverExpired: jest.fn()
 }));
 const service = require('../../../src/services/socketService');
 const db = require('../../../src/config/db');
@@ -29,7 +29,10 @@ beforeEach(() => {
   wallet.start.mockResolvedValue(true);
   wallet.receipt.mockResolvedValue(undefined);
   wallet.cancel.mockResolvedValue(true);
-  wallet.settle.mockResolvedValue(true);
+  wallet.settlePayouts.mockImplementation(async (_matchId,outcome,winner) =>
+    wallet.reserve.mock.calls.map(([,user_id,amount]) => ({
+      user_id, payout: outcome === 'draw' ? amount : user_id === winner ? 2*amount : 0
+    })));
   wallet.recoverExpired.mockResolvedValue(undefined);
   db.query.mockResolvedValue({rows:[sample]});
   service.initializeSocket({});
@@ -80,12 +83,12 @@ it('exposes only presentation data, grades a choice once, and settles once', asy
   await a.events.join_queue({wager:5}); await b.events.join_queue({wager:5});
   const match=io.emit.mock.calls.find(([event])=>event==='match_found')[1];
   const q=match.questions[0];
-  expect(q).toEqual({id:expect.any(Number), q:'Q', options:['A','B']});
+  expect(q).toEqual({id:expect.any(Number), q:'Q', options:['A','B'], hu:{q:'Q',options:['X','Y']}});
   await b.events.submit_answer({matchId:match.matchId, questionId:q.id, answer:'A'});
   await b.events.submit_answer({matchId:match.matchId, questionId:String(q.id), answer:'A'});
   expect(io.emit).toHaveBeenLastCalledWith('score_update',{p1:1,p2:0});
   await Promise.all([a.events.disconnect(),b.events.disconnect()]);
-  expect(wallet.settle).toHaveBeenCalledTimes(1);
+  expect(wallet.settlePayouts).toHaveBeenCalledTimes(1);
 });
 it('refunds both players if no playable questions are available', async () => {
   db.query.mockResolvedValueOnce({rows:[]});
@@ -111,7 +114,7 @@ it('uses the score if a disconnect is observed after the deadline', async () => 
   await a.events.submit_answer({matchId:match.matchId,questionId:match.questions[0].id,answer:'A'});
   jest.setSystemTime(Date.now() + 61000);
   await a.events.disconnect();
-  expect(wallet.settle).toHaveBeenCalledWith(match.matchId, 'win', 1);
+  expect(wallet.settlePayouts).toHaveBeenCalledWith(match.matchId, 'win', 1);
 });
 
 it('refunds the original holds even when match activation committed before its acknowledgement failed', async () => {
@@ -135,7 +138,7 @@ it('reconciles a debit whose acknowledgement failed and acknowledges a repeated 
 });
 
 it('delivers confirmed payouts after a settlement acknowledgement is lost', async () => {
-  wallet.settle.mockRejectedValueOnce(new Error('Reply lost')).mockResolvedValueOnce(false);
+  wallet.settlePayouts.mockRejectedValueOnce(new Error('Reply lost')).mockResolvedValueOnce([]);
   wallet.receipt.mockImplementation(async (_id, user) => ({wager:5,payout:user===2 ? 10 : 0}));
   const a = socket('a',1), b = socket('b',2);
   await a.events.join_queue({wager:5});
@@ -145,7 +148,7 @@ it('delivers confirmed payouts after a settlement acknowledgement is lost', asyn
   const results = io.emit.mock.calls.filter(([event]) => event==='game_over').map(([,data])=>data);
   expect(results.map(row => row.potWon).sort((a,b)=>a-b)).toEqual([0,10]);
   expect(results.every(row => row.winner==='p1')).toBe(true);
-  expect(wallet.settle).toHaveBeenCalledTimes(2);
+  expect(wallet.settlePayouts).toHaveBeenCalledTimes(2);
 });
 
 it('returns only the reconnecting account’s own persisted receipt, including a pending settlement', async () => {
@@ -163,7 +166,7 @@ it('returns only the reconnecting account’s own persisted receipt, including a
 });
 
 it('waits for the recovery refund if an expired match has not yet closed', async () => {
-  wallet.settle.mockResolvedValue(false);
+  wallet.settlePayouts.mockResolvedValue([]);
   wallet.receipt.mockResolvedValue({wager:5,payout:null});
   const a=socket('a',1), b=socket('b',2);
   await a.events.join_queue({wager:5}); await b.events.join_queue({wager:5});
@@ -184,4 +187,59 @@ it('runs one recovery query at a time while the database is slow', async () => {
   finish();
   await jest.advanceTimersByTimeAsync(30000);
   expect(wallet.recoverExpired).toHaveBeenCalledTimes(3);
+});
+
+it('separates a temporary account-store outage from rejected credentials', async () => {
+  const s = {handshake:{auth:{token:'1'},headers:{}}};
+  db.query.mockRejectedValueOnce(new Error('fixture database unavailable'));
+  const next = jest.fn();
+  await auth(s, next);
+  expect(next.mock.calls[0][0]).toMatchObject({data:{code:'SERVICE_UNAVAILABLE'}});
+  expect(s.userId).toBeUndefined();
+  expect(require('../../../src/utils/logger').error).toHaveBeenCalled();
+});
+
+it('does not advertise an inferred payout for a participant without a durable receipt', async () => {
+  const a=socket('a',1), b=socket('b',2);
+  await a.events.join_queue({wager:5}); await b.events.join_queue({wager:5});
+  wallet.settlePayouts.mockResolvedValue([{user_id:1,payout:0}]);
+  wallet.receipt.mockImplementation(async (_id,user) => user===1 ? {wager:5,payout:0} : undefined);
+  await a.events.disconnect();
+  const wins = io.emit.mock.calls.filter(([event,data])=>event==='game_over' && data.isWinner);
+  expect(wins).toHaveLength(0);
+  expect(b.emit).toHaveBeenCalledWith('error', expect.anything());
+});
+
+it('ships translated text and labels with the same ordering as canonical submissions', async () => {
+  db.query.mockResolvedValueOnce({rows:[{...sample, question_text_hu:'Magyar kérdés'}]});
+  const a=socket('a',1), b=socket('b',2);
+  await a.events.join_queue({wager:5}); await b.events.join_queue({wager:5});
+  const match=io.emit.mock.calls.find(([event])=>event==='match_found')[1];
+  const question=match.questions[0];
+  expect(question.hu).toEqual({q:'Magyar kérdés',options:['X','Y']});
+  expect(question.options).toEqual(['A','B']);
+  await b.events.submit_answer({matchId:match.matchId,questionId:question.id,answer:question.options[0]});
+  expect(io.emit).toHaveBeenLastCalledWith('score_update',{p1:1,p2:0});
+});
+
+it('normalizes a question once, including when its stored answer is a serialized single value', async () => {
+  const labels = Array.from({length:32}, (_,i) => 'Choice ' + i);
+  let reads = 0;
+  const question = {...sample, correct_answer:JSON.stringify([labels[25]]),
+    get options() { reads++; return { en:labels }; }};
+  db.query.mockResolvedValueOnce({rows:[question]});
+  const a=socket('a',1), b=socket('b',2);
+  await a.events.join_queue({wager:5}); await b.events.join_queue({wager:5});
+  const match=io.emit.mock.calls.find(([event])=>event==='match_found')[1];
+  await a.events.submit_answer({matchId:match.matchId,questionId:1,answer:labels[25]});
+  expect(io.emit).toHaveBeenLastCalledWith('score_update',{p1:0,p2:1});
+  expect(reads).toBe(1);
+});
+
+it('keeps the canonical choices distinct when translated labels collide', async () => {
+  db.query.mockResolvedValueOnce({rows:[{...sample, options:{en:['A','B'],hu:['X','X']}}]});
+  const a=socket('a',1), b=socket('b',2);
+  await a.events.join_queue({wager:5}); await b.events.join_queue({wager:5});
+  const match=io.emit.mock.calls.find(([event])=>event==='match_found')[1];
+  expect(match.questions[0].hu.options).toEqual(['A','B']);
 });

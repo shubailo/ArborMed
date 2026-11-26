@@ -23,12 +23,13 @@ const globalLimiter = rateLimit({
 });
 
 // Middleware
-app.use(globalLimiter);
 app.use(helmet());
 
 const { corsOrigin } = require('./src/config/origins');
 app.use(cors({ origin: corsOrigin, credentials: true }));
-app.use(morgan('dev'));
+morgan.token('route-path', req => req.originalUrl.split('?')[0]);
+app.use(morgan(':method :route-path :status :response-time ms'));
+app.use(globalLimiter);
 app.use(express.json());
 
 const authRoutes = require('./src/routes/authRoutes');
@@ -78,15 +79,18 @@ app.get('/ping', (req, res) => {
     res.json({ status: 'ok', timestamp: Date.now() });
 });
 
-const { forwardMigrations, baseline } = require('./src/scripts/migrate');
-const requiredMigrations = [baseline, ...forwardMigrations()];
+const { releaseMigrations } = require('./src/scripts/migrate');
+const manifest = releaseMigrations();
+const requiredNames = manifest.map(([name]) => name);
+const requiredChecksums = manifest.map(([, checksum]) => checksum);
 
 app.get('/health', async (req, res) => {
     try {
         const { rows: [schema] } = await db.query(
-            `SELECT now(), count(filename) = cardinality($1::text[]) AS ready
-             FROM arbormed_schema_migrations WHERE filename = ANY($1::text[])`, [requiredMigrations]);
-        if (!schema.ready) return res.status(503).json({ status: 'degraded', message: 'Database migrations pending' });
+            `SELECT now(), count(*) = cardinality($1::text[]) AS ready
+             FROM unnest($1::text[], $2::text[]) AS expected(filename, checksum)
+             JOIN arbormed_schema_migrations USING (filename, checksum)`, [requiredNames, requiredChecksums]);
+        if (!schema.ready) return res.status(503).json({ status: 'degraded', message: 'Database migration state does not match the release' });
         res.json({ status: 'ok', db_time: schema.now, message: 'ArborMed API is running' });
     } catch (err) {
         console.error('[Health Check Warning]:', err.message);

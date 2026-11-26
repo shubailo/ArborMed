@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'auth_strings.dart';
 import 'package:provider/provider.dart';
 import '../../services/auth_provider.dart';
 import '../../theme/cozy_theme.dart';
@@ -36,24 +37,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  void _submitRegister() async {
-    if (!_formKey.currentState!.validate()) return;
+  Future<void> _submitRegister() async {
+    if (_isSubmitting || !_formKey.currentState!.validate()) return;
+    final email = _emailController.text.trim();
 
     setState(() => _isSubmitting = true);
     try {
-      final email = _emailController.text.trim();
       final registrationId = await context.read<AuthProvider>().register(
-        email,
-        _passwordController.text,
-        username: _usernameController.text.trim(),
-        displayName: _displayNameController.text.trim(),
-      );
-      if (!mounted) return;
+            email,
+            _passwordController.text,
+            username: _usernameController.text.trim(),
+            displayName: _displayNameController.text.trim(),
+          );
+      if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
       await Navigator.of(context).push(MaterialPageRoute<void>(
-        builder: (_) => VerificationScreen(email: email, registrationId: registrationId),
+        builder: (_) =>
+            VerificationScreen(email: email, registrationId: registrationId),
       ));
     } catch (e) {
-      if (!mounted) return;
+      if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
       final errorMsg = e is ApiException
           ? e.message
           : e.toString().replaceAll('Exception:', '').trim();
@@ -63,16 +65,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMsg),
+            action: SnackBarAction(
+                label: context.authStrings.authLogin,
+                onPressed: () {
+                  if (mounted && ModalRoute.of(context)?.isCurrent == true) {
+                    Navigator.pop(context, email);
+                  }
+                }),
             backgroundColor: CozyTheme.of(context, listen: false).primary,
           ),
         );
-        Navigator.pop(context, _emailController.text.trim());
         return;
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Registration Failed: $errorMsg'),
+          content: Text(context.authStrings.authRegFailed(errorMsg)),
           backgroundColor: CozyTheme.of(context, listen: false).accent,
         ),
       );
@@ -110,11 +118,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Join ArborMed',
+                  context.authStrings.authJoin,
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
                 Text(
-                  'Start your medical journey',
+                  context.authStrings.authJourney,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 36),
@@ -134,19 +142,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         children: [
                           TextFormField(
                             controller: _emailController,
+                            enabled: !_isSubmitting,
                             decoration: CozyTheme.inputDecoration(
                               context,
-                              'Email',
+                              context.authStrings.authEmail,
                             ),
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
                             style: TextStyle(color: palette.textPrimary),
                             validator: (val) {
                               if (val == null || val.trim().isEmpty) {
-                                return 'Email is required';
+                                return context.authStrings.authEmailRequired;
                               }
                               if (!_emailRegex.hasMatch(val.trim())) {
-                                return 'Please enter a valid email address';
+                                return context.authStrings.authEmailInvalid;
                               }
                               return null;
                             },
@@ -154,40 +163,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _usernameController,
+                            enabled: !_isSubmitting,
                             decoration: CozyTheme.inputDecoration(
                               context,
-                              'Medical Handle (@username)',
+                              context.authStrings.authHandle,
                             ),
                             textInputAction: TextInputAction.next,
                             style: TextStyle(color: palette.textPrimary),
-                            validator: (val) => val == null || val.trim().isEmpty
-                                ? 'Username is required'
-                                : null,
+                            validator: (val) =>
+                                val == null || val.trim().isEmpty
+                                    ? context.authStrings.authUserRequired
+                                    : null,
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _displayNameController,
+                            enabled: !_isSubmitting,
                             decoration: CozyTheme.inputDecoration(
                               context,
-                              'Display Name',
+                              context.authStrings.authDisplayName,
                             ),
                             textInputAction: TextInputAction.next,
                             style: TextStyle(color: palette.textPrimary),
-                            validator: (val) => val == null || val.trim().isEmpty
-                                ? 'Display name is required'
-                                : null,
+                            validator: (val) =>
+                                val == null || val.trim().isEmpty
+                                    ? context.authStrings.authDisplayRequired
+                                    : null,
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _passwordController,
+                            enabled: !_isSubmitting,
                             decoration: CozyTheme.inputDecoration(
                               context,
-                              'Password',
+                              context.authStrings.authPassword,
                             ).copyWith(
                               suffixIcon: IconButton(
                                 tooltip: _obscurePassword
-                                    ? 'Show password'
-                                    : 'Hide password',
+                                    ? context.authStrings.authShow
+                                    : context.authStrings.authHide,
                                 icon: Icon(
                                   _obscurePassword
                                       ? Icons.visibility_off
@@ -208,19 +222,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             onChanged: (_) => setState(() {}),
                             validator: (val) {
                               if (val == null || val.isEmpty) {
-                                return 'Password is required';
+                                return context.authStrings.authPasswordRequired;
                               }
                               if (val.length < 8) {
-                                return 'Min 8 characters';
+                                return context.authStrings.authMinLength;
                               }
                               if (!RegExp(r'[A-Z]').hasMatch(val)) {
-                                return 'Missing uppercase letter';
+                                return context.authStrings.authUpper;
                               }
                               if (!RegExp(r'[0-9]').hasMatch(val)) {
-                                return 'Missing number';
+                                return context.authStrings.authNumber;
                               }
                               if (!RegExp(r'[\W\_]').hasMatch(val)) {
-                                return 'Missing special character';
+                                return context.authStrings.authSpecial;
                               }
                               return null;
                             },
@@ -245,7 +259,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    child: const Text('Create Account'),
+                                    child: Text(context.authStrings.authCreate),
                                   ),
                           ),
                         ],
@@ -260,11 +274,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   child: RichText(
                     text: TextSpan(
-                      text: "Already have an account? ",
+                      text: context.authStrings.authExisting,
                       style: Theme.of(context).textTheme.bodyMedium,
                       children: [
                         TextSpan(
-                          text: "Login",
+                          text: context.authStrings.authLogin,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: palette.primary,

@@ -64,8 +64,7 @@ describe('PedagogicalEngine Unit Tests', () => {
                 // 1. Due review query (none)
                 .mockResolvedValueOnce({ rows: [] })
                 // Unresolved failure, its prerequisite and that prerequisite's own progress.
-                .mockResolvedValueOnce({ rows: [{ id:99, metadata:{prerequisite_ids:[55,56]} }] })
-                .mockResolvedValueOnce({ rows: [mockPrereqQ] })
+                .mockResolvedValueOnce({ rows: [{ ...mockPrereqQ, failed_id: 99 }] })
                 .mockResolvedValueOnce({ rows: [{ mastery_score:50, current_streak:0, level_correct_count:3 }] });
 
             const result = await pedagogicalEngine.getChallenge(userId, topicSlug, []);
@@ -127,7 +126,7 @@ describe('PedagogicalEngine Unit Tests', () => {
                 // 5. update user_topic_progress
                 .mockResolvedValueOnce({ rowCount: 1 });
 
-            const result = await pedagogicalEngine.resolveResponse(userId, topicSlug, questionId, true, 5, 2500);
+            const result = await pedagogicalEngine.resolveResponse(userId, topicSlug, questionId, true, 5, 2500, db);
 
             expect(result.newLevel).toBe(2);
             expect(result.promotedTo).toBe(2);
@@ -155,7 +154,7 @@ describe('PedagogicalEngine Unit Tests', () => {
                 // 5. update user_topic_progress
                 .mockResolvedValueOnce({ rowCount: 1 });
 
-            const result = await pedagogicalEngine.resolveResponse(userId, topicSlug, questionId, false, null, 18000);
+            const result = await pedagogicalEngine.resolveResponse(userId, topicSlug, questionId, false, null, 18000, db);
 
             // Level should remain 2 (no promotion, no demotion on single wrong answer)
             expect(result.currentBloomLevel).toBe(2);
@@ -188,7 +187,7 @@ describe('PedagogicalEngine Unit Tests', () => {
                 // 5. update user_topic_progress
                 .mockResolvedValueOnce({ rowCount: 1 });
 
-            const result = await pedagogicalEngine.resolveResponse(userId, topicSlug, questionId, false, null, 15000);
+            const result = await pedagogicalEngine.resolveResponse(userId, topicSlug, questionId, false, null, 15000, db);
 
             expect(result.currentBloomLevel).toBe(1);
             expect(result.newLevel).toBe(1);

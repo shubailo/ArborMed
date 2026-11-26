@@ -12,6 +12,135 @@ class AppLocalizationsHu extends AppLocalizations {
   String get appTitle => 'ArborMed';
 
   @override
+  String get authLogin => 'Bejelentkezés';
+
+  @override
+  String get authLearn => 'Orvosi tanulás';
+
+  @override
+  String get authIdentifier => 'E-mail-cím vagy felhasználónév';
+
+  @override
+  String get authRequired => 'Kötelező mező';
+
+  @override
+  String get authPassword => 'Jelszó';
+
+  @override
+  String get authShow => 'Jelszó megjelenítése';
+
+  @override
+  String get authHide => 'Jelszó elrejtése';
+
+  @override
+  String get authShort => 'Túl rövid';
+
+  @override
+  String get authForgotLink => 'Elfelejtetted a jelszavad?';
+
+  @override
+  String get authNoAccount => 'Még nincs fiókod? ';
+
+  @override
+  String get authCreateLink => 'Regisztrálj';
+
+  @override
+  String get authForgot => 'Elfelejtett jelszó';
+
+  @override
+  String get authResetTitle => 'Jelszó visszaállítása';
+
+  @override
+  String get authEmailPrompt => 'Add meg az e-mail-címed.';
+
+  @override
+  String get authCodePrompt => 'Add meg a hatjegyű kódot.';
+
+  @override
+  String get authResetSuccess =>
+      'A jelszavad megváltozott. Jelentkezz be az új jelszóval.';
+
+  @override
+  String get authTryAgain => 'Próbáld újra.';
+
+  @override
+  String get authResetHelp =>
+      'Add meg az e-mail-címed, és küldünk egy hatjegyű visszaállító kódot.';
+
+  @override
+  String get authEmail => 'E-mail-cím';
+
+  @override
+  String get authOtp => 'Hatjegyű kód';
+
+  @override
+  String get authShowNew => 'Új jelszó megjelenítése';
+
+  @override
+  String get authHideNew => 'Új jelszó elrejtése';
+
+  @override
+  String get authSendCode => 'Kód küldése';
+
+  @override
+  String get authReset => 'Visszaállítás';
+
+  @override
+  String get authJoin => 'Csatlakozz az ArborMedhez';
+
+  @override
+  String get authJourney => 'Hozd létre a tanulói fiókodat';
+
+  @override
+  String get authEmailRequired => 'Add meg az e-mail-címed';
+
+  @override
+  String get authEmailInvalid => 'Adj meg érvényes e-mail-címet';
+
+  @override
+  String get authHandle => 'Felhasználónév (@név)';
+
+  @override
+  String get authUserRequired => 'Add meg a felhasználóneved';
+
+  @override
+  String get authDisplayName => 'Megjelenített név';
+
+  @override
+  String get authDisplayRequired => 'Add meg a megjelenített neved';
+
+  @override
+  String get authPasswordRequired => 'Add meg a jelszavad';
+
+  @override
+  String get authMinLength => 'Legalább 8 karakter szükséges';
+
+  @override
+  String get authUpper => 'Legalább egy nagybetű szükséges';
+
+  @override
+  String get authNumber => 'Legalább egy számjegy szükséges';
+
+  @override
+  String get authSpecial => 'Legalább egy különleges karakter szükséges';
+
+  @override
+  String get authCreate => 'Fiók létrehozása';
+
+  @override
+  String get authExisting => 'Van már fiókod? ';
+
+  @override
+  String authCodeSent(String email) {
+    return 'A kódot ide küldtük: $email';
+  }
+
+  @override
+  String authRegFailed(String reason) {
+    return 'Sikertelen regisztráció: $reason';
+  }
+
+  @override
   String get quizStart => 'Kvíz indítása';
 
   @override
@@ -1427,4 +1556,84 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get close => 'Bezárás';
+
+  @override
+  String get verifyEmailTitle => 'E-mail-cím megerősítése';
+
+  @override
+  String get verificationRequired => 'Megerősítés szükséges';
+
+  @override
+  String verificationSentTo(String email) {
+    return 'Erre a címre küldtük a hatjegyű ellenőrzőkódot:\n$email';
+  }
+
+  @override
+  String get verificationEnterCode => 'Add meg a hatjegyű kódot';
+
+  @override
+  String get verificationContinue => 'Megerősítés és folytatás';
+
+  @override
+  String get verificationResend => 'Kód újraküldése';
+
+  @override
+  String get verificationSuccess => 'Az e-mail-címedet megerősítettük.';
+
+  @override
+  String get verificationResent => 'Új ellenőrzőkódot küldtünk.';
+
+  @override
+  String get verificationRetry => 'A kérés nem sikerült. Próbáld újra.';
+
+  @override
+  String get verificationRestart => 'Újrakezdés';
+
+  @override
+  String get verificationWait => 'Túl sok kérés. Próbáld újra később.';
+
+  @override
+  String get verificationUnavailable =>
+      'A megerősítés átmenetileg nem érhető el. Próbáld újra később.';
+
+  @override
+  String get verificationChanged =>
+      'Ez a megerősítési kérés megváltozott. Kezdd újra.';
+
+  @override
+  String get verificationSignOutFailed =>
+      'A kijelentkezés nem fejeződött be ezen az eszközön. Próbáld újra.';
+
+  @override
+  String get duelSelectWager => 'Tét kiválasztása';
+
+  @override
+  String get duelChooseWager => 'Válaszd ki a párbaj tétjét.';
+
+  @override
+  String get duelFindMatch => 'Ellenfél keresése';
+
+  @override
+  String get duelSearching => 'Ellenfél keresése…';
+
+  @override
+  String duelWagerAmount(int amount) {
+    return 'Tét: $amount 🩺';
+  }
+
+  @override
+  String duelWalletAmount(int amount) {
+    return '$amount sztetoszkóp';
+  }
+
+  @override
+  String get duelLowBalance => 'Ehhez a téthez nincs elegendő egyenleged.';
+
+  @override
+  String get duelRefreshFailed =>
+      'Az egyenleg frissítése nem sikerült. Próbáld újra.';
+
+  @override
+  String get duelLeaveFailed =>
+      'A kilépést nem sikerült megerősíteni. Próbáld újra.';
 }

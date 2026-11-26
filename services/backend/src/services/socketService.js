@@ -5,7 +5,8 @@ const db = require('../config/db');
 const { findSessionUser } = require('./sessionUser');
 const { isAllowedOrigin, corsOrigin } = require('../config/origins');
 const wallet = require('./walletService');
-const { choiceOptions, gradeChoices } = require('./questionTypes/choiceOptions');
+const { choiceOptions, resolveChoice } = require('./questionTypes/choiceOptions');
+const { scalarAnswer } = require('./questionTypes/storedAnswer');
 const logger = require('../utils/logger');
 
 const members = new Map(); // One pending join, queue slot, or active match per account.
@@ -23,14 +24,22 @@ function initializeSocket(server) {
     const token = socket.handshake.auth?.token ||
       /^Bearer\s+(\S+)$/i.exec(socket.handshake.headers.authorization || '')?.[1];
     if (!token) return next(new Error('Authentication error'));
+    let decoded;
     try {
-      const decoded = verifyAccessToken(token);
+      decoded = verifyAccessToken(token);
+    } catch {
+      return next(new Error('Authentication error'));
+    }
+    try {
       const user = await findSessionUser(decoded);
       if (!user) return next(new Error('Authentication error'));
       socket.userId = user.id;
       socket.accessToken = token;
-    } catch {
-      return next(new Error('Authentication error'));
+    } catch (error) {
+      logger.error('Duel session lookup failed', error);
+      const unavailable = new Error('Duel service temporarily unavailable');
+      unavailable.data = {code:'SERVICE_UNAVAILABLE'};
+      return next(unavailable);
     }
     next();
   });
@@ -148,11 +157,16 @@ async function fetchQuestions() {
     const labels = choices.map(choice => choice.en || choice.hu);
     if (choices.length < 2 || labels.some(label => typeof label !== 'string' || !label.trim())
         || new Set(labels).size !== labels.length) continue;
-    const correct = choices.filter(choice => gradeChoices(row, choice.id).correct);
-    if (correct.length !== 1) continue;
+    const key = scalarAnswer(row.correct_answer);
+    if (!['string','number'].includes(typeof key) || !String(key).trim()) continue;
+    const correct = resolveChoice(choices, key);
+    if (!correct || choices.filter(choice => choice.id === correct.id).length !== 1) continue;
+    const huLabels = choices.map((choice, i) => choice.hu.trim() || labels[i]);
+    const hu = {q: row.question_text_hu?.trim() || text,
+      options: new Set(huLabels).size === huLabels.length ? huLabels : labels};
     questions.push({
-      public: {id: questions.length + 1, q: text, options: labels},
-      correct: correct[0].en || correct[0].hu
+      public: {id: questions.length + 1, q: text, options: labels, hu},
+      correct: correct.en || correct.hu
     });
     if (questions.length === 3) break;
   }
@@ -269,9 +283,12 @@ async function sendReceipt(socket, matchId, token) {
 async function settle(match, result) {
   try {
     const winnerId = match[result]?.socket.userId || null;
-    const paid = await wallet.settle(match.id, result === 'draw' ? 'draw' : 'win', winnerId);
+    const paid = await wallet.settlePayouts(match.id, result === 'draw' ? 'draw' : 'win', winnerId);
     const roles = match.p2 ? ['p1', 'p2'] : ['p1'];
-    const receipts = paid ? [] : await Promise.all(roles.map(role => wallet.receipt(match.id, match[role].socket.userId)));
+    const receipts = await Promise.all(roles.map(role => {
+      const userId = match[role].socket.userId;
+      return paid.find(row => row.user_id === userId) ?? wallet.receipt(match.id, userId);
+    }));
     if (receipts.some(row => row && row.payout === null)) {
       // The hold has expired but the durable refund has not run yet.
       match.retry = setTimeout(() => settle(match, result), 5000);
@@ -280,7 +297,7 @@ async function settle(match, result) {
     for (const [index, role] of roles.entries()) {
       const p = match[role];
       const expected = result === 'draw' ? p.wager : result === role ? p.wager * 2 : 0;
-      const actual = paid ? expected : receipts[index]?.payout;
+      const actual = receipts[index]?.payout;
       forget(p);
       if (actual === p.wager && match.cancelled) {
         p.socket.emit('queue_left', {refundedWager: p.wager});

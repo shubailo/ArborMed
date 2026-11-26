@@ -13,6 +13,7 @@ class QuizState {
   final bool isSubmitting;
   final dynamic userAnswer;
   final bool isAnswerChecked;
+  final bool submissionRejected;
   final bool isCorrect;
   final dynamic correctAnswer;
   final String explanation;
@@ -32,6 +33,7 @@ class QuizState {
     this.isSubmitting = false,
     this.userAnswer,
     this.isAnswerChecked = false,
+    this.submissionRejected = false,
     this.isCorrect = false,
     this.correctAnswer,
     this.explanation = '',
@@ -50,6 +52,7 @@ class QuizState {
     bool? isSubmitting,
     Object? userAnswer = _undefined,
     bool? isAnswerChecked,
+    bool? submissionRejected,
     bool? isCorrect,
     Object? correctAnswer = _undefined,
     String? explanation,
@@ -67,6 +70,7 @@ class QuizState {
       isSubmitting: isSubmitting ?? this.isSubmitting,
       userAnswer: userAnswer == _undefined ? this.userAnswer : userAnswer,
       isAnswerChecked: isAnswerChecked ?? this.isAnswerChecked,
+      submissionRejected: submissionRejected ?? this.submissionRejected,
       isCorrect: isCorrect ?? this.isCorrect,
       correctAnswer: correctAnswer == _undefined ? this.correctAnswer : correctAnswer,
       explanation: explanation ?? this.explanation,

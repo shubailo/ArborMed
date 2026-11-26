@@ -15,7 +15,8 @@ async function findSessionUser(claims) {
         try {
             // Concurrent requests can see the same old value. Only the first writes it.
             await db.query(`UPDATE users SET last_activity_at = statement_timestamp()
-                WHERE ${verified} AND ${activityDue}`, params);
+                WHERE id IN (SELECT id FROM users WHERE ${verified} AND ${activityDue}
+                    FOR NO KEY UPDATE SKIP LOCKED)`, params);
         } catch (error) {
             console.warn('[Activity] Could not update last seen', error.message);
         }

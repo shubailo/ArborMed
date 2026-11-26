@@ -36,7 +36,7 @@ The first command checks core columns and records the operator's baseline. It do
 
 Migration 066 repairs unambiguous historical answer keys and marks unresolved questions inactive. It matches the original bilingual prompt, options, content, type and answer so locally edited records are preserved. The repository corpus currently has 3,816 active questions and 213 awaiting editorial review.
 
-The readiness check returns HTTP 503 while any migration shipped with this release is missing. Migration 067 gives the backend roles `med_buddy_app` and `service_role` read access to applied filenames. Deployments with a custom runtime role need equivalent column access and a SELECT policy on `arbormed_schema_migrations`.
+The readiness check returns HTTP 503 while an expected migration is missing or its recorded checksum differs. Migration 067 gives the backend roles `med_buddy_app` and `service_role` read access to applied filenames. Migration 069 also grants access to the checksum. Deployments with a custom runtime role need SELECT on both filename and checksum and a SELECT policy on `arbormed_schema_migrations`.
 
 ## Deployment
 

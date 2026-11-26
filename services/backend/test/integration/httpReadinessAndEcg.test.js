@@ -58,13 +58,22 @@ describe('readiness and ECG practice over HTTP', () => {
         const pg = new Client({ connectionString: process.env.TEST_DATABASE_URL });
         await pg.connect();
         try {
-            await pg.query('CREATE TEMP TABLE arbormed_schema_migrations(filename text PRIMARY KEY)');
+            await pg.query('CREATE TEMP TABLE arbormed_schema_migrations(filename text PRIMARY KEY, checksum text NOT NULL)');
             db.query.mockImplementation((sql, args) => pg.query(sql, args));
             expect((await fetch(base + '/health')).status).toBe(503);
             const required = [baseline, ...forwardMigrations()];
-            await pg.query('INSERT INTO arbormed_schema_migrations SELECT unnest($1::text[])', [required.slice(0,-1)]);
+            const fs = require('node:fs');
+            const path = require('node:path');
+            const { createHash } = require('node:crypto');
+            const checksums = required.map(name => name === baseline ? 'operator-verified' : createHash('sha256')
+                .update(fs.readFileSync(path.join(__dirname, '../../migrations', name), 'utf8').replace(/\r\n/g, '\n')).digest('hex'));
+            await pg.query('INSERT INTO arbormed_schema_migrations SELECT * FROM unnest($1::text[], $2::text[])',
+                [required.slice(0,-1), checksums.slice(0,-1)]);
             expect((await fetch(base + '/health')).status).toBe(503);
-            await pg.query('INSERT INTO arbormed_schema_migrations VALUES ($1)', [required.at(-1)]);
+            await pg.query('INSERT INTO arbormed_schema_migrations VALUES ($1,$2)', [required.at(-1), 'different-file']);
+            expect((await fetch(base + '/health')).status).toBe(503);
+            await pg.query('UPDATE arbormed_schema_migrations SET checksum=$2 WHERE filename=$1', [required.at(-1),checksums.at(-1)]);
+            await pg.query("INSERT INTO arbormed_schema_migrations VALUES ('999_future.sql','future-release')");
             expect((await fetch(base + '/health')).status).toBe(200);
         } finally { await pg.end(); }
     });

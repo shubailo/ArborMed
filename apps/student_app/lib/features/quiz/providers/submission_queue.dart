@@ -14,11 +14,13 @@ import '../../../services/api_service.dart';
 class SubmissionQueue {
   final AppDatabase db;
   final ApiService api;
-  final _receipts = StreamController<Map<String, dynamic>>.broadcast(sync: true);
+  final _receipts =
+      StreamController<Map<String, dynamic>>.broadcast(sync: true);
   Stream<Map<String, dynamic>> get receipts => _receipts.stream;
   Future<void> _work = Future.value();
   Timer? _retry;
   int? _account;
+  int _generation = 0;
   bool _closed = false;
 
   SubmissionQueue(this.db, this.api);
@@ -26,19 +28,27 @@ class SubmissionQueue {
   void watchAccount(int? userId) {
     if (_account == userId) return;
     _account = userId;
+    _generation++;
     _retry?.cancel();
     if (userId != null) unawaited(flush());
   }
 
-  Future<String> enqueue(int userId, String topic, Map<String, dynamic> answer) async {
+  Future<String> enqueue(
+      int userId, String topic, Map<String, dynamic> answer) async {
     if (_closed || api.userId != userId) {
       throw StateError('The active quiz account changed');
     }
     final id = const Uuid().v4();
     final payload = {...answer, 'submissionId': id, 'submissionUserId': userId};
+    final encoded = jsonEncode(payload);
+    final generation = _generation;
+    await db.ensureSubmissionStorage();
+    if (!_active(userId, generation)) {
+      throw StateError('The active quiz account changed');
+    }
     await db.customStatement(
       'INSERT INTO pending_submissions (submission_id,user_id,topic_slug,payload,created_at) VALUES (?,?,?,?,?)',
-      [id, userId, topic, jsonEncode(payload), DateTime.now().millisecondsSinceEpoch],
+      [id, userId, topic, encoded, DateTime.now().millisecondsSinceEpoch],
     );
     return id;
   }
@@ -56,32 +66,68 @@ class SubmissionQueue {
     _retry = Timer(const Duration(seconds: 30), flush);
   }
 
+  Future<void> _reject(
+      String id, int userId, String message, int generation) async {
+    final changed = await db.customUpdate(
+      'UPDATE pending_submissions SET failure = ? WHERE submission_id = ? AND user_id = ? AND failure IS NULL',
+      variables: [
+        Variable.withString(message),
+        Variable.withString(id),
+        Variable.withInt(userId)
+      ],
+    );
+    if (changed == 1 && _active(userId, generation)) {
+      _receipts.add({'submissionId': id, 'error': message});
+    }
+  }
+
+  bool _active(int userId, int generation) =>
+      !_closed && api.userId == userId && _generation == generation;
+
   Future<void> _drain() async {
     final userId = api.userId;
     if (_closed || userId == null) return;
-    while (!_closed && api.userId == userId) {
+    final generation = _generation;
+    while (_active(userId, generation)) {
       final row = await db.customSelect(
         'SELECT * FROM pending_submissions WHERE user_id = ? AND failure IS NULL ORDER BY sequence LIMIT 1',
         variables: [Variable.withInt(userId)],
       ).getSingleOrNull();
-      if (row == null || _closed || api.userId != userId) return;
+      if (row == null || !_active(userId, generation)) return;
       final id = row.read<String>('submission_id');
-      final payload = jsonDecode(row.read<String>('payload')) as Map<String, dynamic>;
+      late final Map<String, dynamic> payload;
+      try {
+        final data = jsonDecode(row.read<String>('payload'));
+        if (data is! Map<String, dynamic> ||
+            (data['submissionId'] != null && data['submissionId'] != id) ||
+            (data['submissionUserId'] != null &&
+                data['submissionUserId'] != userId)) {
+          throw const FormatException('Invalid queued answer');
+        }
+        payload = {...data, 'submissionId': id, 'submissionUserId': userId};
+      } on FormatException {
+        await _reject(id, userId, 'Invalid stored answer.', generation);
+        continue;
+      }
       late final Map<String, dynamic> receipt;
       try {
         final result = await api.post('/quiz/answer', payload);
-        if (result is! Map<String, dynamic> || result['submissionId'] != id || result['isCorrect'] is! bool) {
+        if (result is! Map<String, dynamic> ||
+            result['submissionId'] != id ||
+            result['isCorrect'] is! bool) {
           throw const FormatException('Invalid quiz receipt');
         }
         receipt = result;
       } on ApiException catch (e) {
         // A permanently rejected question must not block later answers.
         if (![400, 404, 409, 422].contains(e.statusCode)) rethrow;
-        await db.customStatement('UPDATE pending_submissions SET failure = ? WHERE submission_id = ?', [e.message, id]);
-        if (!_closed) _receipts.add({'submissionId': id, 'error': e.message});
+        if (!_active(userId, generation)) return;
+        await _reject(id, userId, e.message, generation);
         continue;
       }
+      if (!_active(userId, generation)) return;
       final acknowledged = await db.transaction(() async {
+        if (!_active(userId, generation)) return false;
         final removed = await db.customUpdate(
           'DELETE FROM pending_submissions WHERE submission_id = ?',
           variables: [Variable.withString(id)],
@@ -89,7 +135,8 @@ class SubmissionQueue {
         if (removed == 0) return false;
         // Older receipts lack the server topic. A persisted review route is
         // a UI label, so it cannot identify a database topic.
-        final topic = receipt['topicSlug'] as String? ?? row.read<String>('topic_slug');
+        final topic =
+            receipt['topicSlug'] as String? ?? row.read<String>('topic_slug');
         if (topic == 'review' || topic.isEmpty) return true;
         await db.customStatement('''
           INSERT INTO topic_progress (user_id,topic_slug,current_bloom_level,current_streak,mastery_score,
@@ -101,12 +148,19 @@ class SubmissionQueue {
             total_answered=topic_progress.total_answered+1,
             correct_answered=topic_progress.correct_answered+excluded.correct_answered,
             last_studied_at=excluded.last_studied_at
-        ''', [userId, topic, receipt['currentBloom'] ?? 1,
-          receipt['streak'] ?? 0, receipt['mastery'] ?? 0, receipt['level_correct_count'] ?? 0,
-          receipt['isCorrect'] ? 1 : 0, row.read<int>('created_at') ~/ 1000]);
+        ''', [
+          userId,
+          topic,
+          receipt['currentBloom'] ?? 1,
+          receipt['streak'] ?? 0,
+          receipt['mastery'] ?? 0,
+          receipt['level_correct_count'] ?? 0,
+          receipt['isCorrect'] ? 1 : 0,
+          row.read<int>('created_at') ~/ 1000
+        ]);
         return true;
       });
-      if (acknowledged && !_closed && api.userId == userId) _receipts.add(receipt);
+      if (acknowledged && _active(userId, generation)) _receipts.add(receipt);
     }
   }
 

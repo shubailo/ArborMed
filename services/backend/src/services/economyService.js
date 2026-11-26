@@ -11,27 +11,31 @@ class EconomyService {
      * Must be called within a transaction context to prevent race conditions.
      * @param {Object} client Database client
      * @param {number} userId
+     * @param {string} rewardDay UTC date returned by the locked reward ledger write
      * @returns {Object} User's current economy state
      */
-    async ensureDailyReset(client, userId) {
+    async ensureDailyReset(client, userId, rewardDay) {
         const { rows } = await client.query(`
-            SELECT daily_coins_earned, daily_coins_softcap_progress,
-                   last_coin_reset_date = (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')::date AS reset_today
-            FROM users
-            WHERE id = $1 FOR UPDATE
-        `, [userId]);
+            SELECT daily_coins_earned, daily_coins_softcap_progress, day::text AS reward_day,
+                   last_coin_reset_date = day AS reset_today
+            FROM users CROSS JOIN (
+                SELECT COALESCE($2::date, (statement_timestamp() AT TIME ZONE 'UTC')::date) AS day
+            ) AS clock
+            WHERE id = $1 FOR UPDATE OF users
+        `, [userId, rewardDay]);
 
         let userState = rows[0];
+        if (!userState) throw new AppError('User not found', 404);
 
         if (!userState.reset_today) {
             const updateRes = await client.query(`
                 UPDATE users
                 SET daily_coins_earned = 0,
                     daily_coins_softcap_progress = 0,
-                    last_coin_reset_date = (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')::date
+                    last_coin_reset_date = $2::date
                 WHERE id = $1
                 RETURNING daily_coins_earned, daily_coins_softcap_progress, last_coin_reset_date
-            `, [userId]);
+            `, [userId, userState.reward_day]);
             userState = updateRes.rows[0];
         }
 
@@ -48,10 +52,11 @@ class EconomyService {
      *
      * @param {Object} client Database client
      * @param {number} userId
+     * @param {string} rewardDay UTC date returned by the locked reward ledger write
      * @returns {number} The amount of coins earned (0 or 1)
      */
-    async processQuizCoinReward(client, userId) {
-        const state = await this.ensureDailyReset(client, userId);
+    async processQuizCoinReward(client, userId, rewardDay) {
+        const state = await this.ensureDailyReset(client, userId, rewardDay);
 
         let coinsToAward = 0;
         let newEarned = state.daily_coins_earned;
@@ -87,14 +92,18 @@ class EconomyService {
 
     async dailyProgress(client, userId) {
         const result = await client.query(`
-            WITH day AS (SELECT (NOW() AT TIME ZONE 'UTC')::date AS today),
+            WITH clock AS (SELECT (NOW() AT TIME ZONE 'UTC')::date AS today),
+            day AS (
+                SELECT today, today::timestamp AT TIME ZONE 'UTC' AS starts,
+                       (today + 1)::timestamp AT TIME ZONE 'UTC' AS ends FROM clock
+            ),
             daily AS (
                 SELECT r.* FROM responses r, day
-                WHERE r.user_id = $1 AND r.created_at >= (today::timestamp AT TIME ZONE 'UTC')
+                WHERE r.user_id = $1 AND r.created_at >= starts AND r.created_at < ends
             ), ordered AS (
                 SELECT d.*, row_number() OVER (PARTITION BY s.id ORDER BY d.created_at, d.id) AS position
                 FROM daily d JOIN quiz_sessions s ON s.id = d.session_id AND s.user_id = $1, day
-                WHERE s.started_at >= (today::timestamp AT TIME ZONE 'UTC')
+                WHERE s.started_at >= starts AND s.started_at < ends
             ), rounds AS (
                 SELECT count(*)::int AS progress FROM ordered WHERE position <= 5 GROUP BY session_id
                 HAVING bool_and(is_correct IS TRUE) AND count(DISTINCT question_id) = count(*)
@@ -107,7 +116,7 @@ class EconomyService {
                       FROM user_claimed_quests WHERE user_id = $1
                       AND (quest_id ~ ('^daily_[123]_' || today::text || '$')
                            OR (quest_id ~ '^daily_[123]_[0-9]{13}$'
-                               AND claimed_at >= (today::timestamp AT TIME ZONE 'UTC')))) AS claimed
+                               AND claimed_at >= starts AND claimed_at < ends))) AS claimed
             FROM day`, [userId]);
         const row = result.rows[0];
         const quests = dailyQuests.map(quest => {

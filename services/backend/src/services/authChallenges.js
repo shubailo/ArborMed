@@ -52,17 +52,22 @@ async function beginEmailVerification(user) {
     ensureDelivery();
     const verificationId = crypto.randomUUID();
     const otp = generateSecureOTP(6);
-    const issued = await db.query(
-        `INSERT INTO auth_challenges (email, purpose, user_id, registration_id, password_hash, otp_digest)
-         SELECT email, 'email-verification', id, $2, password_hash, $3 FROM users
-         WHERE id = $1 AND password_hash = $4 AND is_email_verified IS FALSE
-         ON CONFLICT (email, purpose) DO UPDATE SET
-           user_id = EXCLUDED.user_id, registration_id = EXCLUDED.registration_id, password_hash = EXCLUDED.password_hash,
-           otp_digest = EXCLUDED.otp_digest, attempts_left = 5, issued_at = EXCLUDED.issued_at, expires_at = EXCLUDED.expires_at
-         WHERE auth_challenges.issued_at <= now() - interval '1 minute'`,
-        [user.id, verificationId, digest(user.email, 'email-verification', otp), user.password_hash]
+    const { rows: [issue] } = await db.query(
+        `WITH eligible AS (
+             SELECT email, id, password_hash FROM users
+             WHERE id = $1 AND email = $5 AND password_hash = $4 AND is_email_verified IS FALSE
+         ), issued AS (
+             INSERT INTO auth_challenges (email, purpose, user_id, registration_id, password_hash, otp_digest)
+             SELECT email, 'email-verification', id, $2, password_hash, $3 FROM eligible
+             ON CONFLICT (email, purpose) DO UPDATE SET
+               user_id = EXCLUDED.user_id, registration_id = EXCLUDED.registration_id, password_hash = EXCLUDED.password_hash,
+               otp_digest = EXCLUDED.otp_digest, attempts_left = 5, issued_at = EXCLUDED.issued_at, expires_at = EXCLUDED.expires_at
+             WHERE auth_challenges.issued_at <= now() - interval '1 minute' RETURNING 1
+         ) SELECT EXISTS (SELECT FROM eligible) AS eligible, EXISTS (SELECT FROM issued) AS issued`,
+        [user.id, verificationId, digest(user.email, 'email-verification', otp), user.password_hash, user.email]
     );
-    if (!issued.rowCount) throw new AppError('Please wait one minute before signing in again.', 429);
+    if (!issue.eligible) throw new AppError('Account details changed. Please sign in again.', 409);
+    if (!issue.issued) throw new AppError('Please wait one minute before signing in again.', 429);
     await send(user.email, otp, 'email-verification');
     return verificationId;
 }
@@ -75,16 +80,25 @@ async function resend(email, registrationId, purpose = 'registration') {
     ensureDelivery();
     if (!validRegistrationId(registrationId) || !['registration', 'email-verification'].includes(purpose)) throw invalidCode();
     const otp = generateSecureOTP(6);
-    const issued = await db.query(
-        `UPDATE auth_challenges SET otp_digest = $3, attempts_left = 5,
-             issued_at = now(), expires_at = now() + interval '10 minutes'
-         WHERE email = $1 AND purpose = $4 AND registration_id = $2
-             AND (purpose = 'registration' OR expires_at > now())
-             AND issued_at <= now() - interval '1 minute'`,
-        [email, registrationId, digest(email, purpose, otp), purpose]
+    // Reserve the resend slot while keeping the delivered code usable.
+    const reserved = await db.query(
+        `UPDATE auth_challenges SET issued_at = statement_timestamp()
+         WHERE email = $1 AND registration_id = $2 AND purpose = $3
+           AND (purpose = 'registration' OR expires_at > statement_timestamp())
+           AND issued_at <= statement_timestamp() - interval '1 minute'
+         RETURNING issued_at::text AS generation`,
+        [email, registrationId, purpose]
     );
-    if (!issued.rowCount) throw new AppError('Please wait one minute or start again.', 429);
+    if (!reserved.rowCount) throw new AppError('Please wait one minute or start again.', 429);
     await send(email, otp, purpose);
+    // A newer resend or a successful verification takes precedence over this delivery.
+    const promoted = await db.query(
+        `UPDATE auth_challenges SET otp_digest = $5, attempts_left = 5,
+             expires_at = statement_timestamp() + interval '10 minutes'
+         WHERE email = $1 AND registration_id = $2 AND purpose = $3 AND issued_at = $4::timestamptz`,
+        [email, registrationId, purpose, reserved.rows[0].generation, digest(email, purpose, otp)]
+    );
+    if (!promoted.rowCount) throw new AppError('Verification request has changed. Please start again.', 409);
 }
 
 async function requestPasswordReset(email) {

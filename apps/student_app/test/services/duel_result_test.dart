@@ -1,4 +1,10 @@
 import 'dart:async';
+import 'package:arbor_med/screens/game/duel_game_screen.dart';
+import 'package:arbor_med/services/theme_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/services/duel_provider.dart';
 import 'package:arbor_med/services/duel_socket_service.dart';
@@ -10,6 +16,11 @@ class _Transport extends Fake implements DuelSocketService {
   final receipt = StreamController<Map<String, dynamic>>.broadcast();
   final over = StreamController<Map<String, dynamic>>.broadcast();
   final requests = <String>[];
+  final answers = <dynamic>[];
+  @override
+  bool get isConnected => true;
+  @override
+  void submitAnswer(String matchId, String questionId, dynamic answer) => answers.add(answer);
 
   @override
   Stream<bool> get connectionStream => connection.stream;
@@ -32,6 +43,8 @@ class _Transport extends Fake implements DuelSocketService {
   @override
   Stream<String> get errorStream => const Stream.empty();
   @override
+  void joinQueue(int wager, String? token) {}
+  @override
   void requestResult(String matchId, String? token) => requests.add(matchId);
   @override
   void dispose() {
@@ -48,11 +61,45 @@ void main() {
   Future<void> start(WidgetTester tester) async {
     final api = ApiService()..setToken('test', userId: 1);
     transport = _Transport();
-    duel = DuelProvider(api, openSocket: (url, token) => transport)..setAccount(1)..initialize();
+    duel = DuelProvider(api, openSocket: (url, token) => transport)
+      ..setAccount(1)
+      ..joinQueue(10);
     addTearDown(duel.dispose);
-    transport.match.add({'matchId': 'm', 'role': 'p2', 'questions': <Map<String,dynamic>>[]});
+    transport.match.add({
+      'matchId': 'm',
+      'role': 'p2',
+      'questions': [
+        {
+          'id': 1,
+          'q': 'Test question',
+          'options': ['Yes', 'No'],
+          'hu': {'q': 'Tesztkérdés', 'options': ['Igen', 'Nem']},
+        },
+      ],
+    });
     await tester.pump();
   }
+
+  testWidgets('Hungarian duel displays translated choices and submits the canonical answer', (tester) async {
+    await start(tester);
+    transport.match.add({'matchId':'m','role':'p1','questions':<Map<String,dynamic>>[
+      {'id':1,'q':'Test question','options':['Yes','No'],'hu':{'q':'Tesztkérdés','options':['Igen','Nem']}}
+    ]});
+    await tester.pump();
+    SharedPreferences.setMockInitialValues({});
+    await tester.pumpWidget(MultiProvider(providers: [
+      ChangeNotifierProvider.value(value:duel),
+      ChangeNotifierProvider(create: (_) => ThemeService()),
+    ], child: const MaterialApp(
+      locale:Locale('hu'), supportedLocales:[Locale('en'),Locale('hu')],
+      localizationsDelegates:GlobalMaterialLocalizations.delegates, home:DuelGameScreen(),
+    )));
+    await tester.pump(const Duration(milliseconds:300));
+    expect(find.text('Tesztkérdés'), findsOneWidget);
+    await tester.tap(find.text('Igen'));
+    await tester.pump(const Duration(milliseconds:300));
+    expect(transport.answers, ['Yes']);
+  });
 
   testWidgets('reconnect waits for the recorded wager payout', (tester) async {
     await start(tester);

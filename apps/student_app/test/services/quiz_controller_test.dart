@@ -1,4 +1,9 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:arbor_med/features/quiz/widgets/components/quiz_body.dart';
+import 'package:arbor_med/services/theme_service.dart';
 import 'package:arbor_med/core/api_exceptions.dart';
 
 import 'package:drift/native.dart';
@@ -54,6 +59,102 @@ void main() {
   }
 
   group('QuizController', () {
+    test('a mismatched review result leaves the requested question available for retry', () async {
+      when(mockApiService.get('/quiz/questions/5')).thenAnswer((_) async => {'id': 6});
+      controller = buildController(review: [5]);
+      await Future<void>.delayed(Duration.zero);
+      expect(controller.state.currentQuestion, isNull);
+      expect(controller.state.isReviewComplete, false);
+      when(mockApiService.get('/quiz/questions/5')).thenAnswer((_) async => {'id': '5'});
+      await controller.loadNextQuestion();
+      expect(controller.state.currentQuestion?['id'], 5);
+    });
+
+    test('changing section replaces the progress bar and clears the previous feedback', () async {
+      when(mockApiService.get(any)).thenAnswer((_) async => {
+        'id': 8, 'topic_slug': 'renal', 'currentBloom': 2, 'streakProgress': 0.15,
+      });
+      when(mockApiService.post('/quiz/answer', any)).thenThrow(const NetworkException());
+      controller = buildController(initialData: {
+        'id': 7, 'topic_slug': 'heart', 'streakProgress': 0.80,
+        'correct_answer': 'A', 'explanation': 'First explanation',
+      });
+      controller.selectAnswer('A');
+      await controller.submitAnswer();
+      expect(controller.state.isCorrect, true);
+      await controller.loadNextQuestion();
+      expect(controller.state.levelProgress, 0.15);
+      expect(controller.state.currentBloomLevel, 2);
+      expect(controller.state.correctAnswer, isNull);
+      expect(controller.state.explanation, isEmpty);
+    });
+
+    test('a late receipt updates progress in the same section without grading the new question', () async {
+      when(mockApiService.get(any)).thenAnswer((_) async => {
+        'id': 8, 'topic_slug': 'renal', 'streakProgress': 0.50,
+      });
+      when(mockApiService.post('/quiz/answer', any)).thenThrow(const NetworkException());
+      controller = buildController(initialData: {
+        'id': 7, 'topic_slug': 'renal', 'correct_answer': 'A', 'streakProgress': 0.50,
+      });
+      controller.selectAnswer('A');
+      await controller.submitAnswer();
+      expect(controller.state.levelProgress, closeTo(0.55, 0.001));
+      await controller.loadNextQuestion();
+      expect(controller.state.levelProgress, 0.50);
+      when(mockApiService.post('/quiz/answer', any)).thenAnswer((call) async => {
+        'submissionId': call.positionalArguments[1]['submissionId'], 'isCorrect': true,
+        'topicSlug': 'renal', 'currentBloom': 2, 'streakProgress': 0.0,
+      });
+      await queue.flush();
+      expect(controller.state.currentQuestion?['id'], 8);
+      expect(controller.state.isAnswerChecked, false);
+      expect(controller.state.levelProgress, 0.0);
+      expect(controller.state.currentBloomLevel, 2);
+    });
+
+    test('a definitive rejection withdraws the local grade and a new question can be opened', () async {
+      when(mockApiService.get(any)).thenAnswer((_) async => {'id': 8});
+      when(mockApiService.post('/quiz/answer', any)).thenThrow(const NotFoundException());
+      controller = buildController(initialData: {
+        'id': 7, 'correct_answer': 'A', 'streakProgress': 0.95, 'explanation': 'Local grade',
+      });
+      controller.selectAnswer('A');
+      await controller.submitAnswer();
+      expect(controller.state.isAnswerChecked, false);
+      expect(controller.state.isCorrect, false);
+      expect(controller.state.correctAnswer, isNull);
+      expect(controller.state.explanation, isEmpty);
+      expect(controller.state.levelProgress, 0.95);
+      await controller.submitAnswer();
+      verify(mockApiService.post('/quiz/answer', any)).called(1);
+      await controller.loadNextQuestion();
+      expect(controller.state.currentQuestion?['id'], 8);
+    });
+
+    testWidgets('the rejection panel offers a working next-question action', (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      when(mockApiService.get(any)).thenAnswer((_) async => {'id': 8});
+      when(mockApiService.post('/quiz/answer', any)).thenThrow(const NotFoundException());
+      await tester.runAsync(() async {
+        controller = buildController(initialData: {'id': 7, 'correct_answer': 'A'});
+        controller.selectAnswer('A');
+        await controller.submitAnswer();
+      });
+      await tester.pumpWidget(MultiProvider(
+        providers: [
+          ChangeNotifierProvider<ThemeService>(create: (_) => ThemeService()),
+          ChangeNotifierProvider<QuizController>.value(value: controller),
+        ],
+        child: const MaterialApp(home: Scaffold(body: QuizBody(systemName: 'Renal'))),
+      ));
+      expect(find.textContaining('The server rejected this answer'), findsOneWidget);
+      await tester.tap(find.text('Next question'));
+      await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+      await tester.pumpWidget(const SizedBox());
+      expect(controller.state.currentQuestion?['id'], 8);
+    });
+
     test('initializes and loads first question', () async {
       when(mockApiService.get(any)).thenAnswer((_) async =>
           {'id': 100, 'text': 'Q100', 'question_type': 'single_choice'});

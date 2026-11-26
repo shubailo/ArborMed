@@ -210,4 +210,145 @@ postgres('registration and password recovery on PostgreSQL', () => {
         await client.query("UPDATE auth_challenges SET expires_at = now() - interval '1 hour'");
         await expect(verify(pending.registrationId, deliveredCode())).rejects.toMatchObject({ statusCode: 400 });
     });
+
+    test('login returns the profile and session version at grant issuance', async () => {
+        const pending = await register();
+        const { user } = await verify(pending.registrationId, deliveredCode());
+        // Represent a concurrent profile change after credential lookup, before issuance.
+        db.query.mockImplementationOnce(async (...args) => {
+            const old = await client.query(...args);
+            await client.query(
+                "UPDATE users SET display_name='New display',email_session_version=gen_random_uuid() WHERE id=$1",
+                [user.id]
+            );
+            return old;
+        });
+        const session = await call(auth.login, { password: 'Original123!' });
+        expect(session.display_name).toBe('New display');
+        expect(await permits(session.token)).toBe(true);
+        expect(
+            await permits(
+                (await call(auth.refreshToken, { userId: user.id, refreshToken: session.refreshToken })).token
+            )
+        ).toBe(true);
+    });
+
+    test('refresh transfers at most one grant and logout revokes only that grant', async () => {
+        const pending = await register();
+        const a = await verify(pending.registrationId, deliveredCode());
+        const b = await call(auth.login, { password: 'Original123!' });
+        await client.query(
+            "INSERT INTO refresh_tokens(user_id,token_hash,expires_at) SELECT $1,md5(i::text),now()+interval '1 day' FROM generate_series(1,64) i",
+            [a.user.id]
+        );
+        let rowsRead;
+        db.query.mockImplementationOnce(async (...args) => {
+            const result = await client.query(...args);
+            rowsRead = result.rowCount;
+            return result;
+        });
+        await call(auth.refreshToken, { userId: a.user.id, refreshToken: a.refreshToken });
+        expect(rowsRead).toBe(1);
+        await call(auth.logout, { refreshToken: a.refreshToken }, a.user);
+        await call(auth.logout, { refreshToken: a.refreshToken }, a.user);
+        await expect(
+            call(auth.refreshToken, { userId: a.user.id, refreshToken: a.refreshToken })
+        ).rejects.toMatchObject({ statusCode: 401 });
+        expect(
+            (await call(auth.refreshToken, { userId: a.user.id, refreshToken: b.refreshToken })).token
+        ).toBeTruthy();
+    });
+
+    test('a malformed logout value has a client error and preserves the active session', async () => {
+        const pending = await register();
+        const s = await verify(pending.registrationId, deliveredCode());
+        await expect(call(auth.logout, { refreshToken: {} }, s.user)).rejects.toMatchObject({ statusCode: 400 });
+        expect(
+            (await call(auth.refreshToken, { userId: s.user.id, refreshToken: s.refreshToken })).token
+        ).toBeTruthy();
+    });
+
+    test('profile rejects invalid names, preserves omitted fields and reports a missing account', async () => {
+        const pending = await register();
+        const { user } = await verify(pending.registrationId, deliveredCode());
+        for (const value of ['  ', {}, 'x'.repeat(256)]) {
+            await expect(call(auth.updateProfile, { username: value }, user)).rejects.toMatchObject({
+                statusCode: 400,
+            });
+        }
+        expect((await call(auth.updateProfile, { display_name: 'Hallgató' }, user)).username).toBe('student');
+        await expect(call(auth.updateProfile, { display_name: 'X' }, { id: 99999 })).rejects.toMatchObject({
+            statusCode: 404,
+        });
+    });
+
+    test('a collision at the profile write is returned as an application conflict', async () => {
+        const pending = await register();
+        const { user } = await verify(pending.registrationId, deliveredCode());
+        db.query.mockImplementation(async (sql, params) => {
+            // The other profile claims the name after any preflight check.
+            if (/UPDATE users SET username/.test(sql)) {
+                await client.query(
+                    "INSERT INTO users(email,username,password_hash) VALUES ('other@example.test','taken','fixture')"
+                );
+            }
+            return client.query(sql, params);
+        });
+        try {
+            await expect(call(auth.updateProfile, { username: 'taken' }, user)).rejects.toMatchObject({
+                statusCode: 400,
+            });
+            expect(
+                (await client.query('SELECT username FROM users WHERE id=$1', [user.id])).rows[0].username
+            ).toBe('student');
+        } finally {
+            db.query.mockImplementation(client.query.bind(client));
+        }
+    });
+
+    test('sign-in does not retain an undisclosed refresh grant when access-token issuance fails', async () => {
+        const pending = await register();
+        const { user } = await verify(pending.registrationId, deliveredCode());
+        const count = async () =>
+            (await client.query('SELECT FROM refresh_tokens WHERE user_id=$1', [user.id])).rowCount;
+        const previous = await count();
+        const sign = jest.spyOn(require('jsonwebtoken'), 'sign').mockImplementationOnce(() => {
+            throw new Error('fixture signing failure');
+        });
+        try {
+            await expect(call(auth.login, { password: 'Original123!' })).rejects.toThrow(
+                'fixture signing failure'
+            );
+            expect(await count()).toBe(previous);
+        } finally {
+            sign.mockRestore();
+        }
+    });
+    test('email sign-in resolves an exact email even with a historical overlapping username', async () => {
+        const hashes = await Promise.all(['Original123!', 'Student123!'].map((value) => bcrypt.hash(value, 4)));
+        await client.query(
+            "INSERT INTO users(email,username,password_hash,is_email_verified) VALUES ('alpha@example.test','beta@example.test',$1,true),('beta@example.test','beta',$2,true)",
+            hashes
+        );
+        const session = await call(auth.login, { identifier: 'beta@example.test', password: 'Student123!' });
+        expect(session.email).toBe('beta@example.test');
+        expect(
+            (await call(auth.login, { identifier: 'alpha@example.test', password: 'Original123!' })).email
+        ).toBe('alpha@example.test');
+    });
+
+    test('an issued access token is accepted just before its 15 minute limit and rejected at the limit', async () => {
+        const pending = await register();
+        const { token } = await verify(pending.registrationId, deliveredCode());
+        const issuedAt = require('jsonwebtoken').decode(token).iat;
+        const clock = jest.spyOn(Date, 'now');
+        try {
+            clock.mockReturnValue((issuedAt + 899) * 1000);
+            expect(await permits(token)).toBe(true);
+            clock.mockReturnValue((issuedAt + 900) * 1000);
+            expect(await permits(token)).toBe(false);
+        } finally {
+            clock.mockRestore();
+        }
+    });
 });

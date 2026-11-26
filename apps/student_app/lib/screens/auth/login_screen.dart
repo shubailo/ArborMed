@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'auth_strings.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/auth_provider.dart';
@@ -22,52 +23,65 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.initialIdentifier != null && widget.initialIdentifier!.isNotEmpty) {
+    if (widget.initialIdentifier != null &&
+        widget.initialIdentifier!.isNotEmpty) {
       _identifierController.text = widget.initialIdentifier!;
     }
   }
+
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
 
-  void _submit() async {
-    if (_formKey.currentState!.validate()) {
-      final auth = context.read<AuthProvider>();
-      final identifier = _identifierController.text.trim();
-      final password = _passwordController.text;
+  bool _submitting = false;
+
+  @override
+  void dispose() {
+    _identifierController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_submitting || !_formKey.currentState!.validate()) return;
+    setState(() => _submitting = true);
+    final auth = context.read<AuthProvider>();
+    final identifier = _identifierController.text.trim();
+    final password = _passwordController.text;
+    try {
       try {
-        try {
+        await auth.login(identifier, password);
+      } on EmailVerificationRequired catch (challenge) {
+        if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
+        final verified =
+            await Navigator.of(context).push<bool>(MaterialPageRoute(
+          builder: (_) => VerificationScreen(
+              email: challenge.email, verificationId: challenge.verificationId),
+        ));
+        if (mounted &&
+            verified == true &&
+            ModalRoute.of(context)?.isCurrent == true) {
           await auth.login(identifier, password);
-        } on EmailVerificationRequired catch (challenge) {
-          if (!mounted) return;
-          final verified = await Navigator.of(context).push<bool>(
-            MaterialPageRoute(
-              builder: (_) => VerificationScreen(
-                email: challenge.email,
-                verificationId: challenge.verificationId,
-              ),
-            ),
-          );
-          if (mounted && verified == true) await auth.login(identifier, password);
         }
-      } catch (e) {
-        if (!mounted) return;
-        final displayMsg = e is ApiException
-            ? e.message
-            : e.toString().replaceAll('Exception:', '').trim();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(displayMsg),
-            backgroundColor: CozyTheme.of(context, listen: false).accent,
-          ),
-        );
       }
+    } catch (e) {
+      if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
+      final displayMsg = e is ApiException
+          ? e.message
+          : e.toString().replaceAll('Exception:', '').trim();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(displayMsg),
+        backgroundColor: CozyTheme.of(context, listen: false).accent,
+      ));
+    } finally {
+      if (mounted) setState(() => _submitting = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = Provider.of<AuthProvider>(context).isLoading;
+    final isLoading =
+        Provider.of<AuthProvider>(context).isLoading || _submitting;
 
     return Scaffold(
       backgroundColor: CozyTheme.of(context).background,
@@ -98,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
                 Text(
-                  'Professional Medical Learning',
+                  context.authStrings.authLearn,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 48),
@@ -120,26 +134,27 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: _identifierController,
                             decoration: CozyTheme.inputDecoration(
                               context,
-                              'Email or Username',
+                              context.authStrings.authIdentifier,
                             ),
                             textInputAction: TextInputAction.next,
                             style: TextStyle(
                               color: CozyTheme.of(context).textPrimary,
                             ),
-                            validator: (val) =>
-                                val == null || val.isEmpty ? 'Required' : null,
+                            validator: (val) => val == null || val.isEmpty
+                                ? context.authStrings.authRequired
+                                : null,
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _passwordController,
                             decoration: CozyTheme.inputDecoration(
                               context,
-                              'Password',
+                              context.authStrings.authPassword,
                             ).copyWith(
                               suffixIcon: IconButton(
                                 tooltip: _obscurePassword
-                                    ? 'Show password'
-                                    : 'Hide password',
+                                    ? context.authStrings.authShow
+                                    : context.authStrings.authHide,
                                 icon: Icon(
                                   _obscurePassword
                                       ? Icons.visibility_off
@@ -162,15 +177,16 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: CozyTheme.of(context).textPrimary,
                             ),
                             validator: (val) => val == null || val.length < 4
-                                ? 'Too short'
+                                ? context.authStrings.authShort
                                 : null,
                           ),
                           Align(
                             alignment: Alignment.centerRight,
                             child: TextButton(
-                              onPressed: _showForgotPasswordDialog,
+                              onPressed:
+                                  isLoading ? null : _showForgotPasswordDialog,
                               child: Text(
-                                'Forgot Password?',
+                                context.authStrings.authForgotLink,
                                 style: TextStyle(
                                   color: CozyTheme.of(context).textSecondary,
                                 ),
@@ -187,9 +203,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   )
                                 : ElevatedButton(
                                     onPressed: _submit,
-                                    child: const Text(
-                                      'Login',
-                                      style: TextStyle(fontSize: 18),
+                                    child: Text(
+                                      context.authStrings.authLogin,
+                                      style: const TextStyle(fontSize: 18),
                                     ),
                                   ),
                           ),
@@ -200,24 +216,29 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 24),
                 TextButton(
-                  onPressed: () async {
-                    final returnedEmail = await Navigator.push<String>(
-                      context,
-                      MaterialPageRoute(builder: (_) => const RegisterScreen()),
-                    );
-                    if (returnedEmail != null && returnedEmail.isNotEmpty) {
-                      setState(() {
-                        _identifierController.text = returnedEmail;
-                      });
-                    }
-                  },
+                  onPressed: isLoading
+                      ? null
+                      : () async {
+                          final returnedEmail = await Navigator.push<String>(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const RegisterScreen()),
+                          );
+                          if (mounted &&
+                              returnedEmail != null &&
+                              returnedEmail.isNotEmpty) {
+                            setState(() {
+                              _identifierController.text = returnedEmail;
+                            });
+                          }
+                        },
                   child: RichText(
                     text: TextSpan(
-                      text: "Don't have an account? ",
+                      text: context.authStrings.authNoAccount,
                       style: Theme.of(context).textTheme.bodyMedium,
                       children: [
                         TextSpan(
-                          text: "Create One",
+                          text: context.authStrings.authCreateLink,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: CozyTheme.of(context).primary,
@@ -235,136 +256,142 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _showForgotPasswordDialog() {
-    // Keep internal logic but wrap with CozyTheme's inputDecoration
-    final emailController = TextEditingController();
-    final otpController = TextEditingController();
-    final newPassController = TextEditingController();
-    bool isOTPSent = false;
-    bool obscureNewPassword = true;
+  void _showForgotPasswordDialog() => showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const _ResetPasswordDialog(),
+      );
+}
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => StatefulBuilder(
-        builder: (context, setModalState) {
-          final auth = Provider.of<AuthProvider>(context);
+class _ResetPasswordDialog extends StatefulWidget {
+  const _ResetPasswordDialog();
+  @override
+  State<_ResetPasswordDialog> createState() => _ResetPasswordDialogState();
+}
 
-          return AlertDialog(
-            backgroundColor: CozyTheme.of(context, listen: false).paperWhite,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            title: Text(
-              isOTPSent ? 'Reset Password' : 'Forgot Password',
-              style: CozyTheme.of(context, listen: false).dialogTitle,
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (!isOTPSent) ...[
-                  const Text(
-                    'Enter your email to receive a 6-digit reset code.',
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: emailController,
-                    decoration: CozyTheme.inputDecoration(context, 'Email'),
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.done,
-                  ),
-                ] else ...[
-                  Text('Code sent to ${emailController.text}'),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: otpController,
-                    decoration: CozyTheme.inputDecoration(
-                      context,
-                      '6-digit OTP',
-                    ),
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: newPassController,
-                    decoration: CozyTheme.inputDecoration(
-                      context,
-                      'New Password',
-                    ).copyWith(
-                      suffixIcon: IconButton(
-                        tooltip: obscureNewPassword
-                            ? 'Show new password'
-                            : 'Hide new password',
-                        icon: Icon(
-                          obscureNewPassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: CozyTheme.of(context).textSecondary,
-                        ),
-                        onPressed: () {
-                          setModalState(() {
-                            obscureNewPassword = !obscureNewPassword;
-                          });
-                        },
-                      ),
-                    ),
-                    obscureText: obscureNewPassword,
-                    textInputAction: TextInputAction.done,
-                  ),
-                ],
-                if (auth.isLoading)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 16.0),
-                    child: CircularProgressIndicator(),
-                  ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-              ElevatedButton(
-                onPressed: auth.isLoading
-                    ? null
-                    : () async {
-                        try {
-                          if (!isOTPSent) {
-                            await auth.requestOTP(emailController.text.trim());
-                            setModalState(() => isOTPSent = true);
-                          } else {
-                            await auth.resetPassword(
-                              emailController.text.trim(),
-                              otpController.text.trim(),
-                              newPassController.text,
-                            );
-                            if (context.mounted) {
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Password reset successful! Please login.',
-                                  ),
-                                ),
-                              );
-                            }
-                          }
-                        } catch (e) {
-                          if (context.mounted) {
-                            final msg = e is ApiException ? e.message : e.toString();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(msg)),
-                            );
-                          }
-                        }
-                      },
-                child: Text(isOTPSent ? 'Reset' : 'Send Code'),
-              ),
-            ],
-          );
-        },
-      ),
-    );
+class _ResetPasswordDialogState extends State<_ResetPasswordDialog> {
+  final _email = TextEditingController();
+  final _otp = TextEditingController();
+  final _password = TextEditingController();
+  String? _sentTo;
+  String? _error;
+  bool _busy = false;
+  bool _obscure = true;
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _otp.dispose();
+    _password.dispose();
+    super.dispose();
   }
+
+  Future<void> _submit() async {
+    if (_busy) return;
+    final auth = context.read<AuthProvider>();
+    final email = _sentTo ?? _email.text.trim();
+    if (email.isEmpty) {
+      setState(() => _error = context.authStrings.authEmailPrompt);
+      return;
+    }
+    if (_sentTo != null && !RegExp(r'^\d{6}$').hasMatch(_otp.text.trim())) {
+      setState(() => _error = context.authStrings.authCodePrompt);
+      return;
+    }
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+    try {
+      if (_sentTo == null) {
+        await auth.requestOTP(email);
+        if (mounted) setState(() => _sentTo = email);
+      } else {
+        await auth.resetPassword(email, _otp.text.trim(), _password.text);
+        if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
+        final messenger = ScaffoldMessenger.of(context);
+        final success = context.authStrings.authResetSuccess;
+        Navigator.pop(context);
+        messenger.showSnackBar(SnackBar(content: Text(success)));
+      }
+    } catch (error) {
+      if (mounted) {
+        setState(() => _error = error is ApiException
+            ? error.message
+            : context.authStrings.authTryAgain);
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => AlertDialog(
+        scrollable: true,
+        backgroundColor: CozyTheme.of(context, listen: false).paperWhite,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+            _sentTo == null
+                ? context.authStrings.authForgot
+                : context.authStrings.authResetTitle,
+            style: CozyTheme.of(context, listen: false).dialogTitle),
+        content: Column(mainAxisSize: MainAxisSize.min, children: [
+          if (_sentTo == null) ...[
+            Text(context.authStrings.authResetHelp),
+            const SizedBox(height: 16),
+            TextFormField(
+                controller: _email,
+                enabled: !_busy,
+                decoration: CozyTheme.inputDecoration(
+                    context, context.authStrings.authEmail),
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.done),
+          ] else ...[
+            Text(context.authStrings.authCodeSent(_sentTo!)),
+            const SizedBox(height: 16),
+            TextFormField(
+                controller: _otp,
+                enabled: !_busy,
+                decoration: CozyTheme.inputDecoration(
+                    context, context.authStrings.authOtp),
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.next),
+            const SizedBox(height: 16),
+            TextFormField(
+                controller: _password,
+                enabled: !_busy,
+                decoration: CozyTheme.inputDecoration(
+                        context, context.authStrings.newPassword)
+                    .copyWith(
+                        suffixIcon: IconButton(
+                            tooltip: _obscure
+                                ? context.authStrings.authShowNew
+                                : context.authStrings.authHideNew,
+                            icon: Icon(_obscure
+                                ? Icons.visibility_off
+                                : Icons.visibility),
+                            onPressed: () =>
+                                setState(() => _obscure = !_obscure))),
+                obscureText: _obscure,
+                textInputAction: TextInputAction.done),
+          ],
+          if (_error != null)
+            Text(_error!,
+                style: TextStyle(color: Theme.of(context).colorScheme.error)),
+          if (_busy)
+            const Padding(
+                padding: EdgeInsets.only(top: 16),
+                child: CircularProgressIndicator()),
+        ]),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(context.authStrings.cancel)),
+          ElevatedButton(
+              onPressed: _busy ? null : _submit,
+              child: Text(_sentTo == null
+                  ? context.authStrings.authSendCode
+                  : context.authStrings.authReset)),
+        ],
+      );
 }

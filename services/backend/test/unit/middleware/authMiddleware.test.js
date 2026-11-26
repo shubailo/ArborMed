@@ -43,7 +43,7 @@ describe('Auth Middleware', () => {
 
         await protect(req, res, next);
 
-        expect(jwt.verify).toHaveBeenCalledWith(token, process.env.JWT_SECRET, { algorithms: ['HS256'] });
+        expect(jwt.verify).toHaveBeenCalledWith(token, process.env.JWT_SECRET, { algorithms: ['HS256'], maxAge: '15m' });
         expect(db.query).toHaveBeenCalledWith(expect.stringContaining('email_session_version::text IS NOT DISTINCT FROM $2'), [decoded.id, null]);
         expect(req.user).toEqual(user);
         expect(next).toHaveBeenCalled();

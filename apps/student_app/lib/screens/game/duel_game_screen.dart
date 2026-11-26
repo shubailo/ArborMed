@@ -45,6 +45,10 @@ class _DuelGameScreenState extends State<DuelGameScreen> {
 
     final currentQuestion = duelProvider.questions[duelProvider.currentQuestionIndex];
     final options = _getOptions(currentQuestion);
+    final hu = currentQuestion['hu'];
+    final display = Localizations.localeOf(context).languageCode == 'hu' && hu is Map<String, dynamic>
+        ? hu : currentQuestion;
+    final labels = _getOptions(display);
 
     return Scaffold(
       body: SafeArea(
@@ -58,9 +62,9 @@ class _DuelGameScreenState extends State<DuelGameScreen> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    _buildQuestionCard(context, currentQuestion),
+                    _buildQuestionCard(context, display),
                     const SizedBox(height: 24),
-                    ...options.map((opt) => Padding(
+                    for (final (index, opt) in options.indexed) Padding(
                           padding: const EdgeInsets.only(bottom: 12),
                           child: PressableAnswerButton(
                             isSelected: _selectedAnswer == opt,
@@ -79,13 +83,13 @@ class _DuelGameScreenState extends State<DuelGameScreen> {
                             child: SizedBox(
                               width: double.infinity,
                               child: Text(
-                                opt,
+                                labels.length == options.length ? labels[index] : opt,
                                 style: const TextStyle(fontSize: 16),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                           ),
-                        )),
+                        ),
                   ],
                 ),
               ),

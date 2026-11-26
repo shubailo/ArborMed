@@ -107,9 +107,6 @@ exports.submitAnswer = catchAsync(async (req, res) => {
   const id = positiveId(questionId);
   if (id === null) throw new AppError('Invalid question ID', 400);
   const legacy = req.body.submissionId === undefined;
-  const scope = sessionId ?? new Date().toISOString().slice(0, 10);
-  const submissionId = legacy ? legacySubmissionId(userId, scope, id, userAnswer) : req.body.submissionId;
-  if (typeof submissionId !== 'string' || !uuid.test(submissionId)) throw new AppError('A valid submission ID is required', 400);
   if (quality != null && (!Number.isInteger(quality) || quality < 0 || quality > 5)) {
     throw new AppError('Quality must be an integer between 0 and 5', 400);
   }
@@ -118,16 +115,27 @@ exports.submitAnswer = catchAsync(async (req, res) => {
   const session = offline ? null : positiveId(sessionId);
   if (!offline && session === null) throw new AppError('Invalid session ID', 400);
 
+  // Older releases hashed the wire representation of sessionId. Recognize both
+  // the numeric and canonical text form, as well as the submitted spelling.
+  const scopes = legacy && session !== null
+    ? [...new Set([session, String(session), sessionId])]
+    : [sessionId ?? new Date().toISOString().slice(0, 10)];
+  const receiptIds = legacy
+    ? scopes.map(scope => legacySubmissionId(userId, scope, id, userAnswer))
+    : [req.body.submissionId];
+  const submissionId = receiptIds[0];
+  if (typeof submissionId !== 'string' || !uuid.test(submissionId)) throw new AppError('A valid submission ID is required', 400);
+
   const result = await withTransaction(async client => {
     // Serialize all progress and reward changes for this student, including first-time rows.
     await client.query('SELECT id FROM users WHERE id = $1 FOR UPDATE', [userId]);
     const prior = await client.query(
-      'SELECT question_id, submission_input, submission_result FROM responses WHERE user_id = $1 AND submission_id = $2',
-      [userId, submissionId]
+      'SELECT question_id, session_id, submission_input, submission_result FROM responses WHERE user_id = $1 AND submission_id = ANY($2::uuid[]) ORDER BY id LIMIT 1',
+      [userId, receiptIds]
     );
     if (prior.rows.length) {
       const saved = prior.rows[0];
-      if (saved.question_id !== id || !sameSubmittedAnswer(saved.submission_input, userAnswer)) {
+      if ((saved.session_id ?? null) !== session || saved.question_id !== id || !sameSubmittedAnswer(saved.submission_input, userAnswer)) {
         throw new AppError('Submission ID already used for a different answer', 409);
       }
       return saved.submission_result;
@@ -142,7 +150,7 @@ exports.submitAnswer = catchAsync(async (req, res) => {
         [userId, id, session, JSON.stringify(userAnswer)]
       );
       const saved = candidates.rows.find(row => sameSubmittedAnswer(row.submission_input, userAnswer) &&
-        row.submission_id === legacySubmissionId(userId, scope, id, row.submission_input));
+        scopes.some(scope => row.submission_id === legacySubmissionId(userId, scope, id, row.submission_input)));
       if (saved) return saved.submission_result;
     }
     if (session !== null) {
@@ -173,13 +181,15 @@ exports.submitAnswer = catchAsync(async (req, res) => {
       // Retries of a different attempt can advance study history. Only the
       // first correct answer to each question per UTC day earns coin credit.
       const credit = await client.query(
-        `UPDATE responses SET reward_day = (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')::date
+        `UPDATE responses SET reward_day = (statement_timestamp() AT TIME ZONE 'UTC')::date
          WHERE id = $1 AND NOT EXISTS (
            SELECT 1 FROM responses WHERE user_id = $2 AND question_id = $3
-             AND reward_day = (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')::date
-         ) RETURNING id`, [answered.rows[0].id, userId, id]
+             AND reward_day = (statement_timestamp() AT TIME ZONE 'UTC')::date
+         ) RETURNING reward_day::text AS day`, [answered.rows[0].id, userId, id]
       );
-      if (credit.rows.length) coinsEarned = await economyService.processQuizCoinReward(client, userId);
+      if (credit.rows.length) {
+        coinsEarned = await economyService.processQuizCoinReward(client, userId, credit.rows[0].day);
+      }
     }
     const receipt = {
       submissionId, topicSlug: question.topic_slug, isCorrect, correctAnswer, explanation: question.explanation_en, explanation_hu: question.explanation_hu,

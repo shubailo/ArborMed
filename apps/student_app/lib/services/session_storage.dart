@@ -38,6 +38,8 @@ class SessionStorage {
         (value['token'] as String).isEmpty ||
         value['user'] is! Map<String, dynamic> ||
         value['user']['id'] is! int ||
+        value['user']['id'] < 1 ||
+        value['user']['id'] > 2147483647 ||
         (value['refreshToken'] != null && value['refreshToken'] is! String)) {
       throw const FormatException('Invalid stored session');
     }
@@ -46,6 +48,8 @@ class SessionStorage {
 
   static Future<Map<String, dynamic>?> read() => _run(() async {
         final prefs = await SharedPreferences.getInstance();
+        // Another app instance may have completed a sign-in or sign-out.
+        await prefs.reload();
         if (prefs.getBool(_signedOut) == true) {
           // The device may have been locked when sign-out tried removing the old key.
           try {
@@ -68,7 +72,10 @@ class SessionStorage {
         }
         final token = prefs.getString('auth_token');
         final user = prefs.getString('user_data');
-        if (token == null || user == null) return null;
+        if (token == null || user == null) {
+          await _retryLegacyCleanup(prefs);
+          return null;
+        }
         final session = _validate({
           'token': token,
           'refreshToken': prefs.getString('refresh_token'),
@@ -80,35 +87,34 @@ class SessionStorage {
       });
 
   static Future<void> save(
-          String token, String? refreshToken, Map<String, dynamic> user,
-          {bool replaceSession = false}) =>
-      _run(() async {
-        final prefs = await _preferencesOrNull();
-        if (replaceSession) await _invalidate(prefs);
-        if (prefs == null) {
-          // Keep the secure tombstone until legacy credentials can be cleaned.
-          if (replaceSession) return;
-          throw StateError('Session preferences are unavailable');
+      String token, String? refreshToken, Map<String, dynamic> user,
+      {bool replaceSession = false}) async {
+    final snapshot = jsonEncode(_validate({
+      'token': token,
+      'refreshToken': refreshToken,
+      'user': user,
+    }));
+    await _run(() async {
+      final prefs = await _preferencesOrNull();
+      if (replaceSession) await _invalidate(prefs);
+      if (prefs == null) {
+        // Keep the secure tombstone until legacy credentials can be cleaned.
+        if (replaceSession) return;
+        throw StateError('Session preferences are unavailable');
+      }
+      try {
+        await _storage.write(key: _key, value: snapshot);
+        if (prefs.containsKey(_signedOut) && !await prefs.remove(_signedOut)) {
+          throw StateError('Could not persist the new sign-in');
         }
-        try {
-          await _storage.write(
-              key: _key,
-              value: jsonEncode({
-                'token': token,
-                'refreshToken': refreshToken,
-                'user': user,
-              }));
-          if (prefs.containsKey(_signedOut) &&
-              !await prefs.remove(_signedOut)) {
-            throw StateError('Could not persist the new sign-in');
-          }
-        } catch (_) {
-          if (!replaceSession) rethrow;
-          // Invalidation succeeded, so a memory-only session is safe.
-          debugPrint('The new session could not be persisted.');
-        }
-        await _retryLegacyCleanup(prefs);
-      });
+      } catch (_) {
+        if (!replaceSession) rethrow;
+        // Invalidation succeeded, so a memory-only session is safe.
+        debugPrint('The new session could not be persisted.');
+      }
+      await _retryLegacyCleanup(prefs);
+    });
+  }
 
   static Future<void> clear() => _run(() async {
         final prefs = await _preferencesOrNull();

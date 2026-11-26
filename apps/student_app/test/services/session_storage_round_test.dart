@@ -1,0 +1,69 @@
+import 'dart:convert';
+import 'package:arbor_med/services/session_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+    FlutterSecureStorage.setMockInitialValues({});
+  });
+  test('read sees a completed sign-in when the preferences cache predates it',
+      () async {
+    SharedPreferences.setMockInitialValues({'arbormed_signed_out': true});
+    final previous = await SharedPreferences.getInstance();
+    expect(previous.getBool('arbormed_signed_out'), true);
+    const keys = FlutterSecureStorage();
+    await keys.write(
+        key: 'arbormed_session',
+        value: jsonEncode({
+          'token': 'current',
+          'user': {'id': 2}
+        }));
+    await SharedPreferencesStorePlatform.instance
+        .remove('flutter.arbormed_signed_out');
+    expect((await SessionStorage.read())?['token'], 'current');
+    expect(await keys.read(key: 'arbormed_session'), isNotNull);
+  });
+  test('invalid replacement data leaves the last valid session intact',
+      () async {
+    await SessionStorage.save('first', null, {'id': 1});
+    for (final invalid in [
+      <String, dynamic>{},
+      {'id': 0},
+      {'id': 2147483648}
+    ]) {
+      await expectLater(
+          SessionStorage.save('second', null, invalid, replaceSession: true),
+          throwsFormatException);
+      expect((await SessionStorage.read())?['token'], 'first');
+    }
+    await expectLater(
+        SessionStorage.save('', null, {'id': 2}, replaceSession: true),
+        throwsFormatException);
+    expect((await SessionStorage.read())?['token'], 'first');
+  });
+  test('queued writes persist the profile snapshot presented by the caller',
+      () async {
+    final user = {'id': 1, 'display_name': 'At submission'};
+    final write = SessionStorage.save('first', null, user);
+    user['display_name'] = 'Later mutation';
+    await write;
+    expect((await SessionStorage.read())?['user']['display_name'],
+        'At submission');
+  });
+  test('incomplete legacy sign-in records do not leave orphaned credentials',
+      () async {
+    SharedPreferences.setMockInitialValues({
+      'refresh_token': 'orphan',
+      'auth_token': 'unused',
+      'theme_mode_enum': 1
+    });
+    expect(await SessionStorage.read(), isNull);
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getKeys(), {'theme_mode_enum'});
+  });
+}

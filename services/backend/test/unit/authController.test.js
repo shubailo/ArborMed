@@ -37,6 +37,7 @@ jest.mock('../../src/config/db', () => ({
     query: jest.fn(),
     pool: {
         on: jest.fn(),
+        connect: jest.fn(),
     }
 }));
 
@@ -101,6 +102,7 @@ describe('authController.login', () => {
     });
 
     test('should call bcrypt.compare when user is found (password match)', async () => {
+        db.pool.connect.mockResolvedValueOnce({query:db.query, release:jest.fn()});
         db.query.mockResolvedValue({
             rows: [{
                 id: 1,
@@ -291,4 +293,27 @@ describe('authController.register', () => {
         expect(next).toHaveBeenCalledWith(expect.objectContaining({statusCode: 400}));
         expect(res.json).not.toHaveBeenCalled();
     });
+});
+
+test.each([
+    [{ code: 'ECONNRESET' }, 503],
+    [{ response: { status: 429 } }, 503],
+    [{ response: { status: 502 } }, 503],
+    [{}, 401],
+])('Google verification errors preserve the correct response status (%j)', async (detail, statusCode) => {
+    const previous = process.env.GOOGLE_CLIENT_ID;
+    process.env.GOOGLE_CLIENT_ID = 'fixture';
+    const res = { json: jest.fn() },
+        next = jest.fn();
+    try {
+        googleClient.verifyIdToken.mockRejectedValueOnce(
+            Object.assign(new Error('fixture verification failure'), detail)
+        );
+        await authController.googleLogin({ body: { idToken: 'fixture' } }, res, next);
+        expect(next).toHaveBeenCalledWith(expect.objectContaining({ statusCode }));
+        expect(res.json).not.toHaveBeenCalled();
+    } finally {
+        if (previous === undefined) delete process.env.GOOGLE_CLIENT_ID;
+        else process.env.GOOGLE_CLIENT_ID = previous;
+    }
 });

@@ -6,6 +6,14 @@ jest.mock('../../../src/config/db', () => ({
     query: jest.fn(),
 }));
 
+jest.mock('../../../src/utils/dbHelpers', () => ({
+    withTransaction: work => work({
+        query: (sql, params) => sql.includes('FOR UPDATE')
+            ? Promise.resolve({rows:[{id:params[0]}]})
+            : jest.requireMock('../../../src/config/db').query(sql, params),
+    }),
+}));
+
 jest.mock('../../../src/services/analyticsEngine', () => ({
     calculateSM2: jest.fn(),
 }));

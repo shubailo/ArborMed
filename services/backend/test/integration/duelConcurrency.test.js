@@ -90,4 +90,42 @@ run('concurrent duel wallet operations on separate PostgreSQL connections', () =
     const balances = await pool.query('SELECT coins FROM users ORDER BY id');
     expect(balances.rows.map(row => row.coins)).toEqual(payouts.map(amount => 75 + amount));
   }, 20000);
+
+  it('refunds other expired holds while one is locked, then refunds the deferred hold exactly once', async () => {
+    await pool.query('INSERT INTO users(id, coins) VALUES (101,100), (102,100)');
+    const ids = [randomUUID(), randomUUID()];
+    for (const [i,id] of ids.entries()) await wallet.reserve(id, 101+i, 5);
+    await pool.query("UPDATE duel_wagers SET expires_at = now() - interval '1 second' WHERE id = ANY($1::uuid[])", [ids]);
+    const lock = await pool.connect();
+    const worker = await pool.connect();
+    const balances = async () => (await pool.query('SELECT coins FROM users WHERE id IN (101,102) ORDER BY id')).rows.map(r => r.coins);
+    try {
+      await lock.query('BEGIN');
+      await lock.query('SELECT id FROM duel_wagers WHERE id=$1 FOR UPDATE', [ids[0]]);
+      await worker.query("SET statement_timeout TO '750ms'");
+      db.query.mockImplementationOnce((...args) => worker.query(...args));
+      expect(await wallet.recoverExpired()).toBe(true);
+      expect(await balances()).toEqual([95,100]);
+    } finally {
+      await lock.query('ROLLBACK');
+      lock.release();
+      await worker.query('RESET statement_timeout');
+      worker.release();
+    }
+    expect(await wallet.recoverExpired()).toBe(true);
+    expect(await wallet.recoverExpired()).toBe(false);
+    expect(await balances()).toEqual([100,100]);
+  });
+
+
+  it('returns exactly the rows credited after an account is removed mid-match', async () => {
+    await pool.query('INSERT INTO users(id,coins) VALUES (103,100),(104,100)');
+    const a=randomUUID(), b=randomUUID(), match=randomUUID();
+    await wallet.reserve(a,103,5); await wallet.reserve(b,104,5);
+    await wallet.start(match,[a,b],5);
+    await pool.query('DELETE FROM users WHERE id=104');
+    expect(await wallet.settlePayouts(match,'win',104)).toEqual([{user_id:103,payout:0}]);
+    expect(await wallet.settlePayouts(match,'win',104)).toEqual([]);
+  });
+
 });

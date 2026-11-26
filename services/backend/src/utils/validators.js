@@ -6,6 +6,9 @@ const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 const PASSWORD_ERROR_MSG = 'Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.';
 
 function validatePassword(password, next) {
+    if (typeof password === 'string' && Buffer.byteLength(password, 'utf8') > 72) {
+        return next(new AppError('Password must be at most 72 UTF-8 bytes.', 400));
+    }
     if (!PASSWORD_REGEX.test(password)) {
         return next(new AppError(PASSWORD_ERROR_MSG, 400));
     }

@@ -1,5 +1,6 @@
 const { createHash } = require('node:crypto');
 const fs = require('node:fs/promises');
+const { readdirSync, readFileSync } = require('node:fs');
 const path = require('node:path');
 
 const directory = path.join(__dirname, '../../migrations');
@@ -7,9 +8,18 @@ const baseline = '050_verified_legacy_schema';
 const lockId = 185872925;
 
 function forwardMigrations(dir = directory) {
-  return require('node:fs').readdirSync(dir)
+  return readdirSync(dir)
     .filter(name => /^\d{3}_.*\.sql$/.test(name) && Number(name.slice(0, 3)) > 50)
     .sort();
+}
+
+function checksumOf(sql) {
+  return createHash('sha256').update(sql.replace(/\r\n/g, '\n')).digest('hex');
+}
+
+function releaseMigrations(dir = directory) {
+  return [[baseline, 'operator-verified'], ...forwardMigrations(dir).map(file =>
+    [file, checksumOf(readFileSync(path.join(dir, file), 'utf8'))])];
 }
 
 async function transaction(client, work) {
@@ -18,14 +28,17 @@ async function transaction(client, work) {
     await work();
     await client.query('COMMIT');
   } catch (err) {
-    await client.query('ROLLBACK');
+    try { await client.query('ROLLBACK'); }
+    catch (rollbackError) { console.warn('Migration rollback acknowledgement failed', rollbackError.code || rollbackError.name); }
     throw err;
   }
 }
 
 async function migrate(client, { baselineOnly = false, dir = directory } = {}) {
   // One session owns the lock until all pending files are applied.
-  await client.query('SELECT pg_advisory_lock($1)', [lockId]);
+  const { rows: [lock] } = await client.query('SELECT pg_try_advisory_lock($1) AS acquired', [lockId]);
+  if (!lock.acquired) throw new Error('Another migration is running. Retry after it finishes.');
+  let failed = false;
   try {
     await client.query(`CREATE TABLE IF NOT EXISTS arbormed_schema_migrations (
       filename text PRIMARY KEY, checksum text NOT NULL, applied_at timestamptz NOT NULL DEFAULT now()
@@ -62,7 +75,7 @@ async function migrate(client, { baselineOnly = false, dir = directory } = {}) {
     const latest = Math.max(50, ...[...applied.keys()].map(name => Number(name.slice(0, 3))));
     for (const file of files) {
       const sql = (await fs.readFile(path.join(dir, file), 'utf8')).replace(/\r\n/g, '\n');
-      const checksum = createHash('sha256').update(sql).digest('hex');
+      const checksum = checksumOf(sql);
       if (applied.has(file)) {
         if (applied.get(file) !== checksum) throw new Error('Applied migration changed: ' + file);
       } else {
@@ -81,8 +94,16 @@ async function migrate(client, { baselineOnly = false, dir = directory } = {}) {
       }
       console.log('Applied', file);
     }
+  } catch (error) {
+    failed = true;
+    throw error;
   } finally {
-    await client.query('SELECT pg_advisory_unlock($1)', [lockId]);
+    const unlock = client.query('SELECT pg_advisory_unlock($1)', [lockId]);
+    if (failed) {
+      await unlock.catch(error => console.warn('Migration unlock acknowledgement failed', error.code || error.name));
+    } else {
+      await unlock;
+    }
   }
 }
 
@@ -90,7 +111,7 @@ if (require.main === module) {
   require('dotenv').config({ path: path.join(__dirname, '../../.env') });
   const { Pool } = require('pg');
   const { databaseOptions } = require('../config/databaseOptions');
-  const pool = new Pool(databaseOptions({ ...process.env, DATABASE_URL: process.env.MIGRATION_DATABASE_URL || process.env.DATABASE_URL }));
+  const pool = new Pool({ ...databaseOptions({ ...process.env, DATABASE_URL: process.env.MIGRATION_DATABASE_URL || process.env.DATABASE_URL }), connectionTimeoutMillis: 10000 });
   (async () => {
     const args = process.argv.slice(2);
     if (args.length && (args.length !== 1 || args[0] !== '--baseline')) throw new Error('Usage: npm run migrate [-- --baseline]');
@@ -103,4 +124,4 @@ if (require.main === module) {
   }).finally(() => pool.end());
 }
 
-module.exports = { migrate, forwardMigrations, baseline };
+module.exports = { migrate, forwardMigrations, releaseMigrations, baseline };

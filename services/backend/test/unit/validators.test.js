@@ -93,3 +93,12 @@ describe('validators', () => {
         });
     });
 });
+
+test('new passwords use the bcrypt UTF-8 byte limit, including accented characters', () => {
+    const valid = 'Aa1!' + 'é'.repeat(34);
+    expect(Buffer.byteLength(valid)).toBe(72);
+    expect(validatePassword(valid, jest.fn())).toBe(true);
+    const next = jest.fn();
+    validatePassword(valid+'é', next);
+    expect(next).toHaveBeenCalledWith(expect.objectContaining({statusCode:400}));
+});

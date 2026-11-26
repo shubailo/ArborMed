@@ -12,6 +12,134 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'ArborMed';
 
   @override
+  String get authLogin => 'Login';
+
+  @override
+  String get authLearn => 'Professional Medical Learning';
+
+  @override
+  String get authIdentifier => 'Email or Username';
+
+  @override
+  String get authRequired => 'Required';
+
+  @override
+  String get authPassword => 'Password';
+
+  @override
+  String get authShow => 'Show password';
+
+  @override
+  String get authHide => 'Hide password';
+
+  @override
+  String get authShort => 'Too short';
+
+  @override
+  String get authForgotLink => 'Forgot Password?';
+
+  @override
+  String get authNoAccount => 'Don\'t have an account? ';
+
+  @override
+  String get authCreateLink => 'Create One';
+
+  @override
+  String get authForgot => 'Forgot Password';
+
+  @override
+  String get authResetTitle => 'Reset Password';
+
+  @override
+  String get authEmailPrompt => 'Enter your email address.';
+
+  @override
+  String get authCodePrompt => 'Enter the 6-digit code.';
+
+  @override
+  String get authResetSuccess => 'Password reset successful! Please login.';
+
+  @override
+  String get authTryAgain => 'Please try again.';
+
+  @override
+  String get authResetHelp =>
+      'Enter your email to receive a 6-digit reset code.';
+
+  @override
+  String get authEmail => 'Email';
+
+  @override
+  String get authOtp => '6-digit OTP';
+
+  @override
+  String get authShowNew => 'Show new password';
+
+  @override
+  String get authHideNew => 'Hide new password';
+
+  @override
+  String get authSendCode => 'Send Code';
+
+  @override
+  String get authReset => 'Reset';
+
+  @override
+  String get authJoin => 'Join ArborMed';
+
+  @override
+  String get authJourney => 'Start your medical journey';
+
+  @override
+  String get authEmailRequired => 'Email is required';
+
+  @override
+  String get authEmailInvalid => 'Please enter a valid email address';
+
+  @override
+  String get authHandle => 'Medical Handle (@username)';
+
+  @override
+  String get authUserRequired => 'Username is required';
+
+  @override
+  String get authDisplayName => 'Display Name';
+
+  @override
+  String get authDisplayRequired => 'Display name is required';
+
+  @override
+  String get authPasswordRequired => 'Password is required';
+
+  @override
+  String get authMinLength => 'Min 8 characters';
+
+  @override
+  String get authUpper => 'Missing uppercase letter';
+
+  @override
+  String get authNumber => 'Missing number';
+
+  @override
+  String get authSpecial => 'Missing special character';
+
+  @override
+  String get authCreate => 'Create Account';
+
+  @override
+  String get authExisting => 'Already have an account? ';
+
+  @override
+  String authCodeSent(String email) {
+    return 'Code sent to $email';
+  }
+
+  @override
+  String authRegFailed(String reason) {
+    return 'Registration Failed: $reason';
+  }
+
+  @override
   String get quizStart => 'Start Quiz';
 
   @override
@@ -1431,4 +1559,83 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get close => 'Close';
+
+  @override
+  String get verifyEmailTitle => 'Verify Your Email';
+
+  @override
+  String get verificationRequired => 'Verification Required';
+
+  @override
+  String verificationSentTo(String email) {
+    return 'We sent a 6-digit verification code to:\n$email';
+  }
+
+  @override
+  String get verificationEnterCode => 'Enter 6-digit code';
+
+  @override
+  String get verificationContinue => 'Verify & Continue';
+
+  @override
+  String get verificationResend => 'Resend Code';
+
+  @override
+  String get verificationSuccess => 'Email verified successfully!';
+
+  @override
+  String get verificationResent => 'Verification code resent!';
+
+  @override
+  String get verificationRetry => 'Could not complete the request. Try again.';
+
+  @override
+  String get verificationRestart => 'Start again';
+
+  @override
+  String get verificationWait => 'Too many requests. Please try again later.';
+
+  @override
+  String get verificationUnavailable =>
+      'Verification is temporarily unavailable. Try again later.';
+
+  @override
+  String get verificationChanged =>
+      'This verification request has changed. Start again.';
+
+  @override
+  String get verificationSignOutFailed =>
+      'Could not finish signing out on this device. Try again.';
+
+  @override
+  String get duelSelectWager => 'Select Wager';
+
+  @override
+  String get duelChooseWager => 'Choose your bet for the knowledge battle:';
+
+  @override
+  String get duelFindMatch => 'Find Match';
+
+  @override
+  String get duelSearching => 'Searching for opponent...';
+
+  @override
+  String duelWagerAmount(int amount) {
+    return 'Wager: $amount 🩺';
+  }
+
+  @override
+  String duelWalletAmount(int amount) {
+    return '$amount Stethoscopes';
+  }
+
+  @override
+  String get duelLowBalance => 'Your balance is too low for this wager.';
+
+  @override
+  String get duelRefreshFailed => 'Could not refresh your balance. Try again.';
+
+  @override
+  String get duelLeaveFailed =>
+      'Could not confirm leaving the queue. Try again.';
 }

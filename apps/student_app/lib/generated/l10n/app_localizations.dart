@@ -104,6 +104,252 @@ abstract class AppLocalizations {
   /// **'ArborMed'**
   String get appTitle;
 
+  /// No description provided for @authLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get authLogin;
+
+  /// No description provided for @authLearn.
+  ///
+  /// In en, this message translates to:
+  /// **'Professional Medical Learning'**
+  String get authLearn;
+
+  /// No description provided for @authIdentifier.
+  ///
+  /// In en, this message translates to:
+  /// **'Email or Username'**
+  String get authIdentifier;
+
+  /// No description provided for @authRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get authRequired;
+
+  /// No description provided for @authPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get authPassword;
+
+  /// No description provided for @authShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get authShow;
+
+  /// No description provided for @authHide.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get authHide;
+
+  /// No description provided for @authShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Too short'**
+  String get authShort;
+
+  /// No description provided for @authForgotLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password?'**
+  String get authForgotLink;
+
+  /// No description provided for @authNoAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? '**
+  String get authNoAccount;
+
+  /// No description provided for @authCreateLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Create One'**
+  String get authCreateLink;
+
+  /// No description provided for @authForgot.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password'**
+  String get authForgot;
+
+  /// No description provided for @authResetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get authResetTitle;
+
+  /// No description provided for @authEmailPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address.'**
+  String get authEmailPrompt;
+
+  /// No description provided for @authCodePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit code.'**
+  String get authCodePrompt;
+
+  /// No description provided for @authResetSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset successful! Please login.'**
+  String get authResetSuccess;
+
+  /// No description provided for @authTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Please try again.'**
+  String get authTryAgain;
+
+  /// No description provided for @authResetHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email to receive a 6-digit reset code.'**
+  String get authResetHelp;
+
+  /// No description provided for @authEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get authEmail;
+
+  /// No description provided for @authOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'6-digit OTP'**
+  String get authOtp;
+
+  /// No description provided for @authShowNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Show new password'**
+  String get authShowNew;
+
+  /// No description provided for @authHideNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide new password'**
+  String get authHideNew;
+
+  /// No description provided for @authSendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Code'**
+  String get authSendCode;
+
+  /// No description provided for @authReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get authReset;
+
+  /// No description provided for @authJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Join ArborMed'**
+  String get authJoin;
+
+  /// No description provided for @authJourney.
+  ///
+  /// In en, this message translates to:
+  /// **'Start your medical journey'**
+  String get authJourney;
+
+  /// No description provided for @authEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get authEmailRequired;
+
+  /// No description provided for @authEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email address'**
+  String get authEmailInvalid;
+
+  /// No description provided for @authHandle.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical Handle (@username)'**
+  String get authHandle;
+
+  /// No description provided for @authUserRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Username is required'**
+  String get authUserRequired;
+
+  /// No description provided for @authDisplayName.
+  ///
+  /// In en, this message translates to:
+  /// **'Display Name'**
+  String get authDisplayName;
+
+  /// No description provided for @authDisplayRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Display name is required'**
+  String get authDisplayRequired;
+
+  /// No description provided for @authPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required'**
+  String get authPasswordRequired;
+
+  /// No description provided for @authMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Min 8 characters'**
+  String get authMinLength;
+
+  /// No description provided for @authUpper.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing uppercase letter'**
+  String get authUpper;
+
+  /// No description provided for @authNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing number'**
+  String get authNumber;
+
+  /// No description provided for @authSpecial.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing special character'**
+  String get authSpecial;
+
+  /// No description provided for @authCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get authCreate;
+
+  /// No description provided for @authExisting.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? '**
+  String get authExisting;
+
+  /// No description provided for @authCodeSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Code sent to {email}'**
+  String authCodeSent(String email);
+
+  /// No description provided for @authRegFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration Failed: {reason}'**
+  String authRegFailed(String reason);
+
   /// No description provided for @quizStart.
   ///
   /// In en, this message translates to:
@@ -2773,6 +3019,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get close;
+
+  /// No description provided for @verifyEmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Your Email'**
+  String get verifyEmailTitle;
+
+  /// No description provided for @verificationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification Required'**
+  String get verificationRequired;
+
+  /// No description provided for @verificationSentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'We sent a 6-digit verification code to:\n{email}'**
+  String verificationSentTo(String email);
+
+  /// No description provided for @verificationEnterCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 6-digit code'**
+  String get verificationEnterCode;
+
+  /// No description provided for @verificationContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify & Continue'**
+  String get verificationContinue;
+
+  /// No description provided for @verificationResend.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend Code'**
+  String get verificationResend;
+
+  /// No description provided for @verificationSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Email verified successfully!'**
+  String get verificationSuccess;
+
+  /// No description provided for @verificationResent.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification code resent!'**
+  String get verificationResent;
+
+  /// No description provided for @verificationRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not complete the request. Try again.'**
+  String get verificationRetry;
+
+  /// No description provided for @verificationRestart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start again'**
+  String get verificationRestart;
+
+  /// No description provided for @verificationWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Please try again later.'**
+  String get verificationWait;
+
+  /// No description provided for @verificationUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification is temporarily unavailable. Try again later.'**
+  String get verificationUnavailable;
+
+  /// No description provided for @verificationChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This verification request has changed. Start again.'**
+  String get verificationChanged;
+
+  /// No description provided for @verificationSignOutFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not finish signing out on this device. Try again.'**
+  String get verificationSignOutFailed;
+
+  /// No description provided for @duelSelectWager.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Wager'**
+  String get duelSelectWager;
+
+  /// No description provided for @duelChooseWager.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your bet for the knowledge battle:'**
+  String get duelChooseWager;
+
+  /// No description provided for @duelFindMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Find Match'**
+  String get duelFindMatch;
+
+  /// No description provided for @duelSearching.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching for opponent...'**
+  String get duelSearching;
+
+  /// No description provided for @duelWagerAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Wager: {amount} 🩺'**
+  String duelWagerAmount(int amount);
+
+  /// No description provided for @duelWalletAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} Stethoscopes'**
+  String duelWalletAmount(int amount);
+
+  /// No description provided for @duelLowBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Your balance is too low for this wager.'**
+  String get duelLowBalance;
+
+  /// No description provided for @duelRefreshFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not refresh your balance. Try again.'**
+  String get duelRefreshFailed;
+
+  /// No description provided for @duelLeaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not confirm leaving the queue. Try again.'**
+  String get duelLeaveFailed;
 }
 
 class _AppLocalizationsDelegate

@@ -63,22 +63,26 @@ async function close(where, payout, values) {
        SELECT user_id, SUM(payout)::integer AS total FROM closed GROUP BY user_id
      )
      UPDATE users SET coins = coins + credits.total FROM credits
-     WHERE users.id = credits.user_id RETURNING users.id`, values
+     WHERE users.id = credits.user_id RETURNING users.id AS user_id, credits.total AS payout`, values
   );
-  return result.rowCount > 0;
+  return result.rows;
 }
 
-function cancel(id, unannouncedMatchId = null) {
+async function cancel(id, unannouncedMatchId = null) {
   // A failed COMMIT acknowledgement may have attached this hold to the forming match.
-  return close('id = $1 AND (match_id IS NULL OR match_id = $2)', 'amount', [id, unannouncedMatchId]);
+  return (await close('id = $1 AND (match_id IS NULL OR match_id = $2)', 'amount', [id, unannouncedMatchId])).length > 0;
 }
 
-function settle(matchId, outcome, winnerId) {
+function settlePayouts(matchId, outcome, winnerId) {
   if (outcome === 'draw') return close('match_id = $1 AND expires_at > NOW()', 'amount', [matchId]);
   if (outcome !== 'win') throw new Error('Unknown duel outcome');
   // A null winner identifies the server's bot, which has no wallet.
   return close('match_id = $1 AND expires_at > NOW()',
     'CASE WHEN user_id = $2 THEN amount * 2 ELSE 0 END', [matchId, winnerId]);
+}
+
+async function settle(matchId, outcome, winnerId) {
+  return (await settlePayouts(matchId, outcome, winnerId)).length > 0;
 }
 
 async function receipt(matchId, userId, session) {
@@ -90,8 +94,11 @@ async function receipt(matchId, userId, session) {
   return rows[0];
 }
 
-function recoverExpired() {
-  return close('expires_at <= NOW()', 'amount', []);
+async function recoverExpired() {
+  return (await close(`id IN (
+    SELECT id FROM duel_wagers WHERE closed_at IS NULL AND expires_at <= NOW()
+    ORDER BY expires_at, id FOR UPDATE SKIP LOCKED
+  )`, 'amount', [])).length > 0;
 }
 
-module.exports = { isAllowedWager, reserve, start, cancel, settle, receipt, recoverExpired };
+module.exports = { isAllowedWager, reserve, start, cancel, settle, settlePayouts, receipt, recoverExpired };

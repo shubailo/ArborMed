@@ -1,6 +1,22 @@
 import '../../../core/api_endpoints.dart';
 import '../../../services/api_service.dart';
 
+Map<String, dynamic> normalizePracticeQuestion(Object? result, {int? expectedId}) {
+  if (result is! Map<String, dynamic>) {
+    throw const FormatException('Invalid practice question');
+  }
+  final value = result['id'];
+  final text = value is String ? value.trim() : '';
+  final id = value is int
+      ? value
+      : RegExp(r'^[0-9]+$').hasMatch(text) ? int.tryParse(text) : null;
+  if (id == null || id <= 0 || id > 2147483647 ||
+      (expectedId != null && id != expectedId)) {
+    throw const FormatException('Invalid practice question ID');
+  }
+  return {...result, 'id': id};
+}
+
 class QuestionCacheService {
   final ApiService _api;
   QuestionSession? _session;
@@ -30,6 +46,7 @@ class QuestionSession {
   final int? _account;
   final Set<int> _shown;
   Future<Map<String, dynamic>?>? _pending;
+  Future<Map<String, dynamic>?>? _unclaimed;
   bool _closed = false;
 
   QuestionSession._(this._api, this._topic, this._account, int? shown)
@@ -51,22 +68,24 @@ class QuestionSession {
     final result = await _api.get(endpoint.toString());
     _checkActive();
     if (result == null) return null;
-    if (result is! Map<String, dynamic> ||
-        int.tryParse(result['id'].toString()) == null) {
-      throw const FormatException('Invalid practice question');
-    }
-    return result;
+    return normalizePracticeQuestion(result);
   }
 
   void prefetch() {
     _checkActive();
-    (_pending ??= _request()).ignore();
+    if (_pending != null) return;
+    final request = _request();
+    _pending = _unclaimed = request;
+    request.then<void>((_) {}, onError: (Object _, StackTrace __) {
+      if (identical(_unclaimed, request)) invalidate();
+    });
   }
 
   Future<Map<String, dynamic>?> next({bool prefetchNext = true}) async {
     while (true) {
       _checkActive();
       final request = _pending ??= _request();
+      _unclaimed = null;
       Map<String, dynamic>? question;
       try {
         question = await request;
@@ -80,7 +99,7 @@ class QuestionSession {
       if (!identical(_pending, request)) continue;
       _pending = null;
       if (question == null) return null;
-      if (!_shown.add(int.parse(question['id'].toString()))) {
+      if (!_shown.add(question['id'] as int)) {
         throw const FormatException('Received a previously shown question');
       }
       if (prefetchNext) prefetch();
@@ -88,7 +107,10 @@ class QuestionSession {
     }
   }
 
-  void invalidate() => _pending = null;
+  void invalidate() {
+    _pending = null;
+    _unclaimed = null;
+  }
 
   void close() {
     _closed = true;

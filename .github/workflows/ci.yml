@@ -29,6 +29,7 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm test
+      - run: node --test ../../scripts/test_web_entry.cjs
       - run: npm audit --omit=dev --audit-level=high
   flutter:
     runs-on: ubuntu-latest

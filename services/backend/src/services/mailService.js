@@ -12,10 +12,12 @@ class MailService {
   }
 
   init() {
+    this.transporter = null;
+    this.resend = null;
     const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env;
 
     // 1. Resend API mode (when SMTP_PASS starts with 're_')
-    if (SMTP_PASS && SMTP_PASS.startsWith('re_') && (!SMTP_HOST || SMTP_HOST.includes('resend'))) {
+    if (SMTP_PASS && SMTP_PASS.startsWith('re_') && (!SMTP_HOST || SMTP_HOST.toLowerCase() === 'smtp.resend.com')) {
       this.resend = new Resend(SMTP_PASS);
       this.mode = 'resend';
       this.isConfigured = true;
@@ -23,38 +25,28 @@ class MailService {
       return;
     }
 
-    // 2. Standard SMTP / Gmail mode (when SMTP_USER & SMTP_PASS provided, or custom SMTP_HOST)
-    if (SMTP_PASS && (SMTP_HOST || SMTP_USER)) {
-      const isGmail = (SMTP_HOST && SMTP_HOST.includes('gmail')) || (SMTP_USER && SMTP_USER.endsWith('@gmail.com'));
-
-      const transportOptions = isGmail
-        ? {
-            service: 'gmail',
-            auth: {
-              user: SMTP_USER,
-              pass: SMTP_PASS,
-            },
-            connectionTimeout: 5000,
-            greetingTimeout: 5000,
-            socketTimeout: 5000,
-          }
-        : {
-            host: SMTP_HOST || 'smtp.gmail.com',
-            port: parseInt(SMTP_PORT, 10) || 465,
-            secure: SMTP_PORT == 465 || !SMTP_PORT,
-            auth: {
-              user: SMTP_USER,
-              pass: SMTP_PASS,
-            },
-            connectionTimeout: 5000,
-            greetingTimeout: 5000,
-            socketTimeout: 5000,
-          };
-
+    if (SMTP_PASS && SMTP_USER) {
+      const port = SMTP_PORT ? Number(SMTP_PORT) : 465;
+      if (!Number.isInteger(port) || port < 1 || port > 65535 ||
+          (SMTP_PORT && !/^\d+$/.test(SMTP_PORT))) {
+        this.mode = 'disabled';
+        this.isConfigured = false;
+        logger.error('SMTP port must be an integer between 1 and 65535.');
+        return;
+      }
+      const transportOptions = {
+        host: SMTP_HOST || 'smtp.gmail.com',
+        port,
+        secure: port === 465,
+        auth: { user: SMTP_USER, pass: SMTP_PASS },
+        connectionTimeout: 5000,
+        greetingTimeout: 5000,
+        socketTimeout: 5000,
+      };
       this.transporter = nodemailer.createTransport(transportOptions);
       this.mode = 'smtp';
       this.isConfigured = true;
-      logger.info(`✅ MailService: Configured with SMTP (${isGmail ? 'Gmail' : SMTP_HOST || 'custom'})`);
+      logger.info('MailService: Configured with SMTP');
       return;
     }
 
@@ -87,14 +79,11 @@ class MailService {
                     .otp-box { background-color: #F5F7F5; border: 2px dashed ${brandColor}; border-radius: 12px; padding: 20px; margin: 30px 0; display: inline-block; }
                     .otp-code { font-size: 32px; font-weight: 800; color: ${textColor}; letter-spacing: 5px; font-family: monospace; }
                     .footer { margin-top: 30px; color: #9CA3AF; font-size: 12px; text-align: center; }
-                    .icon { width: 64px; height: 64px; margin-bottom: 20px; border-radius: 16px; }
                 </style>
             </head>
             <body>
                 <div class="container">
                     <div class="card">
-                        <!-- App Icon Placeholder -->
-                        <img src="https://placehold.co/128x128/8CAA8C/ffffff/png?text=AM" alt="ArborMed Icon" class="icon">
                         
                         <div class="logo">Arbor<span>Med</span></div>
                         
@@ -121,9 +110,7 @@ class MailService {
     if (this.mode === 'resend') {
       try {
         const sender = process.env.VERIFIED_SENDER || 'onboarding@resend.dev';
-        logger.info(
-          `📧 [API] Attempting to send OTP to: ${email} from ${sender}`
-        );
+        logger.info('[API] Sending verification email.');
 
         const { data, error } = await this.resend.emails.send({
           from: `ArborMed Support <${sender}>`,
@@ -131,7 +118,7 @@ class MailService {
           subject: subject,
           html: html,
           text: text,
-        });
+        }, { signal: AbortSignal.timeout(10000) });
 
         if (error) {
           throw new Error(error.message);
@@ -140,16 +127,14 @@ class MailService {
         logger.info(`✅ [API] Success! ID: ${data.id}`);
         return data;
       } catch (error) {
-        logger.error(`❌ [API] CRITICAL FAILURE for ${email}:`, error.message);
+        logger.error('[API] Verification email delivery failed.');
 
-        throw new Error(`Resend API Error: ${error.message}`, { cause: error });
+        throw new Error('Resend API delivery failed', { cause: error });
       }
     } else if (this.mode === 'smtp') {
       try {
         const sender = process.env.SMTP_FROM || process.env.SMTP_USER;
-        logger.info(
-          `📧 [SMTP] Attempting to send OTP to: ${email} from ${sender}`
-        );
+        logger.info('[SMTP] Sending verification email.');
 
         const info = await this.transporter.sendMail({
           from: `ArborMed Support <${sender}>`,
@@ -162,9 +147,9 @@ class MailService {
         logger.info(`✅ [SMTP] Success! Message ID: ${info.messageId}`);
         return info;
       } catch (error) {
-        logger.error(`❌ [SMTP] CRITICAL FAILURE for ${email}:`, error.message);
+        logger.error('[SMTP] Verification email delivery failed.');
 
-        throw new Error(`SMTP Error: ${error.message}`, { cause: error });
+        throw new Error('SMTP delivery failed', { cause: error });
       }
     } else {
       throw new Error('Email delivery is unavailable.');

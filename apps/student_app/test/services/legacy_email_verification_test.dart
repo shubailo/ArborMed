@@ -78,6 +78,7 @@ void main() {
     await tester.tap(find.text('Resend Code'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextFormField), '123456');
+    await tester.pump(); // Rebuild the button after the sixth digit enables it.
     await tester.tap(find.text('Verify & Continue'));
     await tester.pumpAndSettle();
     expect(auth.user?.email, email);

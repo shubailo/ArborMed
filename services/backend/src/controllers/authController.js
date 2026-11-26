@@ -9,7 +9,7 @@ const { auditLog } = require('./auditController');
 const { OAuth2Client } = require('google-auth-library');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
-const { validatePassword, hashToken, findMatchingToken, formatUserResponse, USER_FIELDS } = require('../utils/validators');
+const { validatePassword, hashToken, formatUserResponse, USER_FIELDS } = require('../utils/validators');
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // 🛡️ Sentinel: Pre-computed valid hash (cost 10) for timing attack mitigation
@@ -21,24 +21,25 @@ const generateToken = (id, emailVersion) => {
     });
 };
 
-const generateRefreshToken = async (userId, client = db, passwordHash = null) => {
+async function issueSession(userId, client, passwordHash = null, email = null) {
     const refreshToken = crypto.randomBytes(40).toString('hex');
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
-
-    // Record a successful sign-in and issue its grant under the same user-row lock.
-    const inserted = await client.query(
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const { rows: [user] } = await client.query(
         `WITH signed_in AS (
              UPDATE users SET last_activity_at = greatest(last_activity_at, statement_timestamp())
-             WHERE id = $1 AND is_email_verified IS NOT FALSE AND ($4::text IS NULL OR password_hash = $4)
-             RETURNING id
+             WHERE id = $1 AND is_email_verified IS NOT FALSE
+               AND ($4::text IS NULL OR password_hash = $4) AND ($5::text IS NULL OR email = $5)
+             RETURNING ${USER_FIELDS}, email_session_version
+         ), issued AS (
+             INSERT INTO refresh_tokens (user_id, token_hash, expires_at)
+             SELECT id, $2, $3 FROM signed_in RETURNING user_id
          )
-         INSERT INTO refresh_tokens (user_id, token_hash, expires_at) SELECT id, $2, $3 FROM signed_in`,
-        [userId, hashToken(refreshToken), expiresAt, passwordHash]
+         SELECT signed_in.* FROM signed_in JOIN issued ON issued.user_id = signed_in.id`,
+        [userId, hashToken(refreshToken), expiresAt, passwordHash, email]
     );
-    if (inserted.rowCount === 0) throw new AppError('Credentials have changed. Please sign in again.', 401);
-
-    return refreshToken;
-};
+    if (!user) throw new AppError('Credentials have changed. Please sign in again.', 401);
+    return { user: formatUserResponse(user), token: generateToken(user.id, user.email_session_version), refreshToken };
+}
 
 exports.register = catchAsync(async (req, res, next) => {
     const { email, password, username, display_name } = req.body;
@@ -82,13 +83,11 @@ exports.verifyRegistration = catchAsync(async (req, res) => {
     const session = await challenges.consume(email, 'registration', otp, registrationId, async (client, pending) => {
         const inserted = await client.query(
             `INSERT INTO users (email, password_hash, username, display_name, is_email_verified)
-             VALUES ($1, $2, $3, $4, TRUE) ON CONFLICT DO NOTHING RETURNING ${USER_FIELDS}`,
+             VALUES ($1, $2, $3, $4, TRUE) ON CONFLICT DO NOTHING RETURNING id`,
             [pending.email, pending.password_hash, pending.username, pending.display_name]
         );
         if (!inserted.rowCount) throw new AppError('An account with this email or username already exists.', 409);
-        const user = inserted.rows[0];
-        return { user: formatUserResponse(user), token: generateToken(user.id),
-            refreshToken: await generateRefreshToken(user.id, client) };
+        return issueSession(inserted.rows[0].id, client);
     });
     res.status(201).json(session);
 });
@@ -102,7 +101,8 @@ exports.login = catchAsync(async (req, res, next) => {
     }
 
     const result = await db.query(
-        `SELECT ${USER_FIELDS}, password_hash, email_session_version FROM users WHERE email = $1 OR username = $1`,
+        `SELECT id, email, password_hash, is_email_verified FROM users WHERE email = $1 OR username = $1
+         ORDER BY (email = $1) DESC NULLS LAST, id LIMIT 1`,
         [identifier]
     );
     const user = result.rows[0];
@@ -119,10 +119,8 @@ exports.login = catchAsync(async (req, res, next) => {
             return res.status(403).json({ code: 'email_not_verified', email: user.email, verificationId,
                 message: 'Check your email to finish signing in.' });
         }
-        const token = generateToken(user.id, user.email_session_version);
-        const refreshToken = await generateRefreshToken(user.id, db, user.password_hash);
-
-        res.json({ ...formatUserResponse(user), token, refreshToken });
+        const session = await withTransaction(client => issueSession(user.id, client, user.password_hash));
+        res.json({ ...session.user, token: session.token, refreshToken: session.refreshToken });
 
         // 🛡️ Audit Log: Successful Login
         await auditLog({
@@ -212,23 +210,23 @@ exports.changePassword = catchAsync(async (req, res, next) => {
 exports.updateProfile = catchAsync(async (req, res, next) => {
     const { username, display_name } = req.body;
 
-    // Check if username is taken if changing it
-    if (username) {
-        const check = await db.query(
-            'SELECT id FROM users WHERE username = $1 AND id != $2',
-            [username, req.user.id]
+    const names = [username, display_name].filter(value => value != null);
+    if (!names.length || names.some(value => typeof value !== 'string' || !value.trim() || [...value].length > 255)) {
+        return next(new AppError('Provide a non-empty profile name of up to 255 characters.', 400));
+    }
+    try {
+        const result = await db.query(
+            'UPDATE users SET username = COALESCE($1, username), display_name = COALESCE($2, display_name) WHERE id = $3 RETURNING username, display_name',
+            [username, display_name, req.user.id]
         );
-        if (check.rows.length > 0) {
+        if (!result.rowCount) return next(new AppError('User not found', 404));
+        res.json(result.rows[0]);
+    } catch (error) {
+        if (error.code === '23505' && username != null && error.constraint === 'users_username_key') {
             return next(new AppError('Username is already taken', 400));
         }
+        throw error;
     }
-
-    const result = await db.query(
-        'UPDATE users SET username = COALESCE($1, username), display_name = COALESCE($2, display_name) WHERE id = $3 RETURNING username, display_name',
-        [username, display_name, req.user.id]
-    );
-
-    res.json(result.rows[0]);
 });
 
 exports.requestOTP = catchAsync(async (req, res, next) => {
@@ -283,12 +281,13 @@ exports.refreshToken = catchAsync(async (req, res, next) => {
     }
 
     const result = await db.query(
-        `SELECT t.token_hash, u.email_session_version FROM refresh_tokens t JOIN users u ON u.id = t.user_id
-         WHERE t.user_id = $1 AND u.is_email_verified IS NOT FALSE AND t.revoked = FALSE AND t.expires_at > NOW()`,
-        [userId]
+        `SELECT u.email_session_version FROM refresh_tokens t JOIN users u ON u.id = t.user_id
+         WHERE t.user_id = $1 AND t.token_hash = $2 AND u.is_email_verified IS NOT FALSE
+           AND t.revoked = FALSE AND t.expires_at > NOW() LIMIT 1`,
+        [userId, hashToken(refreshToken)]
     );
 
-    const grant = findMatchingToken(refreshToken, result.rows);
+    const grant = result.rows[0];
     if (!grant) {
         return next(new AppError('Invalid or expired refresh token', 401));
     }
@@ -307,7 +306,13 @@ exports.googleLogin = catchAsync(async (req, res, next) => {
     let ticket;
     try {
         ticket = await googleClient.verifyIdToken({ idToken, audience: process.env.GOOGLE_CLIENT_ID });
-    } catch {
+    } catch (error) {
+        const status = error.response?.status;
+        const code = error.cause?.code || error.code;
+        if (status === 429 || status >= 500 ||
+            ['EAI_AGAIN','ENOTFOUND','ECONNRESET','ECONNREFUSED','ETIMEDOUT'].includes(code)) {
+            return next(new AppError('Google sign-in is temporarily unavailable.', 503));
+        }
         return next(new AppError('Invalid Google sign-in token', 401));
     }
 
@@ -319,16 +324,15 @@ exports.googleLogin = catchAsync(async (req, res, next) => {
         return next(new AppError('Use your ArborMed password to sign in with this email.', 401));
     }
 
-    const result = await db.query(`SELECT ${USER_FIELDS}, email_session_version FROM users WHERE email = $1`, [email]);
+    const result = await db.query(`SELECT id, is_email_verified FROM users WHERE email = $1`, [email]);
     let user = result.rows[0];
 
     if (user) {
         if (user.is_email_verified === false) {
             return next(new AppError('Sign in with your password to verify this account, or reset your password.', 403));
         }
-        const token = generateToken(user.id, user.email_session_version);
-        const refreshToken = await generateRefreshToken(user.id);
-        return res.json({ ...formatUserResponse(user), token, refreshToken, isNewUser: false });
+        const session = await withTransaction(client => issueSession(user.id, client, null, email));
+        return res.json({ ...session.user, token: session.token, refreshToken: session.refreshToken, isNewUser: false });
     } else {
         return res.json({ email, googleId, suggestedDisplayName: name, photoUrl: picture, isNewUser: true });
     }
@@ -338,16 +342,14 @@ exports.logout = catchAsync(async (req, res) => {
     const { refreshToken } = req.body;
     const userId = req.user.id;
 
-    if (refreshToken) {
-        const result = await db.query(
-            'SELECT id, token_hash FROM refresh_tokens WHERE user_id = $1 AND revoked = FALSE',
-            [userId]
-        );
-
-        const matched = findMatchingToken(refreshToken, result.rows);
-        if (matched) {
-            await db.query('UPDATE refresh_tokens SET revoked = TRUE WHERE id = $1', [matched.id]);
+    if (refreshToken != null && refreshToken !== '') {
+        if (typeof refreshToken !== 'string' || refreshToken.length > 512) {
+            throw new AppError('Invalid refresh token format', 400);
         }
+        await db.query(
+            'UPDATE refresh_tokens SET revoked = TRUE WHERE user_id = $1 AND token_hash = $2 AND revoked = FALSE',
+            [userId, hashToken(refreshToken)]
+        );
     }
 
     res.json({ message: 'Logged out successfully' });

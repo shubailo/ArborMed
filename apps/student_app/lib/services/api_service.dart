@@ -109,12 +109,8 @@ class ApiService {
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return response.bodyBytes;
-    } else {
-      throw ApiException(
-          statusCode: response.statusCode,
-          message: 'API Error',
-          body: response.body);
     }
+    _throwResponseError(response);
   }
 
   Future<void> submitReport(
@@ -270,8 +266,11 @@ class ApiService {
   ///
   /// Returns the URL of the uploaded image if successful, or null on failure.
   Future<String?> uploadImage(XFile file, {String? folder}) async {
+    final session = _session;
     try {
-      return await _uploadImage(file.name, await file.length(), file.openRead, folder);
+      final length = await file.length();
+      if (_session != session) return null;
+      return await _uploadImage(file.name, length, file.openRead, folder);
     } catch (e) {
       debugPrint("Could not read image: $e");
       return null;
@@ -316,6 +315,10 @@ class ApiService {
       return jsonDecode(response.body);
     }
 
+    _throwResponseError(response);
+  }
+
+  Never _throwResponseError(http.Response response) {
     String? serverMessage;
     Map? details;
     try {

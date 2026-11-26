@@ -96,6 +96,22 @@ run('duel ledger and daily reward transactions', () => {
     expect(await profile(1)).toBe(100);
     expect((await pg.query('SELECT FROM duel_wagers WHERE user_id=2')).rows).toHaveLength(0);
   });
+  it('daily quests exclude tomorrow’s responses, sessions and legacy claims at the UTC boundary', async () => {
+    await pg.query('BEGIN');
+    try {
+      await pg.query("SET LOCAL TIME ZONE 'Pacific/Kiritimati'");
+      const boundary = "((now() AT TIME ZONE 'UTC')::date + 1)::timestamp AT TIME ZONE 'UTC'";
+      await pg.query(`INSERT INTO quiz_sessions(id,user_id,started_at) VALUES (1,1,${boundary}), (2,1,now());
+        INSERT INTO responses(user_id,session_id,question_id,is_correct,created_at)
+          VALUES (1,1,7,true,now()), (1,2,8,true,${boundary});
+        INSERT INTO user_claimed_quests VALUES (1,'daily_1_1700000000000',${boundary})`);
+      const { quests } = await economy.dailyProgress(pg, 1);
+      expect(quests.map(q => [q.currentCount, q.status])).toEqual([[1,'active'],[1,'active'],[0,'active']]);
+    } finally {
+      await pg.query('ROLLBACK');
+    }
+  });
+
   it('verifies quest completion and credits a daily event only once', async () => {
     const claim = (id, quest) => withTransaction(client => economy.processQuestClaim(client, id, quest));
     await expect(claim(1,'daily_2')).rejects.toMatchObject({statusCode:409});
