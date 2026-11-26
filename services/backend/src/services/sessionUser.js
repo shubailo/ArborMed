@@ -18,7 +18,8 @@ async function findSessionUser(claims) {
                 WHERE id IN (SELECT id FROM users WHERE ${verified} AND ${activityDue}
                     FOR NO KEY UPDATE SKIP LOCKED)`, params);
         } catch (error) {
-            console.warn('[Activity] Could not update last seen', error.message);
+            const code = /^[A-Z0-9]{5}$/.test(error?.code) ? error.code : 'unclassified';
+            console.warn('[Activity] Could not update last seen', code);
         }
     }
     return user;

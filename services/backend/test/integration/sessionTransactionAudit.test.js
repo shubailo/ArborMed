@@ -65,6 +65,17 @@ run('session activity and transaction outcomes on PostgreSQL', () => {
             reader.release();
         }
     });
+    test('a versioned login only resolves the current verified owner and rejected sessions do not record activity', async () => {
+        const version = randomUUID();
+        db.query.mockImplementation((...args) => pool.query(...args));
+        await pool.query("INSERT INTO users (id,role,is_email_verified,email_session_version) VALUES (2,'student',true,$1), (3,'student',false,$1)", [version]);
+        expect(await findSessionUser({id: 2})).toBeNull();
+        expect(await findSessionUser({id: 2, emailVersion: randomUUID()})).toBeNull();
+        expect(await findSessionUser({id: 3, emailVersion: version})).toBeNull();
+        expect((await pool.query('SELECT FROM users WHERE id IN (2,3) AND last_activity_at IS NOT NULL')).rowCount).toBe(0);
+        expect(await findSessionUser({id: 2, emailVersion: version})).toMatchObject({id: 2});
+    });
+
     test('an aborted transaction cannot return a successful callback value', async () => {
         await expect(
             withTransaction(async (client) => {
@@ -79,6 +90,19 @@ run('session activity and transaction outcomes on PostgreSQL', () => {
         ).rejects.toMatchObject({ code: 'TRANSACTION_ROLLED_BACK' });
         expect((await pool.query('SELECT FROM marks WHERE n=11')).rowCount).toBe(0);
     });
+    test('a lost checkout before COMMIT reports the connection loss and rolls back the work', async () => {
+        let interruption;
+        const result = withTransaction(async client => {
+            await client.query('INSERT INTO marks VALUES (41)');
+            const interrupted = new Promise(resolve => client.once('error', resolve));
+            await admin.query('SELECT pg_terminate_backend($1)', [client.processID]);
+            interruption = await interrupted;
+        });
+        await expect(result).rejects.toMatchObject({code: '57P01'});
+        await expect(result).rejects.toBe(interruption);
+        expect((await pool.query('SELECT FROM marks WHERE n = 41')).rowCount).toBe(0);
+    });
+
     test('a lost commit acknowledgement is distinguished from a known rollback', async () => {
         const client = await pool.connect(),
             lost = Object.assign(new Error('fixture connection lost'), { code: 'ECONNRESET' });

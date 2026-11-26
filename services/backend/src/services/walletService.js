@@ -10,7 +10,7 @@ function isAllowedWager(amount) {
 }
 
 async function reserve(id, userId, amount, session) {
-  if (!isAllowedWager(amount)) return false;
+  if (!isAllowedWager(amount) || (session != null && session.id !== userId)) return false;
   try {
     return await withTransaction(async client => {
       const hold = await client.query(
@@ -35,13 +35,15 @@ async function reserve(id, userId, amount, session) {
 }
 
 async function start(matchId, holds, amount) {
-  if (!isAllowedWager(amount) || holds.length < 1 || holds.length > 2) return false;
+  if (!isAllowedWager(amount) || !Array.isArray(holds) || holds.length < 1 || holds.length > 2) return false;
   try {
     return await withTransaction(async client => {
+      // Both players must still have live holds after waiting for their row locks.
+      await client.query('SELECT id FROM duel_wagers WHERE id = ANY($1::uuid[]) ORDER BY id FOR UPDATE', [holds]);
       const result = await client.query(
-        `UPDATE duel_wagers SET match_id = $1, expires_at = NOW() + INTERVAL '3 minutes'
+        `UPDATE duel_wagers SET match_id = $1, expires_at = statement_timestamp() + INTERVAL '3 minutes'
          WHERE id = ANY($2::uuid[]) AND match_id IS NULL AND closed_at IS NULL
-           AND expires_at > NOW() AND amount = $3`, [matchId, holds, amount]
+           AND expires_at > statement_timestamp() AND amount = $3`, [matchId, holds, amount]
       );
       if (result.rowCount !== holds.length) throw unavailableReservation;
       return true;
@@ -62,7 +64,7 @@ async function close(where, payout, values) {
      ), credits AS (
        SELECT user_id, SUM(payout)::integer AS total FROM closed GROUP BY user_id
      )
-     UPDATE users SET coins = coins + credits.total FROM credits
+     UPDATE users SET coins = COALESCE(users.coins, 0) + credits.total FROM credits
      WHERE users.id = credits.user_id RETURNING users.id AS user_id, credits.total AS payout`, values
   );
   return result.rows;
@@ -74,10 +76,25 @@ async function cancel(id, unannouncedMatchId = null) {
 }
 
 function settlePayouts(matchId, outcome, winnerId) {
-  if (outcome === 'draw') return close('match_id = $1 AND expires_at > NOW()', 'amount', [matchId]);
+  // Recovery may skip a locked wager and refund its opponent first. Lock the
+  // whole match before deciding whether any player can still receive a win.
+  // clock_timestamp() checks the deadline after a lock wait, even in a long transaction.
+  // A deleted account's hold cascades away. Its opponent may still lose
+  // after the winner is deleted. A live outsider can never win a match.
+  const validWinner = outcome === 'win' ? `AND (
+      bool_or(user_id = $2)
+      OR (count(*) = 1 AND ($2 IS NULL OR NOT EXISTS (SELECT FROM users WHERE id = $2)))
+    )` : '';
+  const eligibleMatch = `match_id = $1 AND (
+    SELECT bool_and(closed_at IS NULL) AND min(expires_at) > clock_timestamp()
+    ${validWinner}
+    FROM (SELECT user_id, closed_at, expires_at FROM duel_wagers
+          WHERE match_id = $1 ORDER BY id FOR UPDATE) AS locked
+  )`;
+  if (outcome === 'draw') return close(eligibleMatch, 'amount', [matchId]);
   if (outcome !== 'win') throw new Error('Unknown duel outcome');
   // A null winner identifies the server's bot, which has no wallet.
-  return close('match_id = $1 AND expires_at > NOW()',
+  return close(eligibleMatch,
     'CASE WHEN user_id = $2 THEN amount * 2 ELSE 0 END', [matchId, winnerId]);
 }
 
@@ -86,6 +103,7 @@ async function settle(matchId, outcome, winnerId) {
 }
 
 async function receipt(matchId, userId, session) {
+  if (session != null && session.id !== userId) return undefined;
   const { rows } = await db.query(
     `SELECT amount AS wager, payout FROM duel_wagers WHERE match_id = $1 AND user_id = $2${session ?
       ' AND EXISTS (SELECT FROM users WHERE id = $2 AND is_email_verified IS NOT FALSE AND email_session_version::text IS NOT DISTINCT FROM $3)' : ''}`,

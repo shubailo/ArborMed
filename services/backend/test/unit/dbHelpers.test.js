@@ -21,6 +21,22 @@ describe('dbHelpers', () => {
 
         afterEach(() => jest.clearAllMocks());
 
+        test('a connection error during application work evicts the checkout without starting COMMIT', async () => {
+            const { EventEmitter } = require('node:events');
+            const client = Object.assign(new EventEmitter(), mockClient);
+            db.pool.connect.mockResolvedValueOnce(client);
+            const lost = new Error('connection lost while acquiring another resource');
+            let callbackResumed = false;
+            await expect(withTransaction(async () => {
+                client.emit('error', lost);
+                callbackResumed = true;
+            })).rejects.toBe(lost);
+            expect(callbackResumed).toBe(true);
+            expect(client.query.mock.calls).toEqual([['BEGIN']]);
+            expect(client.release).toHaveBeenCalledWith(lost);
+            expect(client.listenerCount('error')).toBe(0);
+        });
+
         test('commits on success', async () => {
             const callback = jest.fn().mockResolvedValue('result');
 

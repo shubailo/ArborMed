@@ -146,6 +146,23 @@ describe('Auth Middleware', () => {
         expect(next).not.toHaveBeenCalled();
     });
 
+    it('omits raw database diagnostics when best-effort activity recording fails', async () => {
+        const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+        try {
+            req.headers.authorization = 'Bearer session';
+            jwt.verify.mockReturnValue({ id: 17 });
+            db.query.mockResolvedValueOnce({ rows: [{ id: 17, activity_due: true }] })
+                .mockRejectedValueOnce(Object.assign(new Error('private trigger data'), {code: '22000'}));
+            await protect(req, res, next);
+            expect(warn).toHaveBeenCalled();
+            expect(JSON.stringify(warn.mock.calls)).not.toContain('private trigger data');
+            expect(JSON.stringify(warn.mock.calls)).toContain('22000');
+            expect(next).toHaveBeenCalledTimes(1);
+        } finally {
+            warn.mockRestore();
+        }
+    });
+
     it('keeps the verified account available during an activity-recording failure', async () => {
         req.headers.authorization = 'Bearer session';
         jwt.verify.mockReturnValue({ id: 17 });

@@ -17,7 +17,8 @@ run('duel ledger and daily reward transactions', () => {
   beforeAll(async () => {
     pg = new Client({connectionString: process.env.DUEL_TEST_DATABASE_URL});
     await pg.connect();
-    await pg.query(`CREATE TEMP TABLE users(id int PRIMARY KEY, coins int, last_activity_at timestamptz);
+    await pg.query(`CREATE TEMP TABLE users(id int PRIMARY KEY, coins int, last_activity_at timestamptz,
+        is_email_verified boolean DEFAULT true, email_session_version uuid);
       SET search_path = pg_temp;
       CREATE TEMP TABLE room_likes(liker_id int, receiver_id int);
       CREATE TEMP TABLE responses(id serial, user_id int, session_id int, question_id int, is_correct boolean, created_at timestamptz DEFAULT NOW());
@@ -33,6 +34,40 @@ run('duel ledger and daily reward transactions', () => {
   beforeEach(async () => {
     await pg.query('TRUNCATE duel_wagers, users, responses, quiz_sessions, user_claimed_quests');
     await pg.query('INSERT INTO users VALUES (1, 100), (2, 100)');
+  });
+
+  it('binds authenticated reservations and receipts to both account and session version', async () => {
+    const version = randomUUID(), match = randomUUID(), hold = randomUUID();
+    const owner = {id: 1, emailVersion: version}, other = {id: 2, emailVersion: version};
+    await pg.query('UPDATE users SET email_session_version = $1', [version]);
+    expect(await wallet.reserve(hold, 1, 10, other)).toBe(false);
+    expect(await profile(1)).toBe(100);
+    expect(await wallet.reserve(hold, 1, 10, owner)).toBe(true);
+    expect(await wallet.start(match, [hold], 10)).toBe(true);
+    expect(await wallet.receipt(match, 1, other)).toBeUndefined();
+    expect(await wallet.receipt(match, 1, owner)).toEqual({wager:10, payout:null});
+    await pg.query('UPDATE users SET email_session_version = $1 WHERE id = 1', [randomUUID()]);
+    expect(await wallet.receipt(match, 1, owner)).toBeUndefined();
+  });
+
+  it('records a refund in the balance as well as the receipt for a nullable historical account', async () => {
+    const hold = randomUUID(), match = randomUUID();
+    await wallet.reserve(hold, 1, 10);
+    await wallet.start(match, [hold], 10);
+    await pg.query('UPDATE users SET coins=NULL WHERE id=1');
+    expect(await wallet.settle(match, 'draw')).toBe(true);
+    expect(await wallet.receipt(match, 1)).toEqual({wager:10, payout:10});
+    expect(await wallet.settle(match, 'draw')).toBe(false);
+    expect(await profile(1)).toBe(10);
+  });
+
+  it('credits a nullable historical balance before confirming a daily claim', async () => {
+    await pg.query('UPDATE users SET coins=NULL WHERE id=1');
+    await pg.query('INSERT INTO responses(user_id, question_id, is_correct) SELECT 1,n,true FROM generate_series(1,5) n');
+    const claim = () => withTransaction(client => economy.processQuestClaim(client, 1, 'daily_2'));
+    await expect(claim()).resolves.toMatchObject({awardedTokens:20, newBalance:20});
+    await expect(claim()).resolves.toMatchObject({awardedTokens:0, newBalance:20});
+    expect(await profile(1)).toBe(20);
   });
 
   it('records the joining player and leaves the activity time alone during automated recovery', async () => {

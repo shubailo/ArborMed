@@ -3,10 +3,14 @@ const db = require('../config/db');
 async function withTransaction(fn) {
     const client = await db.pool.connect();
     let releaseError;
+    // pg-pool's idle error listener is detached for the duration of a checkout.
+    const onConnectionError = error => { releaseError ??= error; };
+    client.on?.('error', onConnectionError);
     let transactionFinished = false;
     try {
         await client.query('BEGIN');
         const result = await fn(client);
+        if (releaseError) throw releaseError;
         let commit;
         try {
             commit = await client.query('COMMIT');
@@ -36,6 +40,7 @@ async function withTransaction(fn) {
         }
         throw error;
     } finally {
+        client.removeListener?.('error', onConnectionError);
         client.release(releaseError);
     }
 }

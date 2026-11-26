@@ -234,6 +234,34 @@ integration('PostgreSQL quiz receipts and rewards', () => {
     expect(result.breakdown.map(row => row.slug).sort()).toEqual(['section','sibling']);
   });
 
+  test('the persisted balance matches a quiz credit on a nullable historical account', async () => {
+    await pool.query('UPDATE users SET coins=NULL, daily_coins_earned=NULL, daily_coins_softcap_progress=NULL WHERE id=1');
+    const payload = attempt();
+    const receipt = await submit(payload);
+    expect(receipt.coinsEarned).toBe(1);
+    expect(await submit(payload)).toEqual(receipt);
+    const { rows } = await pool.query('SELECT coins,daily_coins_earned,daily_coins_softcap_progress FROM users WHERE id=1');
+    expect(rows[0]).toEqual({coins:1, daily_coins_earned:1, daily_coins_softcap_progress:0});
+  });
+
+  test('day rollover credits the first reward with one users update', async () => {
+    const economy = require('../../src/services/economyService');
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      const day = '2026-02-02';
+      await client.query("UPDATE users SET last_coin_reset_date='2026-02-01', daily_coins_earned=57, daily_coins_softcap_progress=4 WHERE id=1");
+      const tracked = {query: jest.fn((...args) => client.query(...args))};
+      expect(await economy.processQuizCoinReward(tracked, 1, day)).toBe(1);
+      const { rows } = await client.query('SELECT last_coin_reset_date::text AS day, daily_coins_earned, daily_coins_softcap_progress, coins FROM users WHERE id=1');
+      expect(rows[0]).toEqual({day, daily_coins_earned:1, daily_coins_softcap_progress:0, coins:1});
+      expect(tracked.query.mock.calls.filter(([sql]) => /UPDATE users/i.test(sql))).toHaveLength(1);
+    } finally {
+      await client.query('ROLLBACK');
+      client.release();
+    }
+  });
+
   test('the soft cap uses the exact UTC day recorded by the locked credit operation', async () => {
     const economy = require('../../src/services/economyService');
     const { day } = (await pool.query("SELECT ((now() AT TIME ZONE 'UTC')::date + 1)::text AS day")).rows[0];

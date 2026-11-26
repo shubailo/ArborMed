@@ -10,42 +10,6 @@ const dailyQuests = [
 
 class EconomyService {
     /**
-     * Resets the user's daily coin tracking if the last reset date is not today.
-     * Must be called within a transaction context to prevent race conditions.
-     * @param {Object} client Database client
-     * @param {number} userId
-     * @param {string} rewardDay UTC date returned by the locked reward ledger write
-     * @returns {Object} User's current economy state
-     */
-    async ensureDailyReset(client, userId, rewardDay) {
-        const { rows } = await client.query(`
-            SELECT daily_coins_earned, daily_coins_softcap_progress, day::text AS reward_day,
-                   last_coin_reset_date = day AS reset_today
-            FROM users CROSS JOIN (
-                SELECT COALESCE($2::date, (statement_timestamp() AT TIME ZONE 'UTC')::date) AS day
-            ) AS clock
-            WHERE id = $1 FOR UPDATE OF users
-        `, [userId, rewardDay]);
-
-        let userState = rows[0];
-        if (!userState) throw new AppError('User not found', 404);
-
-        if (!userState.reset_today) {
-            const updateRes = await client.query(`
-                UPDATE users
-                SET daily_coins_earned = 0,
-                    daily_coins_softcap_progress = 0,
-                    last_coin_reset_date = $2::date
-                WHERE id = $1
-                RETURNING daily_coins_earned, daily_coins_softcap_progress, last_coin_reset_date
-            `, [userId, userState.reward_day]);
-            userState = updateRes.rows[0];
-        }
-
-        return userState;
-    }
-
-    /**
      * Processes a correct answer and calculates coins earned based on the Soft Cap logic.
      * Updates the user's balance and daily tracking columns.
      *
@@ -59,14 +23,24 @@ class EconomyService {
      * @returns {number} The amount of coins earned (0 or 1)
      */
     async processQuizCoinReward(client, userId, rewardDay) {
-        const state = await this.ensureDailyReset(client, userId, rewardDay);
+        const { rows } = await client.query(`
+            SELECT daily_coins_earned, daily_coins_softcap_progress, day::text AS reward_day,
+                   last_coin_reset_date = day AS reset_today
+            FROM users CROSS JOIN (
+                SELECT COALESCE($2::date, (statement_timestamp() AT TIME ZONE 'UTC')::date) AS day
+            ) AS clock
+            WHERE id = $1 FOR UPDATE OF users
+        `, [userId, rewardDay]);
+
+        const state = rows[0];
+        if (!state) throw new AppError('User not found', 404);
 
         let coinsToAward = 0;
-        let newEarned = state.daily_coins_earned;
-        let newProgress = state.daily_coins_softcap_progress;
+        let newEarned = state.reset_today ? (state.daily_coins_earned ?? 0) : 0;
+        let newProgress = state.reset_today ? (state.daily_coins_softcap_progress ?? 0) : 0;
 
         // Soft Cap Threshold
-        if (state.daily_coins_earned < 50) {
+        if (newEarned < 50) {
             // 1:1 Ratio Phase
             coinsToAward = 1;
             newEarned += 1;
@@ -86,9 +60,10 @@ class EconomyService {
             UPDATE users
             SET daily_coins_earned = $1,
                 daily_coins_softcap_progress = $2,
-                coins = coins + $3
+                last_coin_reset_date = $5::date,
+                coins = COALESCE(coins, 0) + $3
             WHERE id = $4
-        `, [newEarned, newProgress, coinsToAward, userId]);
+        `, [newEarned, newProgress, coinsToAward, userId, state.reward_day]);
 
         return coinsToAward;
     }
@@ -151,7 +126,7 @@ class EconomyService {
                 [userId, `${quest.id}_${progress.date}`]
             );
             if (claim.rowCount) {
-                const balance = await client.query('UPDATE users SET coins = coins + $1 WHERE id = $2 RETURNING coins',
+                const balance = await client.query('UPDATE users SET coins = COALESCE(coins, 0) + $1 WHERE id = $2 RETURNING coins',
                     [quest.rewardTokens, userId]);
                 return { success: true, date: progress.date, awardedTokens: quest.rewardTokens, newBalance: balance.rows[0].coins };
             }
