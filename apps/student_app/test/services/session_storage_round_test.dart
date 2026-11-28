@@ -28,6 +28,38 @@ void main() {
     expect((await SessionStorage.read())?['token'], 'current');
     expect(await keys.read(key: 'arbormed_session'), isNotNull);
   });
+  test('a background save observes sign-out from another tab', () async {
+    await SessionStorage.save('first', 'refresh', {'id': 1});
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getBool('arbormed_signed_out'), isNull);
+    await SharedPreferencesStorePlatform.instance
+        .setValue('Bool', 'flutter.arbormed_signed_out', true);
+    await SessionStorage.save('late', 'refresh', {'id': 1},
+        replaceSession: false);
+    expect(await SessionStorage.read(), isNull);
+    expect(prefs.getBool('arbormed_signed_out'), isTrue);
+  });
+
+  test('a background save can update only the current login', () async {
+    await SessionStorage.save('first', 'old-refresh', {'id': 1});
+    await SessionStorage.save('fresh', 'new-refresh', {'id': 1});
+    await SessionStorage.save('late', 'old-refresh', {'id': 1},
+        replaceSession: false, invalidateOnFailure: true);
+    expect((await SessionStorage.read())?['token'], 'fresh');
+    await SessionStorage.save('rotated-access', 'new-refresh', {'id': 1},
+        replaceSession: false);
+    expect((await SessionStorage.read())?['token'], 'rotated-access');
+  });
+
+  test('a background save preserves a secure-only sign-out marker', () async {
+    const keys = FlutterSecureStorage();
+    await keys.write(key: 'arbormed_session', value: 'arbormed_signed_out');
+    await SessionStorage.save('late', 'old-refresh', {'id': 1},
+        replaceSession: false);
+    expect(await keys.read(key: 'arbormed_session'), 'arbormed_signed_out');
+    expect(await SessionStorage.read(), isNull);
+  });
+
   test('invalid replacement data leaves the last valid session intact',
       () async {
     await SessionStorage.save('first', null, {'id': 1});

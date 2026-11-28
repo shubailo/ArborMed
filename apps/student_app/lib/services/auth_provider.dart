@@ -99,10 +99,10 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> _saveAuthData(String token, String? refreshToken, User user,
-      {bool replaceSession = false}) async {
+      {bool invalidateOnFailure = false}) async {
     try {
       await SessionStorage.save(token, refreshToken, user.toJson(),
-          replaceSession: replaceSession);
+          replaceSession: false, invalidateOnFailure: invalidateOnFailure);
     } catch (_) {
       // The current session remains usable when a device key store is temporarily locked.
       debugPrint('The current session could not be saved to secure storage.');
@@ -300,7 +300,7 @@ class AuthProvider with ChangeNotifier {
     // Queue this snapshot before notifying listeners, which may switch accounts.
     final save = token != null && token.isNotEmpty
         ? _saveAuthData(token, _apiService.refreshToken, user,
-            replaceSession: permissionsChanged)
+            invalidateOnFailure: permissionsChanged)
         : Future<void>.value();
     notifyListeners();
     return save;

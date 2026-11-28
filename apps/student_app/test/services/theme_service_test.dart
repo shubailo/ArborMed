@@ -71,7 +71,9 @@ void main() {
       expect(service.themeMode, ThemeMode.light);
     });
 
-    test('setThemeMode updates state, notifies listeners, and saves to SharedPreferences', () async {
+    test(
+        'setThemeMode updates state, notifies listeners, and saves to SharedPreferences',
+        () async {
       service = ThemeService();
       await Future.delayed(Duration.zero);
 
@@ -87,6 +89,41 @@ void main() {
 
       final prefs = await SharedPreferences.getInstance();
       expect(prefs.getInt('theme_mode_enum'), ThemeMode.dark.index);
+    });
+
+    test('a local choice made during startup wins over the saved theme',
+        () async {
+      SharedPreferences.setMockInitialValues({
+        'theme_mode_enum': ThemeMode.dark.index,
+      });
+      service = ThemeService();
+      final selections = <ThemeMode>[];
+      service.addListener(() => selections.add(service.themeMode));
+      await service.setThemeMode(ThemeMode.light);
+      expect(selections, [ThemeMode.light]);
+    });
+
+    test('rapid choices persist in order and system mode normalizes to light',
+        () async {
+      service = ThemeService();
+      await Future.wait([
+        service.setThemeMode(ThemeMode.dark),
+        service.setThemeMode(ThemeMode.system),
+      ]);
+      expect(service.themeMode, ThemeMode.light);
+      expect((await SharedPreferences.getInstance()).getInt('theme_mode_enum'),
+          ThemeMode.light.index);
+    });
+
+    test('disposing during startup skips a pending theme notification',
+        () async {
+      SharedPreferences.setMockInitialValues({
+        'theme_mode_enum': ThemeMode.dark.index,
+      });
+      service = ThemeService();
+      service.dispose();
+      await Future<void>.delayed(Duration.zero);
+      expect(service.themeMode, ThemeMode.light);
     });
 
     test('cycleTheme toggles between light and dark', () async {

@@ -117,6 +117,10 @@ exports.submitAnswer = catchAsync(async (req, res) => {
   const offline = sessionId == null || (typeof sessionId === 'string' && sessionId.startsWith('local_'));
   const session = offline ? null : positiveId(sessionId);
   if (!offline && session === null) throw new AppError('Invalid session ID', 400);
+  const offlineScope = offline ? (sessionId ?? '') : null;
+  if (offlineScope !== null && (offlineScope.length > 128 || offlineScope.includes('\0'))) {
+    throw new AppError('Invalid session ID', 400);
+  }
 
   // Older releases hashed the wire representation of sessionId. Recognize both
   // the numeric and canonical text form, as well as the submitted spelling.
@@ -133,12 +137,13 @@ exports.submitAnswer = catchAsync(async (req, res) => {
     // Serialize all progress and reward changes for this student, including first-time rows.
     await client.query('SELECT id FROM users WHERE id = $1 FOR UPDATE', [userId]);
     const prior = await client.query(
-      'SELECT question_id, session_id, submission_input, submission_result FROM responses WHERE user_id = $1 AND submission_id = ANY($2::uuid[]) ORDER BY id LIMIT 1',
+      'SELECT question_id, session_id, submission_scope, submission_input, submission_result FROM responses WHERE user_id = $1 AND submission_id = ANY($2::uuid[]) ORDER BY id LIMIT 1',
       [userId, receiptIds]
     );
     if (prior.rows.length) {
       const saved = prior.rows[0];
-      if ((saved.session_id ?? null) !== session || saved.question_id !== id || !sameSubmittedAnswer(saved.submission_input, userAnswer)) {
+      const scopeMatches = saved.submission_scope == null || saved.submission_scope === offlineScope;
+      if ((saved.session_id ?? null) !== session || !scopeMatches || saved.question_id !== id || !sameSubmittedAnswer(saved.submission_input, userAnswer)) {
         throw new AppError('Submission ID already used for a different answer', 409);
       }
       return saved.submission_result;
@@ -173,10 +178,10 @@ exports.submitAnswer = catchAsync(async (req, res) => {
     const elapsed = Math.max(100, Math.min(3600000, parseInt(responseTimeMs) || 1000));
     const answered = await client.query(
       `INSERT INTO responses (user_id, session_id, question_id, user_answer, is_correct, response_time_ms,
-          quality, selection_reason, submission_id, submission_input)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id`,
+          quality, selection_reason, submission_id, submission_input, submission_scope)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING id`,
       [userId, session, id, JSON.stringify(grade?.displayAnswer ?? userAnswer), isCorrect, elapsed,
-        measuredQuality, selectionReason, submissionId, JSON.stringify(userAnswer)]
+        measuredQuality, selectionReason, submissionId, JSON.stringify(userAnswer), offlineScope]
     );
     const adaptive = await pedagogicalEngine.resolveResponse(userId, question.topic_slug, id, isCorrect, measuredQuality, elapsed, client);
     let coinsEarned = 0;

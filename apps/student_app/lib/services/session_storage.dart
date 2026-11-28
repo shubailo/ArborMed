@@ -4,6 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'session_lock_stub.dart'
+    if (dart.library.js_interop) 'session_lock_web.dart';
+
 class SessionStorage {
   static const _storage = FlutterSecureStorage();
   static const _key = 'arbormed_session';
@@ -11,7 +14,7 @@ class SessionStorage {
   static Future<void> _pending = Future.value();
 
   static Future<T> _run<T>(Future<T> Function() action) {
-    final result = _pending.then((_) => action());
+    final result = _pending.then((_) => withSessionLock(action));
     _pending = result.then<void>((_) {}, onError: (Object _) {});
     return result;
   }
@@ -88,7 +91,8 @@ class SessionStorage {
 
   static Future<void> save(
       String token, String? refreshToken, Map<String, dynamic> user,
-      {bool replaceSession = false}) async {
+      {bool replaceSession = true, bool invalidateOnFailure = false}) async {
+    final userId = user['id'];
     final snapshot = jsonEncode(_validate({
       'token': token,
       'refreshToken': refreshToken,
@@ -102,13 +106,29 @@ class SessionStorage {
         if (replaceSession) return;
         throw StateError('Session preferences are unavailable');
       }
+      if (!replaceSession) {
+        if (prefs.getBool(_signedOut) == true) return;
+        final stored = await _storage.read(key: _key);
+        if (stored == null || stored == _signedOut) return;
+        final current = _validate(jsonDecode(stored));
+        if (current['user']['id'] != userId ||
+            current['refreshToken'] != refreshToken ||
+            (refreshToken == null && current['token'] != token)) {
+          return;
+        }
+      }
       try {
         await _storage.write(key: _key, value: snapshot);
-        if (prefs.containsKey(_signedOut) && !await prefs.remove(_signedOut)) {
+        if (replaceSession &&
+            prefs.containsKey(_signedOut) &&
+            !await prefs.remove(_signedOut)) {
           throw StateError('Could not persist the new sign-in');
         }
       } catch (_) {
-        if (!replaceSession) rethrow;
+        if (!replaceSession) {
+          if (invalidateOnFailure) await _invalidate(prefs);
+          rethrow;
+        }
         // Invalidation succeeded, so a memory-only session is safe.
         debugPrint('The new session could not be persisted.');
       }
@@ -124,7 +144,9 @@ class SessionStorage {
 
   static Future<SharedPreferences?> _preferencesOrNull() async {
     try {
-      return await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.reload();
+      return prefs;
     } catch (_) {
       return null;
     }

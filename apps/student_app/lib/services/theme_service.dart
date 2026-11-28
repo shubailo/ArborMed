@@ -8,6 +8,9 @@ class ThemeService extends ChangeNotifier {
   static const String _themeKey = 'theme_mode_enum';
 
   ThemeMode _themeMode = ThemeMode.light;
+  bool _hasLocalChoice = false;
+  bool _disposed = false;
+  Future<void> _pendingSave = Future.value();
   ThemeMode get themeMode => _themeMode;
   bool get isDark => _themeMode == ThemeMode.dark;
 
@@ -21,30 +24,47 @@ class ThemeService extends ChangeNotifier {
   }
 
   Future<void> _loadTheme() async {
-    final prefs = await SharedPreferences.getInstance();
-    final modeIndex = prefs.getInt(_themeKey);
-    if (modeIndex != null &&
-        modeIndex >= 0 &&
-        modeIndex < ThemeMode.values.length) {
-      _themeMode = ThemeMode.values[modeIndex];
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (_disposed || _hasLocalChoice) return;
+      if (prefs.getInt(_themeKey) == ThemeMode.dark.index) {
+        _themeMode = ThemeMode.dark;
+        notifyListeners();
+      }
+    } catch (_) {
+      debugPrint('Could not load the saved theme.');
     }
-
-    if (_themeMode == ThemeMode.system) {
-      _themeMode = ThemeMode.light;
-    }
-    notifyListeners();
   }
 
-  Future<void> setThemeMode(ThemeMode mode) async {
-    _themeMode = mode;
+  Future<void> setThemeMode(ThemeMode mode) {
+    if (_disposed) return Future.value();
+    _hasLocalChoice = true;
+    final selected = mode == ThemeMode.dark ? ThemeMode.dark : ThemeMode.light;
+    _themeMode = selected;
+    final saved = _pendingSave.then((_) async {
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        if (!await prefs.setInt(_themeKey, selected.index)) {
+          debugPrint('Could not save the selected theme.');
+        }
+      } catch (_) {
+        debugPrint('Could not save the selected theme.');
+      }
+    });
+    _pendingSave = saved;
     notifyListeners();
-
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(_themeKey, mode.index);
+    return saved;
   }
 
   Future<void> cycleTheme() async {
-    final newMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    final newMode =
+        _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
     await setThemeMode(newMode);
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
   }
 }

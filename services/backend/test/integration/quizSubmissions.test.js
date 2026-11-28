@@ -57,6 +57,7 @@ integration('PostgreSQL quiz receipts and rewards', () => {
       .replaceAll('public.responses', schema + '.responses');
     await pool.query(migration);
     await pool.query(migration);
+    await pool.query(readFileSync(resolve(__dirname, '../../migrations/072_quiz_submission_scope.sql'), 'utf8'));
   });
 
   afterAll(async () => {
@@ -134,6 +135,36 @@ integration('PostgreSQL quiz receipts and rewards', () => {
     expect(await counts()).toEqual({ coins: 2, answers: 3, activity: 3, progress: 3 });
     const reset = await pool.query("SELECT last_coin_reset_date=(NOW() AT TIME ZONE 'UTC')::date AS ok FROM users WHERE id=1");
     expect(reset.rows[0].ok).toBe(true);
+  });
+
+  test('two tabs can replay the same offline attempt but cannot reuse its ID across rounds', async () => {
+    const payload = {...attempt(), sessionId: 'local_first'};
+    const [first, retry, collision] = await Promise.allSettled([
+      submit(payload), submit(payload), submit({...payload, sessionId: 'local_second'}),
+    ]);
+    // Either round may win the database lock.
+    if (first.status === 'fulfilled') {
+      expect(retry).toEqual(first);
+      expect(collision).toMatchObject({status: 'rejected', reason: {statusCode: 409}});
+    } else {
+      expect(collision.status).toBe('fulfilled');
+      expect(first).toMatchObject({status: 'rejected', reason: {statusCode: 409}});
+      expect(retry).toMatchObject({status: 'rejected', reason: {statusCode: 409}});
+    }
+    await expect(submit({...payload, sessionId: null})).rejects.toMatchObject({statusCode: 409});
+    expect(await counts()).toEqual({coins: 1, answers: 1, activity: 1, progress: 1});
+  });
+
+  test('new receipts require an owner and historical receipts without scope still replay', async () => {
+    const payload = {...attempt(), sessionId: 'local_old'};
+    await expect(pool.query('INSERT INTO responses (submission_id) VALUES ($1)', [payload.submissionId]))
+      .rejects.toMatchObject({code: '23514', constraint: 'responses_submission_owner'});
+    await pool.query('INSERT INTO responses (question_id) VALUES ($1)', [payload.questionId]);
+    const sql = 'INSERT INTO responses (user_id, question_id, submission_id, submission_input, submission_result) VALUES (1, $1, $2, $3, $4)';
+    await pool.query(sql, [payload.questionId, payload.submissionId, JSON.stringify(payload.userAnswer), {isCorrect: true}]);
+    await expect(submit(payload)).resolves.toEqual({isCorrect: true});
+    await expect(submit(payload, 2)).resolves.toMatchObject({isCorrect: true});
+    expect(await counts()).toEqual({coins: 0, answers: 3, activity: 1, progress: 0});
   });
 
   test('late database failure rolls every write back and the same attempt can succeed on retry', async () => {
