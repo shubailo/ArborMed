@@ -38,6 +38,8 @@ Migration 066 repairs unambiguous historical answer keys and marks unresolved qu
 
 The readiness check returns HTTP 503 while an expected migration is missing or its recorded checksum differs. Migration 067 gives the backend roles `med_buddy_app` and `service_role` read access to applied filenames. Migration 069 also grants access to the checksum. Deployments with a custom runtime role need SELECT on both filename and checksum and a SELECT policy on `arbormed_schema_migrations`.
 
+Run `npm run migrate -- --check` from the backend directory with the target release and its runtime `DATABASE_URL`. The command reads the migration ledger and reports missing files and mismatched checksums. The backend logs the same diagnostics privately when readiness fails.
+
 ## Deployment
 
 - Backend database connections verify the TLS certificate. For a private CA, supply its PEM in `DB_CA_CERT`. In development a local PostgreSQL server may use a loopback connection.

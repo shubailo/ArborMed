@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -117,6 +118,24 @@ void main() {
   });
 
   group('SocialProvider - Initial State & resetState', () {
+    test('an older network response cannot overwrite a newer refresh or reset', () async {
+      final first = Completer<dynamic>();
+      final second = Completer<dynamic>();
+      var calls = 0;
+      when(mockApiService.get(ApiEndpoints.socialNetwork))
+          .thenAnswer((_) => ++calls == 1 ? first.future : second.future);
+      final old = socialProvider.fetchNetwork();
+      final fresh = socialProvider.fetchNetwork();
+      second.complete(sampleNetworkResponse);
+      await fresh;
+      socialProvider.resetState();
+      first.complete(sampleNetworkResponse);
+      await old;
+      expect(socialProvider.colleagues, isEmpty);
+      expect(socialProvider.pendingRequests, isEmpty);
+      expect(socialProvider.isLoading, isFalse);
+    });
+
     test('Initial state is correct', () {
       expect(socialProvider.colleagues, isEmpty);
       expect(socialProvider.pendingRequests, isEmpty);

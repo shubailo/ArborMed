@@ -104,7 +104,7 @@ async function join(socket, wager, token) {
   } catch {
     return socket.emit('error', { message: 'Session expired. Refresh your account to join a duel.' });
   }
-  const member = { socket, wager, hold: randomUUID(), state: 'joining' };
+  const member = { socket, session, wager, hold: randomUUID(), state: 'joining', sessionCheck: null };
   members.set(socket.userId, member);
   try {
     if (!await wallet.reserve(member.hold, socket.userId, wager, session)) {
@@ -190,6 +190,8 @@ async function formMatch(p1, p2) {
   try {
     const questions = await fetchQuestions();
     if (!questions.length) throw new Error('No playable duel questions');
+    const activePlayers = await Promise.all(players.map(p => findSessionUser(p.session)));
+    if (activePlayers.some(user => !user)) return Promise.all(players.map(p => refund(p)));
     if (players.some(p => p.left)) return Promise.all(players.map(p => refund(p)));
     if (!await wallet.start(id, players.map(p => p.hold), p1.wager)) throw new Error('Reservation expired');
 
@@ -235,14 +237,28 @@ function broadcast(match, event, payload) {
   if (match.p2) io.to(match.p2.socket.id).emit(event, update);
 }
 
-function submit(socket, data) {
+async function submit(socket, data) {
   const member = members.get(socket.userId);
   const match = matches.get(data?.matchId);
-  if (!match || member?.socket !== socket || member.matchId !== match.id || Date.now() >= match.endsAt) return;
+  if (!match || match.state !== 'active' || member?.socket !== socket || member.matchId !== match.id || Date.now() >= match.endsAt) return;
   if (typeof data.questionId !== 'string' && typeof data.questionId !== 'number') return;
   const question = match.questions.find(q => String(q.public.id) === String(data.questionId));
   if (!question || !question.public.options.includes(data.answer)) return;
-  record(match, member === match.p1 ? 'p1' : 'p2', question, data.answer === question.correct);
+  const role = member === match.p1 ? 'p1' : 'p2';
+  if (match.answers[role].has(question.public.id)) return;
+  const check = member.sessionCheck ??= findSessionUser(member.session);
+  try {
+    if (!await check) {
+      socket.disconnect(true);
+      return;
+    }
+    record(match, role, question, data.answer === question.correct);
+  } catch (error) {
+    logger.error('Duel answer session lookup failed', error);
+    socket.emit('error', {message: 'Duel service temporarily unavailable'});
+  } finally {
+    if (member.sessionCheck === check) member.sessionCheck = null;
+  }
 }
 
 function record(match, role, question, correct) {

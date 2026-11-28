@@ -86,6 +86,23 @@ class SubmissionQueue {
   bool _active(int userId, int generation) =>
       !_closed && api.userId == userId && _generation == generation;
 
+  Future<Map<String, dynamic>?> readReceipt(int userId, String id) async {
+    final generation = _generation;
+    if (!_active(userId, generation)) return null;
+    final row = await db.customSelect(
+      '''SELECT payload, NULL AS failure FROM submission_receipts
+         WHERE submission_id = ?1 AND user_id = ?2
+         UNION ALL
+         SELECT NULL, failure FROM pending_submissions
+         WHERE submission_id = ?1 AND user_id = ?2 AND failure IS NOT NULL''',
+      variables: [Variable.withString(id), Variable.withInt(userId)],
+    ).getSingleOrNull();
+    if (row == null || !_active(userId, generation)) return null;
+    final failure = row.readNullable<String>('failure');
+    if (failure != null) return {'submissionId': id, 'error': failure};
+    return jsonDecode(row.read<String>('payload')) as Map<String, dynamic>;
+  }
+
   Future<void> _drain() async {
     final userId = api.userId;
     if (_closed || userId == null) return;
@@ -118,6 +135,7 @@ class SubmissionQueue {
         if (result is! Map<String, dynamic> ||
             result['submissionId'] != id ||
             result['isCorrect'] is! bool ||
+            (result['topicSlug'] != null && result['topicSlug'] is! String) ||
             const ['currentBloom', 'streak', 'mastery', 'level_correct_count'].any(
                 (key) => result[key] != null && result[key] is! int)) {
           throw const FormatException('Invalid quiz receipt');
@@ -134,10 +152,19 @@ class SubmissionQueue {
       final acknowledged = await db.transaction(() async {
         if (!_active(userId, generation)) return false;
         final removed = await db.customUpdate(
-          'DELETE FROM pending_submissions WHERE submission_id = ?',
-          variables: [Variable.withString(id)],
+          'DELETE FROM pending_submissions WHERE submission_id = ? AND user_id = ? AND failure IS NULL',
+          variables: [Variable.withString(id), Variable.withInt(userId)],
         );
         if (removed == 0) return false;
+        await db.customStatement(
+          'INSERT INTO submission_receipts (submission_id, user_id, payload) VALUES (?, ?, ?)',
+          [id, userId, jsonEncode(receipt)],
+        );
+        await db.customStatement('''
+          DELETE FROM submission_receipts WHERE sequence <= (
+            SELECT sequence FROM submission_receipts ORDER BY sequence DESC LIMIT 1 OFFSET 256
+          )
+        ''');
         // Older receipts lack the server topic. A persisted review route is
         // a UI label, so it cannot identify a database topic.
         final topic =

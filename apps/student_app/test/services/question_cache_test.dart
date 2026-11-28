@@ -66,6 +66,19 @@ void main() {
     ]);
   });
 
+  test('concurrent consumers share the same selection without skipping a question', () async {
+    final pending = Completer<dynamic>();
+    when(api.get(any)).thenAnswer((_) => pending.future);
+    final session = cache.open('renal');
+    final first = session.next(prefetchNext: false);
+    final second = session.next(prefetchNext: false);
+    pending.complete({'id': 1});
+    expect(await Future.wait([first, second]), [{'id': 1}, {'id': 1}]);
+    verify(api.get(any)).called(1);
+    when(api.get(any)).thenAnswer((_) async => {'id': 2});
+    expect((await session.next(prefetchNext: false))?['id'], 2);
+  });
+
   test('closing a topic or switching accounts discards in-flight results', () async {
     final old = Completer<dynamic>();
     when(api.get(any)).thenAnswer((_) => old.future);

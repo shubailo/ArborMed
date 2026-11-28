@@ -99,6 +99,21 @@ it('refunds both players if no playable questions are available', async () => {
   expect(wallet.cancel).toHaveBeenCalledTimes(2); expect(wallet.start).not.toHaveBeenCalled();
 });
 
+it('rejects answers from a revoked session on an already-open match socket', async () => {
+  const a = socket('a', 1), b = socket('b', 2);
+  a.disconnect = jest.fn();
+  require('../../../src/utils/accessToken').verifyAccessToken.mockReturnValueOnce({id:1, sessionId:4});
+  await a.events.join_queue({wager:5});
+  await b.events.join_queue({wager:5});
+  const match = io.emit.mock.calls.find(([event]) => event === 'match_found')[1];
+  db.query.mockResolvedValueOnce({rows:[]});
+  const answer = {matchId:match.matchId, questionId:match.questions[0].id, answer:'A'};
+  await Promise.all([a.events.submit_answer(answer), a.events.submit_answer(answer)]);
+  expect(db.query).toHaveBeenLastCalledWith(expect.stringContaining('FROM refresh_tokens'), [1, null, 4]);
+  expect(a.disconnect).toHaveBeenCalledWith(true);
+  expect(io.emit).not.toHaveBeenCalledWith('score_update', expect.anything());
+});
+
 it('requires an unexpired same-account credential before funding another wager', async () => {
   const player = socket('a', 1);
   require('../../../src/utils/accessToken').verifyAccessToken.mockImplementationOnce(() => { throw Error('Expired'); });
@@ -259,8 +274,8 @@ it('serves the same recoverable answer key and bilingual content prompt as pract
   const match=io.emit.mock.calls.find(([event])=>event==='match_found')?.[1];
   expect(match?.questions).toEqual([{id:1,q:'Which cause?',options:['A, B','C'],
     hu:{q:'Mi az oka?',options:['A és B','C']}}]);
-  a.events.submit_answer({matchId:match.matchId,questionId:1,answer:'A, B'});
-  b.events.submit_answer({matchId:match.matchId,questionId:1,answer:'C'});
+  await a.events.submit_answer({matchId:match.matchId,questionId:1,answer:'A, B'});
+  await b.events.submit_answer({matchId:match.matchId,questionId:1,answer:'C'});
   expect(io.emit).toHaveBeenLastCalledWith('score_update',expect.objectContaining({p1:0,p2:1}));
 });
 
@@ -281,6 +296,6 @@ it('ignores a structured question id before recording an answer', async () => {
   const match=io.emit.mock.calls.find(([event])=>event==='match_found')[1];
   a.events.submit_answer({matchId:match.matchId,questionId:[1],answer:'B'});
   expect(io.emit.mock.calls.some(([event])=>event==='score_update')).toBe(false);
-  a.events.submit_answer({matchId:match.matchId,questionId:'1',answer:'A'});
+  await a.events.submit_answer({matchId:match.matchId,questionId:'1',answer:'A'});
   expect(io.emit).toHaveBeenLastCalledWith('score_update',expect.objectContaining({p1:0,p2:1}));
 });

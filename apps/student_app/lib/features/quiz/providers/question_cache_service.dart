@@ -52,6 +52,7 @@ class QuestionSession {
   final Set<int> _shown;
   Future<Map<String, dynamic>?>? _pending;
   Future<Map<String, dynamic>?>? _unclaimed;
+  Future<Map<String, dynamic>?>? _foreground;
   bool _closed = false;
 
   QuestionSession._(this._api, this._topic, this._account, int? shown)
@@ -93,7 +94,12 @@ class QuestionSession {
     });
   }
 
-  Future<Map<String, dynamic>?> next({bool prefetchNext = true}) async {
+  Future<Map<String, dynamic>?> next({bool prefetchNext = true}) =>
+      _foreground ??= _takeNext(prefetchNext).whenComplete(() {
+        _foreground = null;
+      });
+
+  Future<Map<String, dynamic>?> _takeNext(bool prefetchNext) async {
     while (true) {
       _checkActive();
       final request = _pending ??= _request();

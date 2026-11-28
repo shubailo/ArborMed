@@ -22,6 +22,21 @@ function releaseMigrations(dir = directory) {
     [file, checksumOf(readFileSync(path.join(dir, file), 'utf8'))])];
 }
 
+async function readMigrationStatus(client, manifest = releaseMigrations()) {
+  const { rows: [state] } = await client.query(
+    `SELECT now(), count(ledger.filename) FILTER (WHERE ledger.checksum = expected.checksum)
+         = cardinality($1::text[]) AS ready,
+       COALESCE(array_agg(expected.filename ORDER BY expected.filename)
+         FILTER (WHERE ledger.filename IS NULL), '{}') AS missing,
+       COALESCE(array_agg(expected.filename ORDER BY expected.filename)
+         FILTER (WHERE ledger.filename IS NOT NULL AND ledger.checksum <> expected.checksum), '{}') AS changed
+     FROM unnest($1::text[], $2::text[]) AS expected(filename, checksum)
+     LEFT JOIN arbormed_schema_migrations AS ledger USING (filename)`,
+    [manifest.map(([file]) => file), manifest.map(([, checksum]) => checksum)]
+  );
+  return state;
+}
+
 async function transaction(client, work) {
   await client.query('BEGIN');
   try {
@@ -111,17 +126,31 @@ if (require.main === module) {
   require('dotenv').config({ path: path.join(__dirname, '../../.env') });
   const { Pool } = require('pg');
   const { databaseOptions } = require('../config/databaseOptions');
-  const pool = new Pool({ ...databaseOptions({ ...process.env, DATABASE_URL: process.env.MIGRATION_DATABASE_URL || process.env.DATABASE_URL }), connectionTimeoutMillis: 10000 });
+  const args = process.argv.slice(2);
+  const check = args.length === 1 && args[0] === '--check';
+  const pool = new Pool({ ...databaseOptions({
+    ...process.env, DATABASE_URL: check ? process.env.DATABASE_URL : process.env.MIGRATION_DATABASE_URL || process.env.DATABASE_URL,
+  }), connectionTimeoutMillis: 10000, query_timeout: check ? 10000 : 0 });
   (async () => {
-    const args = process.argv.slice(2);
-    if (args.length && (args.length !== 1 || args[0] !== '--baseline')) throw new Error('Usage: npm run migrate [-- --baseline]');
+    if (args.length && !check && (args.length !== 1 || args[0] !== '--baseline')) {
+      throw new Error('Usage: npm run migrate [-- --baseline|--check]');
+    }
     const client = await pool.connect();
-    try { await migrate(client, { baselineOnly: args.length === 1 }); }
+    try {
+      if (check) {
+        const { ready, missing, changed } = await readMigrationStatus(client);
+        console.log(JSON.stringify({ ready, missing, changed }));
+        if (!ready) process.exitCode = 1;
+      } else {
+        await migrate(client, { baselineOnly: args.length === 1 });
+      }
+    }
     finally { client.release(); }
   })().catch(error => {
-    console.error(error.message, error.cause?.message || '');
+    console.error(check ? 'Migration check failed: ' + (error.code || error.name) : error.message,
+      check ? '' : error.cause?.message || '');
     process.exitCode = 1;
   }).finally(() => pool.end());
 }
 
-module.exports = { migrate, forwardMigrations, releaseMigrations, baseline };
+module.exports = { migrate, forwardMigrations, releaseMigrations, readMigrationStatus, baseline };

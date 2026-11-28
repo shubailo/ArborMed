@@ -47,6 +47,8 @@ class ShopProvider with ChangeNotifier {
   List<ShopUserItem> _inventory = [];
   List<ShopUserItem> _visitedInventory = [];
   bool _isLoading = false;
+  bool _isVisitLoading = false;
+  int _visitRequest = 0;
   String? _errorMessage;
 
   // Track current catalog filters for reloads
@@ -62,7 +64,7 @@ class ShopProvider with ChangeNotifier {
 
   List<ShopItem> get catalog => _catalog;
   List<ShopUserItem> get inventory => _inventory;
-  bool get isLoading => _isLoading || _pendingPurchases.isNotEmpty;
+  bool get isLoading => _isLoading || _isVisitLoading || _pendingPurchases.isNotEmpty;
   String? get errorMessage => _errorMessage;
 
   // Avatar State
@@ -620,29 +622,34 @@ class ShopProvider with ChangeNotifier {
   }
 
   Future<void> fetchRemoteInventory(int userId) async {
-    _isLoading = true;
     final account = _account;
-    _isVisiting = true; // ✅ START VISITING
+    final request = ++_visitRequest;
+    bool current() => _account == account && request == _visitRequest;
+    _isVisitLoading = true;
+    _isVisiting = true;
+    _visitedInventory = [];
     notifyListeners();
     try {
       final List<dynamic> data = await _apiService.get(
         '/shop/inventory?userId=$userId',
       );
-      if (_account != account || !_isVisiting) return;
+      if (!current()) return;
       _visitedInventory = data
           .map((json) => ShopUserItem.fromJson(json))
           .toList();
     } catch (e) {
-      debugPrint('Fetch remote inventory error: $e');
+      if (current()) debugPrint('Fetch remote inventory error: ${e.runtimeType}');
     } finally {
-      if (_account == account) {
-        _isLoading = false;
+      if (current()) {
+        _isVisitLoading = false;
         notifyListeners();
       }
     }
   }
 
   void clearVisitedInventory() {
+    _visitRequest++;
+    _isVisitLoading = false;
     _visitedInventory = [];
     _isVisiting = false; // ✅ STOP VISITING (Return to my room)
     notifyListeners();
@@ -664,6 +671,7 @@ class ShopProvider with ChangeNotifier {
     _visitedAvatar = null;
     _errorMessage = null;
     _isLoading = false;
+    _isVisitLoading = false;
     _pendingPurchases.clear();
     _pendingPlacements.clear();
     notifyListeners();

@@ -54,7 +54,7 @@ describe('readiness and ECG practice over HTTP', () => {
 
     (process.env.TEST_DATABASE_URL ? test : test.skip)('readiness follows the actual migration ledger', async () => {
         const { Client } = require('pg');
-        const { baseline, forwardMigrations } = require('../../src/scripts/migrate');
+        const { baseline, forwardMigrations, readMigrationStatus } = require('../../src/scripts/migrate');
         const pg = new Client({ connectionString: process.env.TEST_DATABASE_URL });
         await pg.connect();
         try {
@@ -69,9 +69,17 @@ describe('readiness and ECG practice over HTTP', () => {
                 .update(fs.readFileSync(path.join(__dirname, '../../migrations', name), 'utf8').replace(/\r\n/g, '\n')).digest('hex'));
             await pg.query('INSERT INTO arbormed_schema_migrations SELECT * FROM unnest($1::text[], $2::text[])',
                 [required.slice(0,-1), checksums.slice(0,-1)]);
+            expect(await readMigrationStatus(pg)).toMatchObject({
+                ready: false, missing: [required.at(-1)], changed: [],
+            });
             expect((await fetch(base + '/health')).status).toBe(503);
             await pg.query('INSERT INTO arbormed_schema_migrations VALUES ($1,$2)', [required.at(-1), 'different-file']);
-            expect((await fetch(base + '/health')).status).toBe(503);
+            expect(await readMigrationStatus(pg)).toMatchObject({
+                ready: false, missing: [], changed: [required.at(-1)],
+            });
+            const degraded = await fetch(base + '/health');
+            expect(degraded.status).toBe(503);
+            expect(await degraded.text()).not.toContain(required.at(-1));
             await pg.query('UPDATE arbormed_schema_migrations SET checksum=$2 WHERE filename=$1', [required.at(-1),checksums.at(-1)]);
             await pg.query("INSERT INTO arbormed_schema_migrations VALUES ('999_future.sql','future-release')");
             expect((await fetch(base + '/health')).status).toBe(200);

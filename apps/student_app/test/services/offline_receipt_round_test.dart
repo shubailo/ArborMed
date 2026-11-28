@@ -122,6 +122,33 @@ void main() {
         [4, 3, 74, 2, 2, 1]);
   });
 
+  test('two queue clients apply one receipt and the other can read it without sending again', () async {
+    final second = SubmissionQueue(db, api);
+    addTearDown(second.dispose);
+    final id = await queue.enqueue(1, 'ekg', {'questionId': 10});
+    final bothSending = Completer<void>();
+    final reply = Completer<Map<String, dynamic>>();
+    addTearDown(() {
+      if (!reply.isCompleted) reply.complete({});
+    });
+    var requests = 0;
+    when(api.post(any, any)).thenAnswer((_) {
+      if (++requests == 2) bothSending.complete();
+      return reply.future;
+    });
+    final drains = Future.wait([queue.flush(), second.flush()]);
+    await bothSending.future.timeout(const Duration(seconds: 5));
+    final receipt = {'submissionId': id, 'isCorrect': true, 'topicSlug': 'ekg'};
+    reply.complete(receipt);
+    await drains;
+    expect((await db.select(db.topicProgress).getSingle()).totalAnswered, 1);
+    expect(await queue.readReceipt(1, id), receipt);
+    expect(await second.readReceipt(1, id), receipt);
+    expect(await queue.readReceipt(2, id), isNull);
+    await second.flush();
+    expect(requests, 2);
+  });
+
   test('malformed receipt metrics retain the original answer until a valid retry', () async {
     final id = await queue.enqueue(1, 'ekg', {'questionId': 10});
     when(api.post(any, any)).thenAnswer((_) async =>

@@ -38,7 +38,7 @@ void main() {
     expect(
         (await db.customSelect('PRAGMA user_version').getSingle())
             .data['user_version'],
-        6);
+        7);
   });
   test('an older app refuses to stamp a newer database with its own version',
       () async {

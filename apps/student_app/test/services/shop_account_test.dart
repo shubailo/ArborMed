@@ -56,6 +56,30 @@ void main() {
   });
   tearDown(() async { shop.dispose(); await db.close(); });
 
+  test('a previous room cannot replace a newer visit or end its loading state', () async {
+    final first = Completer<dynamic>();
+    final second = Completer<dynamic>();
+    api.onGet = (endpoint) => endpoint.endsWith('=2') ? first.future : second.future;
+    final old = shop.fetchRemoteInventory(2);
+    final current = shop.fetchRemoteInventory(3);
+    first.complete([{...remote(11, 101), 'slot_type': 'room', 'is_placed': true}]);
+    await old;
+    expect(shop.isLoading, true);
+    expect(shop.currentRoom.id, 100);
+    second.complete([{...remote(12, 102), 'slot_type': 'room', 'is_placed': true}]);
+    await current;
+    expect(shop.currentRoom.id, 102);
+    expect(shop.isLoading, false);
+    final pending = Completer<dynamic>();
+    api.onGet = (_) => pending.future;
+    final leaving = shop.fetchRemoteInventory(2);
+    shop.clearVisitedInventory();
+    pending.complete([{...remote(11, 101), 'slot_type': 'room', 'is_placed': true}]);
+    await leaving;
+    expect(shop.isLoading, false);
+    expect(shop.currentRoom.id, 100);
+  });
+
   test('matches an unstamped inventory item only for the active account', () async {
     final mine = await local(1,42);
     final other = await local(2,42);

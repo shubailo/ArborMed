@@ -300,6 +300,14 @@ class QuizController extends ChangeNotifier {
       notifyListeners();
     }
     await _queue.flush();
+    if (!_disposed && _visibleSubmission == id) {
+      try {
+        final stored = await _queue.readReceipt(_userId, id);
+        if (stored != null && _visibleSubmission == id) _applyReceipt(stored);
+      } catch (error) {
+        debugPrint('Quiz receipt lookup failed: ${error.runtimeType}');
+      }
+    }
     if (!_disposed && _visibleSubmission == id && _state.isSubmitting) {
       _state = _state.copyWith(isSubmitting: false);
       notifyListeners();

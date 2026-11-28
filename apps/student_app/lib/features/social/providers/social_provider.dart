@@ -11,6 +11,9 @@ class SocialProvider with ChangeNotifier {
   List<User> _pendingRequests = [];
   User? _visitedUser; // If null, user is in their own room
   bool _isLoading = false;
+  bool _disposed = false;
+  int _networkRequest = 0;
+  int? _account;
 
   SocialProvider({ApiService? apiService})
       : _apiService = apiService ?? ApiService();
@@ -20,6 +23,12 @@ class SocialProvider with ChangeNotifier {
   User? get visitedUser => _visitedUser;
   bool get isVisiting => _visitedUser != null;
   bool get isLoading => _isLoading;
+
+  void setAccount(int? account) {
+    if (_account == account) return;
+    _account = account;
+    resetState();
+  }
 
   User? getVisitingDoctor() => _visitedUser;
 
@@ -37,26 +46,36 @@ class SocialProvider with ChangeNotifier {
   }
 
   Future<void> fetchNetwork() async {
+    if (_disposed) return;
+    final request = ++_networkRequest;
     _isLoading = true;
     notifyListeners();
     try {
       final data = await _apiService.get(ApiEndpoints.socialNetwork);
-      _colleagues =
+      if (request != _networkRequest) return;
+      final colleagues =
           (data['colleagues'] as List).map((u) => User.fromJson(u)).toList();
-      _pendingRequests =
+      final pendingRequests =
           (data['pending'] as List).map((u) => User.fromJson(u)).toList();
+      _colleagues = colleagues;
+      _pendingRequests = pendingRequests;
     } catch (e) {
-      debugPrint("Error fetching network: $e");
+      if (request == _networkRequest) {
+        debugPrint('Error fetching network: ${e.runtimeType}');
+      }
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      if (request == _networkRequest) {
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
   Future<List<User>> searchUsers(String query) async {
     try {
-      final data =
-          await _apiService.get('${ApiEndpoints.socialSearch}?query=$query');
+      final endpoint = Uri.parse(ApiEndpoints.socialSearch)
+          .replace(queryParameters: {'query': query});
+      final data = await _apiService.get(endpoint.toString());
       return (data as List).map((u) => User.fromJson(u)).toList();
     } catch (e) {
       debugPrint("Error searching users: $e");
@@ -125,10 +144,18 @@ class SocialProvider with ChangeNotifier {
 
   /// 🧹 Resets the in-memory state of the social feature.
   void resetState() {
+    _networkRequest++;
     _colleagues = [];
     _pendingRequests = [];
     _visitedUser = null;
     _isLoading = false;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    _networkRequest++;
+    super.dispose();
   }
 }

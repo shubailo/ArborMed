@@ -79,21 +79,29 @@ app.get('/ping', (req, res) => {
     res.json({ status: 'ok', timestamp: Date.now() });
 });
 
-const { releaseMigrations } = require('./src/scripts/migrate');
+const { releaseMigrations, readMigrationStatus } = require('./src/scripts/migrate');
 const manifest = releaseMigrations();
-const requiredNames = manifest.map(([name]) => name);
-const requiredChecksums = manifest.map(([, checksum]) => checksum);
+let lastReadinessFailure;
+
+function logReadinessFailure(details) {
+    const message = JSON.stringify(details);
+    if (message === lastReadinessFailure) return;
+    lastReadinessFailure = message;
+    console.warn('[Health Check Warning]', message);
+}
 
 app.get('/health', async (req, res) => {
     try {
-        const { rows: [schema] } = await db.query(
-            `SELECT now(), count(*) = cardinality($1::text[]) AS ready
-             FROM unnest($1::text[], $2::text[]) AS expected(filename, checksum)
-             JOIN arbormed_schema_migrations USING (filename, checksum)`, [requiredNames, requiredChecksums]);
-        if (!schema.ready) return res.status(503).json({ status: 'degraded', message: 'Database migration state does not match the release' });
+        const schema = await readMigrationStatus(db, manifest);
+        if (!schema.ready) {
+            logReadinessFailure({ missing: schema.missing, changed: schema.changed });
+            return res.status(503).json({ status: 'degraded', message: 'Database migration state does not match the release' });
+        }
+        lastReadinessFailure = undefined;
         res.json({ status: 'ok', db_time: schema.now, message: 'ArborMed API is running' });
     } catch (err) {
-        console.error('[Health Check Warning]:', err.message);
+        const code = /^[A-Z0-9_]{2,32}$/.test(err?.code) ? err.code : 'unclassified';
+        logReadinessFailure({ code });
         res.status(503).json({ status: 'degraded', message: 'Database unavailable' });
     }
 });

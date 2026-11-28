@@ -117,7 +117,16 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase() => _instance;
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
+
+  Future<void> _createSubmissionReceipts() => customStatement('''
+    CREATE TABLE IF NOT EXISTS submission_receipts (
+      sequence INTEGER PRIMARY KEY,
+      submission_id TEXT NOT NULL UNIQUE,
+      user_id INTEGER NOT NULL,
+      payload TEXT NOT NULL
+    )
+  ''');
 
   Future<void> _createSubmissionQueue() => customStatement('''
     CREATE TABLE IF NOT EXISTS pending_submissions (
@@ -145,6 +154,7 @@ class AppDatabase extends _$AppDatabase {
       onCreate: (m) => transaction(() async {
         await m.createAll();
         await _createSubmissionQueue();
+        await _createSubmissionReceipts();
         await _createAccountIndexes();
       }),
       onUpgrade: (m, from, to) => transaction(() async {
@@ -171,6 +181,7 @@ class AppDatabase extends _$AppDatabase {
         }
         if (from < 4) await _createSubmissionQueue();
         if (from < 5) await _createAccountIndexes();
+        if (from < 7) await _createSubmissionReceipts();
         if (from >= 2 && from < 6) {
           await m.addColumn(userItems, userItems.usesGrid);
         }
@@ -189,6 +200,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Clears only the outgoing account's cache. Its pending submissions remain available on return.
   Future<void> clearUserCacheFor(int userId) => batch((batch) {
+        batch.customStatement('DELETE FROM submission_receipts WHERE user_id = ?', [userId]);
         batch.deleteWhere(topicProgress, (row) => row.userId.equals(userId));
         batch.deleteWhere(questionProgress, (row) => row.userId.equals(userId));
         batch.deleteWhere(userItems, (row) => row.userId.equals(userId));
@@ -198,6 +210,7 @@ class AppDatabase extends _$AppDatabase {
   /// Sign-out uses [clearUserCacheFor]. Both methods retain queued submissions.
   Future<void> clearUserData() async {
     await batch((batch) {
+      batch.customStatement('DELETE FROM submission_receipts');
       batch.deleteWhere(topicProgress, (row) => const Constant(true));
       batch.deleteWhere(questionProgress, (row) => const Constant(true));
       batch.deleteWhere(userItems, (row) => const Constant(true));

@@ -125,10 +125,8 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<AuthProvider, SocialProvider>(
           create: (_) => SocialProvider(),
-          update: (context, auth, previous) {
-            if (!auth.isAuthenticated) previous?.resetState();
-            return previous ?? SocialProvider();
-          },
+          update: (context, auth, previous) =>
+              (previous ?? SocialProvider())..setAccount(auth.user?.id),
         ),
         ChangeNotifierProvider<StatsProvider>(
           create: (context) => StatsProvider(context.read<AuthProvider>()),
