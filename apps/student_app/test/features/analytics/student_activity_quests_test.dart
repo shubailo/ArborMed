@@ -230,6 +230,24 @@ void main() {
   });
 
   testWidgets(
+      'a callback from a replaced quest tile cannot claim the newer snapshot',
+      (t) async {
+    var posts = 0;
+    api.claim = (_) async {
+      posts++;
+      return {'date': today(), 'newBalance': 120, 'awardedTokens': 20};
+    };
+    await t.pumpWidget(app(const QuestList()));
+    await frames(t);
+    final old = t.widget<CozyButton>(find.byType(CozyButton)).onPressed!;
+    await quests.fetchQuests();
+    old();
+    await frames(t);
+    expect(posts, 0);
+    await t.pumpWidget(const SizedBox());
+  });
+
+  testWidgets(
       'a mounted quest list refreshes at the UTC day boundary and cancels the timer when closed',
       (t) async {
     await t.pumpWidget(app(const QuestList()));

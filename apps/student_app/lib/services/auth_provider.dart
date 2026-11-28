@@ -18,6 +18,9 @@ class AuthProvider with ChangeNotifier {
   User? _user;
   int _sessionVersion = 0;
   int _nicknameRevision = 0;
+  int _coinRevision = 0;
+  int _profileRequest = 0;
+  int _appliedProfileRequest = 0;
   int get sessionRevision => _sessionVersion;
   int _pendingOperations = 0;
   int _signInAttempt = 0;
@@ -238,17 +241,22 @@ class AuthProvider with ChangeNotifier {
   Future<void> refreshUser() async {
     final version = _sessionVersion;
     final nicknameRevision = _nicknameRevision;
+    final coinRevision = _coinRevision;
     final userId = _user?.id;
     if (userId == null) return;
+    final request = ++_profileRequest;
     try {
       final data = await _apiService.get(ApiEndpoints.authMe);
-      if (_sessionVersion != version || data['id'] != userId) return;
-      await _updateCachedUser(User.fromJson({
-          ...Map<String, dynamic>.from(data),
-          if (nicknameRevision != _nicknameRevision) 'display_name': _user?.displayName,
-        }));
+      if (_sessionVersion != version || request < _appliedProfileRequest || data['id'] != userId) return;
+      final profile = User.fromJson({
+        ...Map<String, dynamic>.from(data),
+        if (nicknameRevision != _nicknameRevision) 'display_name': _user?.displayName,
+        if (coinRevision != _coinRevision) 'coins': _user!.coins,
+      });
+      _appliedProfileRequest = request;
+      await _updateCachedUser(profile);
     } catch (_) {
-      if (_sessionVersion == version) rethrow;
+      if (_sessionVersion == version && request >= _appliedProfileRequest) rethrow;
     }
   }
 
@@ -276,6 +284,7 @@ class AuthProvider with ChangeNotifier {
   /// Sets the authoritative coin balance from a confirmed backend response.
   void updateCoinBalance(int newBalance) {
     if (_user != null) {
+      _coinRevision++;
       unawaited(_updateCachedUser(User.fromJson({
         ..._user!.toJson(),
         'coins': newBalance,

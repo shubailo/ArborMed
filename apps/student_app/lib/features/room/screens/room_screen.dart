@@ -558,6 +558,7 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
 
 /// Keep the loading view and the quiz on one route, including when a dialog covers it.
 Future<bool> openRoomQuiz(BuildContext context, String name, String slug, int owner) async {
+  if (!context.mounted || ModalRoute.of(context)?.isCurrent == false) return false;
   final api = context.read<AuthProvider>().apiService;
   if (api.userId != owner) return false;
   final selection = context.read<QuestionCacheService>().open(slug);

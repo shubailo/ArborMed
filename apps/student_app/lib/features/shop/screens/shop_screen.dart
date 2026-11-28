@@ -24,6 +24,7 @@ class _ShopScreenState extends State<ShopScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       Provider.of<ShopProvider>(context, listen: false).fetchCatalog();
       Provider.of<ShopProvider>(context, listen: false).fetchInventory();
     });
@@ -77,7 +78,6 @@ class _ShopScreenState extends State<ShopScreen> {
                     Container(
                       width: 140,
                       height: 40,
-                      margin: const EdgeInsets.only(top: -20),
                       decoration: BoxDecoration(
                         color: CozyTheme.of(context).textPrimary,
                         borderRadius: BorderRadius.circular(12),
@@ -298,58 +298,68 @@ class _ShopScreenState extends State<ShopScreen> {
                           return;
                         }
 
-                        // Confirmation Dialog
-                        final confirm = await showDialog<bool>(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24)),
-                            backgroundColor: CozyTheme.of(context).paperCream,
-                            title: Text(
-                              "Acquire Medical Supply",
-                              style: GoogleFonts.figtree(
-                                  fontWeight: FontWeight.w900,
-                                  color: CozyTheme.of(context).textPrimary),
-                            ),
-                            content: Text(
-                              "Requisition ${item.name} for ${item.price} 🩺 Stethoscopes?",
-                              style: TextStyle(
-                                  color: CozyTheme.of(context).textSecondary),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(ctx, false),
-                                child: const Text("CANCEL"),
-                              ),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      CozyTheme.of(context).primary,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(14)),
-                                ),
-                                onPressed: () => Navigator.pop(ctx, true),
-                                child: const Text("CONFIRM",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                            ],
-                          ),
-                        );
-
-                        if (confirm != true) return;
-                        if (!mounted) return;
-
+                        final auth = context.read<AuthProvider>();
+                        final owner = auth.user?.id;
+                        final session = auth.sessionRevision;
+                        bool currentAccount() => auth.user?.id == owner &&
+                            auth.sessionRevision == session;
+                        if (owner == null) return;
                         setState(() => _isProcessingBuy = true);
                         try {
+                          // Confirmation Dialog
+                          final confirm = await showDialog<bool>(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24)),
+                              backgroundColor: CozyTheme.of(context).paperCream,
+                              title: Text(
+                                "Acquire Medical Supply",
+                                style: GoogleFonts.figtree(
+                                    fontWeight: FontWeight.w900,
+                                    color: CozyTheme.of(context).textPrimary),
+                              ),
+                              content: Text(
+                                "Requisition ${item.name} for ${item.price} 🩺 Stethoscopes?",
+                                style: TextStyle(
+                                    color: CozyTheme.of(context).textSecondary),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(ctx, false),
+                                  child: const Text("CANCEL"),
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        CozyTheme.of(context).primary,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(14)),
+                                  ),
+                                  onPressed: () => Navigator.pop(ctx, true),
+                                  child: const Text("CONFIRM",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                              ],
+                            ),
+                          );
+
+                          if (confirm != true || !mounted || !currentAccount() ||
+                              ModalRoute.of(context)?.isCurrent == false) {
+                            return;
+                          }
                           bool success = await provider.buyItem(item.id, context, expectedPrice: item.price);
-                          if (!mounted) return;
+                          if (!mounted || !currentAccount()) return;
                           if (success) {
                             audio.playSfx('success');
                             CozyButton.heartbeat();
-                            Provider.of<AuthProvider>(context, listen: false)
-                                .refreshUser();
+                            try {
+                              await auth.refreshUser();
+                            } catch (error) {
+                              debugPrint('Shop balance refresh failed: ${error.runtimeType}');
+                            }
                           }
                         } finally {
                           if (mounted) {

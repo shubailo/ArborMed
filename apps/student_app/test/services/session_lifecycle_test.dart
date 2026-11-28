@@ -110,6 +110,32 @@ void main() {
     expect(await SessionStorage.read(), isNull);
   });
 
+  test('a delayed profile response preserves a confirmed balance in memory and storage', () async {
+    await auth.setAuthDataFromResponse({'id': 1, 'token': 'first', 'coins': 100});
+    final response = Completer<http.Response>();
+    api.setHttpClient(MockClient((_) => response.future));
+    final refresh = auth.refreshUser();
+    auth.updateCoinBalance(130);
+    response.complete(http.Response('{"id":1,"coins":100,"display_name":"Updated"}', 200));
+    await refresh;
+    expect(auth.user?.coins, 130);
+    expect(auth.user?.displayName, 'Updated');
+    expect((await SessionStorage.read())?['user']['coins'], 130);
+  });
+
+  test('a late profile response cannot undo a newer profile read', () async {
+    await auth.setAuthDataFromResponse({'id': 1, 'token': 'first', 'coins': 100});
+    final first = Completer<http.Response>();
+    var requests = 0;
+    api.setHttpClient(MockClient((_) async => ++requests == 1
+        ? await first.future : http.Response('{"id":1,"coins":120}', 200)));
+    final pending = auth.refreshUser();
+    await auth.refreshUser();
+    first.complete(http.Response('{"id":1,"coins":100}', 200));
+    await pending;
+    expect(auth.user?.coins, 120);
+  });
+
   test('auto-login persists server-confirmed profile changes for offline use',
       () async {
     await SessionStorage.save('access', 'refresh', {'id': 7, 'role': 'admin'});

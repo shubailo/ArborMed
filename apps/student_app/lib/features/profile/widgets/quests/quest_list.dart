@@ -162,7 +162,9 @@ class _QuestCard extends StatelessWidget {
                   variant: CozyButtonVariant.primary,
                   isSmall: true,
                   onPressed: () async {
+                    if (!context.mounted) return;
                     final provider = context.read<QuestProvider>();
+                    if (!provider.quests.any((current) => identical(current, quest))) return;
                     try {
                       final reward = await provider.claimQuest(quest.id);
                       if (context.mounted && reward > 0) {

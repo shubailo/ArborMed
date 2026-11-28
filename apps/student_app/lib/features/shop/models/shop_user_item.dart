@@ -3,6 +3,7 @@ class ShopUserItem {
   final int? serverId;
   final int itemId;
   final bool isPlaced;
+  final bool usesGrid;
   final String? placedAtSlot;
   final String name;
   final String assetPath;
@@ -20,6 +21,7 @@ class ShopUserItem {
     this.serverId,
     required this.itemId,
     required this.isPlaced,
+    this.usesGrid = false,
     this.placedAtSlot,
     required this.name,
     required this.assetPath,
@@ -34,17 +36,24 @@ class ShopUserItem {
   });
 
   factory ShopUserItem.fromJson(Map<String, dynamic> json) {
+    final x = json['x'] ?? json['x_pos'];
+    final y = json['y'] ?? json['y_pos'];
+    final slot = json['placed_at_slot'];
+    final placed = json['is_placed'] == true;
     return ShopUserItem(
       id: json['id'], // Server ID is used as primary ID when coming from remote
       serverId: json['id'],
       itemId: json['item_id'],
-      isPlaced: json['is_placed'] ?? false,
-      placedAtSlot: json['placed_at_slot'],
+      isPlaced: placed,
+      usesGrid: placed && (json['uses_grid'] is bool
+          ? json['uses_grid'] as bool
+          : (x ?? 0) != 0 || (y ?? 0) != 0 || slot == 'floor'),
+      placedAtSlot: slot,
       name: json['name'],
       assetPath: json['asset_path'] ?? '',
       slotType: json['slot_type'] ?? '',
-      x: json['x'],
-      y: json['y'],
+      x: x,
+      y: y,
       roomId: json['placed_at_room_id'],
       price: json['price'],
       type: json['type'],

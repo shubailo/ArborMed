@@ -219,6 +219,7 @@ void main() {
     })));
     openRoomQuiz(home, 'Renal', 'renal', 1).then((value) => finished = value);
     await t.pump();
+    expect(await openRoomQuiz(home, 'Another section', 'other', 1), isFalse);
     await t.pump(const Duration(seconds: 1));
     final navigator = Navigator.of(home);
     final dialog = showDialog<void>(
