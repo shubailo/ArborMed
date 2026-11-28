@@ -36,10 +36,11 @@ void main() {
   late AppDatabase db;
   late ShopApi api;
   late ShopProvider shop;
-  Future<int> local(int user, int item, {bool placed=false, int? remote}) =>
+  Future<int> local(int user, int item, {bool placed=false, int? remote, bool grid=false}) =>
       db.into(db.userItems).insert(UserItemsCompanion.insert(
         userId: Value(user), itemId: Value(item), serverId: Value(remote),
         slot: const Value('desk'), isPlaced: Value(placed), roomId: const Value(1),
+        usesGrid: Value(grid),
       ));
   Future<UserItem> read(int id) =>
       (db.select(db.userItems)..where((t) => t.id.equals(id))).getSingle();
@@ -66,7 +67,8 @@ void main() {
 
   test('equipping only affects own slots and rejects a foreign local instance', () async {
     final target = await local(1,42,remote:100);
-    final mine = await local(1,43,placed:true,remote:101);
+    final mine = await local(1,43,placed:true,remote:101,grid:true);
+    final fixed = await local(1,44,placed:true,remote:103);
     final other = await local(2,42,placed:true,remote:102);
     expect(await shop.equipItem(other, 'desk', 1), false);
     expect((await read(mine)).isPlaced, true);
@@ -75,6 +77,8 @@ void main() {
     await api.started.future;
     expect((await read(target)).isPlaced, true);
     expect((await read(mine)).isPlaced, false);
+    expect((await read(target)).usesGrid, true);
+    expect((await read(fixed)).isPlaced, true);
     expect((await read(other)).isPlaced, true);
     expect(api.posts, [ApiEndpoints.shopEquip]);
   });
@@ -156,6 +160,17 @@ void main() {
     api.deferred!.complete({'userItemId': 10});
     expect(await first, isTrue);
     expect(shop.isLoading, isFalse);
+  });
+
+  test('the grid origin survives API sync and a new provider over the same cache', () async {
+    api.items = [{...remote(100, 42), 'is_placed': true, 'uses_grid': true, 'x': 0, 'y': 0}];
+    await shop.fetchInventory();
+    final reopened = ShopProvider.forTesting(api, db)..setAccount(1);
+    addTearDown(reopened.dispose);
+    api.onGet = (_) async => throw StateError('Offline');
+    await reopened.fetchInventory();
+    expect(reopened.inventory.single.usesGrid, isTrue);
+    expect(reopened.equippedItemsAsShopItems.single.gridCell, (0, 0));
   });
 
   test('inventory sync preserves the global catalog price for the next account', () async {

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../shop/providers/shop_provider.dart';
 import 'voxel_data.dart';
+import '../../../services/iso_service.dart';
 
 class CozyRoomRenderer extends StatelessWidget {
   final ShopItem room;
   final List<ShopItem> equippedItems;
   final List<ShopItem> ghostItems;
   final ShopItem? previewItem;
+  final (int, int)? previewCell;
   final double scale;
   final Function(ShopItem)? onItemTap;
   final BorderRadius? borderRadius;
@@ -17,6 +19,7 @@ class CozyRoomRenderer extends StatelessWidget {
     required this.equippedItems,
     this.ghostItems = const [],
     this.previewItem,
+    this.previewCell,
     this.scale = 1.0,
     this.onItemTap,
     this.borderRadius,
@@ -25,7 +28,8 @@ class CozyRoomRenderer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 1. Merge Room + Items + Ghosts + Preview
-    final equippedSlots = equippedItems.map((e) => e.slotType).toSet();
+    final equippedSlots = equippedItems.where((e) => e.gridCell == null)
+        .map((e) => e.placementSlot ?? e.slotType).toSet();
     final visibleGhosts =
         ghostItems.where((g) => !equippedSlots.contains(g.slotType)).toList();
 
@@ -34,21 +38,16 @@ class CozyRoomRenderer extends StatelessWidget {
       allAssets.add(previewItem!);
     }
 
-    // 2. Sort by Z-Index (Painter's Algorithm)
-    allAssets.sort((a, b) => a.zIndex.compareTo(b.zIndex));
-
-    // 3. De-duplicate Assets by Slot Type to prevent visual stacking
-    final Map<String, ShopItem> uniqueAssets = {};
+    final Map<Object, ShopItem> uniqueAssets = {};
+    (int, int)? cellFor(ShopItem item) =>
+        identical(item, previewItem) ? previewCell ?? item.gridCell : item.gridCell;
     for (var item in allAssets) {
       if (item.assetPath.isEmpty) continue;
-
-      // Use slotType as the key to ensure only one item per slot is rendered.
-      // Since allAssets is constructed as [equippedItems, ghosts, previewItem],
-      // the later items (ghosts/previews) will naturally overwrite earlier ones.
-      uniqueAssets[item.slotType] = item;
+      uniqueAssets[cellFor(item) ?? item.placementSlot ?? item.slotType] = item;
     }
 
-    final validAssets = uniqueAssets.values.toList();
+    final validAssets = uniqueAssets.values.toList()
+      ..sort((a, b) => a.zIndex.compareTo(b.zIndex));
 
     return Container(
       alignment: Alignment.center,
@@ -65,8 +64,9 @@ class CozyRoomRenderer extends StatelessWidget {
             final filename = item.assetPath.split('/').last;
             final voxels = VoxelData.data[filename] ?? [];
 
-            return SyncedScaleWrapper(
-              key: ValueKey(itemKey),
+            final cell = cellFor(item);
+            final position = cell == null ? null : IsoService.gridToScreen(cell.$1, cell.$2);
+            final asset = SyncedScaleWrapper(
               onTap: onItemTap != null ? () => onItemTap!(item) : null,
               isGhost: isGhost,
               child: Stack(
@@ -156,6 +156,11 @@ class CozyRoomRenderer extends StatelessWidget {
                     }),
                 ],
               ),
+            );
+            return Transform.translate(
+              key: ValueKey(itemKey),
+              offset: position == null ? Offset.zero : Offset(position[0], position[1]),
+              child: asset,
             );
           }).toList(),
         ),

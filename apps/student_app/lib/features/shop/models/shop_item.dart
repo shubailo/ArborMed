@@ -10,6 +10,8 @@ class ShopItem {
   final Map<String, dynamic>? unlockReq;
   final bool isOwned;
   final int? userItemId;
+  final (int, int)? gridCell;
+  final String? placementSlot;
 
   ShopItem({
     required this.id,
@@ -23,6 +25,8 @@ class ShopItem {
     this.unlockReq,
     this.isOwned = false,
     this.userItemId,
+    this.gridCell,
+    this.placementSlot,
   });
 
   factory ShopItem.fromJson(Map<String, dynamic> json) {

@@ -378,6 +378,8 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                                 borderRadius: BorderRadius.circular(20),
                                 ghostItems: provider.getGhostItems(),
                                 previewItem: provider.previewItem,
+                                previewCell: provider.previewX != null && provider.previewY != null
+                                    ? (provider.previewX!, provider.previewY!) : null,
                                 onItemTap: (item) {
                                   if (provider.isDecorating && !provider.isFullPreviewMode) {
                                     int tx = 0, ty = 0;

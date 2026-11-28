@@ -30,6 +30,7 @@ class RankProvider extends ChangeNotifier with WidgetsBindingObserver {
   Future<bool>? _read;
   _Standing? _standing;
   String? _loadedOn;
+  String? _pendingDay;
   Timer? _midnight;
   static const dailyRoundsGoal = 10;
   String get _today => _now().toUtc().toIso8601String().split('T').first;
@@ -44,7 +45,7 @@ class RankProvider extends ChangeNotifier with WidgetsBindingObserver {
       _current?.done ?? authProvider.user?.completedRoundsOn(_now()) ?? false;
   int? get roundsProgress => _current?.progress;
   int get roundsGoal => _current?.goal ?? dailyRoundsGoal;
-  bool get isSyncing => _sync != null;
+  bool get isSyncing => _sync != null && _pendingDay == _today;
   bool get statusFailed => _failed;
 
   void _authChanged() {
@@ -76,6 +77,7 @@ class RankProvider extends ChangeNotifier with WidgetsBindingObserver {
     _request++;
     _sync = null;
     _read = null;
+    _pendingDay = null;
     _standing = null;
     _failed = false;
   }
@@ -103,11 +105,13 @@ class RankProvider extends ChangeNotifier with WidgetsBindingObserver {
 
   Future<void> fetchStatus() async {
     if (_disposed || _owner == null) return;
+    if (_pendingDay != null && _pendingDay != _today) _reset();
     await (_sync ?? (_read ??= _load(false)));
   }
 
   Future<bool> syncCompletedRounds() {
     if (_disposed || _owner == null) return Future.value(false);
+    if (_pendingDay != null && _pendingDay != _today) _reset();
     if (_sync != null) return _sync!;
     _read = null;
     final pending = _load(true);
@@ -119,6 +123,7 @@ class RankProvider extends ChangeNotifier with WidgetsBindingObserver {
   Future<bool> _load(bool complete) async {
     final ticket = ++_request;
     final today = _today;
+    _pendingDay = today;
     final expected = _current?.day;
     _failed = false;
     // Set the pending future before even a synchronous transport failure.
@@ -136,13 +141,14 @@ class RankProvider extends ChangeNotifier with WidgetsBindingObserver {
       _standing = standing;
       return standing.done;
     } catch (error) {
-      if (_owns(ticket)) {
+      if (_owns(ticket) && today == _today) {
         _failed = true;
         debugPrint('Clinical standing request failed: ${error.runtimeType}');
       }
       return false;
     } finally {
       if (_owns(ticket)) {
+        _pendingDay = null;
         if (complete) {
           _sync = null;
         } else {

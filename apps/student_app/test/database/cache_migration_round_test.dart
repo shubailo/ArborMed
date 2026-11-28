@@ -4,6 +4,9 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  const oldInventory = 'CREATE TABLE user_items (id INTEGER PRIMARY KEY,user_id INTEGER, '
+      'server_id INTEGER,item_id INTEGER,room_id INTEGER,is_placed INTEGER NOT NULL DEFAULT 0, '
+      'slot TEXT,x_pos INTEGER NOT NULL DEFAULT 0,y_pos INTEGER NOT NULL DEFAULT 0)';
   AppDatabase open([DatabaseSetup? setup]) {
     final db = AppDatabase.forTesting(NativeDatabase.memory(setup: setup));
     addTearDown(db.close);
@@ -21,7 +24,7 @@ void main() {
       raw.execute(
           'CREATE TABLE topic_progress (id INTEGER PRIMARY KEY, level_correct_count INTEGER NOT NULL DEFAULT 0)');
       raw.execute(
-          'CREATE TABLE user_items (id INTEGER PRIMARY KEY,user_id INTEGER)');
+          oldInventory);
       raw.execute(queue);
       raw.execute(insert);
       raw.execute('PRAGMA user_version=2');
@@ -35,7 +38,7 @@ void main() {
     expect(
         (await db.customSelect('PRAGMA user_version').getSingle())
             .data['user_version'],
-        5);
+        6);
   });
   test('an older app refuses to stamp a newer database with its own version',
       () async {
@@ -53,7 +56,7 @@ void main() {
               raw.execute(queue);
               raw.execute(insert);
               raw.execute(
-                  'CREATE TABLE user_items (id INTEGER PRIMARY KEY,user_id INTEGER)');
+                  oldInventory);
               raw.execute('PRAGMA user_version=4');
             });
       Future<String> plan(String sql) async =>
@@ -77,6 +80,41 @@ void main() {
       }
     });
   }
+
+  test('v5 derives known grid locations and keeps local identities', () async {
+    final db = open((raw) {
+      raw.execute(oldInventory);
+      raw.execute('''
+        INSERT INTO user_items(id,user_id,server_id,item_id,is_placed,slot,x_pos,y_pos)
+        VALUES (31,1,101,9,1,'desk',0,0), (32,1,102,9,1,'floor',0,0),
+               (33,1,103,9,1,'desk',4,0), (34,1,104,9,0,'floor',2,0)
+      ''');
+      raw.execute('PRAGMA user_version=5');
+    });
+    final rows = await db.select(db.userItems).get();
+    expect({for (final row in rows) row.id: row.usesGrid},
+        {31:false,32:true,33:true,34:false});
+    expect(rows.map((row) => row.serverId), [101,102,103,104]);
+  });
+  test('an explicit grid origin survives closing and reopening the SQLite file', () async {
+    final folder = await Directory.systemTemp.createTemp('arbormed-placement-');
+    addTearDown(() => folder.delete(recursive:true));
+    final file = File('${folder.path}/inventory.db');
+    final writer = AppDatabase.forTesting(NativeDatabase(file));
+    try {
+      await writer.customStatement("INSERT INTO user_items(user_id,item_id,is_placed,slot,uses_grid) VALUES(1,2,1,'desk',1)");
+    } finally {
+      await writer.close();
+    }
+    final reader = AppDatabase.forTesting(NativeDatabase(file));
+    try {
+      final item = await reader.select(reader.userItems).getSingle();
+      expect((item.xPos,item.yPos,item.usesGrid), (0,0,true));
+    } finally {
+      await reader.close();
+    }
+  });
+
   test(
       'logout clears just one profile and keeps its pending answers and the shared catalogue',
       () async {
@@ -120,7 +158,7 @@ void main() {
       raw.execute('CREATE TABLE topic_progress(id INTEGER PRIMARY KEY)');
       raw.execute('INSERT INTO topic_progress(id) VALUES (7)');
       raw.execute(
-          'CREATE TABLE user_items(id INTEGER PRIMARY KEY, user_id INTEGER)');
+          oldInventory);
       raw.execute('CREATE VIEW pending_submissions AS SELECT 1 AS user_id');
       raw.execute('PRAGMA user_version=2');
     }));

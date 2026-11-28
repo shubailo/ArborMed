@@ -88,6 +88,7 @@ class UserItems extends Table {
   TextColumn get slot => text().nullable()();
   IntColumn get xPos => integer().withDefault(const Constant(0))();
   IntColumn get yPos => integer().withDefault(const Constant(0))();
+  BoolColumn get usesGrid => boolean().withDefault(const Constant(false))();
 }
 
 // --- Database Connection ---
@@ -116,7 +117,7 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase() => _instance;
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   Future<void> _createSubmissionQueue() => customStatement('''
     CREATE TABLE IF NOT EXISTS pending_submissions (
@@ -157,7 +158,7 @@ class AppDatabase extends _$AppDatabase {
           await m.alterTable(TableMigration(topicProgress,
               newColumns: [topicProgress.levelCorrectCount]));
           await m.alterTable(TableMigration(questionProgress));
-          await m.alterTable(TableMigration(userItems));
+          await m.alterTable(TableMigration(userItems, newColumns: [userItems.usesGrid]));
         }
         if (from == 2) {
           // A previous release could commit the ALTER before updating user_version.
@@ -170,6 +171,15 @@ class AppDatabase extends _$AppDatabase {
         }
         if (from < 4) await _createSubmissionQueue();
         if (from < 5) await _createAccountIndexes();
+        if (from >= 2 && from < 6) {
+          await m.addColumn(userItems, userItems.usesGrid);
+        }
+        if (from < 6) {
+          await customStatement('''
+            UPDATE user_items SET uses_grid = 1
+            WHERE is_placed = 1 AND (x_pos <> 0 OR y_pos <> 0 OR slot = 'floor')
+          ''');
+        }
       }),
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');

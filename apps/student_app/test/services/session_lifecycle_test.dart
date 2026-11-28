@@ -394,6 +394,28 @@ void main() {
     await request;
   });
 
+  test('a retried write uses the original JSON despite later draft edits', () async {
+    api.setToken('access-A', refreshToken: 'refresh-A', userId: 1);
+    final refresh = Completer<http.Response>();
+    final started = Completer<void>();
+    final bodies = <String>[];
+    api.setHttpClient(MockClient((request) async {
+      if (request.url.path == ApiEndpoints.authRefresh) {
+        started.complete();
+        return refresh.future;
+      }
+      bodies.add(request.body);
+      return bodies.length == 1 ? http.Response('Expired', 401) : http.Response('{}', 200);
+    }));
+    final draft = {'items': [1]};
+    final request = api.post('/shop/sync-room', draft);
+    await started.future;
+    draft['items']!.add(2);
+    refresh.complete(http.Response('{"token":"renewed"}', 200));
+    await request;
+    expect(bodies.map((body) => jsonDecode(body)), [{'items': [1]}, {'items': [1]}]);
+  });
+
   test('a second 401 terminates the retry with exactly one token refresh',
       () async {
     api.setToken('access-A', refreshToken: 'refresh-A', userId: 1);

@@ -120,11 +120,13 @@ class ContextualShopSheet extends StatefulWidget {
 class _ContextualShopSheetState extends State<ContextualShopSheet> {
   ShopViewState _viewState = ShopViewState.list;
   ShopItem? _selectedItem;
+  bool _buying = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       Provider.of<ShopProvider>(context, listen: false)
           .fetchCatalog(slotType: widget.slotType);
     });
@@ -144,6 +146,58 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
       _viewState = ShopViewState.list;
     });
     Provider.of<ShopProvider>(context, listen: false).setPreviewItem(null);
+  }
+
+  Future<void> _buyAndEquip(ShopProvider provider, bool isHu) async {
+    final item = _selectedItem;
+    final auth = context.read<AuthProvider>();
+    final account = auth.sessionRevision;
+    final owner = auth.user?.id;
+    if (_buying || item == null || owner == null) return;
+    bool onScreen() => mounted && ModalRoute.of(context)?.isCurrent != false &&
+        auth.sessionRevision == account && auth.user?.id == owner &&
+        _viewState == ShopViewState.detail && identical(_selectedItem, item);
+    setState(() => _buying = true);
+    try {
+      final bought = await provider.buyItem(item.id, context, expectedPrice: item.price);
+      if (!mounted || !onScreen()) return;
+      if (!bought) {
+        CozyToast.show(context, message: isHu
+            ? 'A vásárlás sikertelen. Frissítse a kínálatot.'
+            : 'Purchase failed. Refresh the catalog.', type: ToastType.error);
+        await provider.fetchCatalog(slotType: widget.slotType);
+        if (onScreen()) _onBackToList();
+        return;
+      }
+      ShopUserItem? owned;
+      for (final candidate in provider.inventory) {
+        final id = candidate.serverId;
+        if (candidate.itemId == item.id && id != null &&
+            (owned == null || id < owned.serverId!)) {
+          owned = candidate;
+        }
+      }
+      final placed = owned != null && await provider.equipItem(
+          owned.id, widget.slotType, 1, x: widget.targetX, y: widget.targetY);
+      if (auth.sessionRevision != account || auth.user?.id != owner) return;
+      try {
+        await auth.refreshUser();
+      } catch (error) {
+        debugPrint('Shop balance refresh failed: ${error.runtimeType}');
+      }
+      if (!mounted || !onScreen()) return;
+      CozyToast.show(context,
+          message: placed
+              ? (isHu ? 'Sikeres vásárlás és elhelyezés!' : 'Purchased & placed!')
+              : (isHu ? 'Megvásárolva. Az elhelyezés sikertelen.' : 'Purchased. Could not place the item.'),
+          type: placed ? ToastType.success : ToastType.error);
+      if (placed) {
+        provider.setPreviewItem(null);
+        Navigator.pop(context);
+      }
+    } finally {
+      if (mounted) setState(() => _buying = false);
+    }
   }
 
   @override
@@ -176,7 +230,11 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                                 : Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 24.0),
-                                    child: _buildDetailView(provider),
+                                    child: Center(
+                                      child: SingleChildScrollView(
+                                        child: _buildDetailView(provider),
+                                      ),
+                                    ),
                                   ),
                   ),
 
@@ -383,10 +441,12 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
 
     return Column(
       children: [
-        Row(
+        Wrap(
+          alignment: WrapAlignment.center,
+          spacing: 12,
+          runSpacing: 8,
           children: [
-            Expanded(
-              child: isOwned
+            isOwned
                   ? CozyButton(
                       label: isPlaced
                           ? (isHu ? 'Eltávolítás' : 'Unequip')
@@ -436,39 +496,13 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                       },
                     )
                   : CozyButton(
-                      label: '${isHu ? "Megvásárlás & Elhelyezés" : "Buy & Equip"} 🩺 ${_selectedItem?.price}',
+                      label: '${isHu ? "Vétel és elhelyezés" : "Buy & Equip"} 🩺 ${_selectedItem?.price}',
                       variant: CozyButtonVariant.primary,
-                      onPressed: () async {
-                        if (_selectedItem == null) return;
-                        final auth = Provider.of<AuthProvider>(context, listen: false);
-                        bool success =
-                            await provider.buyItem(_selectedItem!.id, context, expectedPrice: _selectedItem!.price);
-
-                        if (success) {
-                          try {
-                            auth.refreshUser();
-                          } catch (_) {}
-                          await provider.fetchInventory();
-                          final newItem = provider.inventory.lastWhere(
-                              (ui) => ui.itemId == _selectedItem!.id);
-                          await provider.equipItem(
-                              newItem.id, widget.slotType, 1,
-                              x: widget.targetX, y: widget.targetY);
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).clearSnackBars();
-                            CozyToast.show(context,
-                                message: isHu ? "Sikeres vásárlás és elhelyezés!" : "Purchased & placed!",
-                                type: ToastType.success);
-                            provider.setPreviewItem(null);
-                            Navigator.pop(context);
-                          }
-                        }
-                      },
+                      isSmall: true,
+                      enabled: !_buying,
+                      onPressed: () => _buyAndEquip(provider, isHu),
                     ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: CozyButton(
+            CozyButton(
                 label: isHu ? 'Előnézet' : 'Preview',
                 variant: CozyButtonVariant.outline,
                 onPressed: () {
@@ -478,7 +512,6 @@ class _ContextualShopSheetState extends State<ContextualShopSheet> {
                       y: widget.targetY);
                   Navigator.pop(context);
                 },
-              ),
             ),
           ],
         ),

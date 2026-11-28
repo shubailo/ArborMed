@@ -262,6 +262,8 @@ class ShopProvider with ChangeNotifier {
             description: '',
             isOwned: true,
             userItemId: u.id,
+            gridCell: u.usesGrid && u.x != null && u.y != null ? (u.x!, u.y!) : null,
+            placementSlot: u.placedAtSlot,
           ),
         )
         .toList();
@@ -492,6 +494,7 @@ class ShopProvider with ChangeNotifier {
           serverId: l.serverId,
           itemId: l.itemId ?? 0,
           isPlaced: l.isPlaced,
+          usesGrid: l.usesGrid,
           placedAtSlot: l.slot,
           name: name.isNotEmpty ? name : 'Item ${l.itemId}',
           assetPath: assetPath,
@@ -573,6 +576,7 @@ class ShopProvider with ChangeNotifier {
             UserItemsCompanion(
               serverId: Value<int?>(item.id),
               isPlaced: Value(item.isPlaced),
+              usesGrid: Value(item.usesGrid),
               slot: Value(item.placedAtSlot),
               xPos: Value(item.x ?? 0),
               yPos: Value(item.y ?? 0),
@@ -589,6 +593,7 @@ class ShopProvider with ChangeNotifier {
               serverId: Value<int?>(item.id),
               itemId: Value<int?>(item.itemId),
               isPlaced: Value(item.isPlaced),
+              usesGrid: Value(item.usesGrid),
               slot: Value(item.placedAtSlot),
               xPos: Value(item.x ?? 0),
               yPos: Value(item.y ?? 0),
@@ -720,14 +725,15 @@ class ShopProvider with ChangeNotifier {
         if (_account != account || await _ownedItem(userId, userItemId) == null) return false;
         final conflicts = _db.update(_db.userItems)..where((t) => t.userId.equals(userId) & t.isPlaced.equals(true));
         if (x != null && y != null) {
-          conflicts.where((t) => t.roomId.equals(roomId) & t.xPos.equals(x) & t.yPos.equals(y));
+          conflicts.where((t) => t.roomId.equals(roomId) & t.usesGrid.equals(true) & t.xPos.equals(x) & t.yPos.equals(y));
         } else {
-          conflicts.where((t) => t.roomId.equals(roomId) & t.slot.equals(slot));
+          conflicts.where((t) => t.roomId.equals(roomId) & t.usesGrid.equals(false) & t.slot.equals(slot));
         }
-        await conflicts.write(const UserItemsCompanion(isPlaced: Value(false), roomId: Value(null)));
+        await conflicts.write(const UserItemsCompanion(isPlaced: Value(false), roomId: Value(null), usesGrid: Value(false)));
         await (_db.update(_db.userItems)..where((t) => t.id.equals(userItemId) & t.userId.equals(userId))).write(
           UserItemsCompanion(isPlaced: const Value(true), slot: Value(slot),
-            xPos: Value(x ?? 0), yPos: Value(y ?? 0), roomId: Value(roomId)),
+            xPos: Value(x ?? 0), yPos: Value(y ?? 0), roomId: Value(roomId),
+            usesGrid: Value(x != null && y != null)),
         );
         return true;
       });
@@ -747,7 +753,7 @@ class ShopProvider with ChangeNotifier {
     try {
       final changed = await (_db.update(_db.userItems)
             ..where((t) => t.id.equals(userItemId) & t.userId.equals(userId)))
-          .write(const UserItemsCompanion(isPlaced: Value(false), roomId: Value(null)));
+          .write(const UserItemsCompanion(isPlaced: Value(false), roomId: Value(null), usesGrid: Value(false)));
       if (changed == 0 || _account != account) return false;
       return _refreshPlacement(account, userId, userItemId, ApiEndpoints.shopUnequip, {});
     } catch (error) {

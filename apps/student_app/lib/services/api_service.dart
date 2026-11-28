@@ -127,10 +127,11 @@ class ApiService {
   Future<dynamic> _request(String method, String endpoint,
       {Map<String, dynamic>? body, bool useSessionToken = true}) async {
     final uri = Uri.parse('$baseUrl$endpoint');
+    final payload = body == null ? null : jsonEncode(body);
     final response = await _withSession((token) async {
       final request = http.Request(method, uri)
         ..headers.addAll(_getHeaders(token));
-      if (body != null) request.body = jsonEncode(body);
+      if (payload != null) request.body = payload;
       return http.Response.fromStream(await _client.send(request));
     }, useSessionToken: useSessionToken);
     return _handleResponse(response);

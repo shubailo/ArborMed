@@ -361,6 +361,27 @@ void main() {
     expect(rank.statusFailed, isFalse);
     expect(rank.roundsProgress, 8);
   });
+  test('a pending status from yesterday does not block a new day read', () async {
+    var now = DateTime.utc(2026, 5, 1, 23, 59);
+    final pending = Completer<dynamic>();
+    final started = Completer<void>();
+    auth.apiService.read = (_) {
+      started.complete();
+      return pending.future;
+    };
+    rank = RankProvider(auth, now: () => now);
+    addTearDown(rank.dispose);
+    final first = rank.fetchStatus();
+    await started.future;
+    now = DateTime.utc(2026, 5, 2);
+    auth.apiService.read = (_) async => status(studyDay: day(now), progress: 2);
+    final today = rank.fetchStatus();
+    pending.completeError(StateError('Yesterday offline'));
+    await Future.wait([first, today]);
+    expect(rank.statusFailed, isFalse);
+    expect(rank.roundsProgress, 2);
+  });
+
   test(
       'UTC rollover hides yesterday’s receipt and submits the displayed server day',
       () async {

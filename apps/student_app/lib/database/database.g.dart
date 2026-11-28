@@ -2326,9 +2326,29 @@ class $UserItemsTable extends UserItems
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: const Constant(0));
+  static const VerificationMeta _usesGridMeta =
+      const VerificationMeta('usesGrid');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, serverId, userId, itemId, isPlaced, roomId, slot, xPos, yPos];
+  late final GeneratedColumn<bool> usesGrid = GeneratedColumn<bool>(
+      'uses_grid', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("uses_grid" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        serverId,
+        userId,
+        itemId,
+        isPlaced,
+        roomId,
+        slot,
+        xPos,
+        yPos,
+        usesGrid
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2374,6 +2394,10 @@ class $UserItemsTable extends UserItems
       context.handle(
           _yPosMeta, yPos.isAcceptableOrUnknown(data['y_pos']!, _yPosMeta));
     }
+    if (data.containsKey('uses_grid')) {
+      context.handle(_usesGridMeta,
+          usesGrid.isAcceptableOrUnknown(data['uses_grid']!, _usesGridMeta));
+    }
     return context;
   }
 
@@ -2401,6 +2425,8 @@ class $UserItemsTable extends UserItems
           .read(DriftSqlType.int, data['${effectivePrefix}x_pos'])!,
       yPos: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}y_pos'])!,
+      usesGrid: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}uses_grid'])!,
     );
   }
 
@@ -2420,6 +2446,7 @@ class UserItem extends DataClass implements Insertable<UserItem> {
   final String? slot;
   final int xPos;
   final int yPos;
+  final bool usesGrid;
   const UserItem(
       {required this.id,
       this.serverId,
@@ -2429,7 +2456,8 @@ class UserItem extends DataClass implements Insertable<UserItem> {
       this.roomId,
       this.slot,
       required this.xPos,
-      required this.yPos});
+      required this.yPos,
+      required this.usesGrid});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2452,6 +2480,7 @@ class UserItem extends DataClass implements Insertable<UserItem> {
     }
     map['x_pos'] = Variable<int>(xPos);
     map['y_pos'] = Variable<int>(yPos);
+    map['uses_grid'] = Variable<bool>(usesGrid);
     return map;
   }
 
@@ -2471,6 +2500,7 @@ class UserItem extends DataClass implements Insertable<UserItem> {
       slot: slot == null && nullToAbsent ? const Value.absent() : Value(slot),
       xPos: Value(xPos),
       yPos: Value(yPos),
+      usesGrid: Value(usesGrid),
     );
   }
 
@@ -2487,6 +2517,7 @@ class UserItem extends DataClass implements Insertable<UserItem> {
       slot: serializer.fromJson<String?>(json['slot']),
       xPos: serializer.fromJson<int>(json['xPos']),
       yPos: serializer.fromJson<int>(json['yPos']),
+      usesGrid: serializer.fromJson<bool>(json['usesGrid']),
     );
   }
   @override
@@ -2502,6 +2533,7 @@ class UserItem extends DataClass implements Insertable<UserItem> {
       'slot': serializer.toJson<String?>(slot),
       'xPos': serializer.toJson<int>(xPos),
       'yPos': serializer.toJson<int>(yPos),
+      'usesGrid': serializer.toJson<bool>(usesGrid),
     };
   }
 
@@ -2514,7 +2546,8 @@ class UserItem extends DataClass implements Insertable<UserItem> {
           Value<int?> roomId = const Value.absent(),
           Value<String?> slot = const Value.absent(),
           int? xPos,
-          int? yPos}) =>
+          int? yPos,
+          bool? usesGrid}) =>
       UserItem(
         id: id ?? this.id,
         serverId: serverId.present ? serverId.value : this.serverId,
@@ -2525,6 +2558,7 @@ class UserItem extends DataClass implements Insertable<UserItem> {
         slot: slot.present ? slot.value : this.slot,
         xPos: xPos ?? this.xPos,
         yPos: yPos ?? this.yPos,
+        usesGrid: usesGrid ?? this.usesGrid,
       );
   UserItem copyWithCompanion(UserItemsCompanion data) {
     return UserItem(
@@ -2537,6 +2571,7 @@ class UserItem extends DataClass implements Insertable<UserItem> {
       slot: data.slot.present ? data.slot.value : this.slot,
       xPos: data.xPos.present ? data.xPos.value : this.xPos,
       yPos: data.yPos.present ? data.yPos.value : this.yPos,
+      usesGrid: data.usesGrid.present ? data.usesGrid.value : this.usesGrid,
     );
   }
 
@@ -2551,14 +2586,15 @@ class UserItem extends DataClass implements Insertable<UserItem> {
           ..write('roomId: $roomId, ')
           ..write('slot: $slot, ')
           ..write('xPos: $xPos, ')
-          ..write('yPos: $yPos')
+          ..write('yPos: $yPos, ')
+          ..write('usesGrid: $usesGrid')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, serverId, userId, itemId, isPlaced, roomId, slot, xPos, yPos);
+  int get hashCode => Object.hash(id, serverId, userId, itemId, isPlaced,
+      roomId, slot, xPos, yPos, usesGrid);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2571,7 +2607,8 @@ class UserItem extends DataClass implements Insertable<UserItem> {
           other.roomId == this.roomId &&
           other.slot == this.slot &&
           other.xPos == this.xPos &&
-          other.yPos == this.yPos);
+          other.yPos == this.yPos &&
+          other.usesGrid == this.usesGrid);
 }
 
 class UserItemsCompanion extends UpdateCompanion<UserItem> {
@@ -2584,6 +2621,7 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
   final Value<String?> slot;
   final Value<int> xPos;
   final Value<int> yPos;
+  final Value<bool> usesGrid;
   const UserItemsCompanion({
     this.id = const Value.absent(),
     this.serverId = const Value.absent(),
@@ -2594,6 +2632,7 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
     this.slot = const Value.absent(),
     this.xPos = const Value.absent(),
     this.yPos = const Value.absent(),
+    this.usesGrid = const Value.absent(),
   });
   UserItemsCompanion.insert({
     this.id = const Value.absent(),
@@ -2605,6 +2644,7 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
     this.slot = const Value.absent(),
     this.xPos = const Value.absent(),
     this.yPos = const Value.absent(),
+    this.usesGrid = const Value.absent(),
   });
   static Insertable<UserItem> custom({
     Expression<int>? id,
@@ -2616,6 +2656,7 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
     Expression<String>? slot,
     Expression<int>? xPos,
     Expression<int>? yPos,
+    Expression<bool>? usesGrid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2627,6 +2668,7 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
       if (slot != null) 'slot': slot,
       if (xPos != null) 'x_pos': xPos,
       if (yPos != null) 'y_pos': yPos,
+      if (usesGrid != null) 'uses_grid': usesGrid,
     });
   }
 
@@ -2639,7 +2681,8 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
       Value<int?>? roomId,
       Value<String?>? slot,
       Value<int>? xPos,
-      Value<int>? yPos}) {
+      Value<int>? yPos,
+      Value<bool>? usesGrid}) {
     return UserItemsCompanion(
       id: id ?? this.id,
       serverId: serverId ?? this.serverId,
@@ -2650,6 +2693,7 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
       slot: slot ?? this.slot,
       xPos: xPos ?? this.xPos,
       yPos: yPos ?? this.yPos,
+      usesGrid: usesGrid ?? this.usesGrid,
     );
   }
 
@@ -2683,6 +2727,9 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
     if (yPos.present) {
       map['y_pos'] = Variable<int>(yPos.value);
     }
+    if (usesGrid.present) {
+      map['uses_grid'] = Variable<bool>(usesGrid.value);
+    }
     return map;
   }
 
@@ -2697,7 +2744,8 @@ class UserItemsCompanion extends UpdateCompanion<UserItem> {
           ..write('roomId: $roomId, ')
           ..write('slot: $slot, ')
           ..write('xPos: $xPos, ')
-          ..write('yPos: $yPos')
+          ..write('yPos: $yPos, ')
+          ..write('usesGrid: $usesGrid')
           ..write(')'))
         .toString();
   }
@@ -3767,6 +3815,7 @@ typedef $$UserItemsTableCreateCompanionBuilder = UserItemsCompanion Function({
   Value<String?> slot,
   Value<int> xPos,
   Value<int> yPos,
+  Value<bool> usesGrid,
 });
 typedef $$UserItemsTableUpdateCompanionBuilder = UserItemsCompanion Function({
   Value<int> id,
@@ -3778,6 +3827,7 @@ typedef $$UserItemsTableUpdateCompanionBuilder = UserItemsCompanion Function({
   Value<String?> slot,
   Value<int> xPos,
   Value<int> yPos,
+  Value<bool> usesGrid,
 });
 
 class $$UserItemsTableFilterComposer
@@ -3815,6 +3865,9 @@ class $$UserItemsTableFilterComposer
 
   ColumnFilters<int> get yPos => $composableBuilder(
       column: $table.yPos, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get usesGrid => $composableBuilder(
+      column: $table.usesGrid, builder: (column) => ColumnFilters(column));
 }
 
 class $$UserItemsTableOrderingComposer
@@ -3852,6 +3905,9 @@ class $$UserItemsTableOrderingComposer
 
   ColumnOrderings<int> get yPos => $composableBuilder(
       column: $table.yPos, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get usesGrid => $composableBuilder(
+      column: $table.usesGrid, builder: (column) => ColumnOrderings(column));
 }
 
 class $$UserItemsTableAnnotationComposer
@@ -3889,6 +3945,9 @@ class $$UserItemsTableAnnotationComposer
 
   GeneratedColumn<int> get yPos =>
       $composableBuilder(column: $table.yPos, builder: (column) => column);
+
+  GeneratedColumn<bool> get usesGrid =>
+      $composableBuilder(column: $table.usesGrid, builder: (column) => column);
 }
 
 class $$UserItemsTableTableManager extends RootTableManager<
@@ -3923,6 +3982,7 @@ class $$UserItemsTableTableManager extends RootTableManager<
             Value<String?> slot = const Value.absent(),
             Value<int> xPos = const Value.absent(),
             Value<int> yPos = const Value.absent(),
+            Value<bool> usesGrid = const Value.absent(),
           }) =>
               UserItemsCompanion(
             id: id,
@@ -3934,6 +3994,7 @@ class $$UserItemsTableTableManager extends RootTableManager<
             slot: slot,
             xPos: xPos,
             yPos: yPos,
+            usesGrid: usesGrid,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -3945,6 +4006,7 @@ class $$UserItemsTableTableManager extends RootTableManager<
             Value<String?> slot = const Value.absent(),
             Value<int> xPos = const Value.absent(),
             Value<int> yPos = const Value.absent(),
+            Value<bool> usesGrid = const Value.absent(),
           }) =>
               UserItemsCompanion.insert(
             id: id,
@@ -3956,6 +4018,7 @@ class $$UserItemsTableTableManager extends RootTableManager<
             slot: slot,
             xPos: xPos,
             yPos: yPos,
+            usesGrid: usesGrid,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
