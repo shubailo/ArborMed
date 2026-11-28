@@ -8,6 +8,7 @@ const shop = require('../../src/controllers/shopController');
 const inventory = require('../../src/controllers/inventoryController');
 const social = require('../../src/controllers/socialController');
 const crate = require('../../src/services/crateService');
+const crateHttp = require('../../src/controllers/crateController');
 const { seedGoldCatalog } = require('../../src/scripts/seeders/seedGoldCatalog');
 const run = process.env.TEST_DATABASE_URL ? describe : describe.skip;
 
@@ -20,7 +21,7 @@ run('shop ownership and purchase transactions', () => {
         await admin.connect();
         await admin.query(`CREATE SCHEMA ${schema}`);
         pool = new Pool({connectionString, options:`-c search_path=${schema}`});
-        await pool.query('CREATE TABLE users(id integer PRIMARY KEY, coins integer NOT NULL)');
+        await pool.query('CREATE TABLE users(id integer PRIMARY KEY, coins integer)');
         for (const name of ['002_gamification.sql','004_smart_shop.sql','005_iso_coords.sql']) {
             await pool.query(readFileSync(join(__dirname,'../../migrations',name),'utf8'));
         }
@@ -43,7 +44,8 @@ run('shop ownership and purchase transactions', () => {
     });
     async function call(handler, body, user=1) {
         let result;
-        await handler({body,user:{id:user}}, {json:data=>{result=data;}}, error=>{throw error;});
+        const res = {json:data=>{result=data;}, status:()=>res};
+        await handler({body,user:{id:user}}, res, error=>{throw error;});
         return result;
     }
     const balance = async () => (await pool.query('SELECT coins FROM users WHERE id=1')).rows[0].coins;
@@ -55,6 +57,36 @@ run('shop ownership and purchase transactions', () => {
         await expect(call(shop.buyItem,{itemId:20,expectedPrice:0})).rejects.toMatchObject({statusCode:409});
         expect(await balance()).toBe(160);
         expect((await pool.query('SELECT FROM user_items')).rowCount).toBe(1);
+        await pool.query('UPDATE users SET coins=coins+10 WHERE id=1');
+        expect(await buy()).toEqual({...a,newBalance:170});
+        expect((await pool.query('SELECT FROM user_items')).rowCount).toBe(1);
+    });
+    it('allows a free unlock with a historical null balance and repeats the same unlock', async () => {
+        await pool.query('UPDATE users SET coins=NULL WHERE id=1');
+        await pool.query('UPDATE items SET price=0 WHERE id=19');
+        const buy = () => call(shop.buyItem,{itemId:'19',expectedPrice:0});
+        const first = await buy();
+        expect(first.newBalance).toBe(0);
+        expect(await buy()).toEqual(first);
+        expect(await balance()).toBe(0);
+        expect((await pool.query('SELECT FROM user_items')).rowCount).toBe(1);
+    });
+    it('rejects missing crate request objects and malformed IDs before checkout', async () => {
+        const checkouts = db.pool.connect.mock.calls.length;
+        for (const body of [undefined, [], {purchaseId:null}, {purchaseId:' '}]) {
+            await expect(call(crateHttp.openCrate,body)).rejects.toMatchObject({statusCode:400});
+        }
+        expect(db.pool.connect.mock.calls).toHaveLength(checkouts);
+        expect(await balance()).toBe(200);
+    });
+    it('reports a removed account consistently and rolls back an opening without stock', async () => {
+        await expect(call(shop.buyItem,{itemId:19},99)).rejects.toMatchObject({statusCode:404});
+        await expect(call(crateHttp.openCrate,{purchaseId:'opening-1'},99)).rejects.toMatchObject({statusCode:404});
+        await pool.query("UPDATE items SET theme='dark'");
+        await expect(call(crateHttp.openCrate,{purchaseId:'opening-1'})).rejects.toMatchObject({statusCode:409});
+        expect(await balance()).toBe(200);
+        expect((await pool.query('SELECT FROM crate_purchases')).rowCount).toBe(0);
+        expect((await pool.query('SELECT FROM user_items')).rowCount).toBe(0);
     });
     it('replays the same keyed crate across aliases and supports subsequent keyed or legacy opens', async () => {
         const open = type => crate.openCrate(1,type,'opening-1');

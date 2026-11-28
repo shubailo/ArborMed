@@ -169,6 +169,11 @@ run('duel ledger and daily reward transactions', () => {
       await controller.claimQuest({user:{id:1},body}, res, error => {throw error;});
       return res.json.mock.calls[0][0];
     };
+    for (const invalid of [null, 20261128, '2026-02-30']) {
+      const checkouts = db.pool.connect.mock.calls.length;
+      await expect(claim({questId:'daily_2',date:invalid})).rejects.toMatchObject({statusCode:400});
+      expect(db.pool.connect.mock.calls).toHaveLength(checkouts);
+    }
     await expect(claim({questId:'daily_2',date:'2000-01-01'})).rejects.toMatchObject({statusCode:409});
     expect(await profile(1)).toBe(100);
     expect(await claim({questId:'daily_2',date})).toMatchObject({date,awardedTokens:20,newBalance:120});

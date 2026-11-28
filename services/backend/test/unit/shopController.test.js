@@ -36,6 +36,13 @@ describe('shopController.buyItem', () => {
         jest.clearAllMocks();
     });
 
+    test.each([undefined, {}, {itemId: 0}, {itemId: 1.5}, {itemId: 2147483648},
+        {itemId: 100, expectedPrice: '50'}])('rejects invalid purchase input before checkout (%p)', async body => {
+        await shopController.buyItem({...req, body}, res, next);
+        expect(next).toHaveBeenCalledWith(expect.objectContaining({statusCode:400}));
+        expect(withTransaction).not.toHaveBeenCalled();
+    });
+
     test('should prevent race condition by using atomic UPDATE with balance check', async () => {
 
         withTransaction.mockImplementationOnce(async (fn) => {
@@ -50,25 +57,9 @@ describe('shopController.buyItem', () => {
 
         await shopController.buyItem(req, res, next);
 
-        const updateCalls = clientMock.query.mock.calls.filter(call =>
-            call[0] &&
-            call[0].includes('UPDATE users') &&
-            call[0].includes('coins >=')
-        );
-
-        if (updateCalls.length === 0) {
-             const vulnerableUpdate = clientMock.query.mock.calls.find(call =>
-                call[0] &&
-                call[0].includes('UPDATE users') &&
-                !call[0].includes('coins >=')
-            );
-            if (vulnerableUpdate) {
-                throw new Error('Vulnerability detected: UPDATE without balance check!');
-            }
-            throw new Error('No UPDATE query found');
-        }
-
-        expect(updateCalls.length).toBe(1);
+        const updateCalls = clientMock.query.mock.calls.filter(([sql]) => sql.includes('UPDATE users'));
+        expect(updateCalls).toHaveLength(1);
+        expect(updateCalls[0][0]).toContain('COALESCE(coins, 0) >= $1');
         expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
             message: 'Item purchased',
             newBalance: 50

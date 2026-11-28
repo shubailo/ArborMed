@@ -16,7 +16,8 @@ exports.openCrate = async (userId, crateType = 'clinical', purchaseId) => {
         throw new AppError('Invalid purchaseId', 400);
     }
     return withTransaction(async client => {
-        await client.query('SELECT id FROM users WHERE id = $1 FOR UPDATE', [userId]);
+        const wallet = await client.query('SELECT id FROM users WHERE id = $1 FOR UPDATE', [userId]);
+        if (!wallet.rows.length) throw new AppError('User not found', 404);
         if (purchaseId !== undefined) {
             const previous = await client.query(
                 'SELECT crate_id, result FROM crate_purchases WHERE user_id = $1 AND purchase_id = $2', [userId, purchaseId]
