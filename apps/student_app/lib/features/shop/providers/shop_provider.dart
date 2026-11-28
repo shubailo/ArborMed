@@ -27,8 +27,11 @@ class ShopProvider with ChangeNotifier {
 
   final ApiService _apiService;
   final AppDatabase _db;
+  final Set<int> _pendingPurchases = {};
   int? _owner;
   int _generation = 0;
+  int _catalogRequest = 0;
+  int _inventoryRequest = 0;
   (int?, int) get _account => (_apiService.userId, _generation);
 
   void setAccount(int? userId) {
@@ -56,7 +59,7 @@ class ShopProvider with ChangeNotifier {
 
   List<ShopItem> get catalog => _catalog;
   List<ShopUserItem> get inventory => _inventory;
-  bool get isLoading => _isLoading;
+  bool get isLoading => _isLoading || _pendingPurchases.isNotEmpty;
   String? get errorMessage => _errorMessage;
 
   // Avatar State
@@ -288,6 +291,7 @@ class ShopProvider with ChangeNotifier {
   }
 
   Future<void> fetchCatalog({String? slotType, String? theme}) async {
+    final request = ++_catalogRequest;
     _isLoading = true;
     _errorMessage = null;
     final account = _account;
@@ -297,23 +301,23 @@ class ShopProvider with ChangeNotifier {
 
     try {
       await _loadCatalogFromLocal(slotType: slotType, theme: theme);
-      if (_account != account || account.$1 == null) return;
+      if (_account != account || request != _catalogRequest || account.$1 == null) return;
 
       String endpoint = '${ApiEndpoints.shopCatalog}?';
       if (slotType != null) endpoint += 'slot_type=$slotType&';
       if (theme != null) endpoint += 'theme=$theme&';
 
       final List<dynamic> data = await _apiService.get(endpoint);
-      if (_account != account) return;
+      if (_account != account || request != _catalogRequest) return;
       final remoteItems = data.map((json) => ShopItem.fromJson(json)).toList();
 
       await _syncCatalogToLocal(remoteItems);
-      if (_account != account) return;
+      if (_account != account || request != _catalogRequest) return;
       await _loadCatalogFromLocal(slotType: slotType, theme: theme);
     } catch (e) {
       debugPrint('Fetch remote catalog error: $e');
     } finally {
-      if (_account == account) {
+      if (_account == account && request == _catalogRequest) {
         _isLoading = false;
         notifyListeners();
       }
@@ -322,6 +326,7 @@ class ShopProvider with ChangeNotifier {
 
   Future<void> _loadCatalogFromLocal({String? slotType, String? theme}) async {
     final account = _account;
+    final request = _catalogRequest;
     final query = _db.select(_db.items);
 
     if (slotType != null) {
@@ -366,7 +371,7 @@ class ShopProvider with ChangeNotifier {
       }
     }
 
-    if (_account != account) return;
+    if (_account != account || request != _catalogRequest) return;
     _catalog = catalog.map((item) {
       final int? userItemId = localInventoryMap[item.id];
       final bool owned = userItemId != null;
@@ -413,10 +418,12 @@ class ShopProvider with ChangeNotifier {
   }
 
   Future<void> fetchInventory({bool notify = true}) async {
+    final request = ++_inventoryRequest;
     _isLoading = true;
     if (notify) notifyListeners();
 
     final account = _account;
+    bool current() => _account == account && request == _inventoryRequest;
     final userId = account.$1;
     if (userId == null) {
       _isLoading = false;
@@ -426,24 +433,24 @@ class ShopProvider with ChangeNotifier {
 
     try {
       await _loadInventoryFromLocal(userId, notify: false);
-      if (_account != account) return;
+      if (!current()) return;
       final List<dynamic> data = await _apiService.get(
         ApiEndpoints.shopInventory,
       );
-      if (_account != account) return;
+      if (!current()) return;
       final remoteInventory = data
           .map((json) => ShopUserItem.fromJson(json))
           .toList();
 
       await _db.transaction(() async {
-        if (_account == account) await _syncInventoryToLocal(userId, remoteInventory);
+        if (current()) await _syncInventoryToLocal(userId, remoteInventory);
       });
-      if (_account != account) return;
+      if (!current()) return;
       await _loadInventoryFromLocal(userId, notify: false);
     } catch (e) {
       debugPrint('Fetch remote inventory error: $e');
     } finally {
-      if (_account == account) {
+      if (current()) {
         _isLoading = false;
         if (notify) notifyListeners();
       }
@@ -452,6 +459,7 @@ class ShopProvider with ChangeNotifier {
 
   Future<void> _loadInventoryFromLocal(int userId, {bool notify = true}) async {
     final account = _account;
+    final request = _inventoryRequest;
     if (account.$1 != userId) return;
     final locals = await (_db.select(
       _db.userItems,
@@ -494,7 +502,7 @@ class ShopProvider with ChangeNotifier {
         ),
       );
     }
-    if (_account != account) return;
+    if (_account != account || request != _inventoryRequest) return;
     _inventory = inventory;
     if (notify) notifyListeners();
   }
@@ -638,15 +646,15 @@ class ShopProvider with ChangeNotifier {
     _visitedAvatar = null;
     _errorMessage = null;
     _isLoading = false;
+    _pendingPurchases.clear();
     notifyListeners();
   }
 
   Future<bool> buyItem(int itemId, BuildContext context, {int? expectedPrice}) async {
     final account = _account;
     final userId = account.$1;
-    if (userId == null) return false;
+    if (userId == null || !_pendingPurchases.add(itemId)) return false;
     try {
-      _isLoading = true;
       notifyListeners();
 
       // 1. Strict API-First Buy
@@ -694,7 +702,7 @@ class ShopProvider with ChangeNotifier {
       return false;
     } finally {
       if (_account == account) {
-        _isLoading = false;
+        _pendingPurchases.remove(itemId);
         notifyListeners();
       }
     }

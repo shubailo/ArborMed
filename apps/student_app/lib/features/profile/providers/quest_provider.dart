@@ -7,6 +7,7 @@ import 'package:arbor_med/services/auth_provider.dart';
 
 class QuestProvider with ChangeNotifier {
   final AuthProvider _authProvider;
+  final DateTime Function() _clock;
   List<LearningQuest> _quests = [];
   int? _owner;
   String? _date;
@@ -16,18 +17,21 @@ class QuestProvider with ChangeNotifier {
   bool _refreshFailed = false;
   bool _disposed = false;
   Object? _claim;
+  String? _claimDay;
 
-  QuestProvider(this._authProvider) : _owner = _authProvider.user?.id {
+  QuestProvider(this._authProvider, {DateTime Function()? clock})
+      : _clock = clock ?? DateTime.now,
+        _owner = _authProvider.user?.id {
     _authProvider.addListener(_syncOwner);
   }
 
   String get _today =>
-      DateTime.now().toUtc().toIso8601String().substring(0, 10);
+      _clock().toUtc().toIso8601String().substring(0, 10);
   List<LearningQuest> get quests =>
       _owner == _authProvider.user?.id && _date == _today ? _quests : const [];
   bool get isLoading => _isLoading;
   bool get refreshFailed => _refreshFailed;
-  bool get isClaiming => _claim != null;
+  bool get isClaiming => _claim != null && _claimDay == _today;
   int get sessionRevision => _session;
 
   void _syncOwner() {
@@ -36,6 +40,7 @@ class QuestProvider with ChangeNotifier {
     _session++;
     _request++;
     _claim = null;
+    _claimDay = null;
     _date = null;
     _quests = [];
     _isLoading = false;
@@ -120,7 +125,7 @@ class QuestProvider with ChangeNotifier {
   Future<int> claimQuest(String questId) async {
     final index = quests.indexWhere((quest) => quest.id == questId);
     if (_disposed ||
-        _claim != null ||
+        isClaiming ||
         index < 0 ||
         quests[index].status != QuestStatus.completed) {
       return 0;
@@ -128,6 +133,7 @@ class QuestProvider with ChangeNotifier {
     final session = _session;
     final date = _date!;
     final token = _claim = Object();
+    _claimDay = date;
     notifyListeners();
     try {
       final response = await _authProvider.apiService
@@ -158,6 +164,7 @@ class QuestProvider with ChangeNotifier {
     } finally {
       if (!_disposed && identical(_claim, token)) {
         _claim = null;
+        _claimDay = null;
         notifyListeners();
       }
     }

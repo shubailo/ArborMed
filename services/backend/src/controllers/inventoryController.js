@@ -81,10 +81,11 @@ exports.equipItem = catchAsync(async (req, res) => {
 
 exports.unequipItem = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
-    const { userItemId } = req.body;
+    const userItemId = intValue(req.body?.userItemId);
+    if (userItemId === null || userItemId <= 0) throw new AppError('Invalid inventory item', 400);
 
     const result = await db.query(
-        'UPDATE user_items SET is_placed = FALSE, placed_at_room_id = NULL, placed_at_slot = NULL, x_pos = 0, y_pos = 0 WHERE id = $1 AND user_id = $2 RETURNING id',
+        `${unplace}, x_pos = 0, y_pos = 0 WHERE id = $1 AND user_id = $2 RETURNING id`,
         [userItemId, userId]
     );
 
@@ -96,7 +97,7 @@ exports.unequipItem = catchAsync(async (req, res, next) => {
 });
 
 exports.syncRoomState = catchAsync(async (req, res) => {
-    const { items, roomId } = req.body;
+    const { items, roomId } = req.body ?? {};
     const user = req.user.id;
     if (!Array.isArray(items)) throw new AppError('Invalid payload: items array required', 400);
     const placements = items.map(placement);

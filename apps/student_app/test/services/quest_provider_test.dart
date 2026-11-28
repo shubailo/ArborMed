@@ -10,11 +10,12 @@ import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/services/auth_provider.dart';
 
 class QuestApi extends Fake implements ApiService {
+  String? date;
   bool claimed = false;
   Completer<dynamic>? pending;
   @override
   Future<dynamic> get(String endpoint) async => {
-        'date': DateTime.now().toUtc().toIso8601String().substring(0, 10),
+        'date': date ?? DateTime.now().toUtc().toIso8601String().substring(0, 10),
         'quests': [
           {
             'id': 'daily_3',
@@ -76,5 +77,27 @@ void main() {
     auth.apiService.pending!.complete({'newBalance': 100, 'awardedTokens': 30});
     expect(await claim, 0);
     expect(auth.balance, isNull);
+  });
+
+  test('an outstanding claim from yesterday does not block today', () async {
+    final auth = QuestAuth();
+    var now = DateTime.utc(2026, 11, 27, 23, 59);
+    auth.apiService.date = '2026-11-27';
+    final provider = QuestProvider(auth, clock: () => now);
+    addTearDown(provider.dispose);
+    await provider.fetchQuests();
+    final old = Completer<dynamic>();
+    auth.apiService.pending = old;
+    final first = provider.claimQuest('daily_3');
+    now = DateTime.utc(2026, 11, 28);
+    auth.apiService.date = '2026-11-28';
+    auth.apiService.claimed = false;
+    auth.apiService.pending = null;
+    await provider.fetchQuests();
+    expect(provider.isClaiming, false);
+    expect(await provider.claimQuest('daily_3'), 30);
+    old.complete({'newBalance': 3, 'awardedTokens': 30, 'date': '2026-11-27'});
+    expect(await first, 0);
+    expect(auth.balance, 100);
   });
 }

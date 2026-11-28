@@ -13,13 +13,14 @@ class ShopApi extends Fake implements ApiService {
   int? userId = 1;
   List<Map<String,dynamic>> items = [];
   Completer<dynamic>? deferred;
+  Future<dynamic> Function(String)? onGet;
   final started = Completer<void>();
   final posts = <String>[];
 
   @override
   Future<dynamic> get(String endpoint) async {
     if (!started.isCompleted) started.complete();
-    return deferred?.future ?? Future.value(items);
+    return onGet?.call(endpoint) ?? deferred?.future ?? Future.value(items);
   }
 
   @override
@@ -98,6 +99,65 @@ void main() {
     expect(await purchasing, false);
     expect(await db.select(db.userItems).get(), isEmpty);
   });
+  test('an older inventory response cannot undo a newer placement', () async {
+    final old = Completer<dynamic>();
+    final oldStarted = Completer<void>();
+    var requests = 0;
+    api.onGet = (_) {
+      if (++requests == 1) {
+        oldStarted.complete();
+        return old.future;
+      }
+      return Future.value([{...remote(100, 42), 'is_placed': true}]);
+    };
+    final first = shop.fetchInventory();
+    await oldStarted.future;
+    await shop.fetchInventory();
+    old.complete([remote(100, 42)]);
+    await first;
+    expect(shop.inventory.single.isPlaced, isTrue);
+    expect((await db.select(db.userItems).getSingle()).isPlaced, isTrue);
+  });
+
+  test('an older catalog response cannot restore a previous price', () async {
+    final old = Completer<dynamic>();
+    final oldStarted = Completer<void>();
+    Map<String, dynamic> item(int price) => {
+      'id': 99001, 'name': 'Desk', 'slot_type': 'desk',
+      'theme': 'clinical', 'type': 'furniture', 'price': price,
+    };
+    var requests = 0;
+    api.onGet = (_) {
+      if (++requests == 1) {
+        oldStarted.complete();
+        return old.future;
+      }
+      return Future.value([item(75)]);
+    };
+    final first = shop.fetchCatalog(theme: 'clinical');
+    await oldStarted.future;
+    await shop.fetchCatalog(theme: 'clinical');
+    old.complete([item(40)]);
+    await first;
+    expect(shop.catalog.singleWhere((item) => item.id == 99001).price, 75);
+    final row = await (db.select(db.items)..where((t) => t.serverId.equals(99001))).getSingle();
+    expect(row.price, 75);
+  });
+
+  test('a refresh cannot clear a pending purchase or send the same buy twice', () async {
+    api.deferred = Completer<dynamic>();
+    api.onGet = (_) async => [];
+    final first = shop.buyItem(7, TestContext());
+    await api.started.future;
+    await shop.fetchInventory();
+    expect(shop.isLoading, isTrue);
+    expect(await shop.buyItem(7, TestContext()), isFalse);
+    expect(api.posts, [ApiEndpoints.shopBuy]);
+    api.deferred!.complete({'userItemId': 10});
+    expect(await first, isTrue);
+    expect(shop.isLoading, isFalse);
+  });
+
   test('inventory sync preserves the global catalog price for the next account', () async {
     await db.into(db.items).insert(ItemsCompanion.insert(
       serverId: const Value(42), price: const Value(75), description: const Value('Catalog description'),

@@ -77,7 +77,7 @@ describe('inventoryController', () => {
             await inventoryController.unequipItem(req, res, next);
 
             expect(db.query).toHaveBeenCalledWith(
-                expect.stringContaining('UPDATE user_items SET is_placed = FALSE'),
+                expect.stringMatching(/UPDATE user_items SET is_placed = false, .*uses_grid = false/i),
                 [10, 1]
             );
             expect(res.json).toHaveBeenCalledWith({ message: 'Item removed from room' });

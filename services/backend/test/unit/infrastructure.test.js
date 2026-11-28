@@ -21,6 +21,16 @@ test('production connections always verify the peer, including when a URL contai
   expect(() => databaseOptions({ NODE_ENV: 'production' })).toThrow('DATABASE_URL');
 });
 
+test('TLS opt-out applies only to local development without URL overrides', () => {
+  const options = url => databaseOptions({NODE_ENV:'test', DATABASE_URL:url});
+  expect(options('postgres://localhost/test').ssl).toBe(false);
+  for (const url of ['postgres://localhost/test?host=remote.invalid', 'postgres://localhost/test?ssl=true']) {
+    const config = options(url);
+    const ConnectionParameters = require('pg/lib/connection-parameters');
+    expect(new ConnectionParameters(config).ssl).toEqual({rejectUnauthorized:true});
+  }
+});
+
 test('malformed connection settings report a configuration error without the supplied URL', () => {
   expect(() => databaseOptions({ DATABASE_URL: 'not-a-database-url' })).toThrow(/^Invalid DATABASE_URL$/);
   expect(() => databaseOptions({ DATABASE_URL: 'https://example.test/db' })).toThrow(/^Invalid DATABASE_URL$/);

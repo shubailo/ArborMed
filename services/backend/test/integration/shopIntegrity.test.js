@@ -26,7 +26,9 @@ run('shop ownership and purchase transactions', () => {
             await pool.query(readFileSync(join(__dirname,'../../migrations',name),'utf8'));
         }
         await pool.query('CREATE TABLE room_likes(liker_id integer, receiver_id integer, UNIQUE(liker_id, receiver_id))');
-        await pool.query(readFileSync(join(__dirname,'../../migrations/065_shop_integrity.sql'),'utf8'));
+        for (const name of ['065_shop_integrity.sql','071_inventory_placement_shape.sql']) {
+            await pool.query(readFileSync(join(__dirname,'../../migrations',name),'utf8'));
+        }
         db.pool.connect.mockImplementation(() => pool.connect());
         db.query.mockImplementation((...args) => pool.query(...args));
     });
@@ -114,6 +116,18 @@ run('shop ownership and purchase transactions', () => {
         await pool.query('DELETE FROM user_rooms WHERE id=5');
         expect(await placed()).toEqual([]);
         expect((await pool.query('SELECT FROM user_items')).rowCount).toBe(3);
+    });
+    it('rejects incomplete placements and clears grid state on unequip', async () => {
+        await pool.query("INSERT INTO user_rooms(id,user_id,room_type) VALUES (5,1,'exam')");
+        await expect(pool.query(`INSERT INTO user_items(user_id,item_id,is_placed,placed_at_room_id,placed_at_slot,uses_grid,x_pos,y_pos)
+            VALUES (1,19,true,5,'floor',true,NULL,0)`)).rejects.toMatchObject({code:'23514'});
+        const {rows: [item]} = await pool.query('INSERT INTO user_items(user_id,item_id) VALUES (1,19) RETURNING id');
+        await call(inventory.equipItem,{roomId:5,userItemId:item.id,x:0,y:0});
+        await call(inventory.unequipItem,{userItemId:item.id});
+        const {rows: [stored]} = await pool.query('SELECT is_placed, uses_grid, placed_at_room_id FROM user_items WHERE id=$1',[item.id]);
+        expect(stored).toEqual({is_placed:false,uses_grid:false,placed_at_room_id:null});
+        await expect(call(inventory.unequipItem,undefined)).rejects.toMatchObject({statusCode:400});
+        await expect(call(inventory.syncRoomState,undefined)).rejects.toMatchObject({statusCode:400});
     });
     it('repeated catalog seeding keeps historical IDs, inventory, and placement', async () => {
         await pool.query(`INSERT INTO items(id,name,type,slot_type,asset_path) VALUES(700,'Historical cabinet','furniture','cabinet','legacy.png'),
