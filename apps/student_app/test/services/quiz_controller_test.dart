@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:arbor_med/generated/l10n/app_localizations.dart';
 import 'package:arbor_med/widgets/cozy/liquid_button.dart';
@@ -326,6 +327,29 @@ void main() {
       expect(await database.customSelect('SELECT * FROM pending_submissions').get(), isEmpty);
       final sent = verify(mockApiService.post('/quiz/answer', captureAny)).captured;
       expect(sent.map((p) => p['submissionId']).toSet(), {id});
+      expect(sent.first['sessionId'], startsWith('local_'));
+      expect(sent.last, sent.first);
+    });
+
+    test('separate offline rounds on the same question use different session and submission IDs', () async {
+      when(mockApiService.post('/quiz/answer', any)).thenThrow(Exception('offline'));
+      final question = {
+        'id': 100, 'question_type': 'single_choice', 'correct_answer': 'A', 'options': ['A', 'B'],
+      };
+      controller = buildController(initialData: question);
+      final second = buildController(initialData: question);
+      addTearDown(second.dispose);
+      controller.selectAnswer('A');
+      second.selectAnswer('A');
+      await Future.wait([controller.submitAnswer(), second.submitAnswer()]);
+      final rows = await database.customSelect('SELECT * FROM pending_submissions').get();
+      expect(rows, hasLength(2));
+      expect(rows.map((row) => row.read<String>('submission_id')).toSet(), hasLength(2));
+      final sessions = rows.map((row) => jsonDecode(row.read<String>('payload'))['sessionId']);
+      expect(sessions.toSet(), hasLength(2));
+      for (final session in sessions) {
+        expect(session, matches(r'^local_[a-f0-9-]{36}$'));
+      }
     });
 
     testWidgets('an incomplete cached relation can be skipped without recording a grade', (t) async {

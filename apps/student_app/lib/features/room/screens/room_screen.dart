@@ -562,7 +562,7 @@ Future<bool> openRoomQuiz(BuildContext context, String name, String slug, int ow
   final selection = context.read<QuestionCacheService>().open(slug);
   Future<Map<String, dynamic>> load() async {
     selection.prefetch();
-    var sessionId = 'local_${DateTime.now().millisecondsSinceEpoch}';
+    String? sessionId;
     try {
       final session = await api.post('/quiz/start', {});
       if (session is Map && session['id'] != null) sessionId = session['id'].toString();

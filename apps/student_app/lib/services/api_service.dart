@@ -128,9 +128,13 @@ class ApiService {
       {Map<String, dynamic>? body, bool useSessionToken = true}) async {
     final uri = Uri.parse('$baseUrl$endpoint');
     final payload = body == null ? null : jsonEncode(body);
+    final headers = _getHeaders(null);
     final response = await _withSession((token) async {
       final request = http.Request(method, uri)
-        ..headers.addAll(_getHeaders(token));
+        ..headers.addAll(headers);
+      if ((token ?? '').isNotEmpty) {
+        request.headers['Authorization'] = 'Bearer $token';
+      }
       if (payload != null) request.body = payload;
       return http.Response.fromStream(await _client.send(request));
     }, useSessionToken: useSessionToken);

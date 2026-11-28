@@ -200,19 +200,23 @@ class _QuizViewState extends State<_QuizView> with WidgetsBindingObserver {
     final controller = Provider.of<QuizController>(context);
 
     // Keyboard handling
-    return KeyboardListener(
+    return Focus(
       focusNode: _focusNode,
       autofocus: ModalRoute.isCurrentOf(context) ?? true,
-      onKeyEvent: (event) {
-        if (event is! KeyDownEvent || ModalRoute.of(context)?.isCurrent == false) return;
-        final key = event.logicalKey;
-        if (key == LogicalKeyboardKey.space) {
+      onKeyEvent: (node, event) {
+        if (!node.hasPrimaryFocus ||
+            event.logicalKey != LogicalKeyboardKey.space ||
+            ModalRoute.of(context)?.isCurrent == false) {
+          return KeyEventResult.ignored;
+        }
+        if (event is KeyDownEvent) {
           if (controller.state.isAnswerChecked || controller.state.submissionRejected) {
-            controller.loadNextQuestion();
+            unawaited(controller.loadNextQuestion());
           } else {
-            controller.submitAnswer();
+            unawaited(controller.submitAnswer());
           }
         }
+        return KeyEventResult.handled;
       },
       child: Scaffold(
         backgroundColor: palette.background,

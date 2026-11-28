@@ -4,13 +4,17 @@ const catchAsync = require('../utils/catchAsync');
 const { withTransaction } = require('../utils/dbHelpers');
 
 exports.getInventory = catchAsync(async (req, res) => {
-    const targetUserId = req.query.userId || req.user.id;
+    const targetUserId = Number(req.query.userId ?? req.user.id);
+    const ownInventory = targetUserId === req.user.id;
+    const fields = ownInventory
+        ? 'ui.*, i.name, i.type, i.slot_type, i.asset_path, i.price, i.theme, i.description'
+        : 'ui.id, ui.item_id, ui.is_placed, ui.uses_grid, ui.placed_at_slot, ui.placed_at_room_id, ui.x_pos, ui.y_pos, i.name, i.type, i.slot_type, i.asset_path';
 
     const result = await db.query(`
-        SELECT ui.*, i.name, i.type, i.slot_type, i.asset_path, i.price, i.theme, i.description
+        SELECT ${fields}
         FROM user_items ui
         JOIN items i ON ui.item_id = i.id
-        WHERE ui.user_id = $1
+        WHERE ui.user_id = $1${ownInventory ? '' : ' AND ui.is_placed IS TRUE'}
     `, [targetUserId]);
 
     const items = result.rows.map(row => ({

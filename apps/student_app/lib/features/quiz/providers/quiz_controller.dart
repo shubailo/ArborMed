@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:drift/drift.dart' show BooleanExpressionOperators;
+import 'package:uuid/uuid.dart';
 import 'submission_queue.dart';
 import '../../../core/api_exceptions.dart';
 import '../../../database/connection/browser_storage.dart';
@@ -27,7 +28,7 @@ class QuizController extends ChangeNotifier {
   final int _userId; 
 
   // Session State
-  String? _sessionId;
+  String _sessionId;
   final Stopwatch _stopwatch = Stopwatch();
   QuizState _state = const QuizState();
   QuizState get state => _state;
@@ -56,6 +57,7 @@ class QuizController extends ChangeNotifier {
         _db = db,
         _queue = queue,
         _userId = userId,
+        _sessionId = initialSessionId ?? 'local_${const Uuid().v4()}',
         _mistakeIds = questionIds != null ? List.from(questionIds) : null,
         _isReviewMode = questionIds != null && questionIds.isNotEmpty {
     final first = initialQuestion == null ? null : normalizePracticeQuestion(initialQuestion);
@@ -63,7 +65,6 @@ class QuizController extends ChangeNotifier {
     _receiptSubscription = _queue.receipts.listen(_applyReceipt);
     if (first != null) {
       _progressTopic = first['topic_slug']?.toString() ?? systemSlug;
-      _sessionId = initialSessionId;
       _stopwatch.start();
       _selection?.prefetch();
       _state = _state.copyWith(
@@ -114,9 +115,6 @@ class QuizController extends ChangeNotifier {
 
   Future<void> _startSession() async {
     try {
-      // Optimistic Session ID (Offline / Cold-start support)
-      _sessionId = "local_${DateTime.now().millisecondsSinceEpoch}";
-
       // Load first question immediately so user doesn't wait on backend spin-up
       loadNextQuestion();
 
@@ -127,7 +125,7 @@ class QuizController extends ChangeNotifier {
           debugPrint("✅ Session established with server: $_sessionId");
         }
       }).catchError((e) {
-        debugPrint("Offline or cold-start session, using local ID: $_sessionId ($e)");
+        debugPrint('Quiz session handshake deferred: ${e.runtimeType}');
       });
     } catch (e) {
       debugPrint("Error starting session: $e");
@@ -135,7 +133,7 @@ class QuizController extends ChangeNotifier {
   }
 
   Future<void> loadNextQuestion() async {
-    if (_disposed || _loadingQuestion) return;
+    if (_disposed || _loadingQuestion || (_state.isSubmitting && !_state.isAnswerChecked)) return;
     _loadingQuestion = true;
     final previousProgress = _visibleSubmission == null ? _state.levelProgress : _progressBeforeAnswer;
     _visibleSubmission = null;
@@ -264,17 +262,18 @@ class QuizController extends ChangeNotifier {
     final answer = renderer.formatAnswer(_state.userAnswer);
     if (answer == null) return;
     _stopwatch.stop();
+    final payload = {
+      'sessionId': _sessionId,
+      'questionId': question['id'],
+      'userAnswer': answer,
+      'responseTimeMs': _stopwatch.elapsedMilliseconds,
+      'selectionReason': question['selectionReason'],
+    };
     _state = _state.copyWith(isSubmitting: true, error: null);
     notifyListeners();
     late final String id;
     try {
-      id = await _queue.enqueue(_userId, question['topic_slug']?.toString() ?? systemSlug, {
-        'sessionId': _sessionId,
-        'questionId': question['id'],
-        'userAnswer': answer,
-        'responseTimeMs': _stopwatch.elapsedMilliseconds,
-        'selectionReason': question['selectionReason'],
-      });
+      id = await _queue.enqueue(_userId, question['topic_slug']?.toString() ?? systemSlug, payload);
     } catch (error) {
       if (_disposed || _apiService.userId != _userId || !identical(question, _state.currentQuestion)) return;
       _stopwatch.start();
@@ -372,7 +371,8 @@ class QuizController extends ChangeNotifier {
   }
 
   void resumeTimer() {
-    if (!_stopwatch.isRunning && _state.currentQuestion != null && !_state.isAnswerChecked) {
+    if (!_stopwatch.isRunning && _state.currentQuestion != null &&
+        !_state.isAnswerChecked && !_state.isSubmitting) {
       _stopwatch.start();
       debugPrint("⏱️ Quiz Timer Resumed");
     }

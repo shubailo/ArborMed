@@ -18,6 +18,7 @@ import 'package:arbor_med/services/theme_service.dart';
 import 'package:arbor_med/widgets/cozy/coin_particle.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -178,6 +179,43 @@ void main() {
     expect(t.takeException(), isNull);
     expect(find.text('Visible prompt'), findsOneWidget);
     expect(find.text('Igaz'), findsOneWidget);
+  });
+
+  testWidgets('holding Space submits once and leaving the quiz preserves the queued answer', (t) async {
+    await t.runAsync(db.ensureSubmissionStorage);
+    final posted = Completer<String>();
+    final response = Completer<Map<String, dynamic>>();
+    addTearDown(() {
+      if (!response.isCompleted) response.complete({});
+    });
+    when(api.post('/quiz/answer', any)).thenAnswer((call) {
+      posted.complete(call.positionalArguments[1]['submissionId'] as String);
+      return response.future;
+    });
+    await t.pumpWidget(app(quiz()));
+    await t.pump();
+    final controller = t.element(find.text('Visible quiz question')).read<QuizController>();
+    controller.selectAnswer('opt_second');
+    await t.runAsync(() async {
+      await t.sendKeyDownEvent(LogicalKeyboardKey.space);
+    });
+    for (var i = 0; i < 20 && !posted.isCompleted; i++) {
+      await t.pump();
+      await t.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 10)));
+    }
+    expect(posted.isCompleted, true);
+    expect(controller.state.isAnswerChecked, true);
+    await t.sendKeyRepeatEvent(LogicalKeyboardKey.space);
+    await t.sendKeyUpEvent(LogicalKeyboardKey.space);
+    expect(controller.state.questionIndex, 0);
+    await t.pumpWidget(const SizedBox());
+    await t.runAsync(() async {
+      response.complete({'submissionId': await posted.future, 'isCorrect': true});
+      await queue.flush();
+      expect(await db.customSelect('SELECT * FROM pending_submissions').get(), isEmpty);
+    });
+    verify(api.post('/quiz/answer', any)).called(1);
+    expect(t.takeException(), isNull);
   });
 
   testWidgets('the coin effect removes its completed overlay', (t) async {

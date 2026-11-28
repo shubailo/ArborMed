@@ -51,6 +51,26 @@ run('shop ownership and purchase transactions', () => {
         return result;
     }
     const balance = async () => (await pool.query('SELECT coins FROM users WHERE id=1')).rows[0].coins;
+    it('visitors see placed room items while owners still see their entire inventory', async () => {
+        await pool.query(`INSERT INTO user_rooms(id,user_id,room_type) VALUES (5,1,'exam');
+            INSERT INTO user_items(id,user_id,item_id,is_placed,placed_at_room_id,placed_at_slot,uses_grid)
+            VALUES (41,1,19,true,5,'floor',true),(42,1,20,false,NULL,NULL,false)`);
+        const get = async (owner, query) => {
+            const json = jest.fn();
+            await inventory.getInventory({user:{id:owner},query}, {json}, error => {throw error;});
+            return json.mock.calls[0][0];
+        };
+        const publicItems = await get(2, {userId:'1'});
+        expect(publicItems).toEqual([{
+            id:41, item_id:19, is_placed:true, uses_grid:true, placed_at_slot:'floor',
+            placed_at_room_id:5, x_pos:0, y_pos:0, x:0, y:0, name:'Desk',
+            type:'furniture', slot_type:'desk', asset_path:'desk.png',
+        }]);
+        expect(await get(1, {userId:'1'})).toEqual(expect.arrayContaining([
+            expect.objectContaining({id:41, price:40}),
+            expect.objectContaining({id:42, price:50, is_placed:false}),
+        ]));
+    });
     it('concurrent taps and replays unlock once, while a stale purchase quote rolls back', async () => {
         const buy = () => call(shop.buyItem,{itemId:19});
         const [a,b] = await Promise.all([buy(),buy()]);

@@ -15,8 +15,8 @@ const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // 🛡️ Sentinel: Pre-computed valid hash (cost 10) for timing attack mitigation
 const DUMMY_HASH = '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
 
-const generateToken = (id, emailVersion) => {
-    return jwt.sign(emailVersion ? { id, emailVersion } : { id }, process.env.JWT_SECRET, {
+const generateToken = (id, emailVersion, sessionId) => {
+    return jwt.sign({ id, sessionId, ...(emailVersion ? { emailVersion } : {}) }, process.env.JWT_SECRET, {
         expiresIn: '15m', // Short-lived access token
     });
 };
@@ -32,13 +32,13 @@ async function issueSession(userId, client, passwordHash = null, email = null) {
              RETURNING ${USER_FIELDS}, email_session_version
          ), issued AS (
              INSERT INTO refresh_tokens (user_id, token_hash, expires_at)
-             SELECT id, $2, $3 FROM signed_in RETURNING user_id
+             SELECT id, $2, $3 FROM signed_in RETURNING id AS session_id, user_id
          )
-         SELECT signed_in.* FROM signed_in JOIN issued ON issued.user_id = signed_in.id`,
+         SELECT signed_in.*, issued.session_id FROM signed_in JOIN issued ON issued.user_id = signed_in.id`,
         [userId, hashToken(refreshToken), expiresAt, passwordHash, email]
     );
     if (!user) throw new AppError('Credentials have changed. Please sign in again.', 401);
-    return { user: formatUserResponse(user), token: generateToken(user.id, user.email_session_version), refreshToken };
+    return { user: formatUserResponse(user), token: generateToken(user.id, user.email_session_version, user.session_id), refreshToken };
 }
 
 exports.register = catchAsync(async (req, res, next) => {
@@ -273,7 +273,7 @@ exports.verifyEmail = catchAsync(async (req, res) => {
 });
 
 exports.refreshToken = catchAsync(async (req, res, next) => {
-    const { refreshToken, userId } = req.body;
+    const { refreshToken, userId } = req.body ?? {};
 
     if (typeof refreshToken !== 'string' || !refreshToken || refreshToken.length > 512 ||
         !['number', 'string'].includes(typeof userId) || !/^[1-9]\d{0,9}$/.test(String(userId)) || Number(userId) > 2147483647) {
@@ -281,7 +281,7 @@ exports.refreshToken = catchAsync(async (req, res, next) => {
     }
 
     const result = await db.query(
-        `SELECT u.email_session_version FROM refresh_tokens t JOIN users u ON u.id = t.user_id
+        `SELECT t.id AS session_id, u.email_session_version FROM refresh_tokens t JOIN users u ON u.id = t.user_id
          WHERE t.user_id = $1 AND t.token_hash = $2 AND u.is_email_verified IS NOT FALSE
            AND t.revoked = FALSE AND t.expires_at > NOW() LIMIT 1`,
         [userId, hashToken(refreshToken)]
@@ -292,7 +292,7 @@ exports.refreshToken = catchAsync(async (req, res, next) => {
         return next(new AppError('Invalid or expired refresh token', 401));
     }
 
-    res.json({ token: generateToken(Number(userId), grant.email_session_version) });
+    res.json({ token: generateToken(Number(userId), grant.email_session_version, grant.session_id) });
 });
 
 exports.googleLogin = catchAsync(async (req, res, next) => {
@@ -339,16 +339,18 @@ exports.googleLogin = catchAsync(async (req, res, next) => {
 });
 
 exports.logout = catchAsync(async (req, res) => {
-    const { refreshToken } = req.body;
+    const { refreshToken } = req.body ?? {};
     const userId = req.user.id;
+    const sessionId = req.authSessionId ?? null;
 
-    if (refreshToken != null && refreshToken !== '') {
-        if (typeof refreshToken !== 'string' || refreshToken.length > 512) {
-            throw new AppError('Invalid refresh token format', 400);
-        }
+    if (refreshToken != null && (typeof refreshToken !== 'string' || refreshToken.length > 512)) {
+        throw new AppError('Invalid refresh token format', 400);
+    }
+    if (sessionId !== null || refreshToken) {
         await db.query(
-            'UPDATE refresh_tokens SET revoked = TRUE WHERE user_id = $1 AND token_hash = $2 AND revoked = FALSE',
-            [userId, hashToken(refreshToken)]
+            `UPDATE refresh_tokens SET revoked = TRUE WHERE user_id = $1 AND revoked = FALSE
+             AND (($2::int IS NOT NULL AND id = $2) OR ($2::int IS NULL AND token_hash = $3))`,
+            [userId, sessionId, refreshToken ? hashToken(refreshToken) : null]
         );
     }
 

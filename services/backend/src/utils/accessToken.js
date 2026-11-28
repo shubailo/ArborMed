@@ -8,6 +8,10 @@ function verifyAccessToken(token) {
     if (!Number.isInteger(id) || id < 1 || id > 2147483647) {
         throw new Error('Invalid ArborMed account ID');
     }
+    if (claims.sessionId !== undefined &&
+        (!Number.isInteger(claims.sessionId) || claims.sessionId < 1 || claims.sessionId > 2147483647)) {
+        throw new Error('Invalid ArborMed session ID');
+    }
     return { ...claims, id };
 }
 

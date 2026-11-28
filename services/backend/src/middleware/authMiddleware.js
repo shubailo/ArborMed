@@ -18,6 +18,7 @@ const protect = async (req, res, next) => {
         return res.status(503).json({ message: 'Authentication service temporarily unavailable' });
     }
     if (!req.user) return res.status(401).json({ message: 'Not authorized, user not found' });
+    req.authSessionId = decoded.sessionId ?? null;
     return next();
 };
 

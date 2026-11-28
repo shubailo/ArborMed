@@ -1,5 +1,6 @@
 const db = require('../config/db');
 const { withTransaction } = require('../utils/dbHelpers');
+const { activeSessionGrant } = require('./sessionUser');
 
 const allowedWagers = new Set([5, 10, 25, 50, 100]);
 const insufficientFunds = new Error('Insufficient funds');
@@ -19,11 +20,15 @@ async function reserve(id, userId, amount, session) {
         [id, userId, amount]
       );
       if (!hold.rowCount) return false;
+      const params = [userId, amount];
+      if (session) params.push(session.emailVersion ?? null);
+      const grant = session?.sessionId === undefined ? '' : activeSessionGrant('$1', '$4');
+      if (grant) params.push(session.sessionId);
       const debit = await client.query(
         `UPDATE users SET coins = coins - $2, last_activity_at = greatest(last_activity_at, statement_timestamp())
          WHERE id = $1 AND coins >= $2${session ?
-          ' AND is_email_verified IS NOT FALSE AND email_session_version::text IS NOT DISTINCT FROM $3' : ''}`,
-        session ? [userId, amount, session.emailVersion ?? null] : [userId, amount]
+          ' AND is_email_verified IS NOT FALSE AND email_session_version::text IS NOT DISTINCT FROM $3' : ''}${grant}`,
+        params
       );
       if (!debit.rowCount) throw insufficientFunds;
       return true;
@@ -104,10 +109,14 @@ async function settle(matchId, outcome, winnerId) {
 
 async function receipt(matchId, userId, session) {
   if (session != null && session.id !== userId) return undefined;
+  const params = [matchId, userId];
+  if (session) params.push(session.emailVersion ?? null);
+  const grant = session?.sessionId === undefined ? '' : activeSessionGrant('$2', '$4');
+  if (grant) params.push(session.sessionId);
   const { rows } = await db.query(
     `SELECT amount AS wager, payout FROM duel_wagers WHERE match_id = $1 AND user_id = $2${session ?
-      ' AND EXISTS (SELECT FROM users WHERE id = $2 AND is_email_verified IS NOT FALSE AND email_session_version::text IS NOT DISTINCT FROM $3)' : ''}`,
-    session ? [matchId, userId, session.emailVersion ?? null] : [matchId, userId]
+      ' AND EXISTS (SELECT FROM users WHERE id = $2 AND is_email_verified IS NOT FALSE AND email_session_version::text IS NOT DISTINCT FROM $3)' : ''}${grant}`,
+    params
   );
   return rows[0];
 }

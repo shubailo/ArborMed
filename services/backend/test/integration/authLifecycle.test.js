@@ -268,6 +268,41 @@ postgres('registration and password recovery on PostgreSQL', () => {
         ).toBeTruthy();
     });
 
+    test('logout retires access tokens issued before and during renewal for only that login', async () => {
+        const pending = await register();
+        const first = await verify(pending.registrationId, deliveredCode());
+        const other = await call(auth.login, { password: 'Original123!' });
+        const refresh = () => call(auth.refreshToken, {
+            userId: first.user.id, refreshToken: first.refreshToken,
+        });
+        const { protect } = require('../../src/middleware/authMiddleware');
+        const req = { headers: { authorization: 'Bearer ' + first.token } };
+        const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+        await protect(req, res, error => { if (error) throw error; });
+        expect(req.authSessionId).toEqual(expect.any(Number));
+        let markGrantRead, releaseRenewal;
+        const grantRead = new Promise(resolve => { markGrantRead = resolve; });
+        const finishRenewal = new Promise(resolve => { releaseRenewal = resolve; });
+        db.query.mockImplementationOnce(async (...args) => {
+            const grant = await client.query(...args);
+            markGrantRead();
+            await finishRenewal;
+            return grant;
+        });
+        const inFlight = refresh();
+        try {
+            await Promise.race([grantRead, inFlight]);
+            await auth.logout(req, res, error => { throw error; });
+        } finally {
+            releaseRenewal();
+        }
+        const renewed = await inFlight;
+        expect(await permits(first.token)).toBe(false);
+        expect(await permits(renewed.token)).toBe(false);
+        await expect(refresh()).rejects.toMatchObject({ statusCode: 401 });
+        expect(await permits(other.token)).toBe(true);
+    });
+
     test('profile rejects invalid names, preserves omitted fields and reports a missing account', async () => {
         const pending = await register();
         const { user } = await verify(pending.registrationId, deliveredCode());

@@ -148,6 +148,33 @@ void main() {
   });
 
   group('Token Refresh Logic', () {
+    test('quiz retry preserves the exact payload and locale across token renewal', () async {
+      apiService.setToken('old', refreshToken: 'refresh', userId: 7);
+      apiService.onTokenRefreshed = null;
+      apiService.setLanguage('hu');
+      addTearDown(() => apiService.setLanguage('en'));
+      final payload = <String, dynamic>{
+        'submissionId': 'same-receipt', 'sessionId': 'local_round', 'userAnswer': ['opt_a'],
+      };
+      final seen = <http.Request>[];
+      apiService.setHttpClient(MockClient((request) async {
+        if (request.url.path == ApiEndpoints.authRefresh) {
+          apiService.setLanguage('en');
+          payload['submissionId'] = 'changed-after-send';
+          (payload['userAnswer'] as List).add('opt_b');
+          return http.Response('{"token":"fresh"}', 200);
+        }
+        seen.add(request);
+        return http.Response('{}', seen.length == 1 ? 401 : 200);
+      }));
+      await apiService.post('/quiz/answer', payload);
+      expect(seen, hasLength(2));
+      expect(seen.last.body, seen.first.body);
+      expect(jsonDecode(seen.last.body)['submissionId'], 'same-receipt');
+      expect(seen.map((req) => req.headers['Accept-Language']), ['hu', 'hu']);
+      expect(seen.last.headers['Authorization'], 'Bearer fresh');
+    });
+
     test('concurrent unauthorized requests share one refresh and retry once',
         () async {
       apiService.setToken('old', refreshToken: 'refresh', userId: 7);
