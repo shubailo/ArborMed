@@ -40,4 +40,24 @@ void main() {
       expect(opens, 1);
     });
   }
+
+  test('an unsafe browser does not drain pre-existing pending answers', () async {
+    final db = AppDatabase.forTesting(BrowserStorageConnection(() async =>
+        (executor: NativeDatabase.memory(), safety: BrowserStorageSafety.singleTab)));
+    final api = MockApiService();
+    when(api.userId).thenReturn(1);
+    final queue = SubmissionQueue(db, api);
+    addTearDown(() async {
+      await queue.dispose();
+      await db.close();
+    });
+    await db.customStatement('''
+      INSERT INTO pending_submissions(submission_id,user_id,topic_slug,payload,created_at)
+      VALUES ('held',1,'ekg','{"questionId":7}',0)
+    ''');
+    await queue.flush();
+    verifyNever(api.post('/quiz/answer', any));
+    final pending = await db.customSelect('SELECT submission_id FROM pending_submissions').getSingle();
+    expect(pending.read<String>('submission_id'), 'held');
+  });
 }

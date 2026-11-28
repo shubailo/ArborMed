@@ -72,11 +72,14 @@ describe('inventoryController', () => {
     describe('unequipItem', () => {
         test('should unequip item and return success message', async () => {
             req.body = { userItemId: 10 };
-            db.query.mockResolvedValueOnce({ rows: [{ id: 10 }] });
+            withTransaction.mockImplementationOnce(fn => fn(clientMock));
+            clientMock.query.mockResolvedValueOnce({ rows: [{ id: 1 }] })
+                .mockResolvedValueOnce({ rows: [{ id: 10 }] });
 
             await inventoryController.unequipItem(req, res, next);
 
-            expect(db.query).toHaveBeenCalledWith(
+            expect(clientMock.query).toHaveBeenNthCalledWith(1, expect.stringContaining('FOR UPDATE'), [1]);
+            expect(clientMock.query).toHaveBeenNthCalledWith(2,
                 expect.stringMatching(/UPDATE user_items SET is_placed = false, .*uses_grid = false/i),
                 [10, 1]
             );
@@ -85,7 +88,9 @@ describe('inventoryController', () => {
 
         test('should return 404 if item to unequip is not found', async () => {
             req.body = { userItemId: 999 };
-            db.query.mockResolvedValueOnce({ rows: [] });
+            withTransaction.mockImplementationOnce(fn => fn(clientMock));
+            clientMock.query.mockResolvedValueOnce({ rows: [{ id: 1 }] })
+                .mockResolvedValueOnce({ rows: [] });
 
             await inventoryController.unequipItem(req, res, next);
 

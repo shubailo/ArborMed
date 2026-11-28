@@ -214,8 +214,13 @@ run('colleagues, clinics and residency rounds', () => {
             INSERT INTO responses(user_id,is_correct,created_at)
                 SELECT 1,true, (${today}::timestamp AT TIME ZONE 'UTC') FROM generate_series(1,8);
             INSERT INTO responses(session_id,user_id,is_correct) VALUES(21,NULL,true),(22,NULL,true),(21,2,true),(21,1,false);
-            INSERT INTO responses(user_id,is_correct,created_at) VALUES(1,true,(${today}::timestamp AT TIME ZONE 'UTC')-interval '1 second')`);
-        expect((await call(residency.syncRounds,1)).data.malpracticeStrikes).toBe(3);
+            INSERT INTO responses(user_id,is_correct,created_at) VALUES
+                (1,true,(${today}::timestamp AT TIME ZONE 'UTC')-interval '1 second'),
+                (1,true,((${today}+1)::timestamp AT TIME ZONE 'UTC'));
+            INSERT INTO responses(session_id,user_id,is_correct,created_at) VALUES
+                (21,NULL,true,(${today}::timestamp AT TIME ZONE 'UTC')-interval '1 second'),
+                (21,NULL,true,((${today}+1)::timestamp AT TIME ZONE 'UTC'))`);
+        expect((await call(residency.syncRounds,1)).data).toMatchObject({roundsProgress:9,malpracticeStrikes:3});
         await pool.query('INSERT INTO responses(user_id,is_correct) VALUES(1,true)');
         const [first, retry] = await Promise.all([call(residency.syncRounds,1),call(residency.syncRounds,1)]);
         expect(first).toEqual(retry);

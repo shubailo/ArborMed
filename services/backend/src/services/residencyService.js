@@ -51,8 +51,12 @@ class ResidencyService {
             WHERE r.is_correct
               AND r.created_at >= ($2::date::timestamp AT TIME ZONE 'UTC')
               AND r.created_at <= $4::timestamptz
-              AND (r.user_id = $1 OR (r.user_id IS NULL AND EXISTS (
-                    SELECT 1 FROM quiz_sessions qs WHERE qs.id = r.session_id AND qs.user_id = $1)))
+              AND r.user_id = $1
+            UNION ALL
+            SELECT 1 FROM quiz_sessions qs JOIN responses r ON r.session_id = qs.id
+            WHERE qs.user_id = $1 AND r.user_id IS NULL AND r.is_correct
+              AND r.created_at >= ($2::date::timestamp AT TIME ZONE 'UTC')
+              AND r.created_at <= $4::timestamptz
             LIMIT $3
         ) AS qualifying`, [userId, standing.study_day, roundsGoal, standing.study_time]);
         const progress = rows[0].progress;

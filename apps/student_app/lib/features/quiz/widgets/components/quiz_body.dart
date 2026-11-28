@@ -256,6 +256,15 @@ class QuizBody extends StatelessWidget {
                         children: [
                           // Delegate Content Rendering
                           renderer.buildQuestion(context, q),
+                          if (state.error case final error?)
+                            Semantics(
+                              liveRegion: true,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 12),
+                                child: Text(error,
+                                    style: TextStyle(color: palette.error)),
+                              ),
+                            ),
 
                           const SizedBox(height: 24),
 

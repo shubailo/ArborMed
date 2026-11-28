@@ -2,6 +2,11 @@ import 'package:drift/drift.dart';
 
 enum BrowserStorageSafety { transient, singleTab, sharedPersistent }
 
+class SubmissionStorageUnavailable extends StateError {
+  SubmissionStorageUnavailable()
+      : super('Persistent browser storage with multi-tab protection is required to save an answer.');
+}
+
 /// Browsing and queued answers share the same lazily opened web database.
 class BrowserStorageConnection extends DatabaseConnection {
   final BrowserStorageSafety Function() _storageSafety;
@@ -20,8 +25,7 @@ class BrowserStorageConnection extends DatabaseConnection {
   Future<void> requirePersistentQueue(QueryExecutorUser user) async {
     await ensureOpen(user);
     if (_storageSafety() != BrowserStorageSafety.sharedPersistent) {
-      throw StateError(
-          'Persistent browser storage with multi-tab protection is required to save an answer.');
+      throw SubmissionStorageUnavailable();
     }
   }
 }

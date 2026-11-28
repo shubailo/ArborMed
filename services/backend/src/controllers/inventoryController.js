@@ -40,9 +40,14 @@ function placement(item) {
     return {id, slot, x, y, grid};
 }
 
+async function lockInventory(client, user) {
+    const owner = await client.query('SELECT id FROM users WHERE id = $1 FOR UPDATE', [user]);
+    if (!owner.rows.length) throw new AppError('User not found', 404);
+}
+
 async function ownedRoom(client, user, id) {
     // Different rooms can simultaneously move the same item. Lock the owner first.
-    await client.query('SELECT id FROM users WHERE id = $1 FOR UPDATE', [user]);
+    await lockInventory(client, user);
     if (id == null) {
         const room = await client.query(`INSERT INTO user_rooms (user_id, room_type, is_active)
             VALUES ($1, 'exam', true) ON CONFLICT (user_id, room_type) DO UPDATE SET is_active = true RETURNING id`, [user]);
@@ -84,10 +89,13 @@ exports.unequipItem = catchAsync(async (req, res, next) => {
     const userItemId = intValue(req.body?.userItemId);
     if (userItemId === null || userItemId <= 0) throw new AppError('Invalid inventory item', 400);
 
-    const result = await db.query(
-        `${unplace}, x_pos = 0, y_pos = 0 WHERE id = $1 AND user_id = $2 RETURNING id`,
-        [userItemId, userId]
-    );
+    const result = await withTransaction(async client => {
+        await lockInventory(client, userId);
+        return client.query(
+            `${unplace}, x_pos = 0, y_pos = 0 WHERE id = $1 AND user_id = $2 RETURNING id`,
+            [userItemId, userId]
+        );
+    });
 
     if (result.rows.length === 0) {
         return next(new AppError('Item not found in inventory', 404));

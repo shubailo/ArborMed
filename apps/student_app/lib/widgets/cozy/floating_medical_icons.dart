@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'dart:async'; // Added
+import 'dart:async';
 
 class FloatingMedicalIcons extends StatefulWidget {
   final Color color;
@@ -15,6 +15,7 @@ class _FloatingMedicalIconsState extends State<FloatingMedicalIcons>
   late AnimationController _controller;
   final List<FloatingItem> _items = []; // Active items
   Timer? _refreshTimer;
+  bool _animate = false;
   final Random _random = Random();
 
   // 📝 User custom file names
@@ -51,14 +52,35 @@ class _FloatingMedicalIconsState extends State<FloatingMedicalIcons>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 20),
-    )..repeat();
+    );
 
     _spawnInitialIcons();
+  }
 
-    // 🔄 Refresh every 10 minutes
-    _refreshTimer = Timer.periodic(const Duration(minutes: 10), (timer) {
-      _cycleIcons();
-    });
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final animate = TickerMode.of(context) && !MediaQuery.disableAnimationsOf(context);
+    if (_animate == animate) return;
+    _animate = animate;
+    if (animate) {
+      _controller.repeat();
+      _refreshTimer = Timer.periodic(const Duration(minutes: 10), (_) => _cycleIcons());
+    } else {
+      _controller.stop();
+      _refreshTimer?.cancel();
+      _items.removeWhere((item) => item.exitTime != null);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant FloatingMedicalIcons oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.color != widget.color) {
+      for (final item in _items) {
+        item.cachedWidget = null;
+      }
+    }
   }
 
   void _spawnInitialIcons() {
@@ -72,6 +94,7 @@ class _FloatingMedicalIconsState extends State<FloatingMedicalIcons>
     setState(() {
       // 1. Mark current items as exiting
       final now = DateTime.now();
+      _items.removeWhere((item) => item.exitTime != null);
       for (var item in _items) {
         item.exitTime = now;
       }
@@ -81,10 +104,6 @@ class _FloatingMedicalIconsState extends State<FloatingMedicalIcons>
         _items.add(_createRandomItem(entryTime: now));
       }
 
-      // 3. Cleanup very old items (older than 15 seconds after exit)
-      _items.removeWhere((item) =>
-          item.exitTime != null &&
-          now.difference(item.exitTime!).inSeconds > 15);
     });
   }
 
@@ -134,27 +153,29 @@ class _FloatingMedicalIconsState extends State<FloatingMedicalIcons>
 
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(
-      // 🎨 ISOLATE BACKROUND FROM HUD
-      child: LayoutBuilder(builder: (context, constraints) {
-        final containerSize = Size(constraints.maxWidth, constraints.maxHeight);
-
-        return AnimatedBuilder(
+    return IgnorePointer(
+      child: RepaintBoundary(
+        child: AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {
+            final now = DateTime.now();
             return Stack(
-              children: _items.map((item) {
-                return _buildFloatingWidget(item, containerSize);
-              }).toList(),
+              children: [
+                for (final item in _items)
+                  if (item.exitTime == null ||
+                      now.difference(item.exitTime!) < const Duration(seconds: 5))
+                    _buildFloatingWidget(item, now),
+              ],
             );
           },
-        );
-      }),
+        ),
+      ),
     );
   }
 
-  Widget _buildFloatingWidget(FloatingItem item, Size containerSize) {
-    final double progress = _controller.value;
+  Widget _buildFloatingWidget(FloatingItem item, DateTime now) {
+    final timeAlive = max(0, now.difference(item.entryTime).inMilliseconds);
+    final progress = _animate ? timeAlive / 20000 : 0.0;
     final double dx =
         (item.startPosition.dx + (progress * item.speed * cos(item.angle))) %
             1.0;
@@ -164,11 +185,9 @@ class _FloatingMedicalIconsState extends State<FloatingMedicalIcons>
 
     // Handle Entry/Exit Opacity
     double opacity = 0.08; // Base opacity
-    final now = DateTime.now();
 
     // Fade In
-    final timeAlive = now.difference(item.entryTime).inMilliseconds;
-    if (timeAlive < 2000) {
+    if (_animate && timeAlive < 2000) {
       opacity *= (timeAlive / 2000); // 0.0 to 1.0
     }
 

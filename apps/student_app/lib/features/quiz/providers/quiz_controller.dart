@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:drift/drift.dart' show BooleanExpressionOperators;
 import 'submission_queue.dart';
 import '../../../core/api_exceptions.dart';
+import '../../../database/connection/browser_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/features/quiz/providers/question_cache_service.dart';
@@ -274,11 +275,16 @@ class QuizController extends ChangeNotifier {
         'responseTimeMs': _stopwatch.elapsedMilliseconds,
         'selectionReason': question['selectionReason'],
       });
-    } catch (_) {
+    } catch (error) {
       if (_disposed || _apiService.userId != _userId || !identical(question, _state.currentQuestion)) return;
       _stopwatch.start();
-      _state = _state.copyWith(isSubmitting: false, error: languageCode == 'hu'
-          ? 'A válasz mentése sikertelen. Próbáld újra.' : 'Could not save your answer. Please retry.');
+      final message = switch ((error is SubmissionStorageUnavailable, languageCode)) {
+        (true, 'hu') => 'Ez a böngésző nem tudja biztonságosan tárolni a választ. Nyisd meg az alkalmazást másik böngészőben.',
+        (true, _) => 'This browser cannot store your answer safely. Open the app in another browser.',
+        (false, 'hu') => 'A válasz mentése sikertelen. Próbáld újra.',
+        (false, _) => 'Could not save your answer. Please retry.',
+      };
+      _state = _state.copyWith(isSubmitting: false, error: message);
       notifyListeners();
       return;
     }

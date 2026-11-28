@@ -117,6 +117,33 @@ run('shop ownership and purchase transactions', () => {
         expect(await placed()).toEqual([]);
         expect((await pool.query('SELECT FROM user_items')).rowCount).toBe(3);
     });
+    it('serializes a removal from another connection behind the account placement lock', async () => {
+        await pool.query(`INSERT INTO user_rooms(id,user_id,room_type) VALUES (5,1,'exam');
+            INSERT INTO user_items(id,user_id,item_id,is_placed,placed_at_room_id,placed_at_slot) VALUES(41,1,19,true,5,'desk')`);
+        const holder = await pool.connect();
+        const worker = await pool.connect();
+        let pending;
+        try {
+            await holder.query('BEGIN');
+            await holder.query('SELECT id FROM users WHERE id=1 FOR UPDATE');
+            db.pool.connect.mockResolvedValueOnce(worker);
+            pending = call(inventory.unequipItem,{userItemId:41});
+            const deadline = Date.now() + 4000;
+            while (!(await admin.query("SELECT 1 FROM pg_stat_activity WHERE pid=$1 AND wait_event_type='Lock'", [worker.processID])).rowCount) {
+                if (Date.now() > deadline) throw new Error('Unequip did not await the inventory lock');
+                await new Promise(resolve => setTimeout(resolve,20));
+            }
+            expect((await holder.query('SELECT is_placed FROM user_items WHERE id=41')).rows[0].is_placed).toBe(true);
+            await holder.query('COMMIT');
+            await pending;
+            expect((await pool.query('SELECT is_placed FROM user_items WHERE id=41')).rows[0].is_placed).toBe(false);
+        } finally {
+            await holder.query('ROLLBACK');
+            holder.release();
+            if (pending) await pending.catch(() => {});
+            else worker.release();
+        }
+    });
     it('rejects incomplete placements and clears grid state on unequip', async () => {
         await pool.query("INSERT INTO user_rooms(id,user_id,room_type) VALUES (5,1,'exam')");
         await expect(pool.query(`INSERT INTO user_items(user_id,item_id,is_placed,placed_at_room_id,placed_at_slot,uses_grid,x_pos,y_pos)

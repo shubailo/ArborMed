@@ -7,6 +7,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../core/api_exceptions.dart';
 import '../../../database/database.dart';
+import '../../../database/connection/browser_storage.dart';
 import '../../../services/api_service.dart';
 
 /// Durable FIFO for practice answers. A receipt and its local progress change
@@ -55,6 +56,7 @@ class SubmissionQueue {
 
   Future<void> flush() {
     _work = _work.then((_) => _drain()).catchError((Object error) {
+      if (error is SubmissionStorageUnavailable) return;
       debugPrint('Quiz sync paused: ${error.runtimeType}');
       _retryLater();
     });
@@ -88,6 +90,7 @@ class SubmissionQueue {
     final userId = api.userId;
     if (_closed || userId == null) return;
     final generation = _generation;
+    await db.ensureSubmissionStorage();
     while (_active(userId, generation)) {
       final row = await db.customSelect(
         'SELECT * FROM pending_submissions WHERE user_id = ? AND failure IS NULL ORDER BY sequence LIMIT 1',

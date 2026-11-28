@@ -16,6 +16,7 @@ import 'package:arbor_med/features/quiz/providers/quiz_controller.dart';
 import 'package:arbor_med/services/api_service.dart';
 import 'package:arbor_med/features/quiz/providers/question_cache_service.dart';
 import 'package:arbor_med/database/database.dart';
+import 'package:arbor_med/database/connection/browser_storage.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 
@@ -25,6 +26,15 @@ import 'package:mockito/annotations.dart';
   MockSpec<AppDatabase>(),
 ])
 import 'quiz_controller_test.mocks.dart';
+
+class _UnavailableStorageQueue extends SubmissionQueue {
+  _UnavailableStorageQueue(super.db, super.api);
+
+  @override
+  Future<String> enqueue(int userId, String topic, Map<String, dynamic> answer) async {
+    throw SubmissionStorageUnavailable();
+  }
+}
 
 void main() {
 
@@ -103,6 +113,20 @@ void main() {
         expect(controller.state.currentQuestion?['id'], 8);
       });
     }
+
+    test('unsupported storage keeps the answer selected and explains why saving stopped', () async {
+      addTearDown(queue.dispose);
+      queue = _UnavailableStorageQueue(database, mockApiService);
+      controller = buildController(initialData: {
+        'id':7, 'question_type':'single_choice', 'options':['A','B'], 'correct_answer':'A',
+      });
+      controller.selectAnswer('A');
+      await controller.submitAnswer();
+      expect(controller.state.error,contains('nem tudja biztonságosan tárolni a választ'));
+      expect(controller.state.userAnswer,'A');
+      expect(controller.state.isAnswerChecked,isFalse);
+      verifyNever(mockApiService.post('/quiz/answer',any));
+    });
 
     test('a mismatched review result leaves the requested question available for retry', () async {
       when(mockApiService.get('/quiz/questions/5')).thenAnswer((_) async => {'id': 6});
