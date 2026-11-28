@@ -1,20 +1,26 @@
 const AppError = require('../utils/AppError');
 const roundsGoal = 10;
 const ranks = ['unmatched', 'intern', 'resident', 'attending', 'chief'];
-const utcDay = "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC')::date";
+const utcDay = "(statement_timestamp() AT TIME ZONE 'UTC')::date";
 // DATE is a calendar day. Return UTC midnight to keep the existing API timestamp format.
-const standingColumns = `COALESCE(rank, 'unmatched') AS rank, COALESCE(malpractice_strikes, 0) AS malpractice_strikes,
-    ${utcDay}::text AS study_day,
+const standingColumns = day => `COALESCE(rank, 'unmatched') AS rank, COALESCE(malpractice_strikes, 0) AS malpractice_strikes,
+    ${day}::date::text AS study_day,
     last_rounds_date::timestamp AT TIME ZONE 'UTC' AS last_rounds_date,
-    ${utcDay} - last_rounds_date AS days_since_rounds`;
+    ${day}::date - last_rounds_date AS days_since_rounds`;
 
 class ResidencyService {
-    async ensureDailyClinicalStatus(client, userId) {
+    async ensureDailyClinicalStatus(client, userId, studyDay) {
+        const locked = await client.query('SELECT id FROM users WHERE id = $1 FOR UPDATE', [userId]);
+        if (!locked.rowCount) throw new AppError('User not found', 404);
+        // Anchor the study day after acquiring the lock, then keep that day for every write.
         const { rows } = await client.query(
-            `SELECT ${standingColumns} FROM users WHERE id = $1 FOR UPDATE`, [userId]
+            `SELECT ${standingColumns(utcDay)}, statement_timestamp()::text AS study_time
+             FROM users WHERE id = $1`, [userId]
         );
         const standing = rows[0];
-        if (!standing) throw new AppError('User not found', 404);
+        if (studyDay !== undefined && studyDay !== standing.study_day) {
+            throw new AppError('The UTC study day has changed', 409);
+        }
         const elapsed = standing.days_since_rounds;
         if (elapsed !== null && elapsed <= 1) return standing;
 
@@ -31,32 +37,29 @@ class ResidencyService {
             }
         }
         const updated = await client.query(`UPDATE users
-            SET malpractice_strikes = $1, rank = $2, last_rounds_date = ${utcDay} - 1
-            WHERE id = $3 RETURNING ${standingColumns}`, [strikes, rank, userId]);
-        return updated.rows[0];
+            SET malpractice_strikes = $1, rank = $2, last_rounds_date = $4::date - 1
+            WHERE id = $3 RETURNING ${standingColumns('$4')}`, [strikes, rank, userId, standing.study_day]);
+        return {...updated.rows[0], study_time: standing.study_time};
     }
 
     async dailyStatus(client, userId, { complete = false, studyDay } = {}) {
-        let standing = await this.ensureDailyClinicalStatus(client, userId);
-        if (studyDay !== undefined && studyDay !== standing.study_day) {
-            throw new AppError('The UTC study day has changed', 409);
-        }
+        let standing = await this.ensureDailyClinicalStatus(client, userId, studyDay);
         // Only the progress towards the daily goal is needed. A legacy row
         // without an explicit owner belongs to the owner of its session.
         const { rows } = await client.query(`SELECT count(*)::int AS progress FROM (
             SELECT 1 FROM responses r
             WHERE r.is_correct
               AND r.created_at >= ($2::date::timestamp AT TIME ZONE 'UTC')
-              AND r.created_at <= CURRENT_TIMESTAMP
+              AND r.created_at <= $4::timestamptz
               AND (r.user_id = $1 OR (r.user_id IS NULL AND EXISTS (
                     SELECT 1 FROM quiz_sessions qs WHERE qs.id = r.session_id AND qs.user_id = $1)))
             LIMIT $3
-        ) AS qualifying`, [userId, standing.study_day, roundsGoal]);
+        ) AS qualifying`, [userId, standing.study_day, roundsGoal, standing.study_time]);
         const progress = rows[0].progress;
         if (complete && standing.days_since_rounds > 0 && progress === roundsGoal) {
-            const updated = await client.query(`UPDATE users SET last_rounds_date = ${utcDay},
+            const updated = await client.query(`UPDATE users SET last_rounds_date = $2::date,
                 malpractice_strikes = greatest(coalesce(malpractice_strikes, 0) - 1, 0)
-                WHERE id = $1 RETURNING ${standingColumns}`, [userId]);
+                WHERE id = $1 RETURNING ${standingColumns('$2')}`, [userId, standing.study_day]);
             standing = updated.rows[0];
         }
         return {

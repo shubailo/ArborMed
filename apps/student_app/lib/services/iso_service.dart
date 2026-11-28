@@ -12,9 +12,10 @@ class IsoService {
   /// x-axis goes down-right
   /// y-axis goes down-left
   static List<double> gridToScreen(int x, int y,
-      {double tileWidth = 60.0, double tileHeight = 30.0}) {
-    double screenX = (x - y) * (tileWidth / 2);
-    double screenY = (x + y) * (tileHeight / 2);
+      {double tileWidth = 60.0, double tileHeight = 30.0, double scale = 1.0}) {
+    if (!scale.isFinite || scale <= 0) throw ArgumentError.value(scale, 'scale');
+    final screenX = (x - y) * (tileWidth / 2) * scale;
+    final screenY = (x + y) * (tileHeight / 2) * scale;
     return [screenX, screenY];
   }
 }

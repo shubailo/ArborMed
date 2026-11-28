@@ -24,6 +24,7 @@ class _CozyDialogSheetState extends State<CozyDialogSheet>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
+  bool _closing = false;
 
   @override
   void initState() {
@@ -36,8 +37,22 @@ class _CozyDialogSheetState extends State<CozyDialogSheet>
     _controller.forward();
   }
 
-  void _handleClose() {
-    _controller.reverse().then((_) => widget.onTapOutside());
+  Future<void> _handleClose() async {
+    final route = ModalRoute.of(context);
+    if (_closing || route?.isCurrent == false) return;
+    _closing = true;
+    try {
+      await _controller.reverse().orCancel;
+      if (!mounted) return;
+      if (route?.isCurrent == false) {
+        _closing = false;
+        _controller.forward();
+        return;
+      }
+      widget.onTapOutside();
+    } on TickerCanceled {
+      return;
+    }
   }
 
   @override
@@ -52,7 +67,7 @@ class _CozyDialogSheetState extends State<CozyDialogSheet>
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final dialogWidth = screenWidth > 600 ? 600.0 : screenWidth * 0.95;
-    final dialogMaxHeight = screenHeight * 0.70;
+    final dialogMaxHeight = screenHeight * 0.85;
     final palette = CozyTheme.of(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -73,7 +88,7 @@ class _CozyDialogSheetState extends State<CozyDialogSheet>
           ),
 
           // 2. The Cozy Menu Card
-          Center(
+          SafeArea(child: Center(
             child: ScaleTransition(
               scale: _scaleAnimation,
               child: Container(
@@ -116,7 +131,7 @@ class _CozyDialogSheetState extends State<CozyDialogSheet>
                 ),
               ),
             ),
-          ),
+          )),
         ],
       ),
     );

@@ -65,7 +65,7 @@ class CozyRoomRenderer extends StatelessWidget {
             final voxels = VoxelData.data[filename] ?? [];
 
             final cell = cellFor(item);
-            final position = cell == null ? null : IsoService.gridToScreen(cell.$1, cell.$2);
+            final position = cell == null ? null : IsoService.gridToScreen(cell.$1, cell.$2, scale: scale);
             final asset = SyncedScaleWrapper(
               onTap: onItemTap != null ? () => onItemTap!(item) : null,
               isGhost: isGhost,

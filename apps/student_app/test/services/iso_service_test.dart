@@ -30,6 +30,10 @@ void main() {
     });
 
     group('gridToScreen', () {
+      test('scaled projection preserves signed grid offsets', () {
+        expect(IsoService.gridToScreen(-2, 1, scale: 1.5), [-135.0, -22.5]);
+        expect(() => IsoService.gridToScreen(0, 0, scale: 0), throwsArgumentError);
+      });
       test('calculates correct screen offsets for origin', () {
         final screen = IsoService.gridToScreen(0, 0);
         expect(screen, [0.0, 0.0]);

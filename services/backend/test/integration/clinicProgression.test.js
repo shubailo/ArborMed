@@ -140,6 +140,11 @@ run('colleagues, clinics and residency rounds', () => {
     it('rejects a stale displayed day without applying a pardon, then accepts a current or legacy retry', async () => {
         await pool.query(`UPDATE users SET last_rounds_date=${today}-1,malpractice_strikes=3 WHERE id=1;
             INSERT INTO responses(user_id,is_correct) SELECT 1,true FROM generate_series(1,12)`);
+        const checkouts = db.pool.connect.mock.calls.length;
+        for (const studyDay of [null, 20261128, '2026-02-30']) {
+            await expect(call(residency.syncRounds,1,{body:{studyDay}})).rejects.toMatchObject({statusCode:400});
+        }
+        expect(db.pool.connect.mock.calls).toHaveLength(checkouts);
         await expect(call(residency.syncRounds,1,{body:{studyDay:'2001-01-01'}})).rejects.toMatchObject({statusCode:409});
         const before = (await call(residency.getStatus,1)).data;
         expect(before).toMatchObject({roundsProgress:10,roundsCompleted:false,malpracticeStrikes:3});
@@ -155,6 +160,33 @@ run('colleagues, clinics and residency rounds', () => {
         expect(data.malpracticeStrikes).toBe(3);
         const result = await pool.query(`SELECT last_rounds_date = ${today}+1 AS preserved FROM users WHERE id=1`);
         expect(result.rows[0].preserved).toBe(true);
+    });
+
+    it('takes the rounds snapshot after waiting for the user lock', async () => {
+        await pool.query(`UPDATE users SET last_rounds_date=${today}-1,malpractice_strikes=3 WHERE id=1;
+            INSERT INTO responses(user_id,is_correct) SELECT 1,true FROM generate_series(1,9)`);
+        const gate = await pool.connect();
+        const worker = await pool.connect();
+        let completion;
+        try {
+            await gate.query('BEGIN');
+            await gate.query('SELECT id FROM users WHERE id=1 FOR NO KEY UPDATE');
+            db.pool.connect.mockResolvedValueOnce(worker);
+            completion = call(residency.syncRounds,1);
+            const deadline = Date.now() + 4000;
+            while (!(await admin.query("SELECT 1 FROM pg_stat_activity WHERE pid=$1 AND wait_event_type='Lock'", [worker.processID])).rowCount) {
+                if (Date.now() >= deadline) throw new Error('Rounds transaction did not reach the user lock');
+                await new Promise(resolve => setTimeout(resolve, 20));
+            }
+            await gate.query('INSERT INTO responses(user_id,is_correct,created_at) VALUES(1,true,statement_timestamp())');
+            await gate.query('COMMIT');
+            await expect(completion).resolves.toMatchObject({status:'success',data:{roundsProgress:10,roundsCompleted:true,malpracticeStrikes:2}});
+        } finally {
+            await gate.query('ROLLBACK');
+            gate.release();
+            if (completion) await completion.catch(() => {});
+            else worker.release();
+        }
     });
 
     it('returns a controlled missing-user error from both residency transactions', async () => {

@@ -12,7 +12,12 @@ QueryExecutor openConnection() => BrowserStorageConnection(() async {
       );
       return (
         executor: result.resolvedExecutor,
-        persistent:
-            result.chosenImplementation != WasmStorageImplementation.inMemory,
+        safety: switch (result.chosenImplementation) {
+          WasmStorageImplementation.inMemory => BrowserStorageSafety.transient,
+          WasmStorageImplementation.unsafeIndexedDb => BrowserStorageSafety.singleTab,
+          WasmStorageImplementation.opfsShared ||
+          WasmStorageImplementation.opfsLocks ||
+          WasmStorageImplementation.sharedIndexedDb => BrowserStorageSafety.sharedPersistent,
+        },
       );
     });

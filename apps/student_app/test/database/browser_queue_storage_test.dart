@@ -7,14 +7,15 @@ import 'package:mockito/mockito.dart';
 import '../services/quiz_controller_test.mocks.dart';
 
 void main() {
-  for (final persistent in [true, false]) {
+  for (final safety in BrowserStorageSafety.values) {
+    final persistent = safety == BrowserStorageSafety.sharedPersistent;
     test(
-        'web persistence determines whether an answer can be acknowledged locally ($persistent)',
+        'web storage safety determines whether an answer can be acknowledged locally ($safety)',
         () async {
       var opens = 0;
       final conn = BrowserStorageConnection(() async {
         opens++;
-        return (executor: NativeDatabase.memory(), persistent: persistent);
+        return (executor: NativeDatabase.memory(), safety: safety);
       });
       final db = AppDatabase.forTesting(conn);
       final api = MockApiService();

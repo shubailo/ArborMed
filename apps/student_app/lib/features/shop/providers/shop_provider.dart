@@ -32,6 +32,9 @@ class ShopProvider with ChangeNotifier {
   int _generation = 0;
   int _catalogRequest = 0;
   int _inventoryRequest = 0;
+  int _placementRevision = 0;
+  final Set<int> _pendingPlacements = {};
+  Future<void> _placementSync = Future.value();
   (int?, int) get _account => (_apiService.userId, _generation);
 
   void setAccount(int? userId) {
@@ -419,13 +422,18 @@ class ShopProvider with ChangeNotifier {
     });
   }
 
-  Future<void> fetchInventory({bool notify = true}) async {
+  Future<void> fetchInventory({bool notify = true}) => _fetchInventory(notify: notify);
+
+  Future<void> _fetchInventory({bool notify = true, bool preservePlacement = false}) async {
     final request = ++_inventoryRequest;
+    final placementRevision = _placementRevision;
     _isLoading = true;
     if (notify) notifyListeners();
 
     final account = _account;
     bool current() => _account == account && request == _inventoryRequest;
+    bool canMerge() => current() && (preservePlacement ||
+        (_pendingPlacements.isEmpty && placementRevision == _placementRevision));
     final userId = account.$1;
     if (userId == null) {
       _isLoading = false;
@@ -435,17 +443,20 @@ class ShopProvider with ChangeNotifier {
 
     try {
       await _loadInventoryFromLocal(userId, notify: false);
-      if (!current()) return;
+      if (!canMerge()) return;
       final List<dynamic> data = await _apiService.get(
         ApiEndpoints.shopInventory,
       );
-      if (!current()) return;
+      if (!canMerge()) return;
       final remoteInventory = data
           .map((json) => ShopUserItem.fromJson(json))
           .toList();
 
       await _db.transaction(() async {
-        if (current()) await _syncInventoryToLocal(userId, remoteInventory);
+        if (canMerge()) {
+          await _syncInventoryToLocal(userId, remoteInventory,
+              preservePlacement: preservePlacement, canMerge: canMerge);
+        }
       });
       if (!current()) return;
       await _loadInventoryFromLocal(userId, notify: false);
@@ -512,12 +523,14 @@ class ShopProvider with ChangeNotifier {
 
   Future<void> _syncInventoryToLocal(
     int userId,
-    List<ShopUserItem> remoteInventory,
-  ) async {
+    List<ShopUserItem> remoteInventory, {
+    bool preservePlacement = false,
+    required bool Function() canMerge,
+  }) async {
     // 1. Fetch current locals to find serverId-less matches (local purchases)
     final account = _account;
     final existingLocals = await (_db.select(_db.userItems)..where((t) => t.userId.equals(userId))).get();
-    if (_account != account || account.$1 != userId) return;
+    if (_account != account || account.$1 != userId || !canMerge()) return;
     // ⚡ Bolt: Group local items by serverId and itemId into O(1) Hash Maps
     // This replaces an O(N*M) linear array scan (.where().firstOrNull inside the loop)
     final Map<int, List<UserItem>> serverIdMap = {};
@@ -575,12 +588,12 @@ class ShopProvider with ChangeNotifier {
             _db.userItems,
             UserItemsCompanion(
               serverId: Value<int?>(item.id),
-              isPlaced: Value(item.isPlaced),
-              usesGrid: Value(item.usesGrid),
-              slot: Value(item.placedAtSlot),
-              xPos: Value(item.x ?? 0),
-              yPos: Value(item.y ?? 0),
-              roomId: Value(item.roomId),
+              isPlaced: preservePlacement ? const Value.absent() : Value(item.isPlaced),
+              usesGrid: preservePlacement ? const Value.absent() : Value(item.usesGrid),
+              slot: preservePlacement ? const Value.absent() : Value(item.placedAtSlot),
+              xPos: preservePlacement ? const Value.absent() : Value(item.x ?? 0),
+              yPos: preservePlacement ? const Value.absent() : Value(item.y ?? 0),
+              roomId: preservePlacement ? const Value.absent() : Value(item.roomId),
             ),
             where: (t) => t.id.equals(match!.id) & t.userId.equals(userId),
           );
@@ -652,6 +665,7 @@ class ShopProvider with ChangeNotifier {
     _errorMessage = null;
     _isLoading = false;
     _pendingPurchases.clear();
+    _pendingPlacements.clear();
     notifyListeners();
   }
 
@@ -719,10 +733,14 @@ class ShopProvider with ChangeNotifier {
   Future<bool> equipItem(int userItemId, String slot, int roomId, {int? x, int? y}) async {
     final account = _account;
     final userId = account.$1;
-    if (userId == null) return false;
+    if (userId == null || (x == null) != (y == null)) return false;
+    final revision = ++_placementRevision;
+    _pendingPlacements.add(revision);
+    var queued = false;
     try {
       final changed = await _db.transaction(() async {
-        if (_account != account || await _ownedItem(userId, userItemId) == null) return false;
+        final owned = await _ownedItem(userId, userItemId);
+        if (_account != account || owned == null) return false;
         final conflicts = _db.update(_db.userItems)..where((t) => t.userId.equals(userId) & t.isPlaced.equals(true));
         if (x != null && y != null) {
           conflicts.where((t) => t.roomId.equals(roomId) & t.usesGrid.equals(true) & t.xPos.equals(x) & t.yPos.equals(y));
@@ -738,11 +756,15 @@ class ShopProvider with ChangeNotifier {
         return true;
       });
       if (!changed || _account != account) return false;
-      return _refreshPlacement(account, userId, userItemId, ApiEndpoints.shopEquip,
+      _queuePlacement(account, revision, userId, userItemId, ApiEndpoints.shopEquip,
           {'roomId': roomId, 'slot': slot, 'x': x, 'y': y});
+      queued = true;
+      return await _refreshPlacement(account, userId);
     } catch (error) {
       debugPrint('Equip error: $error');
       return false;
+    } finally {
+      if (!queued) _pendingPlacements.remove(revision);
     }
   }
 
@@ -750,45 +772,69 @@ class ShopProvider with ChangeNotifier {
     final account = _account;
     final userId = account.$1;
     if (userId == null) return false;
+    final revision = ++_placementRevision;
+    _pendingPlacements.add(revision);
+    var queued = false;
     try {
-      final changed = await (_db.update(_db.userItems)
-            ..where((t) => t.id.equals(userItemId) & t.userId.equals(userId)))
-          .write(const UserItemsCompanion(isPlaced: Value(false), roomId: Value(null), usesGrid: Value(false)));
+      final changed = await _db.transaction(() async {
+        if (_account != account) return 0;
+        return (_db.update(_db.userItems)
+              ..where((t) => t.id.equals(userItemId) & t.userId.equals(userId)))
+            .write(const UserItemsCompanion(isPlaced: Value(false), roomId: Value(null), usesGrid: Value(false)));
+      });
       if (changed == 0 || _account != account) return false;
-      return _refreshPlacement(account, userId, userItemId, ApiEndpoints.shopUnequip, {});
+      _queuePlacement(account, revision, userId, userItemId, ApiEndpoints.shopUnequip, {});
+      queued = true;
+      return await _refreshPlacement(account, userId);
     } catch (error) {
       debugPrint('Unequip error: $error');
       return false;
+    } finally {
+      if (!queued) _pendingPlacements.remove(revision);
     }
   }
 
-  Future<bool> _refreshPlacement((int?, int) account, int userId, int localId, String endpoint,
-      Map<String, dynamic> fields) async {
+  Future<bool> _refreshPlacement((int?, int) account, int userId) async {
     await _loadInventoryFromLocal(userId, notify: false);
     if (_account != account) return false;
     await _loadCatalogFromLocal(slotType: _currentSlotType, theme: _currentTheme);
     if (_account != account) return false;
     notifyListeners();
-    unawaited(_syncPlacement(account, userId, localId, endpoint, fields));
     return true;
   }
 
-  Future<void> _syncPlacement((int?, int) account, int userId, int localId, String endpoint,
-      Map<String, dynamic> fields) async {
-    try {
-      var item = await _ownedItem(userId, localId);
-      if (_account != account || item == null) return;
-      if (item.serverId == null) {
-        await fetchInventory(notify: false);
+  void _queuePlacement((int?, int) account, int revision, int userId, int localId,
+      String endpoint, Map<String, dynamic> fields) {
+    _placementSync = _placementSync.then((_) async {
+      var saved = false;
+      try {
         if (_account != account) return;
-        item = await _ownedItem(userId, localId);
+        var item = await _ownedItem(userId, localId);
+        if (_account != account || item == null) return;
+        if (item.serverId == null) {
+          await _fetchInventory(notify: false, preservePlacement: true);
+          if (_account != account) return;
+          item = await _ownedItem(userId, localId);
+        }
+        if (_account == account && item?.serverId != null) {
+          await _apiService.post(endpoint, {...fields, 'userItemId': item!.serverId});
+          saved = true;
+        }
+      } catch (error) {
+        debugPrint('Background placement sync failed: ${error.runtimeType}');
+      } finally {
+        _pendingPlacements.remove(revision);
       }
-      if (_account == account && item?.serverId != null) {
-        await _apiService.post(endpoint, {...fields, 'userItemId': item!.serverId});
-        if (_account == account) await fetchInventory();
+      if (saved && _account == account && _pendingPlacements.isEmpty) {
+        unawaited(fetchInventory());
       }
-    } catch (error) {
-      debugPrint('Background placement sync failed: $error');
-    }
+    });
+  }
+
+  @override
+  void dispose() {
+    _generation++;
+    _pendingPlacements.clear();
+    super.dispose();
   }
 }

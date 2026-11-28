@@ -14,6 +14,7 @@ class ShopApi extends Fake implements ApiService {
   List<Map<String,dynamic>> items = [];
   Completer<dynamic>? deferred;
   Future<dynamic> Function(String)? onGet;
+  Future<dynamic> Function(String, Map<String,dynamic>)? onPost;
   final started = Completer<void>();
   final posts = <String>[];
 
@@ -27,7 +28,7 @@ class ShopApi extends Fake implements ApiService {
   Future<dynamic> post(String endpoint, Map<String,dynamic> data) async {
     posts.add(endpoint);
     if (!started.isCompleted) started.complete();
-    return deferred?.future ?? Future.value({});
+    return onPost?.call(endpoint,data) ?? deferred?.future ?? Future.value({});
   }
 }
 class TestContext extends Fake implements BuildContext {}
@@ -81,6 +82,59 @@ void main() {
     expect((await read(fixed)).isPlaced, true);
     expect((await read(other)).isPlaced, true);
     expect(api.posts, [ApiEndpoints.shopEquip]);
+  });
+
+  test('rapid placements post in order and an old inventory read cannot undo the last cell', () async {
+    final target = await local(1,42,remote:100);
+    final oldRead = Completer<dynamic>();
+    final readStarted = Completer<void>();
+    final firstWrite = Completer<dynamic>();
+    final secondWrite = Completer<void>();
+    final refresh = Completer<void>();
+    final sent = <int>[];
+    api.onGet = (_) async {
+      if (!readStarted.isCompleted) {
+        readStarted.complete();
+        return oldRead.future;
+      }
+      refresh.complete();
+      return [{...remote(100,42),'is_placed':true,'uses_grid':true,'x':2,'y':0}];
+    };
+    api.onPost = (_, data) async {
+      sent.add(data['x'] as int);
+      if (sent.length == 1) return firstWrite.future;
+      secondWrite.complete();
+      return {};
+    };
+    final stale = shop.fetchInventory();
+    await readStarted.future;
+    expect(await shop.equipItem(target,'desk',1,x:1,y:0), isTrue);
+    expect(await shop.equipItem(target,'desk',1,x:2,y:0), isTrue);
+    expect(sent,[1]);
+    oldRead.complete([{...remote(100,42),'is_placed':true,'uses_grid':true,'x':0,'y':0}]);
+    await stale;
+    expect((await read(target)).xPos,2);
+    firstWrite.complete({});
+    await secondWrite.future;
+    await refresh.future;
+    expect(sent,[1,2]);
+    expect((await read(target)).xPos,2);
+  });
+
+  test('an immediate unequip follows equip on the wire and remains unplaced', () async {
+    final target = await local(1,42,remote:100);
+    final sent = Completer<void>();
+    api.onPost = (path, _) async {
+      if (path == ApiEndpoints.shopUnequip) sent.complete();
+      return {};
+    };
+    expect(await Future.wait([
+      shop.equipItem(target,'desk',1,x:1,y:0),
+      shop.unequipItem(target),
+    ]), [true,true]);
+    await sent.future;
+    expect(api.posts,[ApiEndpoints.shopEquip,ApiEndpoints.shopUnequip]);
+    expect((await read(target)).isPlaced,isFalse);
   });
 
   test('a late inventory response cannot recreate logged-out data or replace the next account', () async {

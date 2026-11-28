@@ -382,12 +382,8 @@ class _RoomWidgetState extends State<RoomWidget> with TickerProviderStateMixin {
                                     ? (provider.previewX!, provider.previewY!) : null,
                                 onItemTap: (item) {
                                   if (provider.isDecorating && !provider.isFullPreviewMode) {
-                                    int tx = 0, ty = 0;
-                                    final coords = provider.getSlotCoords(item.slotType);
-                                    if (coords != null) {
-                                      tx = coords['x']!;
-                                      ty = coords['y']!;
-                                    }
+                                    final coords = provider.getSlotCoords(item.placementSlot ?? item.slotType);
+                                    final (tx, ty) = item.gridCell ?? (coords?['x'] ?? 0, coords?['y'] ?? 0);
                                     showDialog(
                                       context: context,
                                       builder: (ctx) => ContextualShopSheet(
